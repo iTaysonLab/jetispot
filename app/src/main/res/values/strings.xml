@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name" translatable="false">Jetispot</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_library">Library</string>
+
+    <string name="auth_welcome">Welcome to Jetispot!</string>
+    <string name="auth_welcome_text">Sign into your Spotify account to get started.</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="auth_next">Sign in</string>
+    <string name="auth_disclaimer">Disclaimers</string>
+    <string name="auth_err_badcreds">Incorrect username or password.</string>
+    <string name="auth_err_premium">To use Jetispot, you must have a Spotify Premium account.</string>
+</resources>
