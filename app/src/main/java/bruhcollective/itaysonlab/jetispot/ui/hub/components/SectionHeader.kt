@@ -11,12 +11,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubText
+import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 
 @Composable
-fun SectionHeader (
-  text: HubText
+fun SectionHeader(
+  text: HubText,
+  delegate: HubScreenDelegate
 ) {
-  Box(Modifier.padding(vertical = 8.dp)) {
+  Box(Modifier.padding(vertical = 8.dp, horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)) {
     Text(text = text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.align(Alignment.CenterStart))
   }
 }

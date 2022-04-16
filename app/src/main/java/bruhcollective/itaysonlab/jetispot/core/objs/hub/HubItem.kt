@@ -12,6 +12,9 @@ data class HubItem (
   val children: List<HubItem>? = null,
   val images: HubImages? = null,
   val events: HubEvents? = null,
+  //
+  val custom: Map<String, Any>? = null,
+  val metadata: HubItemMetadata? = null
 )
 
 //
@@ -51,4 +54,31 @@ class HubEvents (
 @JsonClass(generateAdapter = true)
 class NavigateUri (
   val uri: String
+)
+
+@JsonClass(generateAdapter = true)
+class HubItemMetadata (
+  val uri: String? = null,
+  val album: JsonAlbum? = null
+)
+
+@JsonClass(generateAdapter = true)
+class JsonAlbum (
+  val year: Int,
+  val artists: List<JsonArtist>,
+  val type: String
+)
+
+@JsonClass(generateAdapter = true)
+class JsonArtist (
+  val name: String,
+  val uri: String,
+  val images: List<JsonImage>
+)
+
+@JsonClass(generateAdapter = true)
+class JsonImage (
+  val uri: String,
+  val width: Int,
+  val height: Int
 )

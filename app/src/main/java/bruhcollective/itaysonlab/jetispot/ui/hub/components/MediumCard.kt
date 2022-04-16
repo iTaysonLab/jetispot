@@ -40,6 +40,8 @@ fun MediumCard(
 
     if (!item.text?.subtitle.isNullOrEmpty()) {
       Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
+    } else if (!item.text?.description.isNullOrEmpty()) {
+      Subtext(item.text!!.description!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
     }
   }
 }

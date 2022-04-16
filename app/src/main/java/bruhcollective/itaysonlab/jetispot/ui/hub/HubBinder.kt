@@ -20,7 +20,7 @@ fun HubBinder (
   when (item.component) {
     HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!)
     HubComponent.HomeLargeSectionHeader -> HomeSectionLargeHeader(navController, delegate, item)
-    HubComponent.GlueSectionHeader -> SectionHeader(item.text!!)
+    HubComponent.GlueSectionHeader -> SectionHeader(item.text!!, delegate)
     HubComponent.ShortcutsContainer -> ShortcutsContainer(navController, delegate, item.children!!)
     HubComponent.ShortcutsCard -> ShortcutsCard(navController, delegate, item)
     HubComponent.FindCard -> FindCard(navController, delegate, item)
@@ -31,6 +31,11 @@ fun HubBinder (
     HubComponent.MediumCard -> MediumCard(navController, delegate, item)
 
     HubComponent.AlbumTrackRow -> AlbumTrackRow(navController, delegate, item)
+    HubComponent.ArtistTrackRow -> ArtistTrackRow(navController, delegate, item)
+    HubComponent.ArtistPinnedItem -> ArtistPinnedItem(navController, delegate, item)
+    HubComponent.AlbumHeader -> AlbumHeader(navController, delegate, item)
+    HubComponent.LargerRow -> LargerRow(navController, delegate, item)
+
     HubComponent.TextRow -> TextRow(item.text!!)
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
 

@@ -42,11 +42,23 @@ sealed class HubComponent {
   @TypeLabel("consumerMobile:albumTrackRow")
   object AlbumTrackRow: HubComponent()
 
+  @TypeLabel("consumerMobile:artistTrackRow")
+  object ArtistTrackRow: HubComponent()
+
+  @TypeLabel("artist:pinnedItem")
+  object ArtistPinnedItem: HubComponent()
+
   @TypeLabel("glue:textRow")
   object TextRow: HubComponent()
 
   @TypeLabel("glue2:imageRow")
   object ImageRow: HubComponent()
+
+  @TypeLabel("freetier:entityTopContainer")
+  object AlbumHeader: HubComponent()
+
+  @TypeLabel("freetier:largerRow")
+  object LargerRow: HubComponent()
 
   @DefaultObject
   object Unknown: HubComponent()
