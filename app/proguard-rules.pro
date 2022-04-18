@@ -42,6 +42,7 @@
 
 # spotify protobuf, probably not needed to keep
 -keep class com.spotify.** {*;}
+-keep class xyz.gianlu.librespot.audio.decoders.** {*;}
 
 # default sink
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput { *; }
