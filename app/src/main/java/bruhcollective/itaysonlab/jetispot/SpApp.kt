@@ -14,7 +14,7 @@ class SpApp: Application() {
   init {
     Decoders.registerDecoder(SuperAudioFormat.VORBIS, AndroidNativeDecoder::class.java)
     Decoders.registerDecoder(SuperAudioFormat.MP3, AndroidNativeDecoder::class.java)
-    if (isArm()) Decoders.registerDecoder(SuperAudioFormat.VORBIS, 0, TremoloVorbisDecoder::class.java)
+    //if (isArm()) Decoders.registerDecoder(SuperAudioFormat.VORBIS, 0, TremoloVorbisDecoder::class.java)
   }
 
   private fun isArm() = Build.SUPPORTED_ABIS.firstOrNull { it.contains("arm") } != null

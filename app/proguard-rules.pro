@@ -41,12 +41,15 @@
 -keep,allowobfuscation class * extends xyz.gianlu.librespot.mercury.JsonWrapper { *; }
 
 # spotify protobuf, probably not needed to keep
-#-keep class com.spotify.** {*;}
+-keep class com.spotify.** {*;}
 
 # default sink
--keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput
+-keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput { *; }
+-keep class bruhcollective.itaysonlab.jetispot.playback.sp.TremoloVorbisDecoder { *; }
+-keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder { *; }
 
 # native tremolo code
+-keep class xyz.gianlu.librespot.player.decoders.tremolo.OggDecodingInputStream
 -keepclassmembers class xyz.gianlu.librespot.player.decoders.tremolo.OggDecodingInputStream {
    *;
 }
