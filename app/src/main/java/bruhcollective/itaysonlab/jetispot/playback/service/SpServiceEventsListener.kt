@@ -28,19 +28,19 @@ class SpServiceEventsListener(
 
   override fun onPlaybackPaused(p0: Player, trackTime: Long) {
     player.state.playbackState = SessionPlayer.PLAYER_STATE_PAUSED
+    player.runOnListeners { it.onPlayerStateChanged(player, player.state.playbackState) }
   }
 
   override fun onPlaybackResumed(p0: Player, trackTime: Long) {
     player.state.playbackState = SessionPlayer.PLAYER_STATE_PLAYING
+    player.runOnListeners { it.onPlayerStateChanged(player, player.state.playbackState) }
   }
 
   override fun onTrackSeeked(p0: Player, trackTime: Long) {
-    Log.d("onTrackSeeked", "$trackTime")
+    // player.runOnListeners { it.onSeekCompleted(player, trackTime) }
   }
 
   override fun onMetadataAvailable(p0: Player, p1: MetadataWrapper) {
-    Log.d("SPM", "onMetadataAvailable $p1")
-
     player.state.currentTrack = p1
     player.state.currentMediaItem = MediaItem.Builder().apply {
       setStartPosition(0L)
