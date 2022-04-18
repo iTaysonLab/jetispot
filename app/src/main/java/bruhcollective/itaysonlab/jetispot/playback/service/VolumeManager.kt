@@ -9,7 +9,6 @@ import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 import androidx.core.content.getSystemService
-import androidx.media3.common.C
 
 @SuppressLint("UnsafeOptInUsageError")
 class VolumeManager (
@@ -20,7 +19,7 @@ class VolumeManager (
   private val VOLUME_FLAGS = AudioManager.FLAG_SHOW_UI
   
   private val audioManager = context.getSystemService<AudioManager>()!!
-  private val streamType = C.STREAM_TYPE_DEFAULT
+  private val streamType = AudioManager.STREAM_MUSIC
   private val receiver = VolumeChangeReceiver()
   
   var volume: Int
@@ -117,7 +116,7 @@ class VolumeManager (
   }
 
   interface Listener {
-    fun onStreamTypeChanged(@C.StreamType streamType: Int)
+    fun onStreamTypeChanged(streamType: Int)
     fun onStreamVolumeChanged(streamVolume: Int, streamMuted: Boolean)
   }
 

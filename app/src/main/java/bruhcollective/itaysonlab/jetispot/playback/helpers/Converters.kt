@@ -1,20 +1,26 @@
 package bruhcollective.itaysonlab.jetispot.playback.helpers
 
-import androidx.media3.common.MediaMetadata
-import com.spotify.context.ContextTrackOuterClass
+import android.graphics.BitmapFactory
+import androidx.media2.common.MediaMetadata
 import xyz.gianlu.librespot.audio.MetadataWrapper
+import xyz.gianlu.librespot.player.Player
 
-fun MetadataWrapper.toMediaMetadata() = MediaMetadata.Builder().apply {
-  setTitle(this@toMediaMetadata.name)
-  setDisplayTitle(this@toMediaMetadata.name)
+fun MetadataWrapper.toMediaMetadata(player: Player) = MediaMetadata.Builder().apply {
+  this.putText(MediaMetadata.METADATA_KEY_MEDIA_ID, id.toSpotifyUri())
 
-  setArtist(this@toMediaMetadata.artist)
-  setAlbumArtist(this@toMediaMetadata.artist)
-  setAlbumTitle(this@toMediaMetadata.albumName)
+  this.putText(MediaMetadata.METADATA_KEY_TITLE, name)
+  this.putText(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, name)
 
-  setIsPlayable(true)
-}.build()
+  this.putText(MediaMetadata.METADATA_KEY_ARTIST, artist)
+  this.putText(MediaMetadata.METADATA_KEY_ALBUM_ARTIST, artist)
 
-fun ContextTrackOuterClass.ContextTrack.toMediaMetadata() = MediaMetadata.Builder().apply {
+  this.putText(MediaMetadata.METADATA_KEY_ALBUM, albumName)
+  this.putLong(MediaMetadata.METADATA_KEY_DURATION, duration().toLong())
 
+  this.putLong(MediaMetadata.METADATA_KEY_PLAYABLE, 1)
+
+  val bmpRaw = player.currentCoverImage() ?: return@apply
+  val bmp = BitmapFactory.decodeByteArray(bmpRaw, 0, bmpRaw.size)
+  this.putBitmap(MediaMetadata.METADATA_KEY_ART, bmp)
+  this.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bmp)
 }.build()

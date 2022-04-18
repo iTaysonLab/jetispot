@@ -4,6 +4,7 @@ import android.media.AudioFormat
 import android.media.AudioTrack
 import android.os.Build
 import androidx.annotation.FloatRange
+import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import okio.IOException
@@ -12,6 +13,7 @@ import xyz.gianlu.librespot.player.mixing.output.SinkException
 import xyz.gianlu.librespot.player.mixing.output.SinkOutput
 
 @RequiresApi(Build.VERSION_CODES.M)
+@Keep
 class AndroidSinkOutput: SinkOutput {
   private var track: AudioTrack? = null
   private var lastVolume = -1F

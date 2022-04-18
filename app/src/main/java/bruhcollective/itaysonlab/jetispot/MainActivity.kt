@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
+import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.FullscreenModeScreen
@@ -40,6 +41,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
   @Inject lateinit var sessionManager: SpSessionManager
   @Inject lateinit var authManager: SpAuthManager
+  @Inject lateinit var playerServiceManager: SpPlayerServiceManager
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

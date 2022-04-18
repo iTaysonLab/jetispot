@@ -6,12 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import androidx.media3.common.Player
-import androidx.media3.session.MediaLibraryService
-import androidx.media3.session.MediaSession
-import androidx.media3.session.SessionResult
+import androidx.media2.session.MediaLibraryService
+import androidx.media2.session.MediaSession
+import androidx.media2.session.SessionResult
 import bruhcollective.itaysonlab.jetispot.MainActivity
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,8 +36,7 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
   }
 
   override fun onDestroy() {
-    playerWrapper.release()
-    mediaLibrarySession.release()
+    mediaLibrarySession.close()
     super.onDestroy()
   }
 
@@ -50,15 +46,10 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
     playerWrapper.runOnPlayback {
       spPlayerManager.player().addEventsListener(SpServiceEventsListener(playerWrapper))
       spPlayerManager.player().waitReady()
-      playerWrapper.state.playbackState = Player.STATE_READY
-      playerWrapper.runOnListeners {
-        it.onPlaybackStateChanged(Player.STATE_READY)
-        it.onTimelineChanged(playerWrapper.currentTimeline, Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED)
-      }
     }
 
     mediaLibrarySession =
-      MediaLibrarySession.Builder(this, playerWrapper, librarySessionCallback).apply {
+      MediaLibrarySession.Builder(this, playerWrapper, playerWrapper.playbackExecutor, librarySessionCallback).apply {
         setSessionActivity(
           PendingIntent.getActivity(
             this@SpPlaybackService,
@@ -72,15 +63,15 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
       }.build()
   }
 
-  inner class SessionCallback : MediaLibrarySession.MediaLibrarySessionCallback {
+  inner class SessionCallback : MediaLibrarySession.MediaLibrarySessionCallback() {
     override fun onSetMediaUri(
       session: MediaSession,
       controller: MediaSession.ControllerInfo,
       uri: Uri,
-      extras: Bundle
+      extras: Bundle?
     ): Int {
       playerWrapper.runOnPlayback {
-        spPlayerManager.player().load(uri.toString(), true, extras.getBoolean("spShuffle", false))
+        spPlayerManager.player().load(uri.toString(), true, extras?.getBoolean("spShuffle", false) ?: false)
       }
 
       return SessionResult.RESULT_SUCCESS
