@@ -1,18 +1,24 @@
 ## Jetispot
-_broken __UNOFFICIAL__ Spotify client for Android_
+_not so broken __UNOFFICIAL__ Spotify client for Android_
 
 #### Note that this client will NEVER offer any kind of a downloader/offline caching. Don't ask, seriously. Also, a Spotify Premium account is REQUIRED.
 
-Built on Jetpack Compose for UI, Jetpack Datastore for preferences, librespot-java for the API connection and playback, Media3 for session management, and Hilt for DI.
-
-Also, this project's Proguard rules are heavily optimized for the APK size. For now, it is __approx. 3 megabytes__.
+Also, this project's Proguard rules are heavily optimized for the APK size. For now, it is __approx. 2 megabytes__.
 
 What's working:
 - sign in (login/pass only) 
-- "browse", "home", album, artist and genre screens
-- basic playback w/ Spotify Connect support (NO notification displaying yet bcs Media3 API is stupidly difficult)
+- "browse", "home", album, artist and genre screens (some of the blocks might be unsupported)
+- basic playback w/ Spotify Connect support (NO album/playlist support inside the app + NO in-app UI yet)
+
+Application stack:
+- playback: librespot-java as the core + sinks/decoders from librespot-android + Media2 for the mediasession support
+- preferences: Jetpack Datastore (proto)
+- UI: Jetpack Compose
+- arch: MVVM (probably)
+- DI: Hilt/Dagger
 
 Credits:
 - [librespot-java](https://github.com/librespot-org/librespot-java) for the core API part and playback
+- [librespot-android](https://github.com/devgianlu/librespot-android) for sink and decoder source (in Jetispot they are rewritten to Kotlin)  
 - Google for Jetpack/Hilt
 - [moshi](https://github.com/square/moshi/) and [moshix](https://github.com/ZacSweers/MoshiX/) for the undocumented API JSON parsing
