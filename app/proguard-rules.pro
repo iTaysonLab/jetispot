@@ -38,7 +38,7 @@
 -keep class bruhcollective.itaysonlab.jetispot.core.objs.** { *; }
 
 # genericjson gson fixes
--keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput
+-keep,allowobfuscation class * extends xyz.gianlu.librespot.mercury.JsonWrapper { *; }
 
 # spotify protobuf, probably not needed to keep
 #-keep class com.spotify.** {*;}
