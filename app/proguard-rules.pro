@@ -35,7 +35,22 @@
 -dontwarn kotlin.**
 
 -keep class bruhcollective.itaysonlab.jetispot.core.objs.** { *; }
--keep,allowobfuscation class * extends xyz.gianlu.librespot.mercury.JsonWrapper { *; }
+
+# The spotify librespot player needs an 'output class'
+# for it's audio output ; we need to keep that
+-keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput
+
+# librespot needs reflexion to work internally
+# Here we keep the classes it needs
+-keep class xyz.gianlu.librespot.mercury.MercuryRequests$GenericJson
+{
+    <init>(com.google.gson.JsonObject); # method <init> i.e. constructor
+}
+-keep class xyz.gianlu.librespot.mercury.MercuryRequests$ResolvedContextWrapper
+{
+    <init>(com.google.gson.JsonObject); # method <init> i.e. constructor
+}
+-keep class com.spotify.** {*;}
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -69,3 +84,7 @@
 -keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
 
 ##---------------End: proguard configuration for Gson  ----------
+
+-keepclassmembers class xyz.gianlu.librespot.player.decoders.tremolo.OggDecodingInputStream {
+   *;
+}
