@@ -99,8 +99,8 @@ class SpPlayerWrapper(
   override fun getPlaylistMetadata() = MediaMetadata.Builder().build() // TODO
   override fun skipToPlaylistItem(index: Int) = unsupportedFuture() // TODO
 
-  override fun getRepeatMode() = reflect.getRepeatMode()
-  override fun getShuffleMode() = reflect.getShuffleMode()
+  override fun getRepeatMode() = if (playerAvailable) reflect.getRepeatMode() else REPEAT_MODE_NONE
+  override fun getShuffleMode() = if (playerAvailable) reflect.getShuffleMode() else SHUFFLE_MODE_NONE
   override fun getCurrentMediaItem() = state.currentMediaItem
   override fun getCurrentMediaItemIndex() = if (playerAvailable) getQueue().indexOf(getCurrentTrack()) else 0
   override fun getPreviousMediaItemIndex() = if (playerAvailable) currentMediaItemIndex - 1 else 0

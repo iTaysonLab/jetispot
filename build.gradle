@@ -1,7 +1,6 @@
 buildscript {
     ext {
         compose_version = '1.2.0-alpha07'
-        media3_version = "1.0.0-alpha03"
         media2_version = "1.2.1"
     }
 }
