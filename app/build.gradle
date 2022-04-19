@@ -87,6 +87,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material3:material3:1.0.0-alpha09"
     implementation "androidx.navigation:navigation-compose:2.4.2"
+    implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
@@ -94,7 +95,6 @@ dependencies {
     //implementation "androidx.media3:media3-session:$media3_version"
 
     implementation "io.coil-kt:coil-compose:2.0.0-rc03"
-    implementation 'com.google.accompanist:accompanist-coil:0.15.0'
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.6-alpha'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
