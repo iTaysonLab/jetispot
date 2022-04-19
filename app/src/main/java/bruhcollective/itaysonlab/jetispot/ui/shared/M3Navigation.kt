@@ -1,13 +1,11 @@
 package bruhcollective.itaysonlab.jetispot.ui.shared
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -41,8 +39,6 @@ fun M3Navigation(
     bsState.isExpanded && bsDirection == -1f && bsProgress == 1f -> 0f
     else -> if (bsState.direction == 1f) 1f - bsProgress else bsProgress
   }
-
-  Log.d("SCM", "$bsOffset (${bsState.direction}, ${bsState.isCollapsed}, ${bsState.isExpanded}, ${bsState.progress.fraction}, ${bsState.offset.value})")
 
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination

@@ -13,4 +13,45 @@
     <string name="auth_disclaimer">Disclaimers</string>
     <string name="auth_err_badcreds">Incorrect username or password.</string>
     <string name="auth_err_premium">To use Jetispot, you must have a Spotify Premium account.</string>
+
+    <string name="config_root">Settings</string>
+
+    <string name="config_playback">Playback</string>
+    <string name="config_account">Account</string>
+    <string name="config_about">About</string>
+
+    <string name="config_pbquality">Audio quality</string>
+
+    <string name="quality_normal">Normal</string>
+    <string name="quality_normal_desc">~ 96kbit/s</string>
+    <string name="quality_high">High</string>
+    <string name="quality_high_desc">~ 160kbit/s</string>
+    <string name="quality_very_high">Very high</string>
+    <string name="quality_very_high_desc">~ 320kbit/s</string>
+
+    <string name="config_normalization">Audio normalization</string>
+    <string name="normalization_disabled">Normal</string>
+    <string name="normalization_quiet">Quiet</string>
+    <string name="normalization_balanced">Normal</string>
+    <string name="normalization_loud">Loud</string>
+
+    <string name="config_crossfade">Crossfade</string>
+    <string name="crossfade_disabled">Disabled</string>
+    <string name="crossfade_enabled">%d seconds</string>
+
+    <string name="config_autoplay">Autoplay suggested tracks</string>
+    <string name="config_autoplay_desc">when the queue ends</string>
+
+    <string name="config_logout">Logout</string>
+    <string name="config_logout_as">Signed in as %s</string>
+
+    <string name="about_version">version %s</string>
+    <string name="about_sources">Show source code</string>
+    <string name="about_channel">Open Telegram channel</string>
+
+    <string name="warn_restart">These settings will be applied on full application restart.</string>
+    <string name="warn_quality">Sound quality may also vary by tracks, countries or other server-sided A/B experiments.</string>
+
+    <string name="config_tremolo">Use Tremolo decoder (beta)</string>
+    <string name="config_tremolo_desc">optimized OGG/Vorbis decoding for ARM</string>
 </resources>

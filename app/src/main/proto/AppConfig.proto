@@ -14,6 +14,7 @@ message PlayerConfig {
   AudioNormalization normalizationLevel = 4;
   int32 crossfade = 5; // 12s - max
   bool preload = 6;
+  bool useTremolo = 7;
 }
 
 enum AudioQuality {

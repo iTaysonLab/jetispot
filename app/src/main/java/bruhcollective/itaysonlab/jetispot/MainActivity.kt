@@ -3,6 +3,10 @@ package bruhcollective.itaysonlab.jetispot
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateTo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -12,10 +16,7 @@ import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -59,7 +60,10 @@ class MainActivity : ComponentActivity() {
         val isDark = isSystemInDarkTheme()
         val currentTab = remember { mutableStateOf(Screen.Feed.route) }
 
+        val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
+        val bsVisible = remember { mutableStateOf(false) }
         val bsState = rememberBottomSheetScaffoldState()
+        val bsPeek by animateDpAsState(if (bsVisible.value) 80.dp + 72.dp + navBarHeight else 0.dp)
 
         LaunchedEffect(Unit) {
           if (sessionManager.isSignedIn()) return@LaunchedEffect
@@ -86,9 +90,9 @@ class MainActivity : ComponentActivity() {
               Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.compositeSurfaceElevation(6.dp)))
-          }, scaffoldState = bsState, sheetPeekHeight = 80.dp + 72.dp + with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }, backgroundColor = MaterialTheme.colorScheme.surface, modifier = Modifier) { innerScaffoldPadding ->
+          }, scaffoldState = bsState, sheetPeekHeight = bsPeek, backgroundColor = MaterialTheme.colorScheme.surface, modifier = Modifier) { innerScaffoldPadding ->
             NavHost(navController, startDestination = rootDestination.value, modifier = Modifier
-              .padding(innerScaffoldPadding)) {
+              .padding(innerScaffoldPadding).padding(bottom = 80.dp).navigationBarsPadding()) {
               allScreens.values.forEach { screen ->
                 composable(screen.route) {
                   screen.screenProvider(navController)

@@ -22,19 +22,22 @@ import javax.inject.Singleton
 class SpConfigurationManager @Inject constructor(
   @ApplicationContext private val appContext: Context
 ) {
-  private val defaultConfig = AppConfig.newBuilder().apply {
-    setPlayerConfig(PlayerConfig.newBuilder().apply {
-      autoplay = true
-      normalization = true
-      preferredQuality = AudioQuality.VERY_HIGH
-      normalizationLevel = AudioNormalization.BALANCED
-      crossfade = 0
-      preload = true
-    })
-  }.build()
+  companion object {
+    val DEFAULT = AppConfig.newBuilder().apply {
+      setPlayerConfig(PlayerConfig.newBuilder().apply {
+        autoplay = true
+        normalization = true
+        preferredQuality = AudioQuality.VERY_HIGH
+        normalizationLevel = AudioNormalization.BALANCED
+        crossfade = 0
+        preload = true
+        useTremolo = false
+      })
+    }.build()
+  }
 
-  private val dataStore = DataStoreFactory.create(object: Serializer<AppConfig> {
-    override val defaultValue = defaultConfig
+  val dataStore = DataStoreFactory.create(object: Serializer<AppConfig> {
+    override val defaultValue = DEFAULT
     override suspend fun writeTo(t: AppConfig, output: OutputStream) = t.writeTo(output)
 
     override suspend fun readFrom(input: InputStream) = try {
