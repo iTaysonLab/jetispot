@@ -11,6 +11,7 @@ import androidx.media2.session.MediaSession
 import androidx.media2.session.SessionResult
 import bruhcollective.itaysonlab.jetispot.MainActivity
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerManager
+import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +72,8 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
       extras: Bundle?
     ): Int {
       playerWrapper.runOnPlayback {
-        spPlayerManager.player().load(uri.toString(), true, extras?.getBoolean("spShuffle", false) ?: false)
+        val params = SpPlayerServiceManager.SpStartPlaybackParams(extras)
+        spPlayerManager.player().load(uri.toString(), params.shouldPlay, params.shouldShuffle)
       }
 
       return SessionResult.RESULT_SUCCESS
