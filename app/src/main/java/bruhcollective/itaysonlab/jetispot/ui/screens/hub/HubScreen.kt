@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -17,10 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import androidx.palette.graphics.Palette
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
@@ -29,7 +35,9 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Composable
@@ -55,8 +63,10 @@ fun HubScreen(
                 horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
                 columns = GridCells.Fixed(2)
             ) {
-                item(span = { GridItemSpan(2) }) {
-                    Spacer(modifier = Modifier.statusBarsPadding())
+                if (viewModel.needContentPadding) {
+                 item(span = { GridItemSpan(2) }) {
+                     Spacer(modifier = Modifier.statusBarsPadding())
+                 }
                 }
 
                 (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
@@ -165,6 +175,11 @@ class HubScreenViewModel @Inject constructor(
     }
 
     override fun isSurroundedWithPadding() = needContentPadding
+  
+  override suspend fun calculateDominantColor(drawable: Drawable): Color {
+    val palette = withContext(Dispatchers.Main) { Palette.Builder((drawable as BitmapDrawable).bitmap).generate() }
+    return Color(palette.getMutedColor(Color.Transparent.toArgb()))
+  }
 
     sealed class State {
         class Loaded(val data: HubResponse) : State()
