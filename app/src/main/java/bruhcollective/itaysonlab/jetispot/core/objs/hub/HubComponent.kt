@@ -57,6 +57,9 @@ sealed class HubComponent {
   @TypeLabel("freetier:entityTopContainer")
   object AlbumHeader: HubComponent()
 
+  @TypeLabel("header:fullBleed")
+  object ArtistHeader: HubComponent()
+
   @TypeLabel("freetier:largerRow")
   object LargerRow: HubComponent()
 

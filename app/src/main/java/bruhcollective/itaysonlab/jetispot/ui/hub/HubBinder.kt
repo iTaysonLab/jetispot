@@ -34,6 +34,7 @@ fun HubBinder (
     HubComponent.ArtistTrackRow -> ArtistTrackRow(navController, delegate, item)
     HubComponent.ArtistPinnedItem -> ArtistPinnedItem(navController, delegate, item)
     HubComponent.AlbumHeader -> AlbumHeader(navController, delegate, item)
+    HubComponent.ArtistHeader -> ArtistHeader(item)
     HubComponent.LargerRow -> LargerRow(navController, delegate, item)
 
     HubComponent.TextRow -> TextRow(item.text!!)
