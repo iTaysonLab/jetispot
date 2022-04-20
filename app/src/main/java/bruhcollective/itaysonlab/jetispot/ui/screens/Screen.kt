@@ -19,6 +19,7 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.ui.screens.auth.AuthScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 
@@ -73,6 +74,10 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
   object QualityConfig: Screen("config/playbackQuality", { navController ->
     QualityConfigScreen(navController)
   })
+
+  object NormalizationConfig: Screen("config/playbackNormalization", { navController ->
+    NormalizationConfigScreen(navController)
+  })
 }
 
 // Abstracts
@@ -82,5 +87,5 @@ abstract class BottomNavigationScreen(@StringRes val name: Int, route: String, v
 interface FullscreenModeScreen
 
 // Extensions
-val allScreens = listOf(Screen.CoreLoadingScreen, Screen.Authorization, Screen.Feed, Screen.Search, Screen.Library, Screen.Config, Screen.QualityConfig).associateBy { it.route }
+val allScreens = listOf(Screen.CoreLoadingScreen, Screen.Authorization, Screen.Feed, Screen.Search, Screen.Library, Screen.Config, Screen.QualityConfig, Screen.NormalizationConfig).associateBy { it.route }
 val bottomNavigationScreens: List<BottomNavigationScreen> = allScreens.values.filterIsInstance<BottomNavigationScreen>()

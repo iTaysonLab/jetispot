@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -24,6 +27,7 @@ import androidx.datastore.core.DataStore
 import androidx.navigation.NavController
 import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
+import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import kotlinx.coroutines.launch
 
 interface ConfigViewModel {
@@ -90,8 +94,14 @@ fun BaseConfigScreen(
             }
           }
 
+          is ConfigItem.LargeSwitch -> {
+            ConfigLargeSwitch(stringResource(item.title), item.switchState(dsConfig)) { newValue ->
+              scope.launch { viewModel.modifyDatastore { item.modify(this, newValue) }}
+            }
+          }
+
           is ConfigItem.Radio -> {
-            ConfigRadio(stringResource(item.title), stringResource(item.subtitle), item.radioState(dsConfig)) {
+            ConfigRadio(stringResource(item.title), stringResource(item.subtitle), item.radioState(dsConfig), item.enabledState(dsConfig)) {
               scope.launch { viewModel.modifyDatastore { item.modify(this) }}
             }
           }
@@ -169,24 +179,53 @@ fun ConfigSwitch(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun ConfigLargeSwitch(
+  title: String,
+  value: Boolean,
+  onClick: (Boolean) -> Unit
+) {
+  val color = animateColorAsState(targetValue = if (value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.5f).compositeOver(MaterialTheme.colorScheme.inverseSurface))
+  Card(containerColor = color.value, onClick = {
+     onClick(!value)
+  }, modifier = Modifier
+    .fillMaxWidth()
+    .padding(horizontal = 16.dp).padding(bottom = 8.dp)) {
+    Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+      Text(text = title, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 18.sp, modifier = Modifier
+        .fillMaxWidth(0.85f)
+        .align(Alignment.CenterVertically))
+
+      Switch(
+        checked = value, onCheckedChange = {}, modifier = Modifier
+          .fillMaxWidth()
+          .align(Alignment.CenterVertically)
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun ConfigRadio(
   title: String,
   subtitle: String,
   value: Boolean,
+  enabled: Boolean = true,
   onClick: () -> Unit
 ) {
   Row(modifier = Modifier
     .fillMaxWidth()
-    .clickable { onClick() }
+    .clickable(enabled) { onClick() }
     .padding(vertical = 16.dp, horizontal = 6.dp)) {
 
-    RadioButton(selected = value, onClick = { onClick() }, modifier = Modifier.align(Alignment.CenterVertically))
+    RadioButton(selected = value, onClick = { onClick() }, enabled = enabled, modifier = Modifier.align(Alignment.CenterVertically))
 
     Column(
       modifier = Modifier
         .padding(start = 16.dp)
         .fillMaxWidth()
         .align(Alignment.CenterVertically)
+        .alpha(if (enabled) 1f else 0.7f)
     ) {
       Text(text = title, color = MaterialTheme.colorScheme.onBackground, fontSize = 18.sp)
       if (subtitle.isNotEmpty()) Text(
@@ -238,10 +277,17 @@ sealed class ConfigItem {
     val modify: AppConfig.Builder.(value: Boolean) -> Unit
   ) : ConfigItem()
 
+  class LargeSwitch(
+    @StringRes val title: Int,
+    val switchState: (AppConfig) -> Boolean,
+    val modify: AppConfig.Builder.(value: Boolean) -> Unit
+  ) : ConfigItem()
+
   class Radio(
     @StringRes val title: Int,
     @StringRes val subtitle: Int,
     val radioState: (AppConfig) -> Boolean,
+    val enabledState: (AppConfig) -> Boolean,
     val modify: AppConfig.Builder.() -> Unit
   ) : ConfigItem()
 }

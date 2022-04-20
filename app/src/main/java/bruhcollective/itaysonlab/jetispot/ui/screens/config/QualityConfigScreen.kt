@@ -1,17 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
-import bruhcollectie.itaysonlab.jetispot.proto.AudioNormalization
 import bruhcollectie.itaysonlab.jetispot.proto.AudioQuality
-import bruhcollective.itaysonlab.jetispot.BuildConfig
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -35,19 +30,19 @@ class QualityConfigScreenViewModel @Inject constructor(
   private val configList = buildList {
     add(ConfigItem.Radio(R.string.quality_normal, R.string.quality_normal_desc, {
       it.playerConfig.preferredQuality == AudioQuality.NORMAL
-    }, {
+    }, { true }, {
       playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.NORMAL).build()
     }))
 
     add(ConfigItem.Radio(R.string.quality_high, R.string.quality_high_desc, {
       it.playerConfig.preferredQuality == AudioQuality.HIGH
-    }, {
+    }, { true }, {
       playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.HIGH).build()
     }))
 
     add(ConfigItem.Radio(R.string.quality_very_high, R.string.quality_very_high_desc, {
       it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH
-    }, {
+    }, { true }, {
       playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
     }))
 
