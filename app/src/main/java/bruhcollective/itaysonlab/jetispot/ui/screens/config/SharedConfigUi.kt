@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
@@ -185,12 +186,12 @@ fun ConfigLargeSwitch(
   onClick: (Boolean) -> Unit
 ) {
   val color = animateColorAsState(targetValue = if (value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.5f).compositeOver(MaterialTheme.colorScheme.inverseSurface))
-  Card(containerColor = color.value, onClick = {
+  Card(containerColor = color.value, shape = RoundedCornerShape(28.dp), onClick = {
      onClick(!value)
   }, modifier = Modifier
     .fillMaxWidth()
     .padding(horizontal = 16.dp).padding(bottom = 8.dp)) {
-    Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
       Text(text = title, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 18.sp, modifier = Modifier
         .fillMaxWidth(0.85f)
         .align(Alignment.CenterVertically))

@@ -30,7 +30,7 @@
     <string name="quality_very_high_desc">~ 320kbit/s</string>
 
     <string name="config_normalization">Audio normalization</string>
-    <string name="normalization_disabled">Normal</string>
+    <string name="normalization_disabled">Disabled</string>
     <string name="normalization_quiet">Quiet</string>
     <string name="normalization_quiet_desc">-5 dB</string>
     <string name="normalization_balanced">Normal</string>
