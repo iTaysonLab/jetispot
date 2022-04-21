@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
             }
             return@LaunchedEffect
           }
-          
+
           authManager.authStored()
           rootDestination.value = if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route
           currentTab.value = rootDestination.value

@@ -10,7 +10,7 @@ class OggDecodingInputStream(
   private val oggInputStream: SeekableInputStream
 ): InputStream() {
   private val jniBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE)
-  private val handle = initDecoder(jniBuffer)
+  private val handle: Long
 
   companion object {
     private const val BUFFER_SIZE = 4096
@@ -22,6 +22,7 @@ class OggDecodingInputStream(
 
   init {
     System.loadLibrary("tremolo")
+    handle = initDecoder(jniBuffer)
     if (handle == 0L) throw IOException("Couldn't start decoder!")
   }
 
