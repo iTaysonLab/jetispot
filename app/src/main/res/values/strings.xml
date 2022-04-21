@@ -56,8 +56,5 @@
     <string name="warn_quality">Sound quality may also vary by tracks, countries or other server-sided A/B experiments.</string>
     <string name="warn_normalization">Adjust the volume for your environment.\n\nLoud may diminish audio quality. No effect on audio quality in Normal or Quiet.</string>
 
-    <string name="config_tremolo">Use Tremolo decoder (beta)</string>
-    <string name="config_tremolo_desc">optimized OGG/Vorbis decoding for ARM</string>
-
     <string name="enable">Enable</string>
 </resources>

@@ -46,12 +46,6 @@ class QualityConfigScreenViewModel @Inject constructor(
       playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
     }))
 
-    add(ConfigItem.Switch(R.string.config_tremolo, R.string.config_tremolo_desc, {
-      it.playerConfig.useTremolo
-    }, { value ->
-      playerConfig = playerConfig.toBuilder().setUseTremolo(value).build()
-    }))
-
     add(ConfigItem.Info(R.string.warn_quality))
   }
 
