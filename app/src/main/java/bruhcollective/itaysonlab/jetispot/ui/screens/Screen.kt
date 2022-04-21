@@ -44,7 +44,7 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_home,
     iconProvider = { Icons.Default.Home },
     screenProvider = { navController ->
-      HubScreen(navController, loader = { getHomeView() })
+      HubScreen(navController, loader = { internal.getHomeView() })
     }
   )
 
@@ -53,7 +53,7 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_search,
     iconProvider = { Icons.Default.Search },
     screenProvider = { navController ->
-      HubScreen(navController, loader = { getBrowseView() })
+      HubScreen(navController, loader = { internal.getBrowseView() })
     }
   )
 

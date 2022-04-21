@@ -37,14 +37,14 @@ fun DynamicSpIdScreen (
 
 enum class SpIdDests (val type: String, val provider: suspend SpApiManager.(String) -> HubResponse) {
   Artist("artist", { id ->
-    getArtistView(id)
+    internal.getArtistView(id)
   }),
 
   Album("album", { id ->
-    getAlbumView(id)
+    internal.getAlbumView(id)
   }),
 
   Genre("genre", { id ->
-    getBrowseView(id)
+    internal.getBrowseView(id)
   }),
 }

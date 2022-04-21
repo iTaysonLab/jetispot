@@ -16,11 +16,6 @@ object SpModule {
     @ApplicationContext context: Context
   ) = SpSessionManager(context)
 
-  fun provideSpApiManager(
-    spSessionManager: SpSessionManager,
-    moshi: Moshi
-  ) = SpApiManager(spSessionManager, moshi)
-
   fun provideSpPlayerManager(
     spSessionManager: SpSessionManager,
     spConfigurationManager: SpConfigurationManager

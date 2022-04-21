@@ -102,7 +102,7 @@ class ConfigScreenViewModel @Inject constructor(
         R.string.config_logout_as, spSessionManager.session.username()
       )
     }, {
-      // TODO
+      it.navigate("dialogs/logout")
     }))
 
     add(ConfigItem.Category(R.string.config_about))

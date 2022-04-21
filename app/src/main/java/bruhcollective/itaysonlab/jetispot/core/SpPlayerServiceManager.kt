@@ -2,7 +2,10 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.Context
 import android.os.Bundle
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
+import androidx.media2.common.MediaItem
+import androidx.media2.common.MediaMetadata
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +14,15 @@ import javax.inject.Singleton
 class SpPlayerServiceManager @Inject constructor(
   @ApplicationContext private val context: Context,
 ) {
-  private val impl = SpPlayerServiceImpl(context)
+  private val impl = SpPlayerServiceImpl(context, this)
+
+  // states
+  val currentTrack = mutableStateOf<MediaItem?>(null)
+
+  fun reset() {
+    currentTrack.value = null
+  }
+  //
 
   // Uri should be spotify:<track/album/..>:<id>
   fun playFromUri (uri: String) = impl.awaitService {

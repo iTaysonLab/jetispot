@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -40,31 +38,31 @@ fun AlbumHeader(
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val darkTheme = isSystemInDarkTheme()
   val dominantColor = remember { mutableStateOf(Color.Transparent) }
+  val dominantColorAsBg = animateColorAsState(dominantColor.value)
+
+  LaunchedEffect(Unit) {
+    launch {
+      if (dominantColor.value != Color.Transparent) return@launch
+      dominantColor.value = delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
+    }
+  }
 
   Column(modifier = Modifier
     .fillMaxHeight()
-    .background(brush = Brush.verticalGradient(
-      colors = listOf(dominantColor.value, Color.Transparent)
-    ))
-    .padding(top = 16.dp).statusBarsPadding()) {
-    
-    val painter = rememberAsyncImagePainter(model = item.images?.main?.uri)
-    val painterState = painter.state
+    .background(
+      brush = Brush.verticalGradient(
+        colors = listOf(dominantColorAsBg.value, Color.Transparent)
+      )
+    )
+    .padding(top = 16.dp)
+    .statusBarsPadding()) {
 
-    Image(painter = painter, contentDescription = null, modifier = Modifier
+    Image(painter = rememberAsyncImagePainter(model = item.images?.main?.uri), contentDescription = null, modifier = Modifier
       .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
       .align(Alignment.CenterHorizontally)
       .padding(bottom = 8.dp))
-
-    if (painterState is AsyncImagePainter.State.Success) {
-      LaunchedEffect(key1 = painter) {
-        launch {
-          val image = painter.imageLoader.execute(painter.request.newBuilder().allowHardware(false).build()).drawable
-          dominantColor.value = delegate.calculateDominantColor(image!!)
-        }
-      }
-    }
 
     MediumText(text = item.text!!.title!!, fontSize = 21.sp, modifier = Modifier
       .padding(horizontal = 16.dp)

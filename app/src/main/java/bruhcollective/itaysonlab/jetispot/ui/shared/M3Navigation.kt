@@ -1,10 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.shared
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
@@ -30,6 +27,8 @@ fun M3Navigation(
   isSelected: (String) -> Boolean,
   onSelect: (String) -> Unit,
 ) {
+  val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
+
   val bsDirection = bsState.direction
   val bsProgress = bsState.progress.fraction
 
@@ -43,10 +42,10 @@ fun M3Navigation(
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
   val currentDestinationIsFullscreen = allScreens[currentDestination?.route] is FullscreenModeScreen
-  if (!currentDestinationIsFullscreen) NavigationBar(modifier = Modifier
-    .offset(y = (80.dp + with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }) * bsOffset)
-    .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp))
-    .navigationBarsPadding()) {
+  if (!currentDestinationIsFullscreen) bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(modifier = Modifier
+    .offset(y = (80.dp + navBarHeight) * bsOffset)
+    .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
+  contentPadding = PaddingValues(bottom = navBarHeight)) {
     bottomNavigationScreens.forEach { screen ->
       NavigationBarItem(
         icon = { Icon(screen.iconProvider(), contentDescription = stringResource(screen.name)) },

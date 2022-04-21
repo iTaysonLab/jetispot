@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -176,11 +177,17 @@ class HubScreenViewModel @Inject constructor(
 
   override fun isSurroundedWithPadding() = needContentPadding
 
-  override suspend fun calculateDominantColor(drawable: Drawable): Color {
-    val palette = withContext(Dispatchers.Main) {
-      Palette.Builder((drawable as BitmapDrawable).bitmap).generate()
+  override suspend fun calculateDominantColor(url: String, dark: Boolean): Color {
+    return try {
+      val apiResult = spApiManager.partners.getDominantColors(url).data.extractedColors[0].let {
+        if (dark) it.colorRaw else it.colorDark
+      }.hex
+
+      Color(android.graphics.Color.parseColor(apiResult))
+    } catch (e: Exception) {
+      e.printStackTrace()
+      Color.Transparent
     }
-    return Color(palette.getMutedColor(Color.Transparent.toArgb()))
   }
 
   sealed class State {

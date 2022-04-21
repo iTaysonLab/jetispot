@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,7 +53,7 @@ fun BaseConfigScreen(
   val dsConfig = dsConfigState.value
 
   Scaffold(topBar = {
-    LargeTopAppBar(title = {
+    bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar(title = {
       Text(stringResource(viewModel.provideTitle()))
     }, navigationIcon = {
       if (!viewModel.isRoot()) {
@@ -67,7 +68,7 @@ fun BaseConfigScreen(
             )
             .padding(horizontal = 16.dp))
       }
-    }, modifier = Modifier.statusBarsPadding(), scrollBehavior = scrollBehavior)
+    }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
   }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
     LazyColumn(Modifier.fillMaxHeight()) {
       items(viewModel.provideConfigList()) { item ->

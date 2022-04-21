@@ -8,14 +8,15 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateTo
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
@@ -32,6 +34,7 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.allScreens
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingScreen
 import bruhcollective.itaysonlab.jetispot.ui.shared.M3Navigation
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -61,9 +64,9 @@ class MainActivity : ComponentActivity() {
         val currentTab = remember { mutableStateOf(Screen.Feed.route) }
 
         val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
-        val bsVisible = remember { mutableStateOf(false) }
+        val bsVisible = playerServiceManager.currentTrack.value != null
         val bsState = rememberBottomSheetScaffoldState()
-        val bsPeek by animateDpAsState(if (bsVisible.value) 80.dp + 72.dp + navBarHeight else 0.dp)
+        val bsPeek by animateDpAsState(if (bsVisible) 80.dp + 72.dp + navBarHeight else 0.dp)
 
         LaunchedEffect(Unit) {
           if (sessionManager.isSignedIn()) return@LaunchedEffect
@@ -86,13 +89,11 @@ class MainActivity : ComponentActivity() {
           }
         ) { innerPadding ->
           BottomSheetScaffold(sheetContent = {
-            Box(
-              Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.compositeSurfaceElevation(6.dp)))
+            NowPlayingScreen(navController = navController, bottomSheetState = bsState.bottomSheetState)
           }, scaffoldState = bsState, sheetPeekHeight = bsPeek, backgroundColor = MaterialTheme.colorScheme.surface, modifier = Modifier) { innerScaffoldPadding ->
             NavHost(navController, startDestination = rootDestination.value, modifier = Modifier
-              .padding(innerScaffoldPadding).padding(bottom = 80.dp).navigationBarsPadding()) {
+              .padding(innerScaffoldPadding)
+              .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeight)) {
               allScreens.values.forEach { screen ->
                 composable(screen.route) {
                   screen.screenProvider(navController)
@@ -101,6 +102,30 @@ class MainActivity : ComponentActivity() {
 
               composable("spotify:{type}:{id}") {
                 DynamicSpIdScreen(navController, it.arguments?.getString("type"), it.arguments?.getString("id"))
+              }
+
+              dialog("dialogs/logout") {
+                AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
+                  Icon(Icons.Default.Warning, null)
+                }, title = {
+                  Text("Sign out?")
+                }, text = {
+                  Text("This will remove all data linked to your account from this device. Settings won't be reset to default.")
+                }, confirmButton = {
+                  Text("Confirm",
+                    Modifier
+                      .clickable {
+                        navController.popBackStack()
+                      }
+                      .padding(16.dp))
+                }, dismissButton = {
+                  Text("Cancel",
+                    Modifier
+                      .clickable {
+                        navController.popBackStack()
+                      }
+                      .padding(16.dp))
+                })
               }
             }
           }

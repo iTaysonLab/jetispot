@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.core
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.media2.common.MediaItem
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
 import androidx.media2.session.SessionToken
@@ -12,7 +13,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class SpPlayerServiceImpl (
-  private val context: Context
+  private val context: Context,
+  private val manager: SpPlayerServiceManager
 ) : MediaController.ControllerCallback() {
   override fun onConnected(controller: MediaController, allowedCommands: SessionCommandGroup) {
     svcInit?.let {
@@ -23,6 +25,7 @@ class SpPlayerServiceImpl (
 
   override fun onDisconnected(controller: MediaController) {
     mediaController = null
+    manager.reset()
   }
 
   private var mediaController: MediaController? = null
@@ -55,5 +58,9 @@ class SpPlayerServiceImpl (
         if (this.isDone) continuation.resume(this.get())
       }, ContextCompat.getMainExecutor(context))
     }
+  }
+
+  override fun onCurrentMediaItemChanged(controller: MediaController, item: MediaItem?) {
+    manager.currentTrack.value = item
   }
 }
