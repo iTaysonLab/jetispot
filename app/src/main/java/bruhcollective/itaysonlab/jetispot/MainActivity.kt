@@ -69,7 +69,13 @@ class MainActivity : ComponentActivity() {
         val bsPeek by animateDpAsState(if (bsVisible) 80.dp + 72.dp + navBarHeight else 0.dp)
 
         LaunchedEffect(Unit) {
-          if (sessionManager.isSignedIn()) return@LaunchedEffect
+          if (sessionManager.isSignedIn()) {
+            if (rootDestination.value == Screen.CoreLoadingScreen.route) {
+              rootDestination.value = Screen.Feed.route
+            }
+            return@LaunchedEffect
+          }
+          
           authManager.authStored()
           rootDestination.value = if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route
           currentTab.value = rootDestination.value
