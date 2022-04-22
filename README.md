@@ -10,7 +10,7 @@ What's working:
 - "browse", "home", album, artist and genre screens (some of the blocks might be unsupported)
 - basic playback w/ Spotify Connect support (NO album/playlist support inside the app + NO in-app UI yet)
 
-What's developed:
+What's in progress:
 - "Now Playing" UI
 - album support (prev/next/queue management)
 - better service (audiofocus handling, notification improvements)
