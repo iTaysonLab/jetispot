@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,8 +60,8 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
 
   object Library: BottomNavigationScreen(
     route = "library",
-    name = R.string.tab_library,
-    iconProvider = { Icons.Default.LibraryMusic },
+    name = R.string.tab_config,
+    iconProvider = { Icons.Default.Settings },
     screenProvider = { navController ->
       ConfigScreen(navController)
     }

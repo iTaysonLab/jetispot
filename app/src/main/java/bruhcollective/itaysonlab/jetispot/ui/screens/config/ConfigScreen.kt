@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.config
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -73,15 +74,18 @@ class ConfigScreenViewModel @Inject constructor(
       )
     }, { it.navigate("config/playbackNormalization") }))
 
-    add(ConfigItem.Preference(R.string.config_crossfade, { ctx, cfg ->
-      when (cfg.playerConfig.crossfade) {
+    add(ConfigItem.Slider(R.string.config_crossfade, { ctx, value ->
+      when (value) {
         0 -> ctx.getString(R.string.crossfade_disabled)
-        else -> ctx.getString(
-          R.string.crossfade_enabled,
-          cfg.playerConfig.crossfade
-        ) // TODO: move to plurals
+        else -> ctx.resources.getQuantityString(R.plurals.seconds, value, value)
       }
-    }, { it.navigate("config/playbackCrossfade") }))
+    }, 0f..12f, 11, { cfg ->
+      Log.d("SPM", "get ${cfg.playerConfig.crossfade}")
+      cfg.playerConfig.crossfade
+    }, { num ->
+      Log.d("SPM", "set $num")
+      playerConfig = playerConfig.toBuilder().setCrossfade(num).build()
+    }))
 
     add(
       ConfigItem.Switch(

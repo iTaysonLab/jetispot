@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
 import android.content.Context
+import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import androidx.navigation.NavController
 import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 interface ConfigViewModel {
@@ -105,6 +107,12 @@ fun BaseConfigScreen(
           is ConfigItem.Radio -> {
             ConfigRadio(stringResource(item.title), stringResource(item.subtitle), item.radioState(dsConfig), item.enabledState(dsConfig)) {
               scope.launch { viewModel.modifyDatastore { item.modify(this) }}
+            }
+          }
+
+          is ConfigItem.Slider -> {
+            ConfigSlider(stringResource(item.title), item.subtitle, item.range, item.stepCount, item.state(dsConfig)) { newValue ->
+              scope.launch { viewModel.modifyDatastore { item.modify(this, newValue) }}
             }
           }
         }
@@ -191,7 +199,8 @@ fun ConfigLargeSwitch(
      onClick(!value)
   }, modifier = Modifier
     .fillMaxWidth()
-    .padding(horizontal = 16.dp).padding(bottom = 8.dp)) {
+    .padding(horizontal = 16.dp)
+    .padding(bottom = 8.dp)) {
     Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
       Text(text = title, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 18.sp, modifier = Modifier
         .fillMaxWidth(0.85f)
@@ -260,6 +269,54 @@ fun ConfigPreference(
   }
 }
 
+@Composable
+fun ConfigSlider(
+  title: String,
+  subtitleFunc: (Context, Int) -> String,
+  range: ClosedFloatingPointRange<Float>,
+  stepCount: Int,
+  initialValue: Int,
+  onValueChange: (Int) -> Unit
+) {
+  val sliderValueFirst = remember { initialValue.toFloat() }
+  val sliderValueWAApplied = remember { mutableStateOf(false) }
+  var sliderValue by remember { mutableStateOf(sliderValueFirst) }
+
+  // a slight workaround for datastore's collectAsState initial
+  if (!sliderValueWAApplied.value && initialValue.toFloat() != sliderValueFirst) {
+    sliderValueWAApplied.value = true
+    sliderValue = initialValue.toFloat()
+  }
+
+  val subtitle = subtitleFunc(LocalContext.current, sliderValue.toInt())
+
+  Column(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp)
+      .padding(top = 16.dp, bottom = 6.dp)
+  ) {
+    Box(Modifier.fillMaxWidth()) {
+      Text(text = title, color = MaterialTheme.colorScheme.onBackground, fontSize = 18.sp, modifier = Modifier.align(Alignment.CenterStart))
+      if (subtitle.isNotEmpty()) Text(
+        text = subtitle,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        fontSize = 14.sp,
+        modifier = Modifier.align(Alignment.CenterEnd)
+      )
+    }
+
+    Slider(
+      value = sliderValue,
+      onValueChange = { sliderValue = it },
+      onValueChangeFinished = { onValueChange(sliderValue.toInt()) },
+      modifier = Modifier.padding(top = 4.dp),
+      valueRange = range,
+      steps = stepCount
+    )
+  }
+}
+
 //
 
 sealed class ConfigItem {
@@ -291,5 +348,14 @@ sealed class ConfigItem {
     val radioState: (AppConfig) -> Boolean,
     val enabledState: (AppConfig) -> Boolean,
     val modify: AppConfig.Builder.() -> Unit
+  ) : ConfigItem()
+
+  class Slider(
+    @StringRes val title: Int,
+    val subtitle: (Context, Int) -> String,
+    val range: ClosedFloatingPointRange<Float>,
+    val stepCount: Int,
+    val state: (AppConfig) -> Int,
+    val modify: AppConfig.Builder.(Int) -> Unit
   ) : ConfigItem()
 }
