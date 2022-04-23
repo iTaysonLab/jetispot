@@ -1,11 +1,13 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -20,7 +22,7 @@ fun ArtistHeader(
 ) {
     Column(
         modifier = Modifier
-            .size((LocalConfiguration.current.screenWidthDp).dp, 200.dp),
+            .size((LocalConfiguration.current.screenWidthDp).dp, 310.dp),
     ) {
         Box {
             AsyncImage(
@@ -29,9 +31,20 @@ fun ArtistHeader(
                 contentScale = ContentScale.FillWidth
             )
 
+            Column(
+                Modifier
+                    .background(
+                        Brush.verticalGradient(
+                            0F to Color.Transparent,
+                            1F to Color.Black,
+                        ),
+                    )
+                    .fillMaxSize()
+            ) {}
+
             MediumText(
                 text = item.text?.title!!,
-                fontSize = 30.sp,
+                fontSize = 50.sp,
                 color = Color.White,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
