@@ -71,8 +71,8 @@ fun BaseConfigScreen(
             .padding(horizontal = 16.dp))
       }
     }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-  }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-    LazyColumn(Modifier.fillMaxHeight()) {
+  }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+    LazyColumn(Modifier.fillMaxHeight().padding(padding)) {
       items(viewModel.provideConfigList()) { item ->
         when (item) {
           is ConfigItem.Category -> {

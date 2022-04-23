@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub
 
 import androidx.compose.ui.graphics.Color
-import bruhcollective.itaysonlab.jetispot.core.objs.hub.PlayFromContextData
+import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 
 interface HubScreenDelegate {
   fun play(data: PlayFromContextData)

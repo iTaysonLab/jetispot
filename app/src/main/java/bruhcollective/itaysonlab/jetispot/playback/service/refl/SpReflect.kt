@@ -1,6 +1,8 @@
 package bruhcollective.itaysonlab.jetispot.playback.service.refl
 
 import androidx.media2.common.SessionPlayer
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import xyz.gianlu.librespot.player.Player
 import xyz.gianlu.librespot.player.StateWrapper
 
@@ -9,6 +11,15 @@ class SpReflect(
 ) {
   private val getStateWrapperFromPlayer = Player::class.java.getDeclaredField("state").also { it.isAccessible = true }
   private val getStateFromStateWrapper = StateWrapper::class.java.getDeclaredField("state").also { it.isAccessible = true }
+  private val handleNextFromPlayer = Player::class.java.getDeclaredMethod("handlePlay", JsonObject::class.java).also { it.isAccessible = true }
+
+  fun playUsingData (data: String) {
+    try {
+      handleNextFromPlayer.invoke(player(), JsonParser.parseString(data).asJsonObject)
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+  }
 
   @SessionPlayer.RepeatMode
   fun getRepeatMode(): Int {

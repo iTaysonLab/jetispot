@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.objs.hub
 
+import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import com.squareup.moshi.JsonClass
 import dev.zacsweers.moshix.sealed.annotations.DefaultObject
 import dev.zacsweers.moshix.sealed.annotations.TypeLabel

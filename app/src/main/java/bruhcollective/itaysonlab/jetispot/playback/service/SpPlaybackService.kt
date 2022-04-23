@@ -72,8 +72,12 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
       extras: Bundle?
     ): Int {
       playerWrapper.runOnPlayback {
-        val params = SpPlayerServiceManager.SpStartPlaybackParams(extras)
-        spPlayerManager.player().load(uri.toString(), params.shouldPlay, params.shouldShuffle)
+        val playData = extras?.getString("sp_json", null)
+        if (playData != null) {
+          spPlayerManager.reflect().playUsingData(playData)
+        } else {
+          spPlayerManager.player().load(uri.toString(), true, false)
+        }
       }
 
       return SessionResult.RESULT_SUCCESS

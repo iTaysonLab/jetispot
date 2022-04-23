@@ -8,7 +8,7 @@ Also, this project's Proguard rules are heavily optimized for the APK size. For 
 What's working:
 - sign in (login/pass only) 
 - "browse", "home", album, artist and genre screens (some of the blocks might be unsupported)
-- basic playback w/ Spotify Connect support (NO album/playlist support inside the app + NO in-app UI yet)
+- basic playback w/ Spotify Connect support (NO in-app UI yet)
 
 What's in progress:
 - "Now Playing" UI
