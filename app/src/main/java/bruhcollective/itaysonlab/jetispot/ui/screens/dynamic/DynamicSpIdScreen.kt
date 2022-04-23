@@ -47,4 +47,8 @@ enum class SpIdDests (val type: String, val provider: suspend SpApiManager.(Stri
   Genre("genre", { id ->
     internal.getBrowseView(id)
   }),
+
+  Playlist("playlist", { id ->
+    internal.getPlaylistView(id)
+  }),
 }

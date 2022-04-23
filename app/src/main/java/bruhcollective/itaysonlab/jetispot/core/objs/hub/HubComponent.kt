@@ -45,6 +45,9 @@ sealed class HubComponent {
   @TypeLabel("consumerMobile:artistTrackRow")
   object ArtistTrackRow: HubComponent()
 
+  @TypeLabel("consumerMobile:playlistTrackRow")
+  object PlaylistTrackRow: HubComponent()
+
   @TypeLabel("artist:pinnedItem")
   object ArtistPinnedItem: HubComponent()
 
@@ -59,6 +62,9 @@ sealed class HubComponent {
 
   @TypeLabel("header:fullBleed")
   object ArtistHeader: HubComponent()
+
+  @TypeLabel("playlist:header")
+  object PlaylistHeader: HubComponent()
 
   @TypeLabel("freetier:largerRow")
   object LargerRow: HubComponent()
