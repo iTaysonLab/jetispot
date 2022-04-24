@@ -7,6 +7,7 @@ import androidx.media2.common.MediaItem
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
 import androidx.media2.session.SessionToken
+import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import bruhcollective.itaysonlab.jetispot.playback.service.SpPlaybackService
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -61,6 +62,6 @@ class SpPlayerServiceImpl (
   }
 
   override fun onCurrentMediaItemChanged(controller: MediaController, item: MediaItem?) {
-    manager.currentTrack.value = item
+    manager.currentTrack.value = MediaItemWrapper(item)
   }
 }

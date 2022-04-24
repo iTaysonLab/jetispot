@@ -7,6 +7,7 @@ import androidx.core.net.toUri
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
+import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,10 +23,10 @@ class SpPlayerServiceManager @Inject constructor(
   private val impl = SpPlayerServiceImpl(context, this)
 
   // states
-  val currentTrack = mutableStateOf<MediaItem?>(null)
+  val currentTrack = mutableStateOf(MediaItemWrapper())
 
   fun reset() {
-    currentTrack.value = null
+    currentTrack.value = MediaItemWrapper()
   }
   //
 

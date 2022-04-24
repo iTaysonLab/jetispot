@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
         val currentTab = remember { mutableStateOf(Screen.Feed.route) }
 
         val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
-        val bsVisible = playerServiceManager.currentTrack.value != null
+        val bsVisible = playerServiceManager.currentTrack.value.hasMetadata
         val bsState = rememberBottomSheetScaffoldState()
         val bsPeek by animateDpAsState(if (bsVisible) 80.dp + 72.dp + navBarHeight else 0.dp)
 
