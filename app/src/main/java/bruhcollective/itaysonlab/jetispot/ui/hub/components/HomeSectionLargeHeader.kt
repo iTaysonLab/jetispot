@@ -17,6 +17,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.SubtextOverline
 import coil.compose.AsyncImage
 
@@ -27,9 +28,9 @@ fun HomeSectionLargeHeader (
   item: HubItem
 ) {
   Row(Modifier.padding(vertical = 8.dp).clickableHub(navController, delegate, item)) {
-    AsyncImage(model = item.images?.main?.uri, contentDescription = null, modifier = Modifier
+    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
       .size(48.dp)
-      .clip(CircleShape), contentScale = ContentScale.Crop)
+      .clip(CircleShape))
 
     Column(Modifier.padding(horizontal = 12.dp).align(Alignment.CenterVertically)) {
       SubtextOverline(item.text!!.subtitle!!.uppercase(), modifier = Modifier)

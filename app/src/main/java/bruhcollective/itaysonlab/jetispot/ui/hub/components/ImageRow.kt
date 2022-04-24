@@ -20,6 +20,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubText
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.SubtextOverline
 import coil.compose.AsyncImage
 
@@ -30,9 +31,9 @@ fun ImageRow(
   item: HubItem
 ) {
   Row(Modifier.clickableHub(navController, delegate, item).padding(horizontal = 16.dp, vertical = 12.dp)) {
-    AsyncImage(model = item.images?.main?.uri, contentDescription = null, modifier = Modifier
+    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
       .size(42.dp)
-      .clip(CircleShape), contentScale = ContentScale.Crop)
+      .clip(CircleShape))
 
     Column(Modifier.padding(horizontal = 12.dp).align(Alignment.CenterVertically)) {
       MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal, fontSize = 18.sp)
