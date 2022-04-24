@@ -69,6 +69,11 @@ sealed class HubComponent {
   @TypeLabel("freetier:largerRow")
   object LargerRow: HubComponent()
 
+  // BUTTONS
+
+  @TypeLabel("freetier:tertiaryButtonOutlined")
+  object OutlinedButton: HubComponent()
+
   @DefaultObject
   object Unknown: HubComponent()
 }

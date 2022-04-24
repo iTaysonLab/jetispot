@@ -110,6 +110,10 @@ class MainActivity : ComponentActivity() {
                 DynamicSpIdScreen(navController, it.arguments?.getString("type"), it.arguments?.getString("id"))
               }
 
+              composable("spotify:{type}:{id}:{additionalItem}") {
+                DynamicSpIdScreen(navController, it.arguments?.getString("type"), it.arguments?.getString("id"), it.arguments?.getString("additionalItem"))
+              }
+
               dialog("dialogs/logout") {
                 AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
                   Icon(Icons.Default.Warning, null)

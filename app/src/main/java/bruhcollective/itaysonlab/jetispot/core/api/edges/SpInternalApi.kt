@@ -67,6 +67,17 @@ class SpInternalApi @Inject constructor(
         )
     )
 
+    suspend fun getReleasesView(id: String = "") = api.getJson<HubResponse>(
+        SpApiExecutor.Edge.Internal, "/artistview/v1/artist/$id/releases", mapOf(
+            "platform" to "android",
+            "client-timezone" to TimeZone.getDefault().id,
+            "locale" to api.sessionManager.session.preferredLocale(),
+            "podcast" to "false",
+            "video" to "true",
+            "checkDeviceCapability" to "true"
+        )
+    )
+
     suspend fun getPlaylistView(id: String): HubResponse {
         val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
             ExtensionKind.TRACK_V4

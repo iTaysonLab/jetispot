@@ -13,15 +13,19 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 
 @Composable
-fun DynamicSpIdScreen (
-  navController: NavController,
-  type: String?,
-  id: String?
+fun DynamicSpIdScreen(
+    navController: NavController,
+    type: String?,
+    id: String?,
+    additionalItem: String? = null
 ) {
-  val dest = SpIdDests.values().firstOrNull { it.type == type }
+    val dest = SpIdDests.values().firstOrNull {
+        it.type == type &&
+        it.additionalItem == additionalItem
+    }
 
   if (dest != null) {
-    HubScreen(navController = navController, needContentPadding = false, loader = {
+    HubScreen(navController = navController, needContentPadding = false, statusBarPadding = additionalItem != null, loader = {
       dest.provider(this, id!!)
     })
   } else {
@@ -35,20 +39,28 @@ fun DynamicSpIdScreen (
   }
 }
 
-enum class SpIdDests (val type: String, val provider: suspend SpApiManager.(String) -> HubResponse) {
-  Artist("artist", { id ->
-    internal.getArtistView(id)
-  }),
+enum class SpIdDests(
+    val type: String,
+    val provider: suspend SpApiManager.(String) -> HubResponse,
+    val additionalItem: String? = null
+) {
+    Artist("artist", { id ->
+        internal.getArtistView(id)
+    }),
 
-  Album("album", { id ->
-    internal.getAlbumView(id)
-  }),
+    Releases("artist", { id ->
+        internal.getReleasesView(id)
+    }, "releases"),
 
-  Genre("genre", { id ->
-    internal.getBrowseView(id)
-  }),
+    Album("album", { id ->
+        internal.getAlbumView(id)
+    }),
 
-  Playlist("playlist", { id ->
-    internal.getPlaylistView(id)
-  }),
+    Genre("genre", { id ->
+        internal.getBrowseView(id)
+    }),
+
+    Playlist("playlist", { id ->
+        internal.getPlaylistView(id)
+    }),
 }

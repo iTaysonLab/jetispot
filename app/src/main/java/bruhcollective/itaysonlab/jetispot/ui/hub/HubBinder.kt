@@ -43,6 +43,8 @@ fun HubBinder (
     HubComponent.TextRow -> TextRow(item.text!!)
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
 
+    HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
+
     else -> {
       Text("Unsupported, id = ${item.id}")
       Spacer(modifier = Modifier.height(8.dp))
