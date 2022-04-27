@@ -15,6 +15,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
@@ -29,9 +30,9 @@ fun MediumCard(
   Column(Modifier.width(size).clickableHub(navController, delegate, item)) {
     var drawnTitle = false
 
-    AsyncImage(model = item.images?.main?.uri, contentDescription = null, modifier = Modifier.size(size).clip(
+    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(size).clip(
       RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
-    ), contentScale = ContentScale.Crop)
+    ))
 
     if (!item.text?.title.isNullOrEmpty()) {
       drawnTitle = true

@@ -25,6 +25,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -59,7 +60,7 @@ fun AlbumHeader(
     .padding(top = 16.dp)
     .statusBarsPadding()) {
 
-    Image(painter = rememberAsyncImagePainter(model = item.images?.main?.uri), contentDescription = null, modifier = Modifier
+    PreviewableAsyncImage(item.images?.main?.uri, item.images?.main?.placeholder, modifier = Modifier
       .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
       .align(Alignment.CenterHorizontally)
       .padding(bottom = 8.dp))

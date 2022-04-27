@@ -16,6 +16,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
@@ -33,11 +34,9 @@ fun ArtistTrackRow(
       .align(Alignment.CenterVertically)
       .padding(end = 16.dp))
 
-    AsyncImage(model = item.images!!.main!!.uri, contentScale = ContentScale.Crop, contentDescription = null, modifier = Modifier.align(Alignment.CenterVertically).padding(
-      end = 16.dp
-    ).size(48.dp))
+    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.align(Alignment.CenterVertically).size(48.dp))
 
-    Column(Modifier.align(Alignment.CenterVertically)) {
+    Column(Modifier.align(Alignment.CenterVertically).padding(start = 16.dp)) {
       var drawnTitle = false
 
       if (!item.text?.title.isNullOrEmpty()) {

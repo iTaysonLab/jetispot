@@ -15,6 +15,7 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
@@ -30,7 +31,7 @@ fun SingleFocusCard (
     .fillMaxWidth()
     .clickableHub(navController, delegate, item)) {
     Row {
-      AsyncImage(model = item.images?.main?.uri, contentScale = ContentScale.Crop, contentDescription = null, modifier = Modifier
+      PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
         .fillMaxHeight()
         .width(120.dp))
       Box(Modifier.fillMaxSize().padding(16.dp)) {

@@ -14,6 +14,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
@@ -27,8 +28,7 @@ fun ArtistPinnedItem (
     Modifier
       .clickableHub(navController, delegate, item)
       .padding(horizontal = 16.dp, vertical = 2.dp)) {
-    AsyncImage(model = item.images?.main?.uri, contentDescription = null, modifier = Modifier.size(72.dp).padding(end = 16.dp))
-
+    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(72.dp).padding(vertical = 8.dp).padding(end = 16.dp))
     Column(Modifier.align(Alignment.CenterVertically)) {
       MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal, modifier = Modifier.padding(bottom = 4.dp))
       Subtext(item.text.subtitle!!)
