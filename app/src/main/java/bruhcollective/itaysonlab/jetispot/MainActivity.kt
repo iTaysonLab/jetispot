@@ -21,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
@@ -122,23 +123,16 @@ class MainActivity : ComponentActivity() {
                 AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
                   Icon(Icons.Default.Warning, null)
                 }, title = {
-                  Text("Sign out?")
+                  Text(stringResource(id = R.string.logout_title))
                 }, text = {
-                  Text("This will remove all data linked to your account from this device. Settings won't be reset to default.")
+                  Text(stringResource(id = R.string.logout_message))
                 }, confirmButton = {
-                  Text("Confirm",
-                    Modifier
-                      .clickable {
-                        navController.popBackStack()
-                      }
-                      .padding(16.dp))
+                  Text(stringResource(id = R.string.logout_confirm), Modifier.clickable {
+                    navController.popBackStack()
+                    // TODO: do actual logout&restart sequence
+                  }.padding(16.dp))
                 }, dismissButton = {
-                  Text("Cancel",
-                    Modifier
-                      .clickable {
-                        navController.popBackStack()
-                      }
-                      .padding(16.dp))
+                  Text(stringResource(id = R.string.logout_cancel), Modifier.clickable { navController.popBackStack() }.padding(16.dp))
                 })
               }
             }
