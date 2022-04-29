@@ -31,6 +31,7 @@ import javax.inject.Inject
 fun NowPlayingScreen (
   navController: NavController,
   bottomSheetState: BottomSheetState,
+  bsOffset: Float,
   viewModel: NowPlayingViewModel = hiltViewModel()
 ) {
   Box(Modifier.fillMaxSize()) {
@@ -43,7 +44,7 @@ fun NowPlayingScreen (
         .fillMaxWidth()
         .height(72.dp)
         .align(Alignment.TopStart)
-        .alpha(1f))
+        .alpha(1f - bsOffset))
   }
 }
 
