@@ -7,6 +7,6 @@ import javax.inject.Singleton
 @Singleton
 class SpPublicApi @Inject constructor(
   private val api: SpApiExecutor
-) {
+): SpEdgeScope by SpApiExecutor.Edge.Public.scope(api) {
 
 }

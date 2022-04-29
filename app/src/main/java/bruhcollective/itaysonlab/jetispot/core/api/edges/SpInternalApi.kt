@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.core.api.edges
 
-import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcContextData
@@ -22,9 +21,9 @@ import javax.inject.Singleton
 @Singleton
 class SpInternalApi @Inject constructor(
     private val api: SpApiExecutor
-) {
-    suspend fun getHomeView() = api.getJson<HubResponse>(
-        SpApiExecutor.Edge.Internal, "/homeview/v1/home", mapOf(
+): SpEdgeScope by SpApiExecutor.Edge.Internal.scope(api) {
+    suspend fun getHomeView() = getJson<HubResponse>(
+        "/homeview/v1/home", mapOf(
             "platform" to "android",
             "client-timezone" to TimeZone.getDefault().id,
             "locale" to api.sessionManager.session.preferredLocale(),
@@ -34,8 +33,8 @@ class SpInternalApi @Inject constructor(
         )
     )
 
-    suspend fun getBrowseView(pageId: String = "") = api.getJson<HubResponse>(
-        SpApiExecutor.Edge.Internal, "/hubview-mobile-v1/browse/$pageId", mapOf(
+    suspend fun getBrowseView(pageId: String = "") = getJson<HubResponse>(
+        "/hubview-mobile-v1/browse/$pageId", mapOf(
             "platform" to "android",
             "client-timezone" to TimeZone.getDefault().id,
             "locale" to api.sessionManager.session.preferredLocale(),
@@ -43,8 +42,8 @@ class SpInternalApi @Inject constructor(
         )
     )
 
-    suspend fun getAlbumView(id: String = "") = api.getJson<HubResponse>(
-        SpApiExecutor.Edge.Internal, "/album-entity-view/v2/album/$id", mapOf(
+    suspend fun getAlbumView(id: String = "") = getJson<HubResponse>(
+        "/album-entity-view/v2/album/$id", mapOf(
             "platform" to "android",
             "client-timezone" to TimeZone.getDefault().id,
             "locale" to api.sessionManager.session.preferredLocale(),
@@ -55,8 +54,8 @@ class SpInternalApi @Inject constructor(
         )
     )
 
-    suspend fun getArtistView(id: String = "") = api.getJson<HubResponse>(
-        SpApiExecutor.Edge.Internal, "/artistview/v1/artist/$id", mapOf(
+    suspend fun getArtistView(id: String = "") = getJson<HubResponse>(
+        "/artistview/v1/artist/$id", mapOf(
             "platform" to "android",
             "client-timezone" to TimeZone.getDefault().id,
             "locale" to api.sessionManager.session.preferredLocale(),
@@ -67,8 +66,8 @@ class SpInternalApi @Inject constructor(
         )
     )
 
-    suspend fun getReleasesView(id: String = "") = api.getJson<HubResponse>(
-        SpApiExecutor.Edge.Internal, "/artistview/v1/artist/$id/releases", mapOf(
+    suspend fun getReleasesView(id: String = "") = getJson<HubResponse>(
+        "/artistview/v1/artist/$id/releases", mapOf(
             "platform" to "android",
             "client-timezone" to TimeZone.getDefault().id,
             "locale" to api.sessionManager.session.preferredLocale(),
@@ -87,11 +86,6 @@ class SpInternalApi @Inject constructor(
         // get tracks ids
         val playlist = getPlaylist(id)
         val playlistTracks = playlist.contents.itemsList
-
-        Log.d("SPINTERNAL", playlist.attributes.unknownFields.asMap()[13]
-            ?.lengthDelimitedList
-            ?.get(0)?.toStringUtf8()!!
-        )
 
         val playlistHeader = HubItem(
             component = HubComponent.PlaylistHeader,
