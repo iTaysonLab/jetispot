@@ -32,13 +32,18 @@ fun HubBinder (
 
     HubComponent.AlbumTrackRow -> AlbumTrackRow(navController, delegate, item)
     HubComponent.ArtistTrackRow -> ArtistTrackRow(navController, delegate, item)
+    HubComponent.PlaylistTrackRow -> PlaylistTrackRow(navController, delegate, item)
+
     HubComponent.ArtistPinnedItem -> ArtistPinnedItem(navController, delegate, item)
     HubComponent.AlbumHeader -> AlbumHeader(navController, delegate, item)
     HubComponent.ArtistHeader -> ArtistHeader(item)
+    HubComponent.PlaylistHeader -> PlaylistHeader(navController, delegate, item)
     HubComponent.LargerRow -> LargerRow(navController, delegate, item)
 
     HubComponent.TextRow -> TextRow(item.text!!)
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
+
+    HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
 
     else -> {
       Text("Unsupported, id = ${item.id}")

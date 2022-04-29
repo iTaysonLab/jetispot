@@ -38,7 +38,8 @@ fun HubScreen(
   navController: NavController,
   needContentPadding: Boolean = true,
   loader: suspend SpApiManager.() -> HubResponse,
-  viewModel: HubScreenViewModel = hiltViewModel()
+  viewModel: HubScreenViewModel = hiltViewModel(),
+  statusBarPadding: Boolean = false
 ) {
   val scope = rememberCoroutineScope()
 
@@ -54,7 +55,8 @@ fun HubScreen(
         contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
         verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
         horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
-        columns = GridCells.Fixed(2)
+        columns = GridCells.Fixed(2),
+        modifier = if (statusBarPadding) Modifier.statusBarsPadding() else Modifier
       ) {
         if (viewModel.needContentPadding) {
           item(span = { GridItemSpan(2) }) {
