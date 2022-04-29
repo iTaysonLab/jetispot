@@ -67,6 +67,14 @@ class MainActivity : ComponentActivity() {
         val bsVisible = playerServiceManager.currentTrack.value.hasMetadata
         val bsState = rememberBottomSheetScaffoldState()
         val bsPeek by animateDpAsState(if (bsVisible) 80.dp + 72.dp + navBarHeight else 0.dp)
+        val bsDirection = bsState.bottomSheetState.direction
+        val bsProgress = bsState.bottomSheetState.progress.fraction
+        val bsOffset = when {
+          bsDirection == 0f -> if (bsState.bottomSheetState.isCollapsed) 1f - bsProgress else bsProgress
+          bsState.bottomSheetState.isCollapsed && bsDirection == 1f && bsProgress == 1f -> 0f
+          bsState.bottomSheetState.isExpanded && bsDirection == -1f && bsProgress == 1f -> 0f
+          else -> if (bsState.bottomSheetState.direction == 1f) 1f - bsProgress else bsProgress
+        }
 
         LaunchedEffect(Unit) {
           if (sessionManager.isSignedIn()) {
@@ -87,7 +95,7 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
           bottomBar = {
-            M3Navigation(navController = navController, bsState = bsState.bottomSheetState, isSelected = { route ->
+            M3Navigation(navController = navController, bsOffset = bsOffset, isSelected = { route ->
               currentTab.value == route
             }, onSelect = { route ->
               currentTab.value = route
@@ -95,7 +103,7 @@ class MainActivity : ComponentActivity() {
           }
         ) { innerPadding ->
           BottomSheetScaffold(sheetContent = {
-            NowPlayingScreen(navController = navController, bottomSheetState = bsState.bottomSheetState)
+            NowPlayingScreen(navController = navController, bottomSheetState = bsState.bottomSheetState, bsOffset = bsOffset)
           }, scaffoldState = bsState, sheetPeekHeight = bsPeek, backgroundColor = MaterialTheme.colorScheme.surface, modifier = Modifier) { innerScaffoldPadding ->
             NavHost(navController, startDestination = rootDestination.value, modifier = Modifier
               .padding(innerScaffoldPadding)

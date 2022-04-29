@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -40,12 +41,11 @@ fun PreviewableAsyncImage (
 
 @Composable
 fun PreviewableSyncImage (
-  imageData: Bitmap?,
+  imageBitmap: ImageBitmap?,
   placeholderType: String?,
   modifier: Modifier
 ) {
-  if (imageData != null) {
-    val imageBitmap = remember { imageData.asImageBitmap() }
+  if (imageBitmap != null) {
     Image(bitmap = imageBitmap, contentScale = ContentScale.Crop, contentDescription = null, modifier = modifier)
   } else {
     ImagePreview(placeholderType, modifier)

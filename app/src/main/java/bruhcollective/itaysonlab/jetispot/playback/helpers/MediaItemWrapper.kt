@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.playback.helpers
 
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 
@@ -14,4 +15,5 @@ class MediaItemWrapper(
   val duration get() = item?.metadata?.getLong(MediaMetadata.METADATA_KEY_DURATION) ?: 0L
 
   val artwork get() = item?.metadata?.getBitmap(MediaMetadata.METADATA_KEY_ART)
+  val artworkCompose by lazy { artwork?.asImageBitmap() }
 }

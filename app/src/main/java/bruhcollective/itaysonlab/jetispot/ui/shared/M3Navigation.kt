@@ -23,22 +23,11 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.bottomNavigationScreens
 @Composable
 fun M3Navigation(
   navController: NavController,
-  bsState: BottomSheetState,
+  bsOffset: Float,
   isSelected: (String) -> Boolean,
   onSelect: (String) -> Unit,
 ) {
   val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
-
-  val bsDirection = bsState.direction
-  val bsProgress = bsState.progress.fraction
-
-  val bsOffset = when {
-    bsDirection == 0f -> if (bsState.isCollapsed) 1f - bsProgress else bsProgress
-    bsState.isCollapsed && bsDirection == 1f && bsProgress == 1f -> 0f
-    bsState.isExpanded && bsDirection == -1f && bsProgress == 1f -> 0f
-    else -> if (bsState.direction == 1f) 1f - bsProgress else bsProgress
-  }
-
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
   val currentDestinationIsFullscreen = allScreens[currentDestination?.route] is FullscreenModeScreen
