@@ -89,7 +89,9 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.2"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.ui:ui-util:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
 
     //implementation "androidx.media3:media3-common:$media3_version"
     //implementation "androidx.media3:media3-session:$media3_version"
