@@ -27,11 +27,13 @@ class SpServiceEventsListener(
   }
 
   override fun onPlaybackPaused(p0: Player, trackTime: Long) {
+    player.audioFocus.abandonFocus()
     player.state.playbackState = SessionPlayer.PLAYER_STATE_PAUSED
     player.runOnListeners { it.onPlayerStateChanged(player, player.state.playbackState) }
   }
 
   override fun onPlaybackResumed(p0: Player, trackTime: Long) {
+    player.audioFocus.requestFocus()
     player.state.playbackState = SessionPlayer.PLAYER_STATE_PLAYING
     player.runOnListeners { it.onPlayerStateChanged(player, player.state.playbackState) }
   }

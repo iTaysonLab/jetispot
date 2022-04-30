@@ -21,8 +21,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 @SuppressLint("UnsafeOptInUsageError")
 class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScope(Dispatchers.Main + SupervisorJob()) {
-  @Inject
-  lateinit var spPlayerManager: SpPlayerManager
+  @Inject lateinit var spPlayerManager: SpPlayerManager
+  @Inject lateinit var audioFocusManager: AudioFocusManager
 
   private lateinit var mediaLibrarySession: MediaLibrarySession
   private lateinit var playerWrapper: SpPlayerWrapper
@@ -37,11 +37,13 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
   }
 
   override fun onDestroy() {
+    audioFocusManager.abandonFocus()
     mediaLibrarySession.close()
     super.onDestroy()
   }
 
   private fun createSession() {
+    audioFocusManager.requestFocus()
     playerWrapper = SpPlayerWrapper(this)
 
     playerWrapper.runOnPlayback {
@@ -73,6 +75,7 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
     ): Int {
       playerWrapper.runOnPlayback {
         val playData = extras?.getString("sp_json", null)
+
         if (playData != null) {
           spPlayerManager.reflect().playUsingData(playData)
         } else {

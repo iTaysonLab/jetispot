@@ -20,6 +20,7 @@ class SpPlayerWrapper(
 ) : SessionPlayer() {
   val playbackExecutor = Executors.newSingleThreadExecutor()
   val state = State()
+  val audioFocus get() = service.audioFocusManager
 
   private val playbackScope = CoroutineScope(playbackExecutor.asCoroutineDispatcher() + SupervisorJob())
 
