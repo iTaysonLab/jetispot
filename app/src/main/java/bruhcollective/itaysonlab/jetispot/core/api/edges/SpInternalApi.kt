@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.api.edges
 
+import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcContextData
@@ -87,6 +88,8 @@ class SpInternalApi @Inject constructor(
         val playlist = getPlaylist(id)
         val playlistTracks = playlist.contents.itemsList
 
+        //Log.d("SCM", playlist.toString())
+
         val playlistHeader = HubItem(
             component = HubComponent.PlaylistHeader,
             text = HubText(
@@ -96,11 +99,8 @@ class SpInternalApi @Inject constructor(
             images = HubImages(
                 HubImage(
                     uri = playlist.attributes.formatAttributesList.find { it.key == "image" }?.value
-                        ?: playlist.attributes.unknownFields.asMap()[13]
-                            ?.lengthDelimitedList
-                            ?.get(0)?.toStringUtf8()
-                                // I HAVE NO IDEA ABOUT THIS DON'T TOUCH
-                            ?.split(Regex(".default.."))?.get(1)
+                        ?: "https://i.scdn.co/image/${ImageId.fromHex(Utils.bytesToHex(playlist.attributes.picture)).hexId()}"
+
                 )
             )
         )
@@ -120,6 +120,7 @@ class SpInternalApi @Inject constructor(
                         .build()
                 )
         }
+
         val playlistItems = extensionResponseToHub(playlistData)
 
         return HubResponse(
@@ -146,6 +147,7 @@ class SpInternalApi @Inject constructor(
         val hubItems: MutableList<HubItem> = ArrayList()
         for (data in response.getExtendedMetadata(0).extensionDataList) {
             val track = Metadata.Track.parseFrom(data.extensionData.value)
+            //Log.d("SCM", track.toString())
             hubItems.add(
                 HubItem(
                     HubComponent.PlaylistTrackRow,

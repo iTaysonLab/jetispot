@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -15,9 +17,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
@@ -59,8 +63,16 @@ fun PlaylistHeader(
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 8.dp)
         )
-        Subtext(
-            text = item.text?.subtitle!!, modifier = Modifier
+
+        MediumText(text = item.text?.title!!, fontSize = 21.sp, modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp))
+
+        Text(
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 12.sp,
+            lineHeight = 18.sp,
+            text = item.text.subtitle!!, modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 8.dp)
         )

@@ -179,7 +179,7 @@ class HubScreenViewModel @Inject constructor(
 
       Color(android.graphics.Color.parseColor(apiResult))
     } catch (e: Exception) {
-      e.printStackTrace()
+      // e.printStackTrace()
       Color.Transparent
     }
   }
