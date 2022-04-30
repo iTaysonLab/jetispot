@@ -1,8 +1,10 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -28,9 +30,6 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.ImagePainter
-import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
 
 @Composable

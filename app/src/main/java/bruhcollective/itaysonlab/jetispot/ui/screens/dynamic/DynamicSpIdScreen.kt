@@ -34,6 +34,7 @@ fun DynamicSpIdScreen(
         .align(Alignment.Center)) {
         Text(type ?: "type unknown")
         Text(id ?: "id unknown")
+        Text(additionalItem ?: "null")
       }
     }
   }

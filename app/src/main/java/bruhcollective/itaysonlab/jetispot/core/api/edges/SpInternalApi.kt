@@ -91,7 +91,7 @@ class SpInternalApi @Inject constructor(
         //Log.d("SCM", playlist.toString())
 
         val playlistHeader = HubItem(
-            component = HubComponent.PlaylistHeader,
+            component = if (playlist.attributes.formatAttributesList.firstOrNull { it.key == "image_url" } != null) HubComponent.LargePlaylistHeader else HubComponent.PlaylistHeader,
             text = HubText(
                 title = playlist.attributes.name,
                 subtitle = playlist.attributes.description
@@ -99,8 +99,8 @@ class SpInternalApi @Inject constructor(
             images = HubImages(
                 HubImage(
                     uri = playlist.attributes.formatAttributesList.find { it.key == "image" }?.value
+                        ?: playlist.attributes.formatAttributesList.find { it.key == "image_url" }?.value
                         ?: "https://i.scdn.co/image/${ImageId.fromHex(Utils.bytesToHex(playlist.attributes.picture)).hexId()}"
-
                 )
             )
         )

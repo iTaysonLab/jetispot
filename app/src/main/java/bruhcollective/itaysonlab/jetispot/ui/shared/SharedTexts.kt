@@ -16,9 +16,11 @@ fun MediumText (
   modifier: Modifier = Modifier,
   color: Color = Color.Unspecified,
   fontWeight: FontWeight = FontWeight.Bold,
+  lineHeight: TextUnit = TextUnit.Unspecified,
+  maxLines: Int = 1,
   fontSize: TextUnit = 16.sp,
 ) {
-  Text(text, color = color, fontSize = fontSize, fontWeight = fontWeight, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = modifier)
+  Text(text, color = color, fontSize = fontSize, fontWeight = fontWeight, maxLines = maxLines, lineHeight = lineHeight, overflow = TextOverflow.Ellipsis, modifier = modifier)
 }
 
 @Composable
