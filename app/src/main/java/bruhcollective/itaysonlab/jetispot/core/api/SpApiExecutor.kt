@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
+import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
@@ -11,6 +12,7 @@ import okhttp3.Response
 import okio.IOException
 import okio.use
 import java.net.URLEncoder
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +29,15 @@ class SpApiExecutor @Inject constructor(
   }
 
   suspend fun <T> get(edge: Edge = Edge.Internal, suffix: String, params: Map<String, String>, usageBlock: (Response) -> T) = withContext(Dispatchers.IO) {
-    val url = suffix + "?" + params.map { "${it.key}=${URLEncoder.encode(it.value, "UTF-8")}" }.joinToString("&")
+    val url = "$suffix?" + (params + if (edge == Edge.Internal) arrayOf(
+      "platform" to "android",
+      "client-timezone" to TimeZone.getDefault().id,
+      "locale" to sessionManager.session.preferredLocale(),
+      "video" to "true",
+      "podcast" to "true",
+      "application" to "nft",
+    ) else arrayOf()).map { "${it.key}=${URLEncoder.encode(it.value, "UTF-8")}" }.joinToString("&")
+
     val headers = Headers.headersOf("User-Agent", "Spotify/8.7.20.1261 Android/32 (Pixel 4a (5G))", "Spotify-App-Version", "8.7.20.1261", "Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
 
     when (edge) {

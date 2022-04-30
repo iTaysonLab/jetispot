@@ -45,9 +45,6 @@ sealed class HubComponent {
   @TypeLabel("consumerMobile:artistTrackRow")
   object ArtistTrackRow: HubComponent()
 
-  @TypeLabel("consumerMobile:playlistTrackRow")
-  object PlaylistTrackRow: HubComponent()
-
   @TypeLabel("artist:pinnedItem")
   object ArtistPinnedItem: HubComponent()
 
@@ -78,6 +75,9 @@ sealed class HubComponent {
 
   @TypeLabel("synth:playlistHeaderLarge")
   object LargePlaylistHeader: HubComponent()
+
+  @TypeLabel("synth:playlistTrackRow")
+  object PlaylistTrackRow: HubComponent()
 
   @DefaultObject
   object Unknown: HubComponent()

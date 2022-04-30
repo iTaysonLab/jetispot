@@ -3,10 +3,7 @@ package bruhcollective.itaysonlab.jetispot.core.api.edges
 import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcContextData
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcOptions
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
+import bruhcollective.itaysonlab.jetispot.core.objs.player.*
 import com.spotify.extendedmetadata.ExtendedMetadata.*
 import com.spotify.extendedmetadata.ExtensionKindOuterClass.ExtensionKind
 import com.spotify.metadata.Metadata
@@ -24,58 +21,26 @@ class SpInternalApi @Inject constructor(
     private val api: SpApiExecutor
 ): SpEdgeScope by SpApiExecutor.Edge.Internal.scope(api) {
     suspend fun getHomeView() = getJson<HubResponse>(
-        "/homeview/v1/home", mapOf(
-            "platform" to "android",
-            "client-timezone" to TimeZone.getDefault().id,
-            "locale" to api.sessionManager.session.preferredLocale(),
-            "video" to "true",
-            "podcast" to "true",
-            "is_car_connected" to "false"
-        )
+        "/homeview/v1/home", mapOf("is_car_connected" to "false")
     )
 
     suspend fun getBrowseView(pageId: String = "") = getJson<HubResponse>(
-        "/hubview-mobile-v1/browse/$pageId", mapOf(
-            "platform" to "android",
-            "client-timezone" to TimeZone.getDefault().id,
-            "locale" to api.sessionManager.session.preferredLocale(),
-            "podcast" to "true"
-        )
+        "/hubview-mobile-v1/browse/$pageId", mapOf()
     )
 
     suspend fun getAlbumView(id: String = "") = getJson<HubResponse>(
-        "/album-entity-view/v2/album/$id", mapOf(
-            "platform" to "android",
-            "client-timezone" to TimeZone.getDefault().id,
-            "locale" to api.sessionManager.session.preferredLocale(),
-            "video" to "true",
-            "podcast" to "true",
-            "application" to "nft",
-            "checkDeviceCapability" to "true"
-        )
+        "/album-entity-view/v2/album/$id", mapOf("checkDeviceCapability" to "true")
     )
 
     suspend fun getArtistView(id: String = "") = getJson<HubResponse>(
         "/artistview/v1/artist/$id", mapOf(
-            "platform" to "android",
-            "client-timezone" to TimeZone.getDefault().id,
-            "locale" to api.sessionManager.session.preferredLocale(),
-            "podcast" to "true",
-            "video" to "true",
             "purchase_allowed" to "false",
             "timeFormat" to "24h"
         )
     )
 
     suspend fun getReleasesView(id: String = "") = getJson<HubResponse>(
-        "/artistview/v1/artist/$id/releases", mapOf(
-            "platform" to "android",
-            "client-timezone" to TimeZone.getDefault().id,
-            "locale" to api.sessionManager.session.preferredLocale(),
-            "podcast" to "false",
-            "video" to "true",
-            "checkDeviceCapability" to "true"
-        )
+        "/artistview/v1/artist/$id/releases", mapOf("checkDeviceCapability" to "true")
     )
 
     suspend fun getPlaylistView(id: String): HubResponse {
@@ -121,7 +86,7 @@ class SpInternalApi @Inject constructor(
                 )
         }
 
-        val playlistItems = extensionResponseToHub(playlistData)
+        val playlistItems = extensionResponseToHub(id, playlistTracks, playlistData)
 
         return HubResponse(
             header = playlistHeader,
@@ -143,11 +108,12 @@ class SpInternalApi @Inject constructor(
         return response
     }
 
-    private fun extensionResponseToHub(response: BatchedExtensionResponse): List<HubItem> {
-        val hubItems: MutableList<HubItem> = ArrayList()
-        for (data in response.getExtendedMetadata(0).extensionDataList) {
-            val track = Metadata.Track.parseFrom(data.extensionData.value)
-            //Log.d("SCM", track.toString())
+    private fun extensionResponseToHub(playlistId: String, tracks: List<Playlist4ApiProto.Item>, response: BatchedExtensionResponse): List<HubItem> {
+        val hubItems = mutableListOf<HubItem>()
+        val mappedMetadata = response.getExtendedMetadata(0).extensionDataList.associateBy { it.entityUri }.mapValues { Metadata.Track.parseFrom(it.value.extensionData.value) }
+
+        tracks.forEach { trackItem ->
+            val track = mappedMetadata[trackItem.uri]!!
             hubItems.add(
                 HubItem(
                     HubComponent.PlaylistTrackRow,
@@ -174,16 +140,20 @@ class SpInternalApi @Inject constructor(
                     events = HubEvents(
                         HubEvent.PlayFromContext(
                             PlayFromContextData(
-                                data.entityUri,
+                                trackItem.uri,
                                 PlayFromContextPlayerData(
-                                    PfcContextData(uri = data.entityUri),
-                                    PfcOptions()
+                                    PfcContextData(url = "context://spotify:playlist:$playlistId", uri = "spotify:playlist:$playlistId"),
+                                    PfcOptions(skip_to = PfcOptSkipTo(track_uri = trackItem.uri))
                                 )
                             )
                         )
                     )
                 )
             )
+        }
+
+        for (data in response.getExtendedMetadata(0).extensionDataList) {
+
         }
 
         return hubItems
