@@ -16,9 +16,8 @@ import androidx.compose.ui.util.lerp
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class PlayPauseButtonState {
-  val isPlay = mutableStateOf(false)
-  val isFinallyPlay = mutableStateOf(false)
+class PlayPauseButtonState (isPlaying: Boolean) {
+  val isFinallyPlay = mutableStateOf(isPlaying)
   val leftBar = Path()
   val rightBar = Path()
 }
@@ -31,18 +30,20 @@ class PlayPauseButtonDimens(
 
 @Composable
 fun PlayPauseButton (
+  isPlaying: Boolean,
+  onClick: () -> Unit,
   color: Color,
   modifier: Modifier
 ) {
-  val state = remember { PlayPauseButtonState() }
+  val state = remember { PlayPauseButtonState(isPlaying) }
   val dimens = remember { PlayPauseButtonDimens() }
 
-  val progressAnimator = animateFloatAsState(targetValue = if (state.isPlay.value) 1f else 0f, finishedListener = {
+  val progressAnimator = animateFloatAsState(targetValue = if (!isPlaying) 1f else 0f, finishedListener = {
     state.isFinallyPlay.value = it == 1f
   })
 
   Canvas(modifier.clickable {
-    state.isPlay.value = !state.isPlay.value
+    onClick()
   }) {
     val progress = progressAnimator.value
     val pauseBarDistance = dimens.distance.toPx()

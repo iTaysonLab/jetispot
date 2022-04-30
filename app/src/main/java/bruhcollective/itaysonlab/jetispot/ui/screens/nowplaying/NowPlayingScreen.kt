@@ -39,7 +39,7 @@ fun NowPlayingScreen (
       // main content
     }
 
-    NowPlayingMiniplayer(viewModel.currentTrack.value,
+    NowPlayingMiniplayer(viewModel,
       Modifier
         .fillMaxWidth()
         .height(72.dp)
@@ -50,7 +50,7 @@ fun NowPlayingScreen (
 
 @Composable
 fun NowPlayingMiniplayer (
-  currentTrack: MediaItemWrapper,
+  viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
   Surface(tonalElevation = 8.dp, modifier = modifier) {
@@ -62,13 +62,13 @@ fun NowPlayingMiniplayer (
       Surface(
         Modifier
           .height(2.dp)
-          .fillMaxWidth(0.4f), color = MaterialTheme.colorScheme.primary) {}
+          .fillMaxWidth(viewModel.currentPosition.value.progressRange), color = MaterialTheme.colorScheme.primary) {}
 
       Row(
         Modifier
           .fillMaxHeight()
           .padding(horizontal = 16.dp)) {
-        PreviewableSyncImage(currentTrack.artworkCompose, placeholderType = "track", modifier = Modifier
+        PreviewableSyncImage(viewModel.currentTrack.value.artworkCompose, placeholderType = "track", modifier = Modifier
           .size(48.dp)
           .align(Alignment.CenterVertically)
           .clip(RoundedCornerShape(8.dp)))
@@ -78,11 +78,13 @@ fun NowPlayingMiniplayer (
             .weight(2f)
             .padding(horizontal = 14.dp)
             .align(Alignment.CenterVertically)) {
-          Text(currentTrack.title, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp)
-          Text(currentTrack.artist, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+          Text(viewModel.currentTrack.value.title, color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp)
+          Text(viewModel.currentTrack.value.artist, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
         }
 
         PlayPauseButton(
+          viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+          { viewModel.togglePlayPause() },
           MaterialTheme.colorScheme.onSurface,
           Modifier.fillMaxHeight().width(56.dp).align(Alignment.CenterVertically)
         )
@@ -117,15 +119,10 @@ class NowPlayingViewModel @Inject constructor(
   private val spPlayerServiceManager: SpPlayerServiceManager
 ): ViewModel() {
   val currentTrack get() = spPlayerServiceManager.currentTrack
-}
+  val currentPosition get() = spPlayerServiceManager.playbackProgress
+  val currentState get() = spPlayerServiceManager.playbackState
 
-// Previews
-
-@Preview
-@Composable
-fun NowPlayingMiniplayerPreview () {
-  NowPlayingMiniplayer(
-    MediaItemWrapper(),
-    Modifier.fillMaxWidth()
-  )
+  fun togglePlayPause() {
+    spPlayerServiceManager.playPause()
+  }
 }
