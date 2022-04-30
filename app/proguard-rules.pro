@@ -40,20 +40,14 @@
 # genericjson gson fixes
 -keep,allowobfuscation class * extends xyz.gianlu.librespot.mercury.JsonWrapper { *; }
 
-# spotify protobuf, probably not needed to keep
+# protobuf
 -keep class com.spotify.** {*;}
+-keep class * extends com.google.protobuf.AbstractMessage {*;}
+
+# librespot decoding stuff
 -keep class xyz.gianlu.librespot.audio.decoders.** {*;}
-
-# default sink
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput { *; }
--keep class bruhcollective.itaysonlab.jetispot.playback.sp.TremoloVorbisDecoder { *; }
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder { *; }
-
-# native tremolo code
--keep class xyz.gianlu.librespot.player.decoders.tremolo.OggDecodingInputStream
--keepclassmembers class xyz.gianlu.librespot.player.decoders.tremolo.OggDecodingInputStream {
-   *;
-}
 
 # gson rules
 -keepattributes Signature
