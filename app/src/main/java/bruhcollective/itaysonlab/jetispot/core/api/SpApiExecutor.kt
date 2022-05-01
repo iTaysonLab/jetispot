@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
-import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import com.google.protobuf.GeneratedMessageV3
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
@@ -9,8 +9,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.Request
 import okhttp3.Response
+import okio.BufferedSource
 import okio.IOException
 import okio.use
+import java.io.InputStream
 import java.net.URLEncoder
 import java.util.*
 import javax.inject.Inject
@@ -22,6 +24,12 @@ class SpApiExecutor @Inject constructor(
   val sessionManager: SpSessionManager,
   val moshi: Moshi
 ) {
+  suspend inline fun <reified T: GeneratedMessageV3> getProto(edge: Edge = Edge.Internal, suffix: String, params: Map<String, String>) = get(edge, suffix, params) { res ->
+    res.body!!.source().inputStream().use {
+      T::class.java.getDeclaredMethod("parseFrom", InputStream::class.java).invoke(null, it) as T
+    }
+  }
+
   suspend inline fun <reified T> getJson(edge: Edge = Edge.Internal, suffix: String, params: Map<String, String>) = get<T>(edge, suffix, params) { res ->
     res.body!!.source().use {
       moshi.adapter<T>().fromJson(it)!!

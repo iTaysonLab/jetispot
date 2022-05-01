@@ -1,9 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.core.api.edges
 
-import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
+import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.extendedmetadata.ExtendedMetadata.*
 import com.spotify.extendedmetadata.ExtensionKindOuterClass.ExtensionKind
 import com.spotify.metadata.Metadata
@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,9 +38,11 @@ class SpInternalApi @Inject constructor(
         )
     )
 
-    suspend fun getReleasesView(id: String = "") = getJson<HubResponse>(
-        "/artistview/v1/artist/$id/releases", mapOf("checkDeviceCapability" to "true")
-    )
+    suspend fun getReleasesView(id: String = "") = getJson<HubResponse>("/artistview/v1/artist/$id/releases", mapOf("checkDeviceCapability" to "true"))
+    suspend fun getPlaylist(id: String) = getProto<Playlist4ApiProto.SelectedListContent>("/playlist/v2/playlist/$id")
+
+    suspend fun getAllPlans() = getProto<DacResponse>("/pam-view-service/v1/AllPlans")
+    suspend fun getCurrentPlan() = getProto<DacResponse>("/pam-view-service/v1/PlanOverview")
 
     suspend fun getPlaylistView(id: String): HubResponse {
         val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
@@ -92,20 +93,6 @@ class SpInternalApi @Inject constructor(
             header = playlistHeader,
             body = playlistItems
         )
-    }
-
-    private suspend fun getPlaylist(id: String): Playlist4ApiProto.SelectedListContent {
-        val response = api.get<Playlist4ApiProto.SelectedListContent>(
-            SpApiExecutor.Edge.Internal, "/playlist/v2/playlist/$id", mapOf(
-                "platform" to "android",
-                "client-timezone" to TimeZone.getDefault().id,
-                "locale" to api.sessionManager.session.preferredLocale()
-            )
-        ) { response ->
-            Playlist4ApiProto.SelectedListContent.parseFrom(response.body!!.byteStream())
-        }
-
-        return response
     }
 
     private fun extensionResponseToHub(playlistId: String, tracks: List<Playlist4ApiProto.Item>, response: BatchedExtensionResponse): List<HubItem> {

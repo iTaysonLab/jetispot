@@ -107,6 +107,12 @@ class ConfigScreenViewModel @Inject constructor(
       it.navigate("dialogs/logout")
     }))
 
+    add(ConfigItem.Preference(R.string.config_viewplan, { ctx, cfg ->
+      ctx.getString(R.string.config_viewplan_desc)
+    }, {
+      it.navigate("dac/viewCurrentPlan")
+    }))
+
     add(ConfigItem.Category(R.string.config_about))
 
     add(ConfigItem.Preference(R.string.app_name, { ctx, _ ->

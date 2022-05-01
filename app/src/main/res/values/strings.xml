@@ -49,6 +49,18 @@
     <string name="config_logout">Logout</string>
     <string name="config_logout_as">Signed in as %s</string>
 
+    <string name="config_viewplan">View current plan</string>
+    <string name="config_viewplan_desc">Premium account</string>
+    <string name="plan_overview">Plan overview</string>
+    <string name="all_plans">Premium plans</string>
+
+    <string name="plan_manager">Plan manager</string>
+    <string name="plan_member">Plan member</string>
+    <string name="plan_kid">Kid</string>
+    <string name="unknown">Unknown</string>
+    <string name="plan_includes">Plan includes</string>
+    <string name="plan_others">See other plans</string>
+
     <string name="about_version">version %s</string>
     <string name="about_sources">Show source code</string>
     <string name="about_channel">Open Telegram channel</string>

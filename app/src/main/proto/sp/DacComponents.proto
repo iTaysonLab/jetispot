@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package dac.api.v1.proto;
+
+option java_multiple_files = true;
+option java_package = "com.spotify.dac.api.v1.proto";
+
+message DacResponse {
+    google.protobuf.Any component = 2;
+}
