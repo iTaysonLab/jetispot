@@ -25,8 +25,6 @@ class SpPlayerServiceImpl (
 
   private val progressFlow = flow {
     while (true) {
-      Log.d("PF", "${manager.playbackState.value} -> ${mediaController?.currentPosition}")
-
       if (manager.playbackState.value == SpPlayerServiceManager.PlaybackState.Playing) {
         emit(mediaController?.currentPosition ?: 0L)
       }

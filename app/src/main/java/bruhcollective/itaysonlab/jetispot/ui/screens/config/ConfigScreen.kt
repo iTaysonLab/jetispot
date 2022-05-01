@@ -80,10 +80,8 @@ class ConfigScreenViewModel @Inject constructor(
         else -> ctx.resources.getQuantityString(R.plurals.seconds, value, value)
       }
     }, 0f..12f, 11, { cfg ->
-      Log.d("SPM", "get ${cfg.playerConfig.crossfade}")
       cfg.playerConfig.crossfade
     }, { num ->
-      Log.d("SPM", "set $num")
       playerConfig = playerConfig.toBuilder().setCrossfade(num).build()
     }))
 
