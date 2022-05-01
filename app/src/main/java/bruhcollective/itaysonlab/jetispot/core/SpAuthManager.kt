@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.core
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.core.Session
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,5 +38,9 @@ class SpAuthManager @Inject constructor(
     object Success: AuthResult()
     class SpError(val msg: String): AuthResult()
     class Exception(val e: kotlin.Exception): AuthResult()
+  }
+
+  fun reset() {
+    File(spSessionManager.appContext.filesDir, "spa_creds").delete()
   }
 }

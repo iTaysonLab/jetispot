@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Suppress("BlockingMethodInNonBlockingContext")
 @Singleton
 class SpSessionManager @Inject constructor(
-  @ApplicationContext private val appContext: Context,
+  @ApplicationContext val appContext: Context,
 ) {
   private var _session: Session? = null
   val session get() = _session ?: throw IllegalStateException("Session is not created yet!")

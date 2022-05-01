@@ -44,6 +44,11 @@ class SpInternalApi @Inject constructor(
     suspend fun getAllPlans() = getProto<DacResponse>("/pam-view-service/v1/AllPlans")
     suspend fun getCurrentPlan() = getProto<DacResponse>("/pam-view-service/v1/PlanOverview")
 
+    suspend fun getListeningHistory(timestamp: String = "") = getJson<HubResponse>("/listening-history/v2/mobile/${timestamp}", mapOf(
+        "type" to "merged",
+        "last_component_had_play_context" to "false"
+    ))
+
     suspend fun getPlaylistView(id: String): HubResponse {
         val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
             ExtensionKind.TRACK_V4

@@ -133,7 +133,8 @@ class MainActivity : ComponentActivity() {
                 }, confirmButton = {
                   Text(stringResource(id = R.string.logout_confirm), Modifier.clickable {
                     navController.popBackStack()
-                    // TODO: do actual logout&restart sequence
+                    authManager.reset()
+                    android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
                   }.padding(16.dp))
                 }, dismissButton = {
                   Text(stringResource(id = R.string.logout_cancel), Modifier.clickable { navController.popBackStack() }.padding(16.dp))
