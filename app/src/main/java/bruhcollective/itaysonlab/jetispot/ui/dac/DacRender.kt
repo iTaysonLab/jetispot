@@ -29,7 +29,7 @@ fun DacRender (
     is PlanComponent -> PlanComponentBinder(navController, item)
     is DisclaimerComponent -> DisclaimerComponentBinder(navController, item)
     else -> {
-      Text("DAC [${item::class.java.simpleName}]\n\n${item}")
+      Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}")
       Spacer(modifier = Modifier.height(8.dp))
     }
   }

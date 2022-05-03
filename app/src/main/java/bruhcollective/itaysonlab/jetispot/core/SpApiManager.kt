@@ -13,4 +13,6 @@ class SpApiManager @Inject constructor(
   val internal: SpInternalApi,
   val public: SpPublicApi,
   val partners: SpPartnersApi
-)
+) {
+
+}

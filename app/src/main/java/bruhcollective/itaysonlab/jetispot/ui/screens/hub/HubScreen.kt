@@ -24,9 +24,10 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
+import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +38,7 @@ import javax.inject.Inject
 fun HubScreen(
   navController: NavController,
   needContentPadding: Boolean = true,
-  loader: suspend SpApiManager.() -> HubResponse,
+  loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
   statusBarPadding: Boolean = false
 ) {
@@ -142,6 +143,7 @@ fun HubScreen(
 
 @HiltViewModel
 class HubScreenViewModel @Inject constructor(
+  private val spInternalApi: SpInternalApi,
   private val spApiManager: SpApiManager,
   private val spPlayerServiceManager: SpPlayerServiceManager
 ) : ViewModel(), HubScreenDelegate {
@@ -151,16 +153,16 @@ class HubScreenViewModel @Inject constructor(
   // no state handle needed
   var needContentPadding: Boolean = false
 
-  suspend fun load(loader: suspend SpApiManager.() -> HubResponse) {
+  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = try {
-      State.Loaded(spApiManager.loader())
+      State.Loaded(spInternalApi.loader())
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
     }
   }
 
-  suspend fun reload(loader: suspend SpApiManager.() -> HubResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = State.Loading
     load(loader)
   }

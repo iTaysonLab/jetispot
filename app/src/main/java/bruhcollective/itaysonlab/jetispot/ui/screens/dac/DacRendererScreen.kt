@@ -21,12 +21,15 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
+import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import com.google.protobuf.Any
 import com.google.protobuf.Message
 import com.spotify.dac.api.components.VerticalListComponent
 import com.spotify.dac.api.v1.proto.DacResponse
+import com.spotify.home.dac.component.v1.proto.HomePageComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,7 +41,7 @@ import javax.inject.Inject
 fun DacRendererScreen(
   navController: NavController,
   title: String,
-  loader: suspend SpApiManager.() -> DacResponse,
+  loader: suspend SpInternalApi.() -> DacResponse,
   viewModel: DacViewModel = hiltViewModel()
 ) {
   val scrollBehavior = remember { TopAppBarDefaults.enterAlwaysScrollBehavior() }
@@ -71,14 +74,30 @@ fun DacRendererScreen(
           modifier = Modifier.fillMaxHeight().padding(padding)
         ) {
           (viewModel.state as DacViewModel.State.Loaded).data.apply {
-            when (this) {
-              is VerticalListComponent -> {
-                items(this.componentsList) { item ->
-                  val unpackedItem = item.dynamicUnpack()
-                  DacRender(navController, unpackedItem)
-                  Spacer(modifier = Modifier.height(12.dp))
+            val cmBind: (List<Any>) -> Unit = { componentsList ->
+              items(componentsList) { item ->
+                var exception: Exception? = null
+                var unpackedItem: Message? = null
+
+                try {
+                  unpackedItem = item.dynamicUnpack()
+                } catch (e: Exception) {
+                  exception = e
                 }
+
+                if (unpackedItem == null && exception != null) {
+                  Text("DAC rendering error: ${exception.message}\n\n${exception.stackTraceToString()}")
+                } else if (unpackedItem != null) {
+                  DacRender(navController, unpackedItem)
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
               }
+            }
+
+            when (this) {
+              is VerticalListComponent -> cmBind(this.componentsList)
+              is HomePageComponent -> cmBind(this.componentsList)
             }
           }
         }
@@ -129,15 +148,15 @@ fun DacRendererScreen(
 
 @HiltViewModel
 class DacViewModel @Inject constructor(
-  private val spApiManager: SpApiManager,
+  private val spInternalApi: SpInternalApi,
   private val spPlayerServiceManager: SpPlayerServiceManager
 ) : ViewModel() {
   private val _state = mutableStateOf<State>(State.Loading)
   val state: State get() = _state.value
 
-  suspend fun load(loader: suspend SpApiManager.() -> DacResponse) {
+  suspend fun load(loader: suspend SpInternalApi.() -> DacResponse) {
     _state.value = try {
-      val unpackedRaw = spApiManager.loader()
+      val unpackedRaw = spInternalApi.loader()
       val unpackedMessage = unpackedRaw.component.dynamicUnpack()
       State.Loaded(unpackedMessage)
     } catch (e: Exception) {
@@ -146,7 +165,7 @@ class DacViewModel @Inject constructor(
     }
   }
 
-  suspend fun reload(loader: suspend SpApiManager.() -> DacResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.() -> DacResponse) {
     _state.value = State.Loading
     load(loader)
   }

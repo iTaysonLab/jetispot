@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.jetispot.core.api.edges
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
-import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.extendedmetadata.ExtendedMetadata.*
 import com.spotify.extendedmetadata.ExtensionKindOuterClass.ExtensionKind
 import com.spotify.metadata.Metadata
@@ -12,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
+import xyz.gianlu.librespot.metadata.PlaylistId
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,36 +20,6 @@ import javax.inject.Singleton
 class SpInternalApi @Inject constructor(
     private val api: SpApiExecutor
 ): SpEdgeScope by SpApiExecutor.Edge.Internal.scope(api) {
-    suspend fun getHomeView() = getJson<HubResponse>(
-        "/homeview/v1/home", mapOf("is_car_connected" to "false")
-    )
-
-    suspend fun getBrowseView(pageId: String = "") = getJson<HubResponse>(
-        "/hubview-mobile-v1/browse/$pageId", mapOf()
-    )
-
-    suspend fun getAlbumView(id: String = "") = getJson<HubResponse>(
-        "/album-entity-view/v2/album/$id", mapOf("checkDeviceCapability" to "true")
-    )
-
-    suspend fun getArtistView(id: String = "") = getJson<HubResponse>(
-        "/artistview/v1/artist/$id", mapOf(
-            "purchase_allowed" to "false",
-            "timeFormat" to "24h"
-        )
-    )
-
-    suspend fun getReleasesView(id: String = "") = getJson<HubResponse>("/artistview/v1/artist/$id/releases", mapOf("checkDeviceCapability" to "true"))
-    suspend fun getPlaylist(id: String) = getProto<Playlist4ApiProto.SelectedListContent>("/playlist/v2/playlist/$id")
-
-    suspend fun getAllPlans() = getProto<DacResponse>("/pam-view-service/v1/AllPlans")
-    suspend fun getCurrentPlan() = getProto<DacResponse>("/pam-view-service/v1/PlanOverview")
-
-    suspend fun getListeningHistory(timestamp: String = "") = getJson<HubResponse>("/listening-history/v2/mobile/${timestamp}", mapOf(
-        "type" to "merged",
-        "last_component_had_play_context" to "false"
-    ))
-
     suspend fun getPlaylistView(id: String): HubResponse {
         val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
             ExtensionKind.TRACK_V4
@@ -56,7 +27,7 @@ class SpInternalApi @Inject constructor(
         val entities: MutableList<EntityRequest> = ArrayList()
 
         // get tracks ids
-        val playlist = getPlaylist(id)
+        val playlist = api.sessionManager.session.api().getPlaylist(PlaylistId.fromUri("spotify:playlist:$id"))
         val playlistTracks = playlist.contents.itemsList
 
         //Log.d("SCM", playlist.toString())
@@ -142,10 +113,6 @@ class SpInternalApi @Inject constructor(
                     )
                 )
             )
-        }
-
-        for (data in response.getExtendedMetadata(0).extensionDataList) {
-
         }
 
         return hubItems

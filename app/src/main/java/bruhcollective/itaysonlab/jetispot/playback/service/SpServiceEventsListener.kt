@@ -8,6 +8,7 @@ import bruhcollective.itaysonlab.jetispot.playback.helpers.toMediaMetadata
 import xyz.gianlu.librespot.audio.MetadataWrapper
 import xyz.gianlu.librespot.metadata.PlayableId
 import xyz.gianlu.librespot.player.Player
+import java.lang.Exception
 
 @SuppressLint("UnsafeOptInUsageError")
 class SpServiceEventsListener(
@@ -36,6 +37,10 @@ class SpServiceEventsListener(
     player.audioFocus.requestFocus()
     player.state.playbackState = SessionPlayer.PLAYER_STATE_PLAYING
     player.runOnListeners { it.onPlayerStateChanged(player, player.state.playbackState) }
+  }
+
+  override fun onPlaybackFailed(p0: Player, p1: Exception) {
+    Log.e("SpService", "onPlaybackFailed => ${p1.message}")
   }
 
   override fun onTrackSeeked(p0: Player, trackTime: Long) {

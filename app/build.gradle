@@ -102,7 +102,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
-    implementation('xyz.gianlu.librespot:librespot-player:1.6.2:thin') {
+    implementation('com.github.librespot-org.librespot-java:librespot-player:dev-SNAPSHOT:thin') {
         exclude group: 'xyz.gianlu.librespot', module: 'librespot-sink'
         exclude group: 'com.lmax', module: 'disruptor'
         exclude group: 'org.apache.logging.log4j'
@@ -117,10 +117,12 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.41"
     kapt "com.google.dagger:hilt-compiler:2.41"
 
-    // Interacting with MediaSessions
     implementation "androidx.media2:media2-session:$media2_version"
-    // optional - Implementation of a SessionPlayer
     implementation "androidx.media2:media2-player:$media2_version"
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation "com.squareup.retrofit2:converter-protobuf:2.9.0"
 }
 
 protobuf {

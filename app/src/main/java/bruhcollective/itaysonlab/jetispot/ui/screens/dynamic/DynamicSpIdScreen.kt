@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 
@@ -42,26 +43,26 @@ fun DynamicSpIdScreen(
 
 enum class SpIdDests(
     val type: String,
-    val provider: suspend SpApiManager.(String) -> HubResponse,
+    val provider: suspend SpInternalApi.(String) -> HubResponse,
     val additionalItem: String? = null
 ) {
     Artist("artist", { id ->
-        internal.getArtistView(id)
+        getArtistView(id)
     }),
 
     Releases("artist", { id ->
-        internal.getReleasesView(id)
+        getReleasesView(id)
     }, "releases"),
 
     Album("album", { id ->
-        internal.getAlbumView(id)
+        getAlbumView(id)
     }),
 
     Genre("genre", { id ->
-        internal.getBrowseView(id)
+        getBrowseView(id)
     }),
 
-    Playlist("playlist", { id ->
-        internal.getPlaylistView(id)
-    }),
+    //Playlist("playlist", { id ->
+    //    internal.getPlaylistView(id)
+    //}),
 }
