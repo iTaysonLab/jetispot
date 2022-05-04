@@ -139,7 +139,7 @@ fun LargePlaylistHeader(
           brush = Brush.verticalGradient(
             colors = listOf(dominantColorAsBg.value, Color.Transparent)
           )
-        )
+        ).fillMaxWidth()
     ) {
       Text(
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
