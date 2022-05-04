@@ -50,7 +50,7 @@ fun SmallActionCardBinder(
           Subtext(text = subtitle)
         }
 
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart)) {
           DynamicLikeButton(objectUrl = likeUri, Modifier.size(42.dp).align(Alignment.CenterStart))
           DynamicPlayButton(command = playCommand, Modifier.size(42.dp).align(Alignment.CenterEnd))
         }
