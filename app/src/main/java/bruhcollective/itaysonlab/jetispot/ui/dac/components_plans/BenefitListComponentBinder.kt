@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetispot.ui.dac.components
+package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import com.spotify.planoverview.v1.BenefitListComponent
 
 @OptIn(ExperimentalMaterial3Api::class)

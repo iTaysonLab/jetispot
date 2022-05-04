@@ -15,24 +15,34 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 
 @Composable
 fun DynamicSpIdScreen(
-    navController: NavController,
-    type: String?,
-    id: String?,
-    additionalItem: String? = null
+  navController: NavController,
+  type: String?,
+  id: String?,
+  additionalItem: String? = null
 ) {
-    val dest = SpIdDests.values().firstOrNull {
-        it.type == type &&
-        it.additionalItem == additionalItem
-    }
+  var dest = SpIdDests.values().firstOrNull {
+    it.type == type && it.additionalItem == additionalItem
+  }
+
+  if (type == "user" && additionalItem != null) {
+    val aiTwo = additionalItem.split(":")
+    dest = SpIdDests.values().firstOrNull { it.type == aiTwo[0] }
+  }
 
   if (dest != null) {
-    HubScreen(navController = navController, needContentPadding = false, statusBarPadding = additionalItem != null, loader = {
-      dest.provider(this, id!!)
-    })
+    HubScreen(
+      navController = navController,
+      needContentPadding = false,
+      statusBarPadding = additionalItem != null,
+      loader = { mgr ->
+        dest.provider(this, mgr, if (type == "user" && additionalItem != null) additionalItem.split(":")[1] else id!!)
+      })
   } else {
     Box(Modifier.fillMaxSize()) {
-      Column(modifier = Modifier
-        .align(Alignment.Center)) {
+      Column(
+        modifier = Modifier
+          .align(Alignment.Center)
+      ) {
         Text(type ?: "type unknown")
         Text(id ?: "id unknown")
         Text(additionalItem ?: "null")
@@ -42,27 +52,27 @@ fun DynamicSpIdScreen(
 }
 
 enum class SpIdDests(
-    val type: String,
-    val provider: suspend SpInternalApi.(String) -> HubResponse,
-    val additionalItem: String? = null
+  val type: String,
+  val provider: suspend SpInternalApi.(SpApiManager, String) -> HubResponse,
+  val additionalItem: String? = null
 ) {
-    Artist("artist", { id ->
-        getArtistView(id)
-    }),
+  Artist("artist", { _, id ->
+    getArtistView(id)
+  }),
 
-    Releases("artist", { id ->
-        getReleasesView(id)
-    }, "releases"),
+  Releases("artist", { _, id ->
+    getReleasesView(id)
+  }, "releases"),
 
-    Album("album", { id ->
-        getAlbumView(id)
-    }),
+  Album("album", { _, id ->
+    getAlbumView(id)
+  }),
 
-    Genre("genre", { id ->
-        getBrowseView(id)
-    }),
+  Genre("genre", { _, id ->
+    getBrowseView(id)
+  }),
 
-    //Playlist("playlist", { id ->
-    //    internal.getPlaylistView(id)
-    //}),
+  Playlist("playlist", { mgr, id ->
+    mgr.internal.getPlaylistView(id)
+  }),
 }

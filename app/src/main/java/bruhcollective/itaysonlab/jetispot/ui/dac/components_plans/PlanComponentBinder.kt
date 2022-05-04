@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetispot.ui.dac.components
+package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 
 import android.content.Intent
 import android.net.Uri

@@ -18,3 +18,13 @@ message SectionHeaderComponent {
 message SectionComponent {
   repeated google.protobuf.Any components = 2;
 }
+
+message RecsplanationHeadingComponent {
+  string title = 1;
+  string subtitle = 2;
+  string navigateUri = 3;
+  string imageUri = 4;
+}
+
+// only ubi(soft?!) data here, I guess recents are fetched separately
+message RecentlyPlayedSectionComponent {}

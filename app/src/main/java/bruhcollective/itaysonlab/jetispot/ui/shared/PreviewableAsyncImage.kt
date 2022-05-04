@@ -59,8 +59,10 @@ fun ImagePreview (
   modifier: Modifier
 ) {
   Surface(tonalElevation = 8.dp, modifier = modifier) {
-    Box(Modifier.fillMaxSize()) {
-      Icon(imageVector = placeholderToIcon(of), contentDescription = null, Modifier.fillMaxSize().padding(8.dp))
+    if (of != "none") {
+      Box(Modifier.fillMaxSize()) {
+        Icon(imageVector = placeholderToIcon(of), contentDescription = null, Modifier.fillMaxSize().padding(8.dp))
+      }
     }
   }
 }

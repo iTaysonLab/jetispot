@@ -47,7 +47,7 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_home,
     iconProvider = { Icons.Default.Home },
     screenProvider = { navController ->
-      DacRendererScreen(navController, "", { getDacHome() })
+      DacRendererScreen(navController, "", true, { getDacHome() })
     }
   )
 
@@ -85,11 +85,11 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
   //
 
   object DacViewCurrentPlan: Screen("dac/viewCurrentPlan", { navController ->
-    DacRendererScreen(navController, stringResource(id = R.string.plan_overview), { getPlanOverview() })
+    DacRendererScreen(navController, stringResource(id = R.string.plan_overview), loader = { getPlanOverview() })
   })
 
   object DacViewAllPlans: Screen("dac/viewAllPlans", { navController ->
-    DacRendererScreen(navController, stringResource(id = R.string.all_plans), { getAllPlans() })
+    DacRendererScreen(navController, stringResource(id = R.string.all_plans), loader = { getAllPlans() })
   })
 }
 

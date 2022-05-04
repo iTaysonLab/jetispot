@@ -38,7 +38,7 @@ import javax.inject.Inject
 fun HubScreen(
   navController: NavController,
   needContentPadding: Boolean = true,
-  loader: suspend SpInternalApi.() -> HubResponse,
+  loader: suspend SpInternalApi.(SpApiManager) -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
   statusBarPadding: Boolean = false
 ) {
@@ -153,16 +153,16 @@ class HubScreenViewModel @Inject constructor(
   // no state handle needed
   var needContentPadding: Boolean = false
 
-  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
+  suspend fun load(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
     _state.value = try {
-      State.Loaded(spInternalApi.loader())
+      State.Loaded(spInternalApi.loader(spApiManager))
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
     }
   }
 
-  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
     _state.value = State.Loading
     load(loader)
   }

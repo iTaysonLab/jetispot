@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetispot.ui.dac.components
+package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
