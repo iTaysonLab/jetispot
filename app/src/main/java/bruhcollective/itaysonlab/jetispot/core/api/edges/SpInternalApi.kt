@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.api.edges
 
+import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
@@ -20,7 +21,14 @@ import javax.inject.Singleton
 class SpInternalApi @Inject constructor(
   private val api: SpApiExecutor
 ) : SpEdgeScope by SpApiExecutor.Edge.Internal.scope(api) {
-  suspend fun getPlaylistView(id: String): HubResponse {
+  class ApiPlaylist(
+    val playlist: Playlist4ApiProto.SelectedListContent,
+    val playlistTrackMetadata: List<Playlist4ApiProto.Item>,
+    val trackMetadata: Map<String, Metadata.Track>,
+    val hubResponse: HubResponse
+  )
+
+  suspend fun getPlaylistView(id: String): ApiPlaylist {
     val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
       ExtensionKind.TRACK_V4
     ).build()
@@ -30,7 +38,7 @@ class SpInternalApi @Inject constructor(
     val playlist = withContext(Dispatchers.IO) { api.sessionManager.session.api().getPlaylist(PlaylistId.fromUri("spotify:playlist:$id")) }
     val playlistTracks = playlist.contents.itemsList
 
-    //Log.d("SCM", playlist.toString())
+    Log.d("SCM", playlist.toString())
 
     val playlistHeader = HubItem(
       component = if (playlist.attributes.formatAttributesList.firstOrNull { it.key == "image_url" } != null) HubComponent.LargePlaylistHeader else HubComponent.PlaylistHeader,
@@ -65,24 +73,29 @@ class SpInternalApi @Inject constructor(
         )
     }
 
-    val playlistItems = extensionResponseToHub(id, playlistTracks, playlistData)
+    val mappedMetadata =
+      playlistData.getExtendedMetadata(0).extensionDataList.associateBy { it.entityUri }
+        .mapValues { Metadata.Track.parseFrom(it.value.extensionData.value) }
 
-    return HubResponse(
-      header = playlistHeader,
-      body = playlistItems
+    val playlistItems = extensionResponseToHub(id, playlistTracks, mappedMetadata)
+
+    return ApiPlaylist(
+      playlist = playlist,
+      playlistTrackMetadata = playlistTracks,
+      trackMetadata = mappedMetadata,
+      hubResponse = HubResponse(
+        header = playlistHeader,
+        body = playlistItems
+      )
     )
   }
 
   private fun extensionResponseToHub(
     playlistId: String,
     tracks: List<Playlist4ApiProto.Item>,
-    response: BatchedExtensionResponse
+    mappedMetadata: Map<String, Metadata.Track>
   ): List<HubItem> {
     val hubItems = mutableListOf<HubItem>()
-    val mappedMetadata =
-      response.getExtendedMetadata(0).extensionDataList.associateBy { it.entityUri }
-        .mapValues { Metadata.Track.parseFrom(it.value.extensionData.value) }
-
     tracks.forEach { trackItem ->
       val track = mappedMetadata[trackItem.uri]!!
       hubItems.add(

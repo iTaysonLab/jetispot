@@ -62,10 +62,10 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
 
   object Library: BottomNavigationScreen(
     route = "library",
-    name = R.string.tab_config,
-    iconProvider = { Icons.Default.Settings },
+    name = R.string.tab_library,
+    iconProvider = { Icons.Default.LibraryMusic },
     screenProvider = { navController ->
-      ConfigScreen(navController)
+      //ConfigScreen(navController)
     }
   )
   //

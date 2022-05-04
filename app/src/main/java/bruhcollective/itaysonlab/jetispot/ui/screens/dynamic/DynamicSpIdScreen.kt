@@ -11,41 +11,44 @@ import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
+import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.PlaylistScreen
 
 @Composable
 fun DynamicSpIdScreen(
   navController: NavController,
-  type: String?,
-  id: String?,
-  additionalItem: String? = null
+  uri: String,
+  fullUri: String,
 ) {
-  var dest = SpIdDests.values().firstOrNull {
-    it.type == type && it.additionalItem == additionalItem
-  }
+  val uriSeparated = uri.split(":")
+  val id = uriSeparated.getOrElse(1) { "" }
 
-  if (type == "user" && additionalItem != null) {
-    val aiTwo = additionalItem.split(":")
-    dest = SpIdDests.values().firstOrNull { it.type == aiTwo[0] }
-  }
+  when (uriSeparated[0]) {
+    "album", "artist", "genre" -> HubScreen(navController, needContentPadding = false, loader = {
+      if (uriSeparated.getOrNull(2) == "releases") {
+        getReleasesView(id)
+      } else {
+        when (uriSeparated[0]) {
+          "album" -> getAlbumView(id)
+          "artist" -> getArtistView(id)
+          "genre" -> getBrowseView(id)
+          else -> error("block issue")
+        }
+      }
+    })
 
-  if (dest != null) {
-    HubScreen(
-      navController = navController,
-      needContentPadding = false,
-      statusBarPadding = additionalItem != null,
-      loader = { mgr ->
-        dest.provider(this, mgr, if (type == "user" && additionalItem != null) additionalItem.split(":")[1] else id!!)
-      })
-  } else {
-    Box(Modifier.fillMaxSize()) {
-      Column(
-        modifier = Modifier
-          .align(Alignment.Center)
-      ) {
-        Text(type ?: "type unknown")
-        Text(id ?: "id unknown")
-        Text(additionalItem ?: "null")
+    "playlist" -> PlaylistScreen(navController, id)
+    "config" -> ConfigScreen(navController)
+
+    else -> {
+      Box(Modifier.fillMaxSize()) {
+        Column(
+          modifier = Modifier
+            .align(Alignment.Center)
+        ) {
+          Text(fullUri)
+        }
       }
     }
   }
@@ -70,9 +73,5 @@ enum class SpIdDests(
 
   Genre("genre", { _, id ->
     getBrowseView(id)
-  }),
-
-  Playlist("playlist", { mgr, id ->
-    mgr.internal.getPlaylistView(id)
-  }),
+  })
 }

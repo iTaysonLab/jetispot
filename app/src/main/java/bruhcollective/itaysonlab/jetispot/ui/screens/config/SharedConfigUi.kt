@@ -59,16 +59,9 @@ fun BaseConfigScreen(
       Text(stringResource(viewModel.provideTitle()))
     }, navigationIcon = {
       if (!viewModel.isRoot()) {
-        Icon(Icons.Default.ArrowBack, null,
-          Modifier
-            .clickable(
-              interactionSource = remember { MutableInteractionSource() },
-              indication = rememberRipple(bounded = false),
-              onClick = {
-                navController.popBackStack()
-              }
-            )
-            .padding(horizontal = 16.dp))
+        IconButton(onClick = { navController.popBackStack() }) {
+          Icon(Icons.Default.ArrowBack, null)
+        }
       }
     }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
   }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->

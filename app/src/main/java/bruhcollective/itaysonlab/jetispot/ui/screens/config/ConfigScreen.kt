@@ -130,7 +130,7 @@ class ConfigScreenViewModel @Inject constructor(
     }))
   }
 
-  override fun isRoot() = true
+  override fun isRoot() = false
   override fun provideTitle() = R.string.config_root
   override fun provideDataStore() = spConfigurationManager.dataStore
   override fun provideConfigList() = configList

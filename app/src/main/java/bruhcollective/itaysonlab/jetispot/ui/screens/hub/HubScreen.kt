@@ -30,6 +30,8 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
+import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -98,46 +100,9 @@ fun HubScreen(
         }
       }
     }
-    is HubScreenViewModel.State.Error -> {
-      Box(Modifier.fillMaxSize()) {
-
-        Column(
-          Modifier
-            .align(Alignment.Center)
-        ) {
-          Icon(
-            Icons.Default.Error, contentDescription = null, modifier = Modifier
-                  .align(Alignment.CenterHorizontally)
-                  .size(56.dp)
-                  .padding(bottom = 12.dp)
-          )
-          Text(
-            "An error occurred while loading the page.",
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-          )
-        }
-
-        OutlinedButton(
-          onClick = {
-            scope.launch { viewModel.reload(loader) }
-          }, modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp)
-        ) {
-          Text("Reload")
-        }
-      }
-    }
-
-    HubScreenViewModel.State.Loading -> {
-      Box(Modifier.fillMaxSize()) {
-        CircularProgressIndicator(
-          modifier = Modifier
-              .align(Alignment.Center)
-              .size(56.dp)
-        )
-      }
-    }
+    
+    is HubScreenViewModel.State.Error -> PagingErrorPage(onReload = { scope.launch { viewModel.reload(loader) } }, modifier = Modifier.fillMaxSize())
+    HubScreenViewModel.State.Loading -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
   }
 }
 

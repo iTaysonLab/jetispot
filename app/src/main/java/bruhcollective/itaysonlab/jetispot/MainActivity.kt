@@ -115,12 +115,9 @@ class MainActivity : ComponentActivity() {
                 }
               }
 
-              composable("spotify:{type}:{id}") {
-                DynamicSpIdScreen(navController, it.arguments?.getString("type"), it.arguments?.getString("id"))
-              }
-
-              composable("spotify:{type}:{id}:{additionalItem}") {
-                DynamicSpIdScreen(navController, it.arguments?.getString("type"), it.arguments?.getString("id"), it.arguments?.getString("additionalItem"))
+              composable("spotify:{uri}") {
+                val uri = it.arguments?.getString("uri")!!
+                DynamicSpIdScreen(navController, uri, "spotify:$uri")
               }
 
               dialog("dialogs/logout") {
