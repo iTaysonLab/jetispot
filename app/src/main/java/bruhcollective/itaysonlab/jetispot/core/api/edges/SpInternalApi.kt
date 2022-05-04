@@ -50,6 +50,11 @@ class SpInternalApi @Inject constructor(
         HubImage(
           uri = playlist.attributes.formatAttributesList.find { it.key == "image" }?.value
             ?: playlist.attributes.formatAttributesList.find { it.key == "image_url" }?.value
+            ?: playlist.attributes.unknownFields.asMap()[13]
+              ?.lengthDelimitedList
+              ?.get(0)?.toStringUtf8()
+              // I HAVE NO IDEA ABOUT THIS DON'T TOUCH
+              ?.split(Regex(".default.."))?.get(1)
             ?: "https://i.scdn.co/image/${
               ImageId.fromHex(Utils.bytesToHex(playlist.attributes.picture)).hexId()
             }"

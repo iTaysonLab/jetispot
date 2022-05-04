@@ -12,6 +12,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.history.ListeningHistoryScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.PlaylistScreen
 
@@ -21,7 +22,8 @@ fun DynamicSpIdScreen(
   uri: String,
   fullUri: String,
 ) {
-  val uriSeparated = uri.split(":")
+  var uriSeparated = uri.split(":")
+  if (uriSeparated[0] == "user") uriSeparated = uriSeparated.drop(2)
   val id = uriSeparated.getOrElse(1) { "" }
 
   when (uriSeparated[0]) {
@@ -40,6 +42,12 @@ fun DynamicSpIdScreen(
 
     "playlist" -> PlaylistScreen(navController, id)
     "config" -> ConfigScreen(navController)
+
+    "internal" -> {
+      when (id) {
+        "listeninghistory" -> ListeningHistoryScreen(navController)
+      }
+    }
 
     else -> {
       Box(Modifier.fillMaxSize()) {

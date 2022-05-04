@@ -75,4 +75,6 @@
     <string name="logout_message">This will remove all data linked to your account from this device. Settings won\'t be reset to default.</string>
     <string name="logout_confirm">Confirm</string>
     <string name="logout_cancel">Cancel</string>
+
+    <string name="listening_history">Listening history</string>
 </resources>

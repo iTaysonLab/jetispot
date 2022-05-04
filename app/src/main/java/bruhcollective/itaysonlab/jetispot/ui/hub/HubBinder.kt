@@ -18,7 +18,7 @@ fun HubBinder (
   item: HubItem
 ) {
   when (item.component) {
-    HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!)
+    HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!, delegate)
     HubComponent.HomeLargeSectionHeader -> HomeSectionLargeHeader(navController, delegate, item)
     HubComponent.GlueSectionHeader -> SectionHeader(item.text!!, delegate)
     HubComponent.ShortcutsContainer -> ShortcutsContainer(navController, delegate, item.children!!)
@@ -46,6 +46,7 @@ fun HubBinder (
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
 
     HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
+    HubComponent.EmptySpace -> {}
 
     else -> {
       Text("Unsupported, id = ${item.id}")

@@ -8,7 +8,7 @@ import dev.zacsweers.moshix.sealed.annotations.TypeLabel
 sealed class HubComponent {
   // HOME
 
-  @TypeLabel("home:shortSectionHeader", alternateLabels = ["home:sectionHeader"])
+  @TypeLabel("home:shortSectionHeader", alternateLabels = ["home:sectionHeader", "home:encoreSectionHeader"])
   object HomeShortSectionHeader: HubComponent()
 
   @TypeLabel("home:tappableSectionHeader")
@@ -76,8 +76,11 @@ sealed class HubComponent {
   @TypeLabel("synth:playlistHeaderLarge")
   object LargePlaylistHeader: HubComponent()
 
-  @TypeLabel("synth:playlistTrackRow")
+  @TypeLabel("synth:playlistTrackRow", alternateLabels = ["listeninghistory:trackRow"])
   object PlaylistTrackRow: HubComponent()
+
+  @TypeLabel("listeninghistory:dividerAfterEntityRow")
+  object EmptySpace: HubComponent()
 
   @DefaultObject
   object Unknown: HubComponent()

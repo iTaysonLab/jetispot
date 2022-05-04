@@ -1,9 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +24,7 @@ fun PlaylistTrackRow(
     Row(
         Modifier
             .clickableHub(navController, delegate, item)
+            .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         AsyncImage(

@@ -49,6 +49,7 @@ fun PlaylistHeader(
   Column(
     Modifier
       .fillMaxHeight()
+      .fillMaxWidth()
       .background(
         brush = Brush.verticalGradient(
           colors = listOf(dominantColorAsBg.value, Color.Transparent)
