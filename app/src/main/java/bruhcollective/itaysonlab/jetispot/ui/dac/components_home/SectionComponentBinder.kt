@@ -62,6 +62,15 @@ fun SectionComponentBinder(
           imageUri = listItem.imageUri,
           imagePlaceholder = "podcasts"
         )
+
+        is ShowCardMediumComponent -> MediumCard(
+          navController = navController,
+          title = listItem.title,
+          subtitle = listItem.subtitle,
+          navigateUri = listItem.navigateUri,
+          imageUri = listItem.imageUri,
+          imagePlaceholder = "podcasts"
+        )
       }
     }
   }

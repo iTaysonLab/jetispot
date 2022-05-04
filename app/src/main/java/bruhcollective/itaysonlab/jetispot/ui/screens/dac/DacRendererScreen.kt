@@ -43,7 +43,7 @@ fun DacRendererScreen(
   loader: suspend SpInternalApi.() -> DacResponse,
   viewModel: DacViewModel = hiltViewModel()
 ) {
-  val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior() }
+  val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior() else TopAppBarDefaults.enterAlwaysScrollBehavior() }
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(Unit) {

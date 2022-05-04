@@ -27,6 +27,7 @@ fun BenefitListComponentBinder(
     containerColor = MaterialTheme.colorScheme.surface,
     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     modifier = Modifier
+      .padding(top = 12.dp)
       .padding(horizontal = 16.dp)
       .fillMaxWidth()
   ) {
