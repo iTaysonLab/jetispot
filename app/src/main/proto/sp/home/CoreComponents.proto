@@ -28,3 +28,8 @@ message RecsplanationHeadingComponent {
 
 // only ubi(soft?!) data here, I guess recents are fetched separately
 message RecentlyPlayedSectionComponent {}
+
+message SnappyGridSectionComponent {
+  repeated google.protobuf.Any components = 1;
+  int32 rows = 2;
+}

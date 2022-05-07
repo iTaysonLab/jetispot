@@ -30,7 +30,7 @@ interface SpInternalApi {
 
   @POST("/home-dac-viewservice/v1/view")
   suspend fun getDacHome(@Body request: DacRequest = DacRequest.newBuilder().apply {
-    uri = "dac:home"
+    uri = "dac:home" // dac:home-static
     featureRequest = com.google.protobuf.Any.pack(HomeViewServiceRequest.newBuilder().apply {
       facet = ""
       clientTimezone = TimeZone.getDefault().id

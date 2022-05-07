@@ -40,6 +40,7 @@ fun DacRender (
     is SectionHeaderComponent -> SectionHeaderComponentBinder(item.title)
     is SectionComponent -> SectionComponentBinder(navController, item)
     is RecentlyPlayedSectionComponent -> RecentlyPlayedSectionComponentBinder(navController)
+    // is SnappyGridSectionComponent -> SnappyGridSectionComponentBinder(navController, item)
     // Other
     else -> {
       Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}")

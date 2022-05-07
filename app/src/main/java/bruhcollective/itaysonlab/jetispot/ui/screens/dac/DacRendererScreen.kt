@@ -87,7 +87,16 @@ fun DacRendererScreen(
                 }
 
                 if (unpackedItem == null && exception != null) {
-                  Text("DAC rendering error: ${exception.message}\n\n${exception.stackTraceToString()}")
+                  when (exception) {
+                    is ClassNotFoundException -> {
+                      Text("DAC unsupported component", Modifier.padding(horizontal = 16.dp))
+                      Text(exception.message ?: "", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), modifier = Modifier.padding(top = 4.dp).padding(horizontal = 16.dp))
+                    }
+                    else -> {
+                      Text("DAC rendering error: ${exception.message}\n\n${exception.stackTraceToString()}")
+                    }
+                  }
+
                   Spacer(modifier = Modifier.height(8.dp))
                 } else if (unpackedItem != null) {
                   DacRender(navController, unpackedItem)
