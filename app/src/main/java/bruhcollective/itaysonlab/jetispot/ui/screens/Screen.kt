@@ -25,6 +25,8 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigS
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.YourLibraryContainerScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.debug.YourLibraryDebugScreen
 
 sealed class Screen(open val route: String, val screenProvider: @Composable (navController: NavController) -> Unit) {
   // == CORE ==
@@ -65,7 +67,7 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_library,
     iconProvider = { Icons.Default.LibraryMusic },
     screenProvider = { navController ->
-      //ConfigScreen(navController)
+      YourLibraryContainerScreen(navController)
     }
   )
   //
@@ -91,6 +93,10 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
   object DacViewAllPlans: Screen("dac/viewAllPlans", { navController ->
     DacRendererScreen(navController, stringResource(id = R.string.all_plans), loader = { getAllPlans() })
   })
+
+  object YLDebug: Screen("library/debug", { navController ->
+    YourLibraryDebugScreen(navController)
+  })
 }
 
 // Abstracts
@@ -100,5 +106,5 @@ abstract class BottomNavigationScreen(@StringRes val name: Int, route: String, v
 interface FullscreenModeScreen
 
 // Extensions
-val allScreens = listOf(Screen.CoreLoadingScreen, Screen.Authorization, Screen.Feed, Screen.Search, Screen.Library, Screen.Config, Screen.QualityConfig, Screen.NormalizationConfig, Screen.DacViewAllPlans, Screen.DacViewCurrentPlan).associateBy { it.route }
+val allScreens = listOf(Screen.CoreLoadingScreen, Screen.Authorization, Screen.Feed, Screen.Search, Screen.Library, Screen.Config, Screen.QualityConfig, Screen.NormalizationConfig, Screen.DacViewAllPlans, Screen.DacViewCurrentPlan, Screen.YLDebug).associateBy { it.route }
 val bottomNavigationScreens: List<BottomNavigationScreen> = allScreens.values.filterIsInstance<BottomNavigationScreen>()

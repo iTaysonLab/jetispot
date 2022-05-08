@@ -98,6 +98,7 @@ dependencies {
 
     implementation "io.coil-kt:coil-compose:2.0.0-rc03"
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.6-alpha'
+    implementation 'com.google.accompanist:accompanist-pager:0.24.6-alpha'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation 'androidx.activity:activity-compose:1.4.0'
@@ -123,6 +124,11 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.retrofit2:converter-protobuf:2.9.0"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.room:room-paging:2.5.0-alpha01")
+    kapt "androidx.room:room-compiler:$roomVersion"
 }
 
 protobuf {
