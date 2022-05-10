@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
-import bruhcollective.itaysonlab.jetispot.core.DeviceIdProvider
+import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import com.spotify.dac.api.v1.proto.DacRequest
 import com.spotify.dac.api.v1.proto.DacResponse
@@ -38,7 +38,7 @@ interface SpInternalApi {
     }.build())
     clientInfo = DacRequest.ClientInfo.newBuilder().apply {
       appName = "ANDROID_MUSIC_APP"
-      version = DeviceIdProvider.SPOTIFY_APP_VERSION
+      version = SpUtils.SPOTIFY_APP_VERSION
     }.build()
   }.build()): DacResponse
 

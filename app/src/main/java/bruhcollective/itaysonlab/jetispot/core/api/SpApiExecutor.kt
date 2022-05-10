@@ -1,8 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
-import bruhcollective.itaysonlab.jetispot.core.DeviceIdProvider
+import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
-import com.google.protobuf.GeneratedMessageV3
 import com.google.protobuf.Message
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
@@ -14,7 +13,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import okio.BufferedSource
 import okio.IOException
 import okio.use
 import java.io.InputStream
@@ -53,8 +51,8 @@ class SpApiExecutor @Inject constructor(
 
   suspend fun <T> request(edge: Edge = Edge.Internal, type: String, url: String, body: RequestBody?, usageBlock: (Response) -> T) = withContext(Dispatchers.IO) {
     val headers = when (edge) {
-      Edge.Internal -> Headers.headersOf("User-Agent", "Spotify/${DeviceIdProvider.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))", "Spotify-App-Version", DeviceIdProvider.SPOTIFY_APP_VERSION, "App-Platform", "Android")
-      else -> Headers.headersOf("User-Agent", "Spotify/${DeviceIdProvider.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))", "Spotify-App-Version", DeviceIdProvider.SPOTIFY_APP_VERSION, "App-Platform", "Android", "Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
+      Edge.Internal -> Headers.headersOf("User-Agent", "Spotify/${SpUtils.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))", "Spotify-App-Version", SpUtils.SPOTIFY_APP_VERSION, "App-Platform", "Android")
+      else -> Headers.headersOf("User-Agent", "Spotify/${SpUtils.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))", "Spotify-App-Version", SpUtils.SPOTIFY_APP_VERSION, "App-Platform", "Android", "Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
     }
 
     when (edge) {

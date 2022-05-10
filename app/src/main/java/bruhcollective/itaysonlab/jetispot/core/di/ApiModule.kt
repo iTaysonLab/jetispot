@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.di
 
-import bruhcollective.itaysonlab.jetispot.core.DeviceIdProvider
+import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.ClientTokenHandler
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
@@ -38,8 +38,8 @@ object ApiModule {
       header("client-token", tokenHandler.requestToken())
 
       // 2. Default headers
-      header("User-Agent", "Spotify/${DeviceIdProvider.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))")
-      header("Spotify-App-Version", DeviceIdProvider.SPOTIFY_APP_VERSION)
+      header("User-Agent", "Spotify/${SpUtils.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))")
+      header("Spotify-App-Version", SpUtils.SPOTIFY_APP_VERSION)
       header("App-Platform", "Android")
 
       // 3. Default GET params

@@ -1,10 +1,10 @@
-package bruhcollective.itaysonlab.jetispot.core
+package bruhcollective.itaysonlab.jetispot.core.util
 
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
 
-object DeviceIdProvider {
+object SpUtils {
     const val SPOTIFY_APP_VERSION = "8.7.32.3"
 
     fun getDeviceName(appContext: Context): String {

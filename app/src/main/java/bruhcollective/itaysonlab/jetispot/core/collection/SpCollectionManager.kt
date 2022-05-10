@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import android.util.Log
-import androidx.compose.ui.text.toLowerCase
-import bruhcollection.itaysonlab.swedenmindbreaks.PlaylistHmRes
-import bruhcollective.itaysonlab.jetispot.core.DeviceIdProvider
+import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
@@ -20,11 +18,9 @@ import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.*
-import xyz.gianlu.librespot.common.Base62
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.dealer.DealerClient
 import xyz.gianlu.librespot.metadata.*
-import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -54,7 +50,7 @@ class SpCollectionManager @Inject constructor(
     collectionApi.write(Collection2V2.WriteRequest.newBuilder().apply {
       username = spSessionManager.session.username()
       set = "collection"
-      clientUpdateId = DeviceIdProvider.getRandomString(16)
+      clientUpdateId = SpUtils.getRandomString(16)
       addAllItems(pendingWriteOperations.map {
         when (it) {
           is CollectionWriteOp.Add -> Collection2V2.CollectionItem.newBuilder().setUri(it.spId)
