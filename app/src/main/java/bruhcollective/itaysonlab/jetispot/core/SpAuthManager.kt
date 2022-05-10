@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core
 
+import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.core.Session
@@ -10,13 +11,15 @@ import javax.inject.Singleton
 @Singleton
 class SpAuthManager @Inject constructor(
   private val spSessionManager: SpSessionManager,
-  private val spPlayerManager: SpPlayerManager
+  private val spPlayerManager: SpPlayerManager,
+  private val spCollectionManager: SpCollectionManager
 ) {
   @Suppress("BlockingMethodInNonBlockingContext")
   suspend fun authWith(username: String, password: String) = withContext(Dispatchers.IO) {
     try {
       spSessionManager.setSession(spSessionManager.createSession().userPass(username, password).create())
       spPlayerManager.createPlayer()
+      spCollectionManager.init()
       AuthResult.Success
     } catch (se: Session.SpotifyAuthenticationException) {
       AuthResult.SpError(se.message ?: "Unknown error")
@@ -31,6 +34,7 @@ class SpAuthManager @Inject constructor(
     try {
       spSessionManager.setSession(spSessionManager.createSession().stored().create())
       spPlayerManager.createPlayer()
+      spCollectionManager.init()
     } catch (e: Exception) {}
   }
 

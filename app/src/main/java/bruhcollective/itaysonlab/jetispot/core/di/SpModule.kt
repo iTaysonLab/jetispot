@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core.di
 
 import android.content.Context
 import bruhcollective.itaysonlab.jetispot.core.*
+import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -32,6 +33,7 @@ object SpModule {
 
   fun provideSpAuthManager(
     spSessionManager: SpSessionManager,
-    spPlayerManager: SpPlayerManager
-  ) = SpAuthManager(spSessionManager, spPlayerManager)
+    spPlayerManager: SpPlayerManager,
+    spCollectionManager: SpCollectionManager
+  ) = SpAuthManager(spSessionManager, spPlayerManager, spCollectionManager)
 }

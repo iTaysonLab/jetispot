@@ -6,6 +6,7 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAl
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
+import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 
 @Dao
 interface LocalCollectionDao {
@@ -23,6 +24,9 @@ interface LocalCollectionDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addAlbums(vararg items: CollectionAlbum)
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun addRootListItems(vararg items: CollectionRootlistItem)
 
   @Query("DELETE FROM lcTracks WHERE id IN (:ids)")
   suspend fun deleteTracks(vararg ids: String)
@@ -44,4 +48,19 @@ interface LocalCollectionDao {
 
   @Query("SELECT * from lcTypes WHERE type = :of")
   suspend fun getCollection(of: String): LocalCollectionCategory?
+
+  @Query("DELETE from lcTracks")
+  suspend fun deleteTracks()
+
+  @Query("DELETE from lcArtists")
+  suspend fun deleteArtists()
+
+  @Query("DELETE from lcMetaArtists")
+  suspend fun deleteMetaArtists()
+
+  @Query("DELETE from lcAlbums")
+  suspend fun deleteAlbums()
+
+  @Query("DELETE from rootList")
+  suspend fun deleteRootList()
 }

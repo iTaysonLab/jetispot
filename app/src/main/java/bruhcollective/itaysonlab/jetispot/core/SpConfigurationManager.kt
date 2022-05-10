@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
-import bruhcollectie.itaysonlab.jetispot.proto.AudioNormalization
-import bruhcollectie.itaysonlab.jetispot.proto.AudioQuality
-import bruhcollectie.itaysonlab.jetispot.proto.PlayerConfig
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
+import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
+import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
+import bruhcollective.itaysonlab.jetispot.proto.PlayerConfig
 import com.google.protobuf.InvalidProtocolBufferException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first

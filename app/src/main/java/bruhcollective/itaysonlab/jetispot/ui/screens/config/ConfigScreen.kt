@@ -25,9 +25,9 @@ import androidx.datastore.core.DataStore
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
-import bruhcollectie.itaysonlab.jetispot.proto.AudioNormalization
-import bruhcollectie.itaysonlab.jetispot.proto.AudioQuality
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
+import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
+import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import bruhcollective.itaysonlab.jetispot.BuildConfig
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager

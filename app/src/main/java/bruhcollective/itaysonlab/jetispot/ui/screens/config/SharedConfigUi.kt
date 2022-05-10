@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.navigation.NavController
-import bruhcollectie.itaysonlab.jetispot.proto.AppConfig
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import kotlinx.coroutines.flow.first

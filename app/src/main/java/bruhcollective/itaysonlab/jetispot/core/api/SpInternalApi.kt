@@ -5,6 +5,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import com.spotify.dac.api.v1.proto.DacRequest
 import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.home.dac.viewservice.v1.proto.HomeViewServiceRequest
+import com.spotify.playlist4.Playlist4ApiProto
 import retrofit2.http.*
 import java.util.*
 
@@ -47,5 +48,20 @@ interface SpInternalApi {
   @GET("/pam-view-service/v1/PlanOverview")
   suspend fun getPlanOverview(): DacResponse
 
+  @GET("/playlist/v2/user/:username/rootlist")
+  suspend fun getRootlist(
+    @Path("username") username: String,
+    @Query("decorate") decorate: String = "attributes,owner", // client: revision,attributes,length,owner,capabilities
+    @Query("from") offset: Int = 0,
+    @Query("length") size: Int = 120
+  ): Playlist4ApiProto.SelectedListContent
 
+  @GET("/playlist/v2/user/:username/rootlist/diff")
+  @Headers("x-accept-list-items: audio-track, audio-episode, video-episode")
+  suspend fun getRootlistDelta(
+    @Path("username") username: String,
+    @Query("revision") revision: String,
+    @Query("handlesContent") handles: String = "",
+    @Query("hint_revision") targetRevision: String,
+  ): Playlist4ApiProto.SelectedListContent
 }

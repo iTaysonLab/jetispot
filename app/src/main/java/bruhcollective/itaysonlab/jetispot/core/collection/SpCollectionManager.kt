@@ -1,30 +1,39 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
+import bruhcollection.itaysonlab.swedenmindbreaks.PlaylistHmRes
 import bruhcollective.itaysonlab.jetispot.core.DeviceIdProvider
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionRepository
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
+import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import com.google.protobuf.ByteString
 import com.spotify.collection2.v2.proto.Collection2V2
 import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
+import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.*
+import xyz.gianlu.librespot.common.Base62
 import xyz.gianlu.librespot.common.Utils
+import xyz.gianlu.librespot.dealer.DealerClient
 import xyz.gianlu.librespot.metadata.*
+import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class SpCollectionManager @Inject constructor(
   private val spSessionManager: SpSessionManager,
+  private val internalApi: SpInternalApi,
   private val collectionApi: SpCollectionApi,
   private val dbRepository: LocalCollectionRepository
-) {
+): DealerClient.MessageListener {
   // it's important to use queuing here
   private val scopeDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
   private val scope = CoroutineScope(scopeDispatcher + SupervisorJob())
@@ -91,9 +100,7 @@ class SpCollectionManager @Inject constructor(
    */
   private suspend fun performScan(of: String) {
     Log.d("SpColManager", "Performing scan of $of")
-
     val data = performPagingScan(of)
-
     Log.d("SpColManager", "Scan of $of completed [total = ${data.first.size}]")
   }
 
@@ -228,49 +235,40 @@ class SpCollectionManager @Inject constructor(
     return Pair(items, syncToken)
   }
 
-  class UnpackedMetadataResponse(
-    dataArray: List<ExtendedMetadata.EntityExtensionDataArray>
-  ) {
-    var tracks: Map<String, Metadata.Track> = mapOf()
-      private set
+  private suspend fun performRootlistScan() {
+    val data = internalApi.getRootlist(spSessionManager.session.username())
 
-    var artists: Map<String, Metadata.Artist> = mapOf()
-      private set
+    val mappedData = data.contents.itemsList.mapIndexed { index, item -> Pair(item, data.contents.metaItemsList[index]) }.map { pair ->
+      CollectionRootlistItem(
+        uri = pair.first.uri,
+        timestamp = pair.first.attributes.timestamp,
+        name = pair.second.attributes.name,
+        ownerUsername = pair.second.ownerUsername,
+        picture = pair.second.attributes.unknownFields.getField(13)?.lengthDelimitedList
+          ?.get(0)?.toStringUtf8()
+          ?.split(Regex(".default.."))?.get(1) ?: ""
+      )
+    }.toTypedArray()
 
-    var albums: Map<String, Metadata.Album> = mapOf()
-      private set
+    dbRepository.insertRootList(*mappedData)
+    dbRepository.insertOrUpdateCollection("rootlist", data.revision.toStringUtf8())
+  }
 
-    init {
-      dataArray.forEach { arr ->
-        when (arr.extensionKind) {
-          ExtensionKindOuterClass.ExtensionKind.TRACK_V4 -> {
-            tracks = arr.extensionDataList.associate {
-              Pair(
-                it.entityUri,
-                Metadata.Track.parseFrom(it.extensionData.value)
-              )
-            }
-          }
+  fun init() {
+    //spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username())
+    //spSessionManager.session.dealer().addMessageListener(this, "hm://collection/artist/" + spSessionManager.session.username())
+    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+  }
 
-          ExtensionKindOuterClass.ExtensionKind.ALBUM_V4 -> {
-            albums = arr.extensionDataList.associate {
-              Pair(
-                it.entityUri,
-                Metadata.Album.parseFrom(it.extensionData.value)
-              )
-            }
-          }
-
-          ExtensionKindOuterClass.ExtensionKind.ARTIST_V4 -> {
-            artists = arr.extensionDataList.associate {
-              Pair(
-                it.entityUri,
-                Metadata.Artist.parseFrom(it.extensionData.value)
-              )
-            }
-          }
-        }
+  override fun onMessage(p0: String, p1: MutableMap<String, String>, p2: ByteArray) {
+    Log.d("SpColManager", "<onMessage: $p0 / $p1> = ${p2.decodeToString()} / ${Utils.bytesToHex(p2)}")
+    if (p0.startsWith("hm://playlist/v2/user/")) {
+      val decoded = Playlist4ApiProto.PlaylistModificationInfo.parseFrom(p2)
+      if (decoded.uri.toStringUtf8() == "spotify:user:${spSessionManager.session.username()}:rootlist") {
+        // perform rootlist update
       }
+    } else {
+
     }
   }
 }

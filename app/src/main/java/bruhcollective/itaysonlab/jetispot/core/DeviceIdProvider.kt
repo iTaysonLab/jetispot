@@ -5,7 +5,7 @@ import android.os.Build
 import android.provider.Settings
 
 object DeviceIdProvider {
-    const val SPOTIFY_APP_VERSION = "8.7.20.1261"
+    const val SPOTIFY_APP_VERSION = "8.7.32.3"
 
     fun getDeviceName(appContext: Context): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {

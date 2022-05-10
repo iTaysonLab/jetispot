@@ -1,0 +1,17 @@
+package bruhcollective.itaysonlab.jetispot.core.util
+
+import android.util.Base64
+import java.nio.ByteBuffer
+
+object Revision {
+  fun base64ToRevision(b64: String) = Base64.decode(b64, Base64.DEFAULT).let { b64dec ->
+    val buffer = ByteBuffer.wrap(b64dec)
+
+    val revId = buffer.int
+    val revHash = ByteArray(buffer.remaining()).also { buffer.get(it) }.joinToString("") {
+      (0xFF and it.toInt()).toString(16).padStart(2, '0')
+    }.padEnd(40, '0')
+
+    return@let "$revId,$revHash"
+  }
+}

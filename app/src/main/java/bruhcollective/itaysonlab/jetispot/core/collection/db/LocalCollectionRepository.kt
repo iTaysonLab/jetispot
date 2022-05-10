@@ -5,6 +5,7 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAl
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
+import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,8 +24,17 @@ class LocalCollectionRepository @Inject constructor(
   suspend fun insertArtists(vararg items: CollectionArtist) = dao.addArtists(*items)
   suspend fun insertAlbums(vararg items: CollectionAlbum) = dao.addAlbums(*items)
   suspend fun insertTracks(vararg items: CollectionTrack) = dao.addTracks(*items)
+  suspend fun insertRootList(vararg items: CollectionRootlistItem) = dao.addRootListItems(*items)
 
   suspend fun getArtists() = dao.getArtists()
   suspend fun getAlbums() = dao.getAlbums()
   suspend fun getCollection(of: String): LocalCollectionCategory? = dao.getCollection(of)
+
+  suspend fun clean() {
+    dao.deleteTracks()
+    dao.deleteAlbums()
+    dao.deleteArtists()
+    dao.deleteMetaArtists()
+    dao.deleteRootList()
+  }
 }

@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "lcTypes")
 data class LocalCollectionCategory(
   @PrimaryKey val type: String,
-  val syncToken: String
+  val syncToken: String // or revision in case of rootList
 )

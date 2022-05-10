@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core
 
 import android.os.Looper
-import bruhcollectie.itaysonlab.jetispot.proto.AudioNormalization
+import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
 import bruhcollective.itaysonlab.jetispot.playback.service.refl.SpReflect
 import bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput
 import xyz.gianlu.librespot.audio.decoders.AudioQuality
@@ -46,9 +46,9 @@ class SpPlayerManager @Inject constructor(
         setPreloadEnabled(config.preload)
 
         setPreferredQuality(when (config.preferredQuality) {
-          bruhcollectie.itaysonlab.jetispot.proto.AudioQuality.NORMAL -> AudioQuality.NORMAL
-          bruhcollectie.itaysonlab.jetispot.proto.AudioQuality.HIGH -> AudioQuality.HIGH
-          bruhcollectie.itaysonlab.jetispot.proto.AudioQuality.VERY_HIGH -> AudioQuality.VERY_HIGH
+          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.NORMAL -> AudioQuality.NORMAL
+          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.HIGH -> AudioQuality.HIGH
+          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.VERY_HIGH -> AudioQuality.VERY_HIGH
           else -> AudioQuality.VERY_HIGH
         })
 
