@@ -88,11 +88,14 @@ fun YourLibraryContainerScreen(
       }
     }
   }) { padding ->
-    HorizontalPager( // 4.
+    HorizontalPager(
       count = viewModel.sources.size,
       state = pagerState,
+      modifier = Modifier.padding(padding)
     ) { tabIndex ->
-      YourLibraryRenderer(navController, viewModel.sources[tabIndex])
+      Box(Modifier.fillMaxSize()) {
+        YourLibraryRenderer(navController, viewModel.sources[tabIndex])
+      }
     }
   }
 }
