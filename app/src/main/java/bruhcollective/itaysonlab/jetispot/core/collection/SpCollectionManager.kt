@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
@@ -12,6 +11,9 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAr
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
+import bruhcollective.itaysonlab.jetispot.core.util.Revision
+import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdate
+import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdateEntry
 import com.google.protobuf.ByteString
 import com.spotify.collection2.v2.proto.Collection2V2
 import com.spotify.extendedmetadata.ExtendedMetadata
@@ -102,7 +104,7 @@ class SpCollectionManager @Inject constructor(
   suspend fun performScan(of: String) {
     Log.d("SpColManager", "Performing scan of $of")
     val data = performPagingScan(of)
-    Log.d("SpColManager", "Scan of $of completed [total = ${data.first.size}]")
+    Log.d("SpColManager", "Scan of $of completed")
   }
 
   private fun spotifyIdToKind(id: String) = when (id.split(":")[1]) {
@@ -112,11 +114,16 @@ class SpCollectionManager @Inject constructor(
     else -> ExtensionKindOuterClass.ExtensionKind.UNKNOWN_EXTENSION
   }
 
+  private fun hexToSpotifyId(id: String, type: CollectionUpdateEntry.Type) = when (type) {
+    CollectionUpdateEntry.Type.TRACK -> TrackId.fromHex(id).toSpotifyUri()
+    CollectionUpdateEntry.Type.ALBUM -> AlbumId.fromHex(id).toSpotifyUri()
+    CollectionUpdateEntry.Type.ARTIST -> ArtistId.fromHex(id).toSpotifyUri()
+    CollectionUpdateEntry.Type.UNRECOGNIZED -> ""
+  }
+
   private fun bytesToPicUrl(bytes: ByteString) = ImageId.fromHex(Utils.bytesToHex(bytes)).hexId()
 
-  private suspend fun performPagingScan(of: String): Pair<List<Collection2V2.CollectionItem>, String> {
-    val items = mutableListOf<Collection2V2.CollectionItem>()
-
+  private suspend fun performPagingScan(of: String) {
     val syncToken: String
     var pToken = ""
 
@@ -130,21 +137,80 @@ class SpCollectionManager @Inject constructor(
         limit = 300
       }.build())
 
-      items.addAll(page.itemsList)
-
       Log.d(
         "SpColManager",
         "Performing page metadata request of $of [count = ${page.itemsList.size}]"
       )
 
+      performCollectionInsert(page.itemsList.associate { Pair(it.uri, it.addedAt) })
+
+      if (!page.nextPageToken.isNullOrEmpty()) {
+        // next page
+        pToken = page.nextPageToken
+      } else {
+        // no more pages remain
+        syncToken = page.syncToken
+        break
+      }
+    }
+
+    dbRepository.insertOrUpdateCollection(of, syncToken)
+  }
+
+  private suspend fun performRootlistScan() {
+    val data = internalApi.getRootlist(spSessionManager.session.username())
+
+    val mappedData = data.contents.itemsList.mapIndexed { index, item -> Pair(item, data.contents.metaItemsList[index]) }.map { pair ->
+      CollectionRootlistItem(
+        uri = pair.first.uri,
+        timestamp = pair.first.attributes.timestamp,
+        name = pair.second.attributes.name,
+        ownerUsername = pair.second.ownerUsername,
+        picture = pair.second.attributes.unknownFields.getField(13)?.lengthDelimitedList
+          ?.get(0)?.toStringUtf8()
+          ?.split(Regex(".default.."))?.get(1) ?: ""
+      )
+    }.toTypedArray()
+
+    dbRepository.insertRootList(*mappedData)
+    dbRepository.insertOrUpdateCollection("rootlist", data.revision.toStringUtf8())
+  }
+
+  fun init() {
+    spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
+    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+  }
+
+  override fun onMessage(p0: String, p1: MutableMap<String, String>, p2: ByteArray) {
+    if (p0.startsWith("hm://playlist/v2/user/")) {
+      val decoded = Playlist4ApiProto.PlaylistModificationInfo.parseFrom(p2)
+      if (decoded.uri.toStringUtf8() == "spotify:user:${spSessionManager.session.username()}:rootlist") {
+        // perform rootlist update
+        Log.d("SpColManager", "PubSub rootlist update to rev. ${Revision.base64ToRevision(decoded.newRevision.toStringUtf8())}")
+      }
+    } else if (p0.startsWith("hm://collection/") && !p0.endsWith("json/")) {
+      val decoded = CollectionUpdate.parseFrom(p2)
+
+      scope.launch {
+        val toInsert = decoded.itemsList.filterNot { it.removed }.associate { Pair(hexToSpotifyId(Utils.bytesToHex(it.identifier), it.type), it.addedAt) }
+        val toRemove = decoded.itemsList.filter { it.removed }.groupBy { it.type }.mapValues { it.value.map { li -> Utils.bytesToHex(li.identifier).lowercase() } }
+        performCollectionInsert(toInsert, toRemove)
+      }
+    } else {
+      Log.d("SpColManager", "<onMessage: $p0 / $p1> = ${p2.decodeToString()} / ${Utils.bytesToHex(p2)}")
+    }
+  }
+
+  private suspend fun performCollectionInsert(mappedRequest: Map<String, Int>, mappedDeleteRequest: Map<CollectionUpdateEntry.Type, List<String>> = mapOf()) {
+    if (mappedRequest.isNotEmpty()) {
       val requests = mutableListOf<ExtendedMetadata.EntityRequest>()
 
-      page.itemsList.forEach { ci ->
-        val kind = spotifyIdToKind(ci.uri)
+      mappedRequest.keys.forEach { ci ->
+        val kind = spotifyIdToKind(ci)
 
         if (kind != ExtensionKindOuterClass.ExtensionKind.UNKNOWN_EXTENSION) {
           requests.add(
-            ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(ci.uri)
+            ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(ci)
               .addQuery(ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(kind).build())
               .build()
           )
@@ -164,7 +230,9 @@ class SpCollectionManager @Inject constructor(
           .getExtendedMetadata(
             ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
               metadata.tracks.map {
-                ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(ArtistId.fromHex(Utils.bytesToHex(it.value.artistList.first().gid)).toSpotifyUri()).addQuery(
+                ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(
+                  ArtistId.fromHex(Utils.bytesToHex(it.value.artistList.first().gid)).toSpotifyUri()
+                ).addQuery(
                   ExtendedMetadata.ExtensionQuery.newBuilder()
                     .setExtensionKind(ExtensionKindOuterClass.ExtensionKind.ARTIST_V4).build()
                 ).build()
@@ -181,8 +249,6 @@ class SpCollectionManager @Inject constructor(
 
         dbRepository.insertMetaArtists(*mappedArtists)
       }
-
-      val mappedRequest = page.itemsList.associate { Pair(it.uri, it.addedAt) }
 
       dbRepository.insertTracks(*metadata.tracks.values.map { track ->
         CollectionTrack(
@@ -221,55 +287,16 @@ class SpCollectionManager @Inject constructor(
           addedAt = mappedRequest[ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri()]!!
         )
       }.toTypedArray())
-
-      if (!page.nextPageToken.isNullOrEmpty()) {
-        // next page
-        pToken = page.nextPageToken
-      } else {
-        // no more pages remain
-        syncToken = page.syncToken
-        break
-      }
     }
 
-    dbRepository.insertOrUpdateCollection(of, syncToken)
-    return Pair(items, syncToken)
-  }
-
-  private suspend fun performRootlistScan() {
-    val data = internalApi.getRootlist(spSessionManager.session.username())
-
-    val mappedData = data.contents.itemsList.mapIndexed { index, item -> Pair(item, data.contents.metaItemsList[index]) }.map { pair ->
-      CollectionRootlistItem(
-        uri = pair.first.uri,
-        timestamp = pair.first.attributes.timestamp,
-        name = pair.second.attributes.name,
-        ownerUsername = pair.second.ownerUsername,
-        picture = pair.second.attributes.unknownFields.getField(13)?.lengthDelimitedList
-          ?.get(0)?.toStringUtf8()
-          ?.split(Regex(".default.."))?.get(1) ?: ""
-      )
-    }.toTypedArray()
-
-    dbRepository.insertRootList(*mappedData)
-    dbRepository.insertOrUpdateCollection("rootlist", data.revision.toStringUtf8())
-  }
-
-  fun init() {
-    //spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username())
-    //spSessionManager.session.dealer().addMessageListener(this, "hm://collection/artist/" + spSessionManager.session.username())
-    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
-  }
-
-  override fun onMessage(p0: String, p1: MutableMap<String, String>, p2: ByteArray) {
-    Log.d("SpColManager", "<onMessage: $p0 / $p1> = ${p2.decodeToString()} / ${Utils.bytesToHex(p2)}")
-    if (p0.startsWith("hm://playlist/v2/user/")) {
-      val decoded = Playlist4ApiProto.PlaylistModificationInfo.parseFrom(p2)
-      if (decoded.uri.toStringUtf8() == "spotify:user:${spSessionManager.session.username()}:rootlist") {
-        // perform rootlist update
+    if (mappedDeleteRequest.isNotEmpty()) {
+      mappedDeleteRequest.forEach { del ->
+        when (del.key) {
+          CollectionUpdateEntry.Type.TRACK -> dbRepository.deleteTracks(*del.value.toTypedArray())
+          CollectionUpdateEntry.Type.ALBUM -> dbRepository.deleteAlbums(*del.value.toTypedArray())
+          CollectionUpdateEntry.Type.ARTIST -> dbRepository.deleteArtists(*del.value.toTypedArray())
+        }
       }
-    } else {
-
     }
   }
 
