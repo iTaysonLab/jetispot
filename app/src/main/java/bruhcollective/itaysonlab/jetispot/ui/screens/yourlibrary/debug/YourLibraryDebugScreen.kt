@@ -34,7 +34,9 @@ fun YourLibraryDebugScreen(
   val scope = rememberCoroutineScope()
 
   val items = listOf(
-    "Rescan collection" to { scope.launch { viewModel.rescan() }}
+    "Rescan (collection)" to { scope.launch { viewModel.rescan() }},
+    "Rescan (rootlist)" to { },
+    "Clear (everything)" to { scope.launch { viewModel.clean() }},
   )
 
   Scaffold(topBar = {
@@ -68,4 +70,5 @@ class YourLibraryDebugScreenViewModel @Inject constructor(
   private val collectionManager: SpCollectionManager
 ): ViewModel() {
   suspend fun rescan() = collectionManager.scan()
+  suspend fun clean() = collectionManager.clean()
 }

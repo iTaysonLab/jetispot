@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDatabase
@@ -33,7 +34,8 @@ object CollectionModule {
 
   fun provideManager (
     spSessionManager: SpSessionManager,
+    internalApi: SpInternalApi,
     collectionApi: SpCollectionApi,
     repository: LocalCollectionRepository
-  ): SpCollectionManager = SpCollectionManager(spSessionManager, collectionApi, repository)
+  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository)
 }

@@ -61,6 +61,6 @@ interface LocalCollectionDao {
   @Query("DELETE from lcAlbums")
   suspend fun deleteAlbums()
 
-  @Query("DELETE from rootList")
+  @Query("DELETE from rootlist")
   suspend fun deleteRootList()
 }

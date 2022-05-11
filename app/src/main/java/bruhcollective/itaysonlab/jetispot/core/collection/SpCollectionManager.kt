@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
@@ -18,6 +19,7 @@ import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.dealer.DealerClient
 import xyz.gianlu.librespot.metadata.*
@@ -80,6 +82,7 @@ class SpCollectionManager @Inject constructor(
   }
 
   private suspend fun performScanIfEmpty(of: String) {
+    Log.d("SpColManager", "Performing scan of $of (if empty)")
     dbRepository.getCollection(of) ?: performScan(of)
   }
 
@@ -93,8 +96,10 @@ class SpCollectionManager @Inject constructor(
    *
    * for "artist" + "ylpin"
    * - fetch data, metadata and save to DB
+   *
+   * "listenlater" - "My Episodes"
    */
-  private suspend fun performScan(of: String) {
+  suspend fun performScan(of: String) {
     Log.d("SpColManager", "Performing scan of $of")
     val data = performPagingScan(of)
     Log.d("SpColManager", "Scan of $of completed [total = ${data.first.size}]")
@@ -267,4 +272,6 @@ class SpCollectionManager @Inject constructor(
 
     }
   }
+
+  suspend fun clean() = dbRepository.clean()
 }
