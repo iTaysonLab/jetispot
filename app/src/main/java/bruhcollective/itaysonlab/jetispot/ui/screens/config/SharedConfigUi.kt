@@ -65,7 +65,10 @@ fun BaseConfigScreen(
       }
     }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
   }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
-    LazyColumn(Modifier.fillMaxHeight().padding(padding)) {
+    LazyColumn(
+      Modifier
+        .fillMaxHeight()
+        .padding(padding)) {
       items(viewModel.provideConfigList()) { item ->
         when (item) {
           is ConfigItem.Category -> {
@@ -188,18 +191,22 @@ fun ConfigLargeSwitch(
   onClick: (Boolean) -> Unit
 ) {
   val color = animateColorAsState(targetValue = if (value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.5f).compositeOver(MaterialTheme.colorScheme.inverseSurface))
-  Card(containerColor = color.value, shape = RoundedCornerShape(28.dp), onClick = {
+  Card(colors = CardDefaults.cardColors(containerColor = color.value), shape = RoundedCornerShape(28.dp), onClick = {
      onClick(!value)
   }, modifier = Modifier
     .fillMaxWidth()
     .padding(horizontal = 16.dp)
     .padding(bottom = 8.dp)) {
-    Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
-      Text(text = title, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 18.sp, modifier = Modifier
+    Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)) {
+      Text(text = title, color = MaterialTheme.colorScheme.inverseOnSurface, fontSize = 20.sp, modifier = Modifier
         .fillMaxWidth(0.85f)
         .align(Alignment.CenterVertically))
 
       Switch(
+        colors = SwitchDefaults.colors(
+          checkedTrackColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+          checkedThumbColor = MaterialTheme.colorScheme.primary,
+        ),
         checked = value, onCheckedChange = {}, modifier = Modifier
           .fillMaxWidth()
           .align(Alignment.CenterVertically)

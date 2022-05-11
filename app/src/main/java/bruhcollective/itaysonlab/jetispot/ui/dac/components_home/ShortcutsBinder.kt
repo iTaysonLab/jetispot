@@ -2,10 +2,7 @@ package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +47,7 @@ private fun ShortcutComponentBinder(
   imagePlaceholder: String,
   title: String
 ) {
-  Card(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp), modifier = Modifier.height(56.dp).fillMaxWidth().clickable {
+  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth().clickable {
     navController.navigate(navigateUri)
   }) {
     Row {

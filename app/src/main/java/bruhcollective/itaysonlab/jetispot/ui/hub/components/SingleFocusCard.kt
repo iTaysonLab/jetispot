@@ -26,7 +26,7 @@ fun SingleFocusCard (
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  Card(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp), modifier = Modifier
+  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier
     .height(120.dp)
     .fillMaxWidth()
     .clickableHub(navController, delegate, item)) {

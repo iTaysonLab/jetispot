@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import com.spotify.planoverview.v1.BenefitListComponent
 
@@ -24,7 +25,7 @@ fun BenefitListComponentBinder(
   item: BenefitListComponent
 ) {
   Card(
-    containerColor = MaterialTheme.colorScheme.surface,
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     modifier = Modifier
       .padding(top = 12.dp)
