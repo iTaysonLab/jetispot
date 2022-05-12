@@ -23,6 +23,9 @@ sealed class HubComponent {
   @TypeLabel("home:singleFocusCard")
   object SingleFocusCard: HubComponent()
 
+  @TypeLabel("artist:likedSongsRow")
+  object ArtistLikedSongs: HubComponent()
+
   // BROWSE
 
   @TypeLabel("find:categoryCard")

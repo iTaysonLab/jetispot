@@ -28,6 +28,9 @@ interface LocalCollectionDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addRootListItems(vararg items: CollectionRootlistItem)
 
+  @Query("SELECT * from lcTypes WHERE type = :of")
+  suspend fun getCollection(of: String): LocalCollectionCategory?
+
   @Query("DELETE FROM lcTracks WHERE id IN (:ids)")
   suspend fun deleteTracks(vararg ids: String)
 
@@ -46,8 +49,8 @@ interface LocalCollectionDao {
   @Query("SELECT * from lcAlbums ORDER BY addedAt DESC")
   suspend fun getAlbums(): List<CollectionAlbum>
 
-  @Query("SELECT * from lcTypes WHERE type = :of")
-  suspend fun getCollection(of: String): LocalCollectionCategory?
+  @Query("SELECT * from lcTracks WHERE mainArtistId = :id")
+  suspend fun getTracksByArtist(id: String): List<CollectionTrack>
 
   @Query("DELETE from lcTracks")
   suspend fun deleteTracks()

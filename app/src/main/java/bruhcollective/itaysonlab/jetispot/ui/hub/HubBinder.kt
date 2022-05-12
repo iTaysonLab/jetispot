@@ -30,6 +30,8 @@ fun HubBinder (
     HubComponent.Carousel -> Carousel(navController, delegate, item)
     HubComponent.MediumCard -> MediumCard(navController, delegate, item)
 
+    HubComponent.ArtistLikedSongs -> LikedSongsRow(navController, delegate, item)
+
     HubComponent.AlbumTrackRow -> AlbumTrackRow(navController, delegate, item)
     HubComponent.ArtistTrackRow -> ArtistTrackRow(navController, delegate, item)
     HubComponent.PlaylistTrackRow -> PlaylistTrackRow(navController, delegate, item)

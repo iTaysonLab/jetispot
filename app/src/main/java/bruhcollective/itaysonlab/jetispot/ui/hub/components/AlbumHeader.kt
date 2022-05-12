@@ -75,20 +75,20 @@ fun AlbumHeader(
           HubEventHandler.handle(
             navController,
             delegate,
-            HubEvent.NavigateToUri(NavigateUri(item.metadata.album!!.artists[0].uri))
+            HubEvent.NavigateToUri(NavigateUri(item.metadata.album!!.artists[0].uri!!))
           )
         }
         .padding(horizontal = 16.dp)
         .padding(vertical = 12.dp)) {
-        AsyncImage(model = item.metadata.album!!.artists.first().images[0].uri, contentScale = ContentScale.Crop, contentDescription = null, modifier = Modifier
+        AsyncImage(model = item.metadata.album!!.artists.first().images!![0].uri, contentScale = ContentScale.Crop, contentDescription = null, modifier = Modifier
           .clip(CircleShape)
           .size(32.dp))
-        MediumText(text = item.metadata.album.artists.first().name, fontSize = 13.sp, modifier = Modifier
+        MediumText(text = item.metadata.album.artists.first().name!!, fontSize = 13.sp, modifier = Modifier
           .align(Alignment.CenterVertically)
           .padding(start = 12.dp))
       }
     } else {
-      MediumText(text = item.metadata.album!!.artists.joinToString(" • ") { it.name }, fontSize = 13.sp, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+      MediumText(text = item.metadata.album!!.artists.joinToString(" • ") { it.name!! }, fontSize = 13.sp, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
     }
 
     Subtext(text = "${item.metadata.album!!.type} • ${item.metadata.album.year}", modifier = Modifier.padding(horizontal = 16.dp))

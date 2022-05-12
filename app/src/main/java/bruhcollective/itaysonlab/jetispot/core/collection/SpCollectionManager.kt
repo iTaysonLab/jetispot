@@ -83,6 +83,11 @@ class SpCollectionManager @Inject constructor(
     dbRepository.getAlbums()
   }
 
+  suspend fun tracksByArtist(id: String) = withContext(scopeDispatcher) {
+    performScanIfEmpty("collection")
+    dbRepository.getTracksOfArtist(id)
+  }
+
   private suspend fun performScanIfEmpty(of: String) {
     Log.d("SpColManager", "Performing scan of $of (if empty)")
     dbRepository.getCollection(of) ?: performScan(of)
@@ -242,7 +247,7 @@ class SpCollectionManager @Inject constructor(
           .extendedMetadataList
         ).artists.map {
           CollectionArtistMetadata(
-            Utils.bytesToHex(it.value.gid),
+            Utils.bytesToHex(it.value.gid).lowercase(),
             it.value.genreList.joinToString("|")
           )
         }.toTypedArray()
@@ -255,10 +260,10 @@ class SpCollectionManager @Inject constructor(
           id = TrackId.fromHex(Utils.bytesToHex(track.gid)).hexId(),
           uri = TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri(),
           name = track.name,
-          albumId = Utils.bytesToHex(track.album.gid),
+          albumId = AlbumId.fromHex(Utils.bytesToHex(track.album.gid)).hexId(),
           albumName = track.album.name,
-          mainArtistId = Utils.bytesToHex(track.artistList.first().gid),
-          rawArtistsData = track.artistList.joinToString("|") { artist -> "${Utils.bytesToHex(artist.gid)}=${artist.name}" },
+          mainArtistId = Utils.bytesToHex(track.artistList.first().gid).lowercase(),
+          rawArtistsData = track.artistList.joinToString("|") { artist -> "${ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri()}=${artist.name}" },
           hasLyrics = track.hasLyrics,
           isExplicit = track.explicit,
           duration = track.duration,
@@ -271,7 +276,7 @@ class SpCollectionManager @Inject constructor(
         CollectionAlbum(
           id = AlbumId.fromHex(Utils.bytesToHex(album.gid)).hexId(),
           uri = AlbumId.fromHex(Utils.bytesToHex(album.gid)).toSpotifyUri(),
-          rawArtistsData = album.artistList.joinToString("|") { artist -> "${Utils.bytesToHex(artist.gid)}=${artist.name}" },
+          rawArtistsData = album.artistList.joinToString("|") { artist -> "${ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri()}=${artist.name}" },
           name = album.name,
           picture = bytesToPicUrl(album.coverGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
           addedAt = mappedRequest[AlbumId.fromHex(Utils.bytesToHex(album.gid)).toSpotifyUri()]!!

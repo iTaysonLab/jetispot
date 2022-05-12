@@ -30,6 +30,8 @@ class LocalCollectionRepository @Inject constructor(
   suspend fun getAlbums() = dao.getAlbums()
   suspend fun getCollection(of: String): LocalCollectionCategory? = dao.getCollection(of)
 
+  suspend fun getTracksOfArtist(id: String) = dao.getTracksByArtist(id.lowercase())
+
   suspend fun deleteTracks(vararg ids: String) = dao.deleteTracks(*ids)
   suspend fun deleteAlbums(vararg ids: String) = dao.deleteAlbums(*ids)
   suspend fun deleteArtists(vararg ids: String) = dao.deleteArtists(*ids)

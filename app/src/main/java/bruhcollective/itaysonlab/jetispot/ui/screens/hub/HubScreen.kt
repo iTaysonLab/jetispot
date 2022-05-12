@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
@@ -110,7 +111,8 @@ fun HubScreen(
 class HubScreenViewModel @Inject constructor(
   private val spInternalApi: SpInternalApi,
   private val spApiManager: SpApiManager,
-  private val spPlayerServiceManager: SpPlayerServiceManager
+  private val spPlayerServiceManager: SpPlayerServiceManager,
+  private val spCollectionManager: SpCollectionManager
 ) : ViewModel(), HubScreenDelegate {
   private val _state = mutableStateOf<State>(State.Loading)
   val state: State get() = _state.value
@@ -149,6 +151,10 @@ class HubScreenViewModel @Inject constructor(
       // e.printStackTrace()
       Color.Transparent
     }
+  }
+
+  override suspend fun getLikedSongsCount(artistId: String): Int {
+    return spCollectionManager.tracksByArtist(artistId).size
   }
 
   sealed class State {

@@ -8,4 +8,5 @@ interface HubScreenDelegate {
   fun isSurroundedWithPadding(): Boolean
   // headers
   suspend fun calculateDominantColor(url: String, dark: Boolean): Color
+  suspend fun getLikedSongsCount(artistId: String): Int = 0
 }
