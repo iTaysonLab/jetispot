@@ -33,6 +33,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
@@ -119,7 +120,7 @@ fun AlbumHeader(
         Icon(if (delegate.getMainObjectAddedState().value) Icons.Default.Favorite else Icons.Default.FavoriteBorder, null)
       }
 
-      Spacer(Modifier.width(12.dp))
+      Spacer(Modifier.width(16.dp))
 
       IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
         Icon(Icons.Default.MoreVert, null)
@@ -129,9 +130,7 @@ fun AlbumHeader(
 
       Box(Modifier.size(48.dp)) {
         Box(
-          Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickable {
-
-          }
+          Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(navController, delegate, item.children!![0])
         ) {
           Icon(
             imageVector = Icons.Default.PlayArrow,
@@ -141,15 +140,18 @@ fun AlbumHeader(
           )
         }
 
-        Box(
-          Modifier.align(Alignment.BottomEnd).offset(4.dp, 4.dp).clip(CircleShape).size(22.dp).background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
-        ) {
-          Icon(
-            imageVector = Icons.Default.Shuffle,
-            tint = MaterialTheme.colorScheme.primary,
-            contentDescription = null,
-            modifier = Modifier.padding(4.dp).align(Alignment.Center)
-          )
+        if (!((item.children[0].events?.click as? HubEvent.PlayFromContext)?.data?.player?.options?.player_options_override?.shuffling_context == false)) {
+          Box(
+            Modifier.align(Alignment.BottomEnd).offset(4.dp, 4.dp).clip(CircleShape).size(22.dp)
+              .background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
+          ) {
+            Icon(
+              imageVector = Icons.Default.Shuffle,
+              tint = MaterialTheme.colorScheme.primary,
+              contentDescription = null,
+              modifier = Modifier.padding(4.dp).align(Alignment.Center)
+            )
+          }
         }
       }
     }

@@ -42,6 +42,7 @@
 
 # protobuf
 -keep class com.spotify.** {*;}
+-keep class bruhcollective.itaysonlab.swedentricks.** {*;}
 -keep class * extends com.google.protobuf.AbstractMessage {*;}
 
 # librespot decoding stuff
