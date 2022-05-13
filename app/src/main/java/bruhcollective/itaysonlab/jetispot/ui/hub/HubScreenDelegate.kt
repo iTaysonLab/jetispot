@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 
@@ -9,4 +11,6 @@ interface HubScreenDelegate {
   // headers
   suspend fun calculateDominantColor(url: String, dark: Boolean): Color
   suspend fun getLikedSongsCount(artistId: String): Int = 0
+  // states
+  fun getMainObjectAddedState(): State<Boolean>
 }

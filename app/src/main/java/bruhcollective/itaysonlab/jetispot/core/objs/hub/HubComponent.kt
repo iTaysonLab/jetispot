@@ -85,6 +85,9 @@ sealed class HubComponent {
   @TypeLabel("listeninghistory:dividerAfterEntityRow")
   object EmptySpace: HubComponent()
 
+  @TypeLabel("freetier:offlineSwitchComponent")
+  object Ignored: HubComponent()
+
   @DefaultObject
   object Unknown: HubComponent()
 }

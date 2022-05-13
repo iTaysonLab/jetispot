@@ -7,6 +7,7 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAr
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LocalCollectionDao {
@@ -66,4 +67,15 @@ interface LocalCollectionDao {
 
   @Query("DELETE from rootlist")
   suspend fun deleteRootList()
+
+  // Flows
+
+  @Query("SELECT * from lcArtists WHERE id = :id")
+  fun subscribeOnArtist(id: String): Flow<List<CollectionArtist>>
+
+  @Query("SELECT * from lcAlbums WHERE id = :id")
+  fun subscribeOnAlbum(id: String): Flow<List<CollectionAlbum>>
+
+  @Query("SELECT * from lcTracks WHERE id = :id")
+  fun subscribeOnTrack(id: String): Flow<List<CollectionTrack>>
 }

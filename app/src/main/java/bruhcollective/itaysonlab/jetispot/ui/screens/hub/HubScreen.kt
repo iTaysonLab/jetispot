@@ -117,6 +117,9 @@ class HubScreenViewModel @Inject constructor(
   private val _state = mutableStateOf<State>(State.Loading)
   val state: State get() = _state.value
 
+  val nullState = mutableStateOf(false)
+  override fun getMainObjectAddedState() = nullState
+
   // no state handle needed
   var needContentPadding: Boolean = false
 

@@ -8,7 +8,7 @@
 
     <string name="auth_welcome">Welcome to Jetispot!</string>
     <string name="auth_welcome_text">Sign into your Spotify account to get started.</string>
-    <string name="username">Username</string>
+    <string name="username">Username or email</string>
     <string name="password">Password</string>
     <string name="auth_next">Sign in</string>
     <string name="auth_disclaimer">Disclaimers</string>
@@ -75,6 +75,8 @@
     <string name="logout_message">This will remove all data linked to your account from this device. Settings won\'t be reset to default.</string>
     <string name="logout_confirm">Confirm</string>
     <string name="logout_cancel">Cancel</string>
+
+    <string name="liked_songs">Liked Songs</string>
 
     <string name="listening_history">Listening history</string>
 </resources>

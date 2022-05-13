@@ -97,6 +97,9 @@ class HistoryViewModel @Inject constructor(
   private val _state = mutableStateOf<State>(State.Loading)
   val state: State get() = _state.value
 
+  val nullState = mutableStateOf(false)
+  override fun getMainObjectAddedState() = nullState
+
   suspend fun load(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
     _state.value = try {
       State.Loaded(spInternalApi.loader(spApiManager))

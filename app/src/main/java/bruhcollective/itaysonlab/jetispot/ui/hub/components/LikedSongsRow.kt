@@ -43,33 +43,52 @@ fun LikedSongsRow(
   LaunchedEffect(Unit) {
     launch {
       val count = delegate.getLikedSongsCount(ArtistId.fromBase62((item.events!!.click as HubEvent.NavigateToUri).data.uri.split(":").last()).hexId())
-      likedSongsInfo.value = "$count songs by ${item.metadata!!.artist!!.name}"
+      likedSongsInfo.value = if (count == 0) "" else "$count songs by ${item.metadata!!.artist!!.name}"
     }
   }
 
-  Row(
-    Modifier
-      .clickableHub(navController, delegate, item)
-      .padding(horizontal = 16.dp, vertical = 12.dp)) {
+  if (likedSongsInfo.value.isNotEmpty()) {
+    Row(
+      Modifier
+        .clickableHub(navController, delegate, item)
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
 
-    Box(Modifier.size(48.dp)) {
-      PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
-        .clip(CircleShape)
-        .align(Alignment.Center)
-        .size(48.dp))
-      Box(Modifier.offset(4.dp, 4.dp).clip(CircleShape).size(28.dp).background(MaterialTheme.colorScheme.surface).align(Alignment.BottomEnd)) {
-        Box(Modifier.clip(CircleShape).size(22.dp).background(MaterialTheme.colorScheme.primary).align(Alignment.Center)) {
-          Icon(imageVector = Icons.Default.Favorite, tint = MaterialTheme.colorScheme.onPrimary, contentDescription = null, modifier = Modifier.padding(4.dp))
+      Box(Modifier.size(48.dp)) {
+        PreviewableAsyncImage(
+          imageUrl = item.images?.main?.uri,
+          placeholderType = item.images?.main?.placeholder,
+          modifier = Modifier
+            .clip(CircleShape)
+            .align(Alignment.Center)
+            .size(48.dp)
+        )
+        Box(
+          Modifier.offset(4.dp, 4.dp).clip(CircleShape).size(28.dp)
+            .background(MaterialTheme.colorScheme.surface).align(Alignment.BottomEnd)
+        ) {
+          Box(
+            Modifier.clip(CircleShape).size(22.dp).background(MaterialTheme.colorScheme.primary)
+              .align(Alignment.Center)
+          ) {
+            Icon(
+              imageVector = Icons.Default.Favorite,
+              tint = MaterialTheme.colorScheme.onPrimary,
+              contentDescription = null,
+              modifier = Modifier.padding(4.dp)
+            )
+          }
         }
       }
-    }
 
-    Column(
-      Modifier
-        .align(Alignment.CenterVertically)
-        .padding(start = 16.dp)) {
-      MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
-      Subtext(likedSongsInfo.value, modifier = Modifier.padding(top = 4.dp))
+      Column(
+        Modifier
+          .align(Alignment.CenterVertically)
+          .padding(start = 16.dp)
+      ) {
+        MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
+        Subtext(likedSongsInfo.value, modifier = Modifier.padding(top = 4.dp))
+      }
     }
   }
 }

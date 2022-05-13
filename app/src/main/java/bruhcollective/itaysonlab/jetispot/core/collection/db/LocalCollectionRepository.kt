@@ -20,22 +20,6 @@ class LocalCollectionRepository @Inject constructor(
     dao.updateCollectionCategory(LocalCollectionCategory(collectionSet, syncToken))
   }
 
-  suspend fun insertMetaArtists(vararg items: CollectionArtistMetadata) = dao.addMetaArtists(*items)
-  suspend fun insertArtists(vararg items: CollectionArtist) = dao.addArtists(*items)
-  suspend fun insertAlbums(vararg items: CollectionAlbum) = dao.addAlbums(*items)
-  suspend fun insertTracks(vararg items: CollectionTrack) = dao.addTracks(*items)
-  suspend fun insertRootList(vararg items: CollectionRootlistItem) = dao.addRootListItems(*items)
-
-  suspend fun getArtists() = dao.getArtists()
-  suspend fun getAlbums() = dao.getAlbums()
-  suspend fun getCollection(of: String): LocalCollectionCategory? = dao.getCollection(of)
-
-  suspend fun getTracksOfArtist(id: String) = dao.getTracksByArtist(id.lowercase())
-
-  suspend fun deleteTracks(vararg ids: String) = dao.deleteTracks(*ids)
-  suspend fun deleteAlbums(vararg ids: String) = dao.deleteAlbums(*ids)
-  suspend fun deleteArtists(vararg ids: String) = dao.deleteArtists(*ids)
-
   suspend fun clean() {
     dao.deleteTracks()
     dao.deleteAlbums()

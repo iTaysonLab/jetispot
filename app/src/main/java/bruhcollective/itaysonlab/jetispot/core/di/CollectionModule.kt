@@ -36,6 +36,7 @@ object CollectionModule {
     spSessionManager: SpSessionManager,
     internalApi: SpInternalApi,
     collectionApi: SpCollectionApi,
-    repository: LocalCollectionRepository
-  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository)
+    repository: LocalCollectionRepository,
+    dao: LocalCollectionDao
+  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository, dao)
 }

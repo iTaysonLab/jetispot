@@ -48,7 +48,7 @@ fun HubBinder (
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
 
     HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
-    HubComponent.EmptySpace -> {}
+    HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {
       Text("Unsupported, id = ${item.id}")
