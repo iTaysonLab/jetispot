@@ -5,24 +5,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
@@ -41,7 +33,7 @@ import javax.inject.Inject
 fun HubScreen(
   navController: NavController,
   needContentPadding: Boolean = true,
-  loader: suspend SpInternalApi.(SpApiManager) -> HubResponse,
+  loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
   statusBarPadding: Boolean = false
 ) {
@@ -110,7 +102,6 @@ fun HubScreen(
 @HiltViewModel
 class HubScreenViewModel @Inject constructor(
   private val spInternalApi: SpInternalApi,
-  private val spApiManager: SpApiManager,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spCollectionManager: SpCollectionManager
 ) : ViewModel(), HubScreenDelegate {
@@ -123,16 +114,16 @@ class HubScreenViewModel @Inject constructor(
   // no state handle needed
   var needContentPadding: Boolean = false
 
-  suspend fun load(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
+  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = try {
-      State.Loaded(spInternalApi.loader(spApiManager))
+      State.Loaded(spInternalApi.loader())
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
     }
   }
 
-  suspend fun reload(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = State.Loading
     load(loader)
   }
@@ -143,18 +134,7 @@ class HubScreenViewModel @Inject constructor(
 
   override fun isSurroundedWithPadding() = needContentPadding
 
-  override suspend fun calculateDominantColor(url: String, dark: Boolean): Color {
-    return try {
-      val apiResult = spApiManager.partners.getDominantColors(url).data.extractedColors[0].let {
-        if (dark) it.colorRaw else it.colorDark
-      }.hex
-
-      Color(android.graphics.Color.parseColor(apiResult))
-    } catch (e: Exception) {
-      // e.printStackTrace()
-      Color.Transparent
-    }
-  }
+  override suspend fun calculateDominantColor(url: String, dark: Boolean) = Color.Transparent
 
   override suspend fun getLikedSongsCount(artistId: String): Int {
     return spCollectionManager.tracksByArtist(artistId).size

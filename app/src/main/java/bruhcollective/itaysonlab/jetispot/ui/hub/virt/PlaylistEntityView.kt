@@ -1,11 +1,11 @@
-package bruhcollective.itaysonlab.jetispot.core.api.edges
+package bruhcollective.itaysonlab.jetispot.ui.hub.virt
 
 import android.util.Log
-import bruhcollective.itaysonlab.jetispot.core.api.SpApiExecutor
+import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
-import com.spotify.extendedmetadata.ExtendedMetadata.*
-import com.spotify.extendedmetadata.ExtensionKindOuterClass.ExtensionKind
+import com.spotify.extendedmetadata.ExtendedMetadata
+import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.Dispatchers
@@ -13,14 +13,9 @@ import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
 import xyz.gianlu.librespot.metadata.PlaylistId
-import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
+import java.util.ArrayList
 
-@Singleton
-class SpInternalApi @Inject constructor(
-  private val api: SpApiExecutor
-) : SpEdgeScope by SpApiExecutor.Edge.Internal.scope(api) {
+object PlaylistEntityView {
   class ApiPlaylist(
     val playlist: Playlist4ApiProto.SelectedListContent,
     val playlistTrackMetadata: List<Playlist4ApiProto.Item>,
@@ -28,14 +23,15 @@ class SpInternalApi @Inject constructor(
     val hubResponse: HubResponse
   )
 
-  suspend fun getPlaylistView(id: String): ApiPlaylist {
-    val extensionQuery = ExtensionQuery.newBuilder().setExtensionKind(
-      ExtensionKind.TRACK_V4
+  suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager): ApiPlaylist {
+    val extensionQuery = ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(
+      ExtensionKindOuterClass.ExtensionKind.TRACK_V4
     ).build()
-    val entities: MutableList<EntityRequest> = ArrayList()
+    val entities: MutableList<ExtendedMetadata.EntityRequest> = ArrayList()
 
     // get tracks ids
-    val playlist = withContext(Dispatchers.IO) { api.sessionManager.session.api().getPlaylist(PlaylistId.fromUri("spotify:playlist:$id")) }
+    val playlist = withContext(Dispatchers.IO) { sessionManager.session.api().getPlaylist(
+      PlaylistId.fromUri("spotify:playlist:$id")) }
     val playlistTracks = playlist.contents.itemsList
 
     Log.d("SCM", playlist.toString())
@@ -63,16 +59,16 @@ class SpInternalApi @Inject constructor(
     )
 
     playlistTracks.listIterator().forEach { track ->
-      entities.add(EntityRequest.newBuilder().apply {
+      entities.add(ExtendedMetadata.EntityRequest.newBuilder().apply {
         entityUri = track.uri
         addQuery(extensionQuery)
       }.build())
     }
 
     val playlistData = withContext(Dispatchers.IO) {
-      api.sessionManager.session.api()
+      sessionManager.session.api()
         .getExtendedMetadata(
-          BatchedEntityRequest.newBuilder()
+          ExtendedMetadata.BatchedEntityRequest.newBuilder()
             .addAllEntityRequest(entities)
             .build()
         )

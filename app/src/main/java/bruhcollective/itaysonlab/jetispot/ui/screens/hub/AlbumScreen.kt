@@ -10,16 +10,15 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.ext.collectAsStateLifecycleAware
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import xyz.gianlu.librespot.metadata.AlbumId
 import javax.inject.Inject
 
@@ -54,7 +53,7 @@ fun AlbumScreen(
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
   private val spInternalApi: SpInternalApi,
-  private val spApiManager: SpApiManager,
+  private val spPartnersApi: SpPartnersApi,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spDao: LocalCollectionDao
 ) : AbsHubViewModel() {
@@ -71,5 +70,5 @@ class AlbumViewModel @Inject constructor(
   private suspend fun loadInternal(id: String) = spInternalApi.getAlbumView(id).also { title.value = it.title ?: "" }
 
   override fun play(data: PlayFromContextData) = play(spPlayerServiceManager, data)
-  override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spApiManager, url, dark)
+  override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spPartnersApi, url, dark)
 }

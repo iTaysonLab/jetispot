@@ -6,12 +6,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
-import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.core.api.edges.SpInternalApi.ApiPlaylist
-import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
+import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
+import bruhcollective.itaysonlab.jetispot.ui.hub.virt.PlaylistEntityView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -29,7 +28,7 @@ fun PlaylistScreen(
 
   HubScaffold(
     navController = navController,
-    appBarTitle = viewModel.playlistMetadata?.playlist?.attributes?.name ?: "",
+    appBarTitle = viewModel.title.value,
     state = viewModel.state,
     viewModel = viewModel
   ) {
@@ -39,17 +38,19 @@ fun PlaylistScreen(
 
 @HiltViewModel
 class PlaylistViewModel @Inject constructor(
-  private val spInternalApi: SpInternalApi,
-  private val spApiManager: SpApiManager,
+  private val spSessionManager: SpSessionManager,
+  private val spPartnersApi: SpPartnersApi,
   private val spPlayerServiceManager: SpPlayerServiceManager
 ) : AbsHubViewModel() {
-  private val _playlistMetadata = mutableStateOf<ApiPlaylist?>(null)
-  val playlistMetadata: ApiPlaylist? get() = _playlistMetadata.value
+  val title = mutableStateOf("")
+
+  private val _playlistMetadata = mutableStateOf<PlaylistEntityView.ApiPlaylist?>(null)
+  val playlistMetadata: PlaylistEntityView.ApiPlaylist? get() = _playlistMetadata.value
 
   suspend fun loadPlaylist(id: String) = load { loadPlaylistInternal(id) }
   suspend fun reloadPlaylist(id: String) = reload { loadPlaylistInternal(id) }
-  suspend fun loadPlaylistInternal(id: String) = spApiManager.internal.getPlaylistView(id).also { _playlistMetadata.value = it }.hubResponse
+  suspend fun loadPlaylistInternal(id: String) = PlaylistEntityView.getPlaylistView(id, spSessionManager).also { _playlistMetadata.value = it; title.value = it.playlist.attributes.name; }.hubResponse
 
   override fun play(data: PlayFromContextData) = play(spPlayerServiceManager, data)
-  override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spApiManager, url, dark)
+  override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spPartnersApi, url, dark)
 }

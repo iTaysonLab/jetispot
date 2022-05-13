@@ -3,8 +3,8 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
@@ -37,13 +37,13 @@ abstract class AbsHubViewModel: ViewModel(), HubScreenDelegate {
   override fun isSurroundedWithPadding() = false
   override fun getMainObjectAddedState() = mainAddedState
 
-  suspend fun calculateDominantColor(spApiManager: SpApiManager, url: String, dark: Boolean): Color {
+  suspend fun calculateDominantColor(partnersApi: SpPartnersApi, url: String, dark: Boolean): Color {
     return try {
       if (imageCache.containsKey(url)) {
         return imageCache[url]!!
       }
 
-      val apiResult = spApiManager.partners.getDominantColors(url).data.extractedColors[0].let {
+      val apiResult = partnersApi.fetchExtractedColors(variables = "{\"uris\":[\"$url\"]}").data.extractedColors[0].let {
         if (dark) it.colorRaw else it.colorDark
       }.hex
 

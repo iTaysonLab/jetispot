@@ -16,7 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
@@ -91,7 +90,6 @@ fun ListeningHistoryScreen(
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
   private val spInternalApi: SpInternalApi,
-  private val spApiManager: SpApiManager,
   private val spPlayerServiceManager: SpPlayerServiceManager
 ) : ViewModel(), HubScreenDelegate {
   private val _state = mutableStateOf<State>(State.Loading)
@@ -100,16 +98,16 @@ class HistoryViewModel @Inject constructor(
   val nullState = mutableStateOf(false)
   override fun getMainObjectAddedState() = nullState
 
-  suspend fun load(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
+  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = try {
-      State.Loaded(spInternalApi.loader(spApiManager))
+      State.Loaded(spInternalApi.loader())
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
     }
   }
 
-  suspend fun reload(loader: suspend SpInternalApi.(SpApiManager) -> HubResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = State.Loading
     load(loader)
   }
@@ -120,18 +118,7 @@ class HistoryViewModel @Inject constructor(
 
   override fun isSurroundedWithPadding() = false
 
-  override suspend fun calculateDominantColor(url: String, dark: Boolean): Color {
-    return try {
-      val apiResult = spApiManager.partners.getDominantColors(url).data.extractedColors[0].let {
-        if (dark) it.colorRaw else it.colorDark
-      }.hex
-
-      Color(android.graphics.Color.parseColor(apiResult))
-    } catch (e: Exception) {
-      // e.printStackTrace()
-      Color.Transparent
-    }
-  }
+  override suspend fun calculateDominantColor(url: String, dark: Boolean) = Color.Transparent
 
   sealed class State {
     class Loaded(val data: HubResponse) : State()

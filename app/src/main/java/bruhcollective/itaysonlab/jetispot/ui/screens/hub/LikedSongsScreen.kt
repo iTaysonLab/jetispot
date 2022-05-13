@@ -1,15 +1,14 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.core.SpApiManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
-import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.core.api.edges.SpInternalApi.ApiPlaylist
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
@@ -40,12 +39,11 @@ fun LikedSongsScreen(
 
 @HiltViewModel
 class LikedSongsViewModel @Inject constructor(
-  private val spApiManager: SpApiManager,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spCollectionManager: SpCollectionManager
 ) : AbsHubViewModel() {
   override fun play(data: PlayFromContextData) = play(spPlayerServiceManager, data)
-  override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spApiManager, url, dark)
+  override suspend fun calculateDominantColor(url: String, dark: Boolean) = Color.Transparent
 
   suspend fun load(fullUri: String, id: String) = load {
     val artistTracks = spCollectionManager.tracksByArtist(ArtistId.fromBase62(id).hexId())

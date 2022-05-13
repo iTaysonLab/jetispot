@@ -5,6 +5,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.ClientTokenHandler
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.di.ext.interceptRequest
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -43,7 +44,7 @@ object ApiModule {
       header("App-Platform", "Android")
 
       // 3. Default GET params
-      if (orig.method == "GET") {
+      if (orig.method == "GET" && !orig.url.host.contains("api-partner")) {
         url(orig.url.newBuilder().apply {
           addQueryParameter("platform", "android")
           addQueryParameter("client-timezone", TimeZone.getDefault().id)
@@ -68,6 +69,10 @@ object ApiModule {
   @Provides
   @Singleton
   fun provideInternalApi(retrofit: Retrofit): SpInternalApi = retrofit.newBuilder().baseUrl("https://spclient.wg.spotify.com").build().create(SpInternalApi::class.java)
+
+  @Provides
+  @Singleton
+  fun providePartnersApi(retrofit: Retrofit): SpPartnersApi = retrofit.newBuilder().baseUrl("https://api-partner.spotify.com").build().create(SpPartnersApi::class.java)
 
   @Provides
   @Singleton

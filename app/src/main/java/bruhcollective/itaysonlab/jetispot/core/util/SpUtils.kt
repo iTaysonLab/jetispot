@@ -20,4 +20,6 @@ object SpUtils {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length).map { allowedChars.random() }.joinToString("")
     }
+
+    fun getScannableUrl(uri: String) = "https://scannables.scdn.co/uri/800/spotify%3Aalbum%3A3DR0FThvw6I18Ntp3D6kxf"
 }
