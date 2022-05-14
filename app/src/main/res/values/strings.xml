@@ -79,4 +79,6 @@
     <string name="liked_songs">Liked Songs</string>
 
     <string name="listening_history">Listening history</string>
+
+    <string name="np_playing_from">Playing from</string>
 </resources>

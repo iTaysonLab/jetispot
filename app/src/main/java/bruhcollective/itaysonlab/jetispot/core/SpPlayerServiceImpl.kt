@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.media2.common.MediaItem
+import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
@@ -52,7 +53,9 @@ class SpPlayerServiceImpl (
     if (mc != null) {
       if (!mc.isConnected) {
         Log.w("Jetispot:Service", "MC created, but not connected -> should be a deadlock, report if you see this!")
-        svcInit = init
+        mc.close()
+        mediaController = null
+        return awaitService(init)
       } else {
         mc.also {
           init?.invoke(it)
@@ -81,6 +84,10 @@ class SpPlayerServiceImpl (
     }
 
     manageTimer(manager.playbackState.value == SpPlayerServiceManager.PlaybackState.Playing)
+  }
+
+  override fun onPlaylistMetadataChanged(controller: MediaController, metadata: MediaMetadata?) {
+    manager.currentContext.value = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: ""
   }
 
   private fun manageTimer(run: Boolean) {

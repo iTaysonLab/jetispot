@@ -30,6 +30,7 @@ class SpPlayerServiceManager @Inject constructor(
   val currentTrack = mutableStateOf(MediaItemWrapper())
   val playbackState = mutableStateOf(PlaybackState.Idle)
   val playbackProgress = mutableStateOf(PlaybackProgress(Pair(0F, 0L)))
+  val currentContext = mutableStateOf("")
 
   @JvmInline
   value class PlaybackProgress(

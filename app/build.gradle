@@ -98,18 +98,14 @@ dependencies {
     implementation "androidx.compose.ui:ui-util:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
-
-    //implementation "androidx.media3:media3-common:$media3_version"
-    //implementation "androidx.media3:media3-session:$media3_version"
-
     implementation "io.coil-kt:coil-compose:2.0.0-rc03"
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.6-alpha'
-    implementation 'com.google.accompanist:accompanist-pager:0.24.6-alpha'
+    implementation 'com.google.accompanist:accompanist-pager:0.24.7-alpha'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
-    implementation('com.github.librespot-org.librespot-java:librespot-player:dev-SNAPSHOT:thin') {
+    implementation('com.github.iTaysonLab.librespot-java:librespot-player:dev-jsp-SNAPSHOT:thin') {
         exclude group: 'xyz.gianlu.librespot', module: 'librespot-sink'
         exclude group: 'com.lmax', module: 'disruptor'
         exclude group: 'org.apache.logging.log4j'

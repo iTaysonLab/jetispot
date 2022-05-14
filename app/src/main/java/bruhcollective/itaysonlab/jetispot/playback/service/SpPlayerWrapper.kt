@@ -97,7 +97,7 @@ class SpPlayerWrapper(
   }
 
   override fun getPlaylist(): MutableList<MediaItem>? = null // TODO
-  override fun getPlaylistMetadata() = MediaMetadata.Builder().build() // TODO
+  override fun getPlaylistMetadata() = state.currentContextMetadata
   override fun skipToPlaylistItem(index: Int) = unsupportedFuture() // TODO
 
   override fun getRepeatMode() = if (playerAvailable) reflect.getRepeatMode() else REPEAT_MODE_NONE
@@ -124,6 +124,7 @@ class SpPlayerWrapper(
   data class State(
     var playbackState: Int = PLAYER_STATE_IDLE,
     var currentTrack: MetadataWrapper? = null,
-    var currentMediaItem: MediaItem? = null
+    var currentMediaItem: MediaItem? = null,
+    var currentContextMetadata: MediaMetadata? = null
   )
 }

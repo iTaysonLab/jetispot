@@ -120,9 +120,7 @@ class SpCollectionWriter(
         timestamp = pair.first.attributes.timestamp,
         name = pair.second.attributes.name,
         ownerUsername = pair.second.ownerUsername,
-        picture = pair.second.attributes.unknownFields.getField(13)?.lengthDelimitedList
-          ?.get(0)?.toStringUtf8()
-          ?.split(Regex(".default.."))?.get(1) ?: ""
+        picture = pair.second.attributes.pictureSizeList.find { it.targetName == "default" }?.url ?: ""
       )
     }.toTypedArray()
 

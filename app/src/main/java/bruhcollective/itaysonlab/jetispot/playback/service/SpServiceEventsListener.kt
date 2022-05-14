@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.playback.service
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.media2.common.MediaItem
+import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer
 import bruhcollective.itaysonlab.jetispot.playback.helpers.toMediaMetadata
 import xyz.gianlu.librespot.audio.MetadataWrapper
@@ -15,7 +16,8 @@ class SpServiceEventsListener(
   val player: SpPlayerWrapper
 ) : Player.EventsListener {
   override fun onContextChanged(p0: Player, p1: String) {
-
+    player.state.currentContextMetadata = MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE, p1).build()
+    player.runOnListeners { it.onPlaylistMetadataChanged(player, player.state.currentContextMetadata) }
   }
 
   override fun onTrackChanged(p0: Player, p1: PlayableId, p2: MetadataWrapper?, userInitiated: Boolean) {
