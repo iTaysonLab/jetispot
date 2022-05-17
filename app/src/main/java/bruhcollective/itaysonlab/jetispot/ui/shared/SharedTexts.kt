@@ -26,9 +26,11 @@ fun MediumText (
 @Composable
 fun Subtext (
   text: String,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  fontSize: TextUnit = 12.sp,
+  maxLines: Int = 2,
 ) {
-  Text(text, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), fontSize = 12.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = modifier)
+  Text(text, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), fontSize = fontSize, lineHeight = 18.sp, maxLines = maxLines, overflow = TextOverflow.Ellipsis, modifier = modifier)
 }
 
 @Composable

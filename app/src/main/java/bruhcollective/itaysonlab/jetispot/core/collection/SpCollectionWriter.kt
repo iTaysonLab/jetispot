@@ -6,11 +6,9 @@ import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionRepository
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
+import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
+import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
 import bruhcollective.itaysonlab.jetispot.core.util.Revision
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdate
@@ -55,7 +53,7 @@ class SpCollectionWriter(
    */
   suspend fun performScan(of: String) {
     Log.d("SpColManager", "Performing scan of $of")
-    val data = performPagingScan(of)
+    performPagingScan(of, dao.getCollection(of)?.syncToken)
     Log.d("SpColManager", "Scan of $of completed")
   }
 
@@ -77,41 +75,52 @@ class SpCollectionWriter(
     }.build())
   }
 
-  private suspend fun performPagingScan(of: String) {
+  private suspend fun performPagingScan(of: String, existingSyncToken: String? = null) {
     val syncToken: String
     var pToken = ""
 
-    while (true) {
-      Log.d("SpColManager", "Performing page request of $of [pToken = $pToken]")
-
-      val page = collectionApi.paging(Collection2V2.PageRequest.newBuilder().apply {
+    if (!existingSyncToken.isNullOrEmpty()) {
+      val page = collectionApi.delta(Collection2V2.DeltaRequest.newBuilder().apply {
         username = spSessionManager.session.username()
         set = of
-        paginationToken = pToken
-        limit = 300
+        lastSyncToken = existingSyncToken
       }.build())
-
-      Log.d(
-        "SpColManager",
-        "Performing page metadata request of $of [count = ${page.itemsList.size}]"
-      )
-
+      Log.d("SpColManager", "Performing DELTA page metadata request of $of [count = ${page.itemsList.size}]")
       performCollectionInsert(page.itemsList.associate { Pair(it.uri, it.addedAt) })
+      syncToken = page.syncToken
+    } else {
+      while (true) {
+        Log.d("SpColManager", "Performing page request of $of [pToken = $pToken]")
 
-      if (!page.nextPageToken.isNullOrEmpty()) {
-        // next page
-        pToken = page.nextPageToken
-      } else {
-        // no more pages remain
-        syncToken = page.syncToken
-        break
+        val page = collectionApi.paging(Collection2V2.PageRequest.newBuilder().apply {
+          username = spSessionManager.session.username()
+          set = of
+          paginationToken = pToken
+          limit = 300
+        }.build())
+
+        Log.d(
+          "SpColManager",
+          "Performing page metadata request of $of [count = ${page.itemsList.size}]"
+        )
+
+        performCollectionInsert(page.itemsList.associate { Pair(it.uri, it.addedAt) })
+
+        if (!page.nextPageToken.isNullOrEmpty()) {
+          // next page
+          pToken = page.nextPageToken
+        } else {
+          // no more pages remain
+          syncToken = page.syncToken
+          break
+        }
       }
     }
 
     dbRepository.insertOrUpdateCollection(of, syncToken)
   }
 
-  private suspend fun performRootlistScan() {
+  suspend fun performRootlistScan() {
     val data = internalApi.getRootlist(spSessionManager.session.username())
 
     val mappedData = data.contents.itemsList.mapIndexed { index, item -> Pair(item, data.contents.metaItemsList[index]) }.map { pair ->
@@ -126,6 +135,17 @@ class SpCollectionWriter(
 
     dao.addRootListItems(*mappedData)
     dbRepository.insertOrUpdateCollection("rootlist", data.revision.toStringUtf8())
+  }
+
+  suspend fun performContentFiltersScan() {
+    val data = try { internalApi.getCollectionTags() } catch (e: Exception) { ContentFilterResponse(emptyList()) }
+
+    val mappedData = data.contentFilters.map {
+      CollectionContentFilter(name = it.title, query = it.query)
+    }.toTypedArray()
+
+    dao.deleteContentFilters()
+    dao.addContentFilters(*mappedData)
   }
 
   private suspend fun performCollectionInsert(mappedRequest: Map<String, Int>, mappedDeleteRequest: Map<CollectionUpdateEntry.Type, List<String>> = mapOf()) {
@@ -152,46 +172,42 @@ class SpCollectionWriter(
         ).extendedMetadataList
       )
 
-      if (metadata.tracks.isNotEmpty()) {
-        // also request artists to get genre data
-
-        val mappedArtists = UnpackedMetadataResponse(spSessionManager.session.api()
+      val trackDescriptors = if (metadata.tracks.isNotEmpty()) {
+        // also request descriptors to get genre data
+        UnpackedMetadataResponse(spSessionManager.session.api()
           .getExtendedMetadata(
             ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
-              metadata.tracks.map {
-                ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(
-                  ArtistId.fromHex(Utils.bytesToHex(it.value.artistList.first().gid)).toSpotifyUri()
+              metadata.tracks.keys.map { ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(it
                 ).addQuery(
-                  ExtendedMetadata.ExtensionQuery.newBuilder()
-                    .setExtensionKind(ExtensionKindOuterClass.ExtensionKind.ARTIST_V4).build()
+                  ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR).build()
                 ).build()
               }.distinctBy { it.entityUri }
             ).build()
           )
           .extendedMetadataList
-        ).artists.map {
-          CollectionArtistMetadata(
-            Utils.bytesToHex(it.value.gid).lowercase(),
-            it.value.genreList.joinToString("|")
-          )
-        }.toTypedArray()
-
-        dao.addMetaArtists(*mappedArtists)
+        ).descriptors.mapValues { e ->
+          e.value.descriptorsList.joinToString("|") { it.text }
+        }
+      } else {
+        emptyMap()
       }
 
       dao.addTracks(*metadata.tracks.values.map { track ->
+        val spUri = TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri()
         CollectionTrack(
           id = TrackId.fromHex(Utils.bytesToHex(track.gid)).hexId(),
-          uri = TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri(),
+          uri = spUri,
           name = track.name,
           albumId = AlbumId.fromHex(Utils.bytesToHex(track.album.gid)).hexId(),
           albumName = track.album.name,
+          mainArtistName = track.artistList.first().name,
           mainArtistId = Utils.bytesToHex(track.artistList.first().gid).lowercase(),
           rawArtistsData = track.artistList.joinToString("|") { artist -> "${ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri()}=${artist.name}" },
           hasLyrics = track.hasLyrics,
           isExplicit = track.explicit,
           duration = track.duration,
           picture = bytesToPicUrl(track.album.coverGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
+          descriptors = trackDescriptors[spUri] ?: "",
           addedAt = mappedRequest[TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri()]!!
         )
       }.toTypedArray())

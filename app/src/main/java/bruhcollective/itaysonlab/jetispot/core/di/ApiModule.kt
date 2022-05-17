@@ -46,12 +46,14 @@ object ApiModule {
       // 3. Default GET params
       if (orig.method == "GET" && !orig.url.host.contains("api-partner")) {
         url(orig.url.newBuilder().apply {
-          addQueryParameter("platform", "android")
           addQueryParameter("client-timezone", TimeZone.getDefault().id)
-          addQueryParameter("locale", sessionManager.session.preferredLocale())
-          addQueryParameter("video", "true")
-          addQueryParameter("podcast", "true")
-          addQueryParameter("application", "nft")
+          if (!orig.url.pathSegments.contains("content-filter")) {
+            addQueryParameter("platform", "android")
+            addQueryParameter("locale", sessionManager.session.preferredLocale())
+            addQueryParameter("video", "true")
+            addQueryParameter("podcast", "true")
+            addQueryParameter("application", "nft")
+          }
         }.build())
       }
     }

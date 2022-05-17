@@ -56,6 +56,7 @@ class ConfigScreenViewModel @Inject constructor(
     add(ConfigItem.Preference(R.string.config_pbquality, { ctx, cfg ->
       ctx.getString(
         when (cfg.playerConfig.preferredQuality) {
+          AudioQuality.LOW -> R.string.quality_low
           AudioQuality.NORMAL -> R.string.quality_normal
           AudioQuality.HIGH -> R.string.quality_high
           else -> R.string.quality_very_high

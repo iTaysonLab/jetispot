@@ -10,10 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.history.ListeningHistoryScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.hub.AlbumScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.hub.LikedSongsScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.hub.PlaylistScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.*
 
 @Composable
 fun DynamicSpIdScreen(
@@ -46,6 +43,7 @@ fun DynamicSpIdScreen(
 
     "collection" -> when (id) {
       "artist" -> LikedSongsScreen(navController, argument, fullUri)
+      "" -> CollectionScreen(navController)
       /* else -> {  TODO  } */
     }
 

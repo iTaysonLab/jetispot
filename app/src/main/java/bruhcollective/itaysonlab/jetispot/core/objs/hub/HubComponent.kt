@@ -82,6 +82,9 @@ sealed class HubComponent {
   @TypeLabel("synth:playlistTrackRow", alternateLabels = ["listeninghistory:trackRow"])
   object PlaylistTrackRow: HubComponent()
 
+  @TypeLabel("synth:collectionHeader")
+  object CollectionHeader: HubComponent()
+
   @TypeLabel("listeninghistory:dividerAfterEntityRow")
   object EmptySpace: HubComponent()
 

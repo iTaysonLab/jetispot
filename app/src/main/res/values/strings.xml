@@ -23,6 +23,8 @@
 
     <string name="config_pbquality">Audio quality</string>
 
+    <string name="quality_low">Low</string>
+    <string name="quality_low_desc">~ 24kbit/s</string>
     <string name="quality_normal">Normal</string>
     <string name="quality_normal_desc">~ 96kbit/s</string>
     <string name="quality_high">High</string>
@@ -66,7 +68,7 @@
     <string name="about_channel">Open Telegram channel</string>
 
     <string name="warn_restart">These settings will be applied on full application restart.</string>
-    <string name="warn_quality">Sound quality may also vary by tracks, countries or other server-sided A/B experiments.</string>
+    <string name="warn_quality">Sound quality may also vary by tracks, countries or other server-sided A/B experiments.\n\nThis setting will take effect </string>
     <string name="warn_normalization">Adjust the volume for your environment.\n\nLoud may diminish audio quality. No effect on audio quality in Normal or Quiet.</string>
 
     <string name="enable">Enable</string>
@@ -81,4 +83,11 @@
     <string name="listening_history">Listening history</string>
 
     <string name="np_playing_from">Playing from</string>
+
+    <string name="sort">Sort by</string>
+    <string name="sort_time">Recently added</string>
+    <string name="sort_title">Title</string>
+    <string name="sort_artist">Artist</string>
+    <string name="sort_album">Album</string>
+    <string name="sort_invert">Invert</string>
 </resources>

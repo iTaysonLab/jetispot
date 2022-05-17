@@ -1,31 +1,16 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import android.util.Log
-import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionRepository
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
-import bruhcollective.itaysonlab.jetispot.core.util.Revision
 import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdate
-import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdateEntry
-import com.google.protobuf.ByteString
-import com.spotify.collection2.v2.proto.Collection2V2
-import com.spotify.extendedmetadata.ExtendedMetadata
-import com.spotify.extendedmetadata.ExtensionKindOuterClass
-import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.dealer.DealerClient
-import xyz.gianlu.librespot.metadata.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -45,22 +30,26 @@ class SpCollectionManager @Inject constructor(
   fun init() {
     spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
     //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+    scope.launch {
+      scan()
+      writer.performContentFiltersScan()
+    }
   }
 
   // scans network collection for tracks, albums, pins and artists
   suspend fun scan() = withContext(scopeDispatcher) {
-    writer.performScan("collection")
+    performCollectionScan()
     writer.performScan("artist")
     // performScan("ylpin")
   }
 
   suspend fun artists() = withContext(scopeDispatcher) {
-    performScanIfEmpty("artist")
+    writer.performScan("artist")
     dao.getArtists()
   }
 
   suspend fun albums() = withContext(scopeDispatcher) {
-    performScanIfEmpty("collection")
+    performCollectionScan()
     dao.getAlbums()
   }
 
@@ -69,9 +58,13 @@ class SpCollectionManager @Inject constructor(
     dao.getTracksByArtist(id)
   }
 
-  private suspend fun performScanIfEmpty(of: String) {
+  suspend fun performScanIfEmpty(of: String) {
     Log.d("SpColManager", "Performing scan of $of (if empty)")
     dao.getCollection(of) ?: writer.performScan(of)
+  }
+
+  suspend fun performCollectionScan() {
+    writer.performScan("collection")
   }
 
   override fun onMessage(p0: String, p1: MutableMap<String, String>, p2: ByteArray) {

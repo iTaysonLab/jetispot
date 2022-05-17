@@ -28,6 +28,12 @@ class QualityConfigScreenViewModel @Inject constructor(
   private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel(), ConfigViewModel {
   private val configList = buildList {
+    add(ConfigItem.Radio(R.string.quality_low, R.string.quality_low_desc, {
+      it.playerConfig.preferredQuality == AudioQuality.LOW
+    }, { true }, {
+      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.LOW).build()
+    }))
+
     add(ConfigItem.Radio(R.string.quality_normal, R.string.quality_normal_desc, {
       it.playerConfig.preferredQuality == AudioQuality.NORMAL
     }, { true }, {

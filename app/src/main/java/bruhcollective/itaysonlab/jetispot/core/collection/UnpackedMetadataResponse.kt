@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
+import com.spotify.descriptorextension.proto.ExtensionDescriptorData
 import com.spotify.metadata.Metadata
 import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
@@ -14,6 +15,9 @@ class UnpackedMetadataResponse(
     private set
 
   var albums: Map<String, Metadata.Album> = mapOf()
+    private set
+
+  var descriptors: Map<String, ExtensionDescriptorData> = mapOf()
     private set
 
   init {
@@ -42,6 +46,15 @@ class UnpackedMetadataResponse(
             Pair(
               it.entityUri,
               Metadata.Artist.parseFrom(it.extensionData.value)
+            )
+          }
+        }
+
+        ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR -> {
+          descriptors = arr.extensionDataList.associate {
+            Pair(
+              it.entityUri,
+              ExtensionDescriptorData.parseFrom(it.extensionData.value)
             )
           }
         }

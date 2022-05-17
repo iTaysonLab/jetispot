@@ -29,8 +29,9 @@ object CollectionModule {
   ): LocalCollectionDao = db.dao()
 
   fun provideRepository (
+    db: LocalCollectionDatabase,
     dao: LocalCollectionDao
-  ): LocalCollectionRepository = LocalCollectionRepository(dao)
+  ): LocalCollectionRepository = LocalCollectionRepository(db, dao)
 
   fun provideManager (
     spSessionManager: SpSessionManager,

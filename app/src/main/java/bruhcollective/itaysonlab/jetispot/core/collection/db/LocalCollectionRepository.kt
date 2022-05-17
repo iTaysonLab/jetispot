@@ -1,16 +1,14 @@
 package bruhcollective.itaysonlab.jetispot.core.collection.db
 
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model.LocalCollectionCategory
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtist
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionArtistMetadata
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionTrack
-import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocalCollectionRepository @Inject constructor(
+  private val db: LocalCollectionDatabase,
   private val dao: LocalCollectionDao
 ) {
   suspend fun insertOrUpdateCollection(
@@ -21,10 +19,6 @@ class LocalCollectionRepository @Inject constructor(
   }
 
   suspend fun clean() {
-    dao.deleteTracks()
-    dao.deleteAlbums()
-    dao.deleteArtists()
-    dao.deleteMetaArtists()
-    dao.deleteRootList()
+    withContext(Dispatchers.Default) { db.clearAllTables() }
   }
 }

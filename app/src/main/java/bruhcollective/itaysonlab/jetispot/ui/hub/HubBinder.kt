@@ -43,6 +43,7 @@ fun HubBinder (
 
     HubComponent.PlaylistHeader -> PlaylistHeader(navController, delegate, item)
     HubComponent.LargePlaylistHeader -> LargePlaylistHeader(navController, delegate, item)
+    HubComponent.CollectionHeader -> CollectionHeader(navController, delegate, item)
 
     HubComponent.TextRow -> TextRow(item.text!!)
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)

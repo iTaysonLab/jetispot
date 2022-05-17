@@ -21,6 +21,8 @@ enum AudioQuality {
   NORMAL = 0;
   HIGH = 1;
   VERY_HIGH = 2;
+  LOW = 3;
+  FLAC = 4;
 }
 
 // (loud at +6, normal at +3, quiet at -5)

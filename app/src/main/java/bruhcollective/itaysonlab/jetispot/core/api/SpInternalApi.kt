@@ -1,7 +1,8 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
-import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
+import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
+import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import com.spotify.dac.api.v1.proto.DacRequest
 import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.home.dac.viewservice.v1.proto.HomeViewServiceRequest
@@ -28,6 +29,10 @@ interface SpInternalApi {
 
   @GET("/listening-history/v2/mobile/{timestamp}")
   suspend fun getListeningHistory(@Path("timestamp") timestamp: String = "", @Query("type") type: String = "merged", @Query("last_component_had_play_context") idk: Boolean = false): HubResponse
+
+  @GET("/content-filter/v1/liked-songs")
+  @Headers("Accept: application/json", "Accept-Language: en-US")
+  suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true): ContentFilterResponse
 
   @POST("/home-dac-viewservice/v1/view")
   suspend fun getDacHome(@Body request: DacRequest = DacRequest.newBuilder().apply {

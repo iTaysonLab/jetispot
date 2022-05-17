@@ -4,6 +4,7 @@ import android.os.Looper
 import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
 import bruhcollective.itaysonlab.jetispot.playback.service.refl.SpReflect
 import bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput
+import bruhcollective.itaysonlab.jetispot.playback.sp.LowToHighQualityPicker
 import xyz.gianlu.librespot.audio.decoders.AudioQuality
 import xyz.gianlu.librespot.player.Player
 import xyz.gianlu.librespot.player.PlayerConfiguration
@@ -32,6 +33,15 @@ class SpPlayerManager @Inject constructor(
   fun isPlayerAvailable () = _player != null
   fun playerNullable() = _player
 
+  private fun protoQualityToLibrespot(src: bruhcollective.itaysonlab.jetispot.proto.AudioQuality) = when (src) {
+    bruhcollective.itaysonlab.jetispot.proto.AudioQuality.LOW -> AudioQuality.LOW
+    bruhcollective.itaysonlab.jetispot.proto.AudioQuality.NORMAL -> AudioQuality.NORMAL
+    bruhcollective.itaysonlab.jetispot.proto.AudioQuality.HIGH -> AudioQuality.HIGH
+    bruhcollective.itaysonlab.jetispot.proto.AudioQuality.VERY_HIGH -> AudioQuality.VERY_HIGH
+    bruhcollective.itaysonlab.jetispot.proto.AudioQuality.FLAC -> AudioQuality.FLAC
+    else -> AudioQuality.VERY_HIGH
+  }
+
   fun createPlayer() {
     if (_player != null) return
     _player = verifyNotMainThread {
@@ -45,12 +55,11 @@ class SpPlayerManager @Inject constructor(
         setAutoplayEnabled(config.autoplay)
         setPreloadEnabled(config.preload)
 
-        setPreferredQuality(when (config.preferredQuality) {
-          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.NORMAL -> AudioQuality.NORMAL
-          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.HIGH -> AudioQuality.HIGH
-          bruhcollective.itaysonlab.jetispot.proto.AudioQuality.VERY_HIGH -> AudioQuality.VERY_HIGH
-          else -> AudioQuality.VERY_HIGH
+        setPreferredQualityPicker(LowToHighQualityPicker {
+          protoQualityToLibrespot(configurationManager.syncPlayerConfig().preferredQuality)
         })
+
+        setPreferredQuality(protoQualityToLibrespot(config.preferredQuality))
 
         setNormalisationPregain(when (config.normalizationLevel) {
           AudioNormalization.QUIET -> -5f
