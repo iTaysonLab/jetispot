@@ -28,6 +28,9 @@ interface LocalCollectionDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addContentFilters(vararg items: CollectionContentFilter)
 
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun addPins(vararg items: CollectionPinnedItem)
+
   @Query("SELECT * from lcTypes WHERE type = :of")
   suspend fun getCollection(of: String): LocalCollectionCategory?
 
@@ -52,6 +55,12 @@ interface LocalCollectionDao {
   @Query("SELECT * from lcTracks WHERE mainArtistId = :id")
   suspend fun getTracksByArtist(id: String): List<CollectionTrack>
 
+  @Query("SELECT * from lcPins ORDER BY addedAt DESC")
+  suspend fun getPins(): List<CollectionPinnedItem>
+
+  @Query("SELECT * from rootlist ORDER BY timestamp DESC")
+  suspend fun getRootlist(): List<CollectionRootlistItem>
+
   @Query("DELETE from lcTracks")
   suspend fun deleteTracks()
 
@@ -64,8 +73,14 @@ interface LocalCollectionDao {
   @Query("DELETE from rootlist")
   suspend fun deleteRootList()
 
+  @Query("DELETE FROM rootlist WHERE uri IN (:uris)")
+  suspend fun deleteRootList(vararg uris: String)
+
   @Query("DELETE from lcFilters")
   suspend fun deleteContentFilters()
+
+  @Query("DELETE FROM lcPins WHERE uri IN (:uris)")
+  suspend fun deletePins(vararg uris: String)
 
   // Flows
 

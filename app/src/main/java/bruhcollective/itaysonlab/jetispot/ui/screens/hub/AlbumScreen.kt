@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

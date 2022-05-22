@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.playback.sp
 
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import com.spotify.metadata.Metadata
 import xyz.gianlu.librespot.audio.decoders.AudioQuality
 import xyz.gianlu.librespot.audio.decoders.VorbisOnlyAudioQuality

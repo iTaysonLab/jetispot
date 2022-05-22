@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,15 +17,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.ui.screens.auth.AuthScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.YourLibraryContainerScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.debug.YourLibraryDebugScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 
 sealed class Screen(open val route: String, val screenProvider: @Composable (navController: NavController) -> Unit) {
   // == CORE ==

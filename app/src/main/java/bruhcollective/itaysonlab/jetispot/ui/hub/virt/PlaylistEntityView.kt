@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.virt
 
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
@@ -47,7 +47,7 @@ object PlaylistEntityView {
           uri = playlist.attributes.formatAttributesList.find { it.key == "image" }?.value
             ?: playlist.attributes.formatAttributesList.find { it.key == "image_url" }?.value
             ?: playlist.attributes.pictureSizeList.find { it.targetName == "default" }?.url
-            ?: if (playlist.attributes.hasPicture()) "https://i.scdn.co/image/${Utils.bytesToHex(playlist.attributes.picture)}" else ""
+            ?: if (playlist.attributes.hasPicture()) "https://i.scdn.co/image/${Utils.bytesToHex(playlist.attributes.picture).lowercase()}" else ""
         )
       )
     )

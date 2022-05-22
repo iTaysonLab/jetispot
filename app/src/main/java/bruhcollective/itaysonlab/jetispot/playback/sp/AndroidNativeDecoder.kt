@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.jetispot.playback.sp
 
 import android.media.*
 import android.os.Build
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import xyz.gianlu.librespot.player.decoders.Decoder
 import xyz.gianlu.librespot.player.decoders.SeekableInputStream
 import xyz.gianlu.librespot.player.mixing.output.OutputAudioFormat

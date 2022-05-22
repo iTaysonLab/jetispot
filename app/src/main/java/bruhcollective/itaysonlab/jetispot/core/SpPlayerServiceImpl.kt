@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.ComponentName
 import android.content.Context
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import androidx.core.content.ContextCompat
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata

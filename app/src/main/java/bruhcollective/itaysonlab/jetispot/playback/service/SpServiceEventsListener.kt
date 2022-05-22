@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.playback.service
 
 import android.annotation.SuppressLint
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer

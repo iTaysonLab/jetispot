@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
-import android.util.Log
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
@@ -33,6 +33,7 @@ class SpCollectionManager @Inject constructor(
     scope.launch {
       scan()
       writer.performContentFiltersScan()
+      writer.performRootlistScan()
     }
   }
 
@@ -40,7 +41,7 @@ class SpCollectionManager @Inject constructor(
   suspend fun scan() = withContext(scopeDispatcher) {
     performCollectionScan()
     writer.performScan("artist")
-    // performScan("ylpin")
+    writer.performScan("ylpin")
   }
 
   suspend fun artists() = withContext(scopeDispatcher) {

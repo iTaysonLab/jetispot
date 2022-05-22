@@ -53,7 +53,7 @@ interface SpInternalApi {
   @GET("/pam-view-service/v1/PlanOverview")
   suspend fun getPlanOverview(): DacResponse
 
-  @GET("/playlist/v2/user/:username/rootlist")
+  @GET("/playlist/v2/user/{username}/rootlist")
   suspend fun getRootlist(
     @Path("username") username: String,
     @Query("decorate") decorate: String = "attributes,owner", // client: revision,attributes,length,owner,capabilities
@@ -61,7 +61,7 @@ interface SpInternalApi {
     @Query("length") size: Int = 120
   ): Playlist4ApiProto.SelectedListContent
 
-  @GET("/playlist/v2/user/:username/rootlist/diff")
+  @GET("/playlist/v2/user/{username}/rootlist/diff")
   @Headers("x-accept-list-items: audio-track, audio-episode, video-episode")
   suspend fun getRootlistDelta(
     @Path("username") username: String,

@@ -26,5 +26,6 @@ Application stack:
 Credits:
 - [librespot-java](https://github.com/librespot-org/librespot-java) for the core API part and playback
 - [librespot-android](https://github.com/devgianlu/librespot-android) for sink and decoder source (in Jetispot they are rewritten to Kotlin)  
-- Google for Jetpack/Hilt
 - [moshi](https://github.com/square/moshi/) and [moshix](https://github.com/ZacSweers/MoshiX/) for the undocumented API JSON parsing
+- [VK Icons](https://github.com/VKCOM/icons) for the amazing icon set used in the application's icon
+- Google for Android/Jetpack/Hilt
