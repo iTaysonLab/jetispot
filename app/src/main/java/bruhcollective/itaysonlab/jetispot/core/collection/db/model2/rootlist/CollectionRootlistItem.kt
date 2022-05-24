@@ -13,5 +13,6 @@ data class CollectionRootlistItem(
   val picture: String
 ): CollectionEntry {
   override fun ceId() = uri
+  override fun ceUri() = uri
   override fun ceTimestamp() = timestamp / 1000L
 }

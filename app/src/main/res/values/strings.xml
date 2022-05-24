@@ -78,11 +78,14 @@
     <string name="logout_confirm">Confirm</string>
     <string name="logout_cancel">Cancel</string>
 
-    <string name="liked_songs">Liked Songs</string>
-
     <string name="listening_history">Listening history</string>
 
     <string name="np_playing_from">Playing from</string>
+
+    <string name="liked_songs">Liked Songs</string>
+    <string name="new_episodes">New Episodes</string>
+    <string name="liked_songs_desc">%s songs</string>
+    <string name="new_episodes_desc">Last updated on %s</string>
 
     <string name="sort">Sort by</string>
     <string name="sort_time">Recently added</string>

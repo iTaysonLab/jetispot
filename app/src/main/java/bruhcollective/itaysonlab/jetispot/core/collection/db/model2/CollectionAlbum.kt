@@ -13,5 +13,6 @@ data class CollectionAlbum(
   val addedAt: Int
 ): CollectionEntry {
   override fun ceId() = id
+  override fun ceUri() = uri
   override fun ceTimestamp() = addedAt.toLong()
 }

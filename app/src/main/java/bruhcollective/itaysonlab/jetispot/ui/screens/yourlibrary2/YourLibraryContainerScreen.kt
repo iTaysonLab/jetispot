@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.BugReport
@@ -21,20 +22,26 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
+import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(
+  ExperimentalMaterial3Api::class,
+  ExperimentalFoundationApi::class
+)
 @Composable
 fun YourLibraryContainerScreen(
   navController: NavController,
   viewModel: YourLibraryContainerViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
+  val state = rememberLazyListState()
 
   LaunchedEffect(Unit) {
     launch {
@@ -58,34 +65,59 @@ fun YourLibraryContainerScreen(
         IconButton(onClick = { navController.navigate("library/debug") }) {
           Icon(Icons.Default.BugReport, null)
         }
-      }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
-        LocalDensity.current).toDp() }))
+      }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
+        WindowInsets.statusBars.getTop(
+          LocalDensity.current
+        ).toDp()
+      }))
       AnimatedChipRow(
-        listOf(ChipItem("playlists", "Playlists"), ChipItem("artists", "Artists"), ChipItem("albums", "Albums")),
+        listOf(
+          ChipItem("playlists", "Playlists"),
+          ChipItem("artists", "Artists"),
+          ChipItem("albums", "Albums")
+        ),
         viewModel.selectedTabId
-      ) { viewModel.selectedTabId = it }
+      ) {
+        viewModel.selectedTabId = it
+        scope.launch {
+          viewModel.load()
+          if (viewModel.selectedTabId == "") {
+            delay(25L)
+            state.animateScrollToItem(0)
+          }
+        }
+      }
     }
   }) { padding ->
     if (viewModel.content.isNotEmpty()) {
       LazyColumn(
-        Modifier
+        state = state,
+        modifier = Modifier
           .padding(padding)
-          .fillMaxSize()) {
-        items(viewModel.content, key = { it.javaClass.simpleName + "_" + it.ceId() }) { item ->
-          YlRenderer(item, modifier = Modifier.clickable {
-
-          }.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).animateItemPlacement())
+          .fillMaxSize()
+      ) {
+        items(
+          viewModel.content,
+          key = { it.javaClass.simpleName + "_" + it.ceId() },
+          contentType = { it.javaClass.simpleName }) { item ->
+          YlRenderer(item, modifier = Modifier
+            .clickable { navController.navigate(item.ceUri()) }
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .animateItemPlacement())
         }
       }
     } else {
-      PagingLoadingPage(modifier = Modifier
-        .padding(padding)
-        .fillMaxSize())
+      PagingLoadingPage(
+        modifier = Modifier
+          .padding(padding)
+          .fillMaxSize()
+      )
     }
   }
 }
 
-class ChipItem (val id: String, val name: String)
+class ChipItem(val id: String, val name: String)
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -94,7 +126,11 @@ fun AnimatedChipRow(
   selectedId: String,
   onClick: (String) -> Unit,
 ) {
-  LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+  LazyRow(
+    contentPadding = PaddingValues(horizontal = 16.dp),
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    modifier = Modifier.fillMaxWidth()
+  ) {
     items(chips.let {
       if (selectedId != "") it.filter { i -> i.id == selectedId } else it
     }, key = { it.id }) { item ->
@@ -112,20 +148,52 @@ fun AnimatedChipRow(
 @HiltViewModel
 class YourLibraryContainerViewModel @Inject constructor(
   private val dao: LocalCollectionDao
-): ViewModel() {
+) : ViewModel() {
   var selectedTabId: String by mutableStateOf("")
-  var content = mutableStateListOf<CollectionEntry>()
+  var content by mutableStateOf<List<CollectionEntry>>(emptyList())
 
   suspend fun load() {
-    content.clear()
+    val type = when (selectedTabId) {
+      "playlists" -> FetchType.Playlists
+      "albums" -> FetchType.Albums
+      "artists" -> FetchType.Artists
+      else -> FetchType.All
+    }
 
     val albums = dao.getAlbums()
     val artists = dao.getArtists()
-    val pins = dao.getPins()
     val playlists = dao.getRootlist()
+    val pins = dao.getPins().filter { p ->
+      when (type) {
+        FetchType.Playlists -> p.uri.contains("playlist")
+        FetchType.Artists -> p.uri.contains("artist")
+        FetchType.Albums -> p.uri.contains("album")
+        FetchType.All -> true
+      }
+    }
 
-    content.addAll(
-      (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }.toMutableList().also { it.addAll(0, pins) }
-    )
+    content = (when (type) {
+      FetchType.Playlists -> playlists
+      FetchType.Artists -> artists
+      FetchType.Albums -> albums
+      FetchType.All -> {
+        (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }
+      }
+    }.toMutableList().also {
+      it.addAll(0, pins)
+      it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
+        when (pF.ceUri()) {
+          "spotify:collection" -> pF.ceModifyPredef(PredefCeType.COLLECTION, dao.trackCount().toString())
+          "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+        }
+      }
+    })
+  }
+
+  enum class FetchType {
+    All,
+    Playlists,
+    Artists,
+    Albums
   }
 }

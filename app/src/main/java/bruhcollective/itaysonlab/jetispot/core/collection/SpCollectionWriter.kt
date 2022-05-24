@@ -194,7 +194,7 @@ class SpCollectionWriter(
         CollectionPinnedItem(
           uri = AlbumId.fromHex(Utils.bytesToHex(album.gid)).toSpotifyUri(),
           name = album.name,
-          subtitle = album.artistList.joinToString(",") { artist -> artist.name },
+          subtitle = album.artistList.joinToString { artist -> artist.name },
           picture = bytesToPicUrl(album.coverGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
           addedAt = mappedRequest[AlbumId.fromHex(Utils.bytesToHex(album.gid)).toSpotifyUri()]!!
         )
@@ -244,7 +244,7 @@ class SpCollectionWriter(
     Log.d("SpCollectionWriter", "collection-insert [ins -> ${mappedRequest.keys.joinToString(",")}, del -> ${mappedDeleteRequest.values.joinToString(",")}]")
 
     if (mappedRequest.isNotEmpty()) {
-      val metadata = getExtendedMetadata(mappedRequest.keys)
+      val metadata = getExtendedMetadata(mappedRequest.keys.toList())
 
       val trackDescriptors = if (metadata.tracks.isNotEmpty()) {
         // also request descriptors to get genre data
@@ -319,7 +319,9 @@ class SpCollectionWriter(
     }
   }
 
-  private suspend fun getExtendedMetadata(of: Iterable<String>): UnpackedMetadataResponse {
+  private suspend fun getExtendedMetadata(of: List<String>): UnpackedMetadataResponse {
+    if (of.isEmpty()) return UnpackedMetadataResponse(emptyList())
+
     val requests = mutableListOf<ExtendedMetadata.EntityRequest>()
 
     of.forEach { ci ->

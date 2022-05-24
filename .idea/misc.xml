@@ -13,6 +13,11 @@
         <entry key="../../../../layout/compose-model-1649872296061.xml" value="0.18116554054054054" />
         <entry key="../../../../layout/compose-model-1649950838513.xml" value="0.33530405405405406" />
         <entry key="../../../../layout/compose-model-1649959620132.xml" value="0.1891891891891892" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_sound_wave_outline_28.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/icongrad.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="app/src/main/res/xml/nsc.xml" value="0.2078125" />
       </map>
     </option>

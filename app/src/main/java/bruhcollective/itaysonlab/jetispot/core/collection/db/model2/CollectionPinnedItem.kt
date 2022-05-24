@@ -11,6 +11,15 @@ data class CollectionPinnedItem(
   val picture: String,
   val addedAt: Int
 ): CollectionEntry {
+  @Transient var predefType: PredefCeType? = null
+  @Transient var predefDyn: String = ""
+
   override fun ceId() = uri
+  override fun ceUri() = uri
   override fun ceTimestamp() = addedAt.toLong()
+
+  override fun ceModifyPredef(type: PredefCeType, dyn: String) {
+    predefType = type
+    predefDyn = dyn
+  }
 }

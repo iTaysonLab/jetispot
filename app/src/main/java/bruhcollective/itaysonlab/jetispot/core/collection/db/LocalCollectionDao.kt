@@ -55,7 +55,7 @@ interface LocalCollectionDao {
   @Query("SELECT * from lcTracks WHERE mainArtistId = :id")
   suspend fun getTracksByArtist(id: String): List<CollectionTrack>
 
-  @Query("SELECT * from lcPins ORDER BY addedAt DESC")
+  @Query("SELECT * from lcPins ORDER BY addedAt ASC")
   suspend fun getPins(): List<CollectionPinnedItem>
 
   @Query("SELECT * from rootlist ORDER BY timestamp DESC")
@@ -100,6 +100,9 @@ interface LocalCollectionDao {
 
   @Query("SELECT * from lcTracks ORDER BY addedAt DESC")
   suspend fun getTracks(): List<CollectionTrack>
+
+  @Query("SELECT COUNT(id) FROM lcTracks")
+  suspend fun trackCount(): Int
 
   @RawQuery
   suspend fun getTracksRaw(query: SupportSQLiteQuery): List<CollectionTrack>
