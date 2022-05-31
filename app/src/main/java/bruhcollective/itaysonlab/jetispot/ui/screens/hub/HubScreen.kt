@@ -35,14 +35,15 @@ fun HubScreen(
   needContentPadding: Boolean = true,
   loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
-  statusBarPadding: Boolean = false
+  statusBarPadding: Boolean = false,
+  onAppBarTitleChange: (String) -> Unit = {},
 ) {
   val scope = rememberCoroutineScope()
 
   viewModel.needContentPadding = needContentPadding
 
   LaunchedEffect(Unit) {
-    viewModel.load(loader)
+    viewModel.load(onAppBarTitleChange, loader)
   }
 
   when (viewModel.state) {
@@ -52,7 +53,7 @@ fun HubScreen(
         verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
         horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
         columns = GridCells.Fixed(2),
-        modifier = if (statusBarPadding) Modifier.statusBarsPadding() else Modifier
+        modifier = if (statusBarPadding) Modifier.fillMaxSize().statusBarsPadding() else Modifier.fillMaxSize()
       ) {
         if (viewModel.needContentPadding) {
           item(span = { GridItemSpan(2) }) {
@@ -78,7 +79,7 @@ fun HubScreen(
               items(item.children, key = { dItem -> dItem.id }, contentType = {
                 item.component.javaClass.simpleName
               }) { cItem ->
-                HubBinder(navController, viewModel, cItem)
+                HubBinder(navController, viewModel, cItem, isRenderingInGrid = true)
               }
             } else {
               item(span = {
@@ -94,7 +95,7 @@ fun HubScreen(
       }
     }
     
-    is HubScreenViewModel.State.Error -> PagingErrorPage(onReload = { scope.launch { viewModel.reload(loader) } }, modifier = Modifier.fillMaxSize())
+    is HubScreenViewModel.State.Error -> PagingErrorPage(onReload = { scope.launch { viewModel.reload(onAppBarTitleChange, loader) } }, modifier = Modifier.fillMaxSize())
     HubScreenViewModel.State.Loading -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
   }
 }
@@ -114,18 +115,18 @@ class HubScreenViewModel @Inject constructor(
   // no state handle needed
   var needContentPadding: Boolean = false
 
-  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
+  suspend fun load(chg: (String) -> Unit, loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = try {
-      State.Loaded(spInternalApi.loader())
+      State.Loaded(spInternalApi.loader().also { chg(it.title ?: "") })
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
     }
   }
 
-  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
+  suspend fun reload(chg: (String) -> Unit, loader: suspend SpInternalApi.() -> HubResponse) {
     _state.value = State.Loading
-    load(loader)
+    load(chg, loader)
   }
 
   override fun play(data: PlayFromContextData) {

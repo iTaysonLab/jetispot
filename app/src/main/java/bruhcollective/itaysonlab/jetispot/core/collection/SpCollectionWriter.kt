@@ -50,10 +50,14 @@ class SpCollectionWriter(
    */
   suspend fun performScan(of: String) {
     Log.d("SpColManager", "Performing scan of $of")
-    if (of == "ylpin") {
-      performPinScan(dao.getCollection(of)?.syncToken)
-    } else {
-      performPagingScan(of, dao.getCollection(of)?.syncToken)
+    try {
+      if (of == "ylpin") {
+        performPinScan(dao.getCollection(of)?.syncToken)
+      } else {
+        performPagingScan(of, dao.getCollection(of)?.syncToken)
+      }
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
     Log.d("SpColManager", "Scan of $of completed")
   }

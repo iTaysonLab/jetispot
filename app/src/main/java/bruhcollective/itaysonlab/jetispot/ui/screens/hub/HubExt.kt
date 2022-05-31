@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -38,8 +39,9 @@ fun HubScaffold(
   toolbarOptions: ToolbarOptions = ToolbarOptions(),
   reloadFunc: suspend () -> Unit
 ) {
-  val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.enterAlwaysScrollBehavior() else TopAppBarDefaults.pinnedScrollBehavior() }
   val scope = rememberCoroutineScope()
+  val sbd = rememberSplineBasedDecay<Float>()
+  val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) else TopAppBarDefaults.pinnedScrollBehavior() }
 
   when (state) {
     is HubState.Loaded -> {
@@ -66,7 +68,7 @@ fun HubScaffold(
           ), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         }
-      }, drawContentUnderTopBar = !toolbarOptions.alwaysVisible, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, drawContentUnderTopBar = !toolbarOptions.alwaysVisible, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()

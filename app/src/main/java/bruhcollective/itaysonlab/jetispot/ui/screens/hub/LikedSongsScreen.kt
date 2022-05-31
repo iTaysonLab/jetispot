@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -16,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import xyz.gianlu.librespot.metadata.ArtistId
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LikedSongsScreen(
   navController: NavController,

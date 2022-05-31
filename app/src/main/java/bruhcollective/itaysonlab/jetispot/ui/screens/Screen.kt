@@ -22,6 +22,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.debug.YourLibraryDebugScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
@@ -56,7 +57,7 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_search,
     iconProvider = { Icons.Default.Search },
     screenProvider = { navController ->
-      HubScreen(navController, loader = { getBrowseView() })
+      BrowseRootScreen(navController)
     }
   )
 

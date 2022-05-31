@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.history
 
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,7 +38,9 @@ fun ListeningHistoryScreen(
   navController: NavController,
   viewModel: HistoryViewModel = hiltViewModel()
 ) {
-  val scrollBehavior = remember { TopAppBarDefaults.enterAlwaysScrollBehavior() }
+
+  val sbd = rememberSplineBasedDecay<Float>()
+  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
   val scope = rememberCoroutineScope()
   val loadFunc: suspend CoroutineScope.() -> Unit = remember {{
     viewModel.load {

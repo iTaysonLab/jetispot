@@ -24,16 +24,13 @@ fun DynamicSpIdScreen(
   val argument = uriSeparated.getOrElse(2) { "" }
 
   when (uriSeparated[0]) {
-    "artist", "genre" -> HubScreen(navController, needContentPadding = false, loader = {
+    "genre" -> BrowseScreen(navController = navController, id)
+
+    "artist" -> HubScreen(navController, needContentPadding = false, loader = {
       if (argument == "releases") {
         getReleasesView(id)
       } else {
-        when (uriSeparated[0]) {
-          "album" -> getAlbumView(id)
-          "artist" -> getArtistView(id)
-          "genre" -> getBrowseView(id)
-          else -> error("block issue")
-        }
+        getArtistView(id)
       }
     })
 

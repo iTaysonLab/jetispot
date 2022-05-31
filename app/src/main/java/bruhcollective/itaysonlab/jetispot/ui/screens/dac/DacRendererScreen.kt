@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -43,7 +44,8 @@ fun DacRendererScreen(
   loader: suspend SpInternalApi.() -> DacResponse,
   viewModel: DacViewModel = hiltViewModel()
 ) {
-  val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior() else TopAppBarDefaults.enterAlwaysScrollBehavior() }
+  val sbd = rememberSplineBasedDecay<Float>()
+  val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior() else TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(Unit) {

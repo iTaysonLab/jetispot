@@ -40,7 +40,7 @@ sealed class HubComponent {
   object Carousel: HubComponent()
 
   @TypeLabel("home:cardMedium", alternateLabels = ["glue2:card"])
-  object MediumCard: HubComponent()
+  object MediumCard: HubComponent(), ComponentInGrid
 
   @TypeLabel("consumerMobile:albumTrackRow")
   object AlbumTrackRow: HubComponent()

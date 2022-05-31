@@ -16,6 +16,8 @@ abstract class AbsHubViewModel: ViewModel(), HubScreenDelegate {
   val mainAddedState = mutableStateOf(false)
   val imageCache = mutableMapOf<String, Color>()
 
+  val hubTitle get() = (_state.value as? HubState.Loaded)?.data?.title ?: ""
+
   suspend fun load(loader: suspend () -> HubResponse) {
     _state.value = try {
       HubState.Loaded(loader())

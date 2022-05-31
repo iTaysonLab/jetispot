@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -48,7 +49,8 @@ fun BaseConfigScreen(
   navController: NavController,
   viewModel: ConfigViewModel
 ) {
-  val scrollBehavior = remember { TopAppBarDefaults.enterAlwaysScrollBehavior() }
+  val sbd = rememberSplineBasedDecay<Float>()
+  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
 
   val scope = rememberCoroutineScope()
   val dsConfigState = viewModel.provideDataStore().data.collectAsState(initial = SpConfigurationManager.DEFAULT)

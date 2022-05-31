@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary.debug
 
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +31,8 @@ fun YourLibraryDebugScreen(
   navController: NavController,
   viewModel: YourLibraryDebugScreenViewModel = hiltViewModel()
 ) {
-  val scrollBehavior = remember { TopAppBarDefaults.enterAlwaysScrollBehavior() }
+  val sbd = rememberSplineBasedDecay<Float>()
+  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
   val scope = rememberCoroutineScope()
 
   val items = listOf(

@@ -15,7 +15,8 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
 fun HubBinder (
   navController: NavController,
   delegate: HubScreenDelegate,
-  item: HubItem
+  item: HubItem,
+  isRenderingInGrid: Boolean = false,
 ) {
   when (item.component) {
     HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!, delegate)
@@ -28,7 +29,13 @@ fun HubBinder (
     HubComponent.SingleFocusCard -> SingleFocusCard(navController, delegate, item)
 
     HubComponent.Carousel -> Carousel(navController, delegate, item)
-    HubComponent.MediumCard -> MediumCard(navController, delegate, item)
+    HubComponent.MediumCard -> {
+      if (isRenderingInGrid) {
+        GridMediumCard(navController, delegate, item)
+      } else {
+        MediumCard(navController, delegate, item)
+      }
+    }
 
     HubComponent.ArtistLikedSongs -> LikedSongsRow(navController, delegate, item)
 
