@@ -1,16 +1,15 @@
 package bruhcollective.itaysonlab.jetispot
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateTo
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -24,14 +23,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.allScreens
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
@@ -48,6 +48,18 @@ class MainActivity : ComponentActivity() {
   @Inject lateinit var sessionManager: SpSessionManager
   @Inject lateinit var authManager: SpAuthManager
   @Inject lateinit var playerServiceManager: SpPlayerServiceManager
+
+  private var provider: (() -> NavController)? = null
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    provider?.invoke()?.handleDeepLink(intent)
+  }
+
+  override fun onDestroy() {
+    provider = null
+    super.onDestroy()
+  }
 
   @OptIn(ExperimentalMaterialApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +90,8 @@ class MainActivity : ComponentActivity() {
         }
 
         LaunchedEffect(Unit) {
+          provider = { navController }
+
           if (sessionManager.isSignedIn()) {
             if (rootDestination.value == Screen.CoreLoadingScreen.route) {
               rootDestination.value = Screen.Feed.route
@@ -115,8 +129,14 @@ class MainActivity : ComponentActivity() {
                 }
               }
 
-              composable("spotify:{uri}") {
-                val uri = it.arguments?.getString("uri")!!
+              composable("spotify:{uri}", deepLinks = listOf(navDeepLink {
+                uriPattern = "https://open.spotify.com/{type}/{typeId}"
+                action = Intent.ACTION_VIEW
+              })) {
+                val fullUrl = it.arguments?.getString("uri")
+                val dpLinkType = it.arguments?.getString("type")
+                val dpLinkTypeId = it.arguments?.getString("typeId")
+                val uri = fullUrl ?: "$dpLinkType:$dpLinkTypeId"
                 DynamicSpIdScreen(navController, uri, "spotify:$uri")
               }
 

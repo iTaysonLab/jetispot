@@ -10,7 +10,6 @@
     <application
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/nsc"
-
         android:name=".SpApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,13 +18,19 @@
         android:theme="@style/Theme.Jetispot"
         tools:targetApi="n">
         <activity
+            android:launchMode="singleTop"
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Jetispot">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="open.spotify.com" />
             </intent-filter>
         </activity>
 
