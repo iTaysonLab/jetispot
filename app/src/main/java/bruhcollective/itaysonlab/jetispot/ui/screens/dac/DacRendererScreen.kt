@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
+import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.FilterComponentBinder
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
@@ -27,6 +28,7 @@ import com.google.protobuf.Any
 import com.google.protobuf.Message
 import com.spotify.dac.api.components.VerticalListComponent
 import com.spotify.dac.api.v1.proto.DacResponse
+import com.spotify.home.dac.component.experimental.v1.proto.FilterComponent
 import com.spotify.home.dac.component.v1.proto.HomePageComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -40,7 +42,7 @@ fun DacRendererScreen(
   navController: NavController,
   title: String,
   fullscreen: Boolean = false,
-  loader: suspend SpInternalApi.() -> DacResponse,
+  loader: suspend SpInternalApi.(String) -> DacResponse,
   viewModel: DacViewModel = hiltViewModel()
 ) {
   val sbd = rememberSplineBasedDecay<Float>()
@@ -75,7 +77,7 @@ fun DacRendererScreen(
             .fillMaxHeight()
             .let { if (!fullscreen) it.padding(padding) else it }
         ) {
-          (viewModel.state as DacViewModel.State.Loaded).data.apply {
+          (viewModel.state as? DacViewModel.State.Loaded)?.data?.apply {
             val cmBind: (List<Any>) -> Unit = { componentsList ->
               items(componentsList) { item ->
                 var exception: Exception? = null
@@ -100,7 +102,16 @@ fun DacRendererScreen(
 
                   Spacer(modifier = Modifier.height(8.dp))
                 } else if (unpackedItem != null) {
-                  DacRender(navController, unpackedItem)
+                  if (unpackedItem is FilterComponent) {
+                    FilterComponentBinder(unpackedItem, viewModel.facet) { nf ->
+                      scope.launch {
+                        viewModel.facet = nf
+                        viewModel.reload(loader)
+                      }
+                    }
+                  } else {
+                    DacRender(navController, unpackedItem)
+                  }
                 }
               }
             }
@@ -133,12 +144,14 @@ class DacViewModel @Inject constructor(
   private val spInternalApi: SpInternalApi,
   private val spPlayerServiceManager: SpPlayerServiceManager
 ) : ViewModel() {
+  var facet = "default"
+
   private val _state = mutableStateOf<State>(State.Loading)
   val state: State get() = _state.value
 
-  suspend fun load(loader: suspend SpInternalApi.() -> DacResponse) {
+  suspend fun load(loader: suspend SpInternalApi.(String) -> DacResponse) {
     _state.value = try {
-      val unpackedRaw = spInternalApi.loader()
+      val unpackedRaw = spInternalApi.loader(facet)
       val unpackedMessage = unpackedRaw.component.dynamicUnpack()
       State.Loaded(unpackedMessage)
     } catch (e: Exception) {
@@ -147,7 +160,7 @@ class DacViewModel @Inject constructor(
     }
   }
 
-  suspend fun reload(loader: suspend SpInternalApi.() -> DacResponse) {
+  suspend fun reload(loader: suspend SpInternalApi.(String) -> DacResponse) {
     _state.value = State.Loading
     load(loader)
   }

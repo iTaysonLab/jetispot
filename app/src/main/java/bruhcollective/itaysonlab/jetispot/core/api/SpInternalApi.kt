@@ -35,17 +35,7 @@ interface SpInternalApi {
   suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true): ContentFilterResponse
 
   @POST("/home-dac-viewservice/v1/view")
-  suspend fun getDacHome(@Body request: DacRequest = DacRequest.newBuilder().apply {
-    uri = "dac:home" // dac:home-static
-    featureRequest = com.google.protobuf.Any.pack(HomeViewServiceRequest.newBuilder().apply {
-      facet = "default"
-      clientTimezone = TimeZone.getDefault().id
-    }.build())
-    clientInfo = DacRequest.ClientInfo.newBuilder().apply {
-      appName = "ANDROID_MUSIC_APP"
-      version = SpUtils.SPOTIFY_APP_VERSION
-    }.build()
-  }.build()): DacResponse
+  suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome()): DacResponse
 
   @GET("/pam-view-service/v1/AllPlans")
   suspend fun getAllPlans(): DacResponse
@@ -69,4 +59,18 @@ interface SpInternalApi {
     @Query("handlesContent") handles: String = "",
     @Query("hint_revision") targetRevision: String,
   ): Playlist4ApiProto.SelectedListContent
+
+  companion object {
+    fun buildDacRequestForHome (bFacet: String = "default") = DacRequest.newBuilder().apply {
+      uri = "dac:home" // dac:home-static
+      featureRequest = com.google.protobuf.Any.pack(HomeViewServiceRequest.newBuilder().apply {
+        facet = bFacet
+        clientTimezone = TimeZone.getDefault().id
+      }.build())
+      clientInfo = DacRequest.ClientInfo.newBuilder().apply {
+        appName = "ANDROID_MUSIC_APP"
+        version = SpUtils.SPOTIFY_APP_VERSION
+      }.build()
+    }.build()
+  }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.ui.screens.auth.AuthScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigScreen
@@ -48,7 +49,9 @@ sealed class Screen(open val route: String, val screenProvider: @Composable (nav
     name = R.string.tab_home,
     iconProvider = { Icons.Default.Home },
     screenProvider = { navController ->
-      DacRendererScreen(navController, "", true, { getDacHome() })
+      DacRendererScreen(navController, "", true, {
+        getDacHome(SpInternalApi.buildDacRequestForHome(it))
+      })
     }
   )
 
