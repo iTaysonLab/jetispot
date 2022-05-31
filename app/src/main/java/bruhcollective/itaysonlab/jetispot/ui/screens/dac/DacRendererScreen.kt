@@ -20,7 +20,6 @@ import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
-import bruhcollective.itaysonlab.jetispot.ui.shared.ControllableScaffold
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -54,7 +53,7 @@ fun DacRendererScreen(
 
   when (viewModel.state) {
     is DacViewModel.State.Loaded -> {
-      ControllableScaffold(topBar = {
+      Scaffold(topBar = {
         if (fullscreen) {
           SmallTopAppBar(title = {}, colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = Color.Transparent,
@@ -70,11 +69,11 @@ fun DacRendererScreen(
           }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         }
-      }, drawContentUnderTopBar = fullscreen, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
-            .padding(padding)
+            .let { if (!fullscreen) it.padding(padding) else it }
         ) {
           (viewModel.state as DacViewModel.State.Loaded).data.apply {
             val cmBind: (List<Any>) -> Unit = { componentsList ->

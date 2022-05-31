@@ -22,7 +22,6 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.shared.ControllableScaffold
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
@@ -45,7 +44,7 @@ fun HubScaffold(
 
   when (state) {
     is HubState.Loaded -> {
-      ControllableScaffold(topBar = {
+      Scaffold(topBar = {
         if (toolbarOptions.big) {
           LargeTopAppBar(title = {
             Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -68,11 +67,11 @@ fun HubScaffold(
           ), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         }
-      }, drawContentUnderTopBar = !toolbarOptions.alwaysVisible, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
-            .padding(padding)
+            .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
         ) {
           state.data.apply {
             if (header != null) {

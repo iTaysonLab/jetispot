@@ -23,7 +23,6 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.shared.ControllableScaffold
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -54,15 +53,15 @@ fun ListeningHistoryScreen(
 
   when (viewModel.state) {
     is HistoryViewModel.State.Loaded -> {
-      ControllableScaffold(topBar = {
-        LargeTopAppBar(title = {
+      Scaffold(topBar = {
+        LargeTopAppBar(title = { 
           Text(stringResource(id = R.string.listening_history))
         }, navigationIcon = {
           IconButton(onClick = { navController.popBackStack() }) {
             Icon(Icons.Default.ArrowBack, null)
           }
         }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-      }, drawContentUnderTopBar = false, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
