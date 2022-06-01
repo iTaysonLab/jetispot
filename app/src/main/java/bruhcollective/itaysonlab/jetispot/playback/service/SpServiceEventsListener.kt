@@ -6,8 +6,12 @@ import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer
 import bruhcollective.itaysonlab.jetispot.playback.helpers.toMediaMetadata
+import com.spotify.context.ContextTrackOuterClass
 import xyz.gianlu.librespot.audio.MetadataWrapper
+import xyz.gianlu.librespot.common.Utils
+import xyz.gianlu.librespot.json.ResolvedContextWrapper
 import xyz.gianlu.librespot.metadata.PlayableId
+import xyz.gianlu.librespot.player.PagesLoader
 import xyz.gianlu.librespot.player.Player
 import java.lang.Exception
 
@@ -16,8 +20,19 @@ class SpServiceEventsListener(
   val player: SpPlayerWrapper
 ) : Player.EventsListener {
   override fun onContextChanged(p0: Player, p1: String) {
-    player.state.currentContextMetadata = MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE, p1).build()
-    player.runOnListeners { it.onPlaylistMetadataChanged(player, player.state.currentContextMetadata) }
+    Log.e("SpService", "onContextChanged => $p1")
+    /* player.state.currentContextMetadata = MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_MEDIA_URI, p1).build()
+    player.runOnListeners {
+      it.onPlaylistMetadataChanged(player, player.state.currentContextMetadata)
+    }*/
+  }
+
+  override fun onContextDescriptionChanged(p0: Player, description: String?) {
+    Log.e("SpService", "onContextDescriptionChanged => $description")
+    player.state.currentContextMetadata = MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_MEDIA_URI, p0.stateWrapper.contextUri).putString(MediaMetadata.METADATA_KEY_TITLE, description).build()
+    player.runOnListeners {
+      it.onPlaylistMetadataChanged(player, player.state.currentContextMetadata)
+    }
   }
 
   override fun onTrackChanged(p0: Player, p1: PlayableId, p2: MetadataWrapper?, userInitiated: Boolean) {
@@ -50,7 +65,10 @@ class SpServiceEventsListener(
   }
 
   override fun onMetadataAvailable(p0: Player, p1: MetadataWrapper) {
+    Log.d("SpService:OMA", p0.stateWrapper.state.toString())
+
     player.state.currentTrack = p1
+
     player.state.currentMediaItem = MediaItem.Builder().apply {
       setStartPosition(0L)
       setEndPosition(p1.duration().toLong())
@@ -78,6 +96,21 @@ class SpServiceEventsListener(
 
   override fun onStartedLoading(p0: Player) {
 
+  }
+
+  override fun onQueueChanged(
+    p0: Player,
+    queue: MutableList<ContextTrackOuterClass.ContextTrack>
+  ) {
+    Log.d("SpService", "onQueueChanged")
+
+    val queueX = queue.map { MediaItem.Builder().apply {
+      setMetadata(MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_MEDIA_ID, Utils.bytesToHex(it.gid)).putString(MediaMetadata.METADATA_KEY_MEDIA_URI, it.uri).build())
+    }.build() }
+
+    player.runOnListeners {
+      it.onPlaylistChanged(player, queueX, player.state.currentContextMetadata)
+    }
   }
 
   override fun onFinishedLoading(p0: Player) {

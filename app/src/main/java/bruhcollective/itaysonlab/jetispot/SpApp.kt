@@ -1,15 +1,23 @@
 package bruhcollective.itaysonlab.jetispot
 
 import android.app.Application
+import android.os.Build
 import bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder
 import dagger.hilt.android.HiltAndroidApp
+import org.slf4j.LoggerFactory
+import org.slf4j.impl.HandroidLoggerAdapter
 import xyz.gianlu.librespot.audio.decoders.Decoders
 import xyz.gianlu.librespot.audio.format.SuperAudioFormat
+import xyz.gianlu.librespot.player.state.DeviceStateHandler
 
 @HiltAndroidApp
 class SpApp: Application() {
   init {
     Decoders.registerDecoder(SuperAudioFormat.VORBIS, AndroidNativeDecoder::class.java)
     Decoders.registerDecoder(SuperAudioFormat.MP3, AndroidNativeDecoder::class.java)
+
+    HandroidLoggerAdapter.DEBUG = BuildConfig.DEBUG
+    HandroidLoggerAdapter.ANDROID_API_LEVEL = Build.VERSION.SDK_INT
+    HandroidLoggerAdapter.APP_NAME = "SpApp"
   }
 }

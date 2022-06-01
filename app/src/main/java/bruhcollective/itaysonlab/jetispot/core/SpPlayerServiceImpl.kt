@@ -10,8 +10,12 @@ import androidx.media2.common.SessionPlayer
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
 import androidx.media2.session.SessionToken
+import bruhcollective.itaysonlab.jetispot.core.collection.UnpackedMetadataResponse
 import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import bruhcollective.itaysonlab.jetispot.playback.service.SpPlaybackService
+import com.spotify.extendedmetadata.ExtendedMetadata
+import com.spotify.extendedmetadata.ExtensionKindOuterClass
+import com.spotify.metadata.Metadata
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -23,6 +27,7 @@ class SpPlayerServiceImpl (
   private var mediaController: MediaController? = null
   private var svcInit: (MediaController.() -> Unit)? = null
   private var timer: Job = Job().apply { cancel() }
+  private var queueMetaTask: Job? = null
 
   private val progressFlow = flow {
     while (true) {
@@ -74,6 +79,8 @@ class SpPlayerServiceImpl (
 
   override fun onCurrentMediaItemChanged(controller: MediaController, item: MediaItem?) {
     manager.currentTrack.value = MediaItemWrapper(item)
+    manager.currentQueuePosition.value = controller.currentMediaItemIndex
+    manager.runExtra { it.onTrackIndexChanged(manager.currentQueuePosition.value) }
   }
 
   override fun onPlayerStateChanged(controller: MediaController, state: Int) {
@@ -88,6 +95,29 @@ class SpPlayerServiceImpl (
 
   override fun onPlaylistMetadataChanged(controller: MediaController, metadata: MediaMetadata?) {
     manager.currentContext.value = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: ""
+    manager.currentContextUri.value = metadata?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI) ?: ""
+  }
+
+  override fun onPlaylistChanged(
+    controller: MediaController,
+    list: MutableList<MediaItem>?,
+    metadata: MediaMetadata?
+  ) {
+    list ?: return
+    queueMetaTask?.cancel()
+    queueMetaTask = launch(Dispatchers.IO) {
+      val meta = UnpackedMetadataResponse(manager.sessionManager.session.api().getExtendedMetadata(
+        ExtendedMetadata.BatchedEntityRequest.newBuilder()
+        .addAllEntityRequest(list.map {
+          ExtendedMetadata.EntityRequest.newBuilder().apply {
+            entityUri = it.metadata!!.getString(MediaMetadata.METADATA_KEY_MEDIA_URI)
+            addQuery(ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(ExtensionKindOuterClass.ExtensionKind.TRACK_V4).build())
+          }.build()
+        })
+        .build()).extendedMetadataList)
+
+      manager.currentQueue.value = list.map { meta.tracks[it.metadata?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI) ?: ""] }.map { it ?: Metadata.Track.getDefaultInstance() }
+    }
   }
 
   private fun manageTimer(run: Boolean) {

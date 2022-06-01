@@ -28,8 +28,9 @@ object SpModule {
 
   fun provideSpPlayerServiceManager(
     @ApplicationContext context: Context,
-    moshi: Moshi
-  ) = SpPlayerServiceManager(context, moshi)
+    moshi: Moshi,
+    sessionManager: SpSessionManager
+  ) = SpPlayerServiceManager(context, moshi, sessionManager)
 
   fun provideSpAuthManager(
     spSessionManager: SpSessionManager,

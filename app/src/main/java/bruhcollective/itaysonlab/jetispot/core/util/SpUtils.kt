@@ -3,6 +3,9 @@ package bruhcollective.itaysonlab.jetispot.core.util
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import com.google.protobuf.ByteString
+import xyz.gianlu.librespot.common.Utils
+import xyz.gianlu.librespot.metadata.ImageId
 
 object SpUtils {
     const val SPOTIFY_APP_VERSION = "8.7.38.86"
@@ -21,5 +24,6 @@ object SpUtils {
         return (1..length).map { allowedChars.random() }.joinToString("")
     }
 
-    fun getScannableUrl(uri: String) = "https://scannables.scdn.co/uri/800/spotify%3Aalbum%3A3DR0FThvw6I18Ntp3D6kxf"
+    fun getScannableUrl(uri: String) = "https://scannables.scdn.co/uri/800/$uri"
+    fun getImageUrl(bytes: ByteString?) = if (bytes != null) "https://i.scdn.co/image/${Utils.bytesToHex(bytes).lowercase()}" else null
 }
