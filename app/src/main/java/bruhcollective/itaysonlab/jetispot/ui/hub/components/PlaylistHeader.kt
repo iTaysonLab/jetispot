@@ -95,18 +95,6 @@ fun LargePlaylistHeader(
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  val darkTheme = isSystemInDarkTheme()
-  val dominantColor = remember { mutableStateOf(Color.Transparent) }
-  val dominantColorAsBg = animateColorAsState(dominantColor.value)
-
-  LaunchedEffect(Unit) {
-    launch {
-      if (dominantColor.value != Color.Transparent) return@launch
-      dominantColor.value =
-        delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
-    }
-  }
-
   Column {
     Box(
       Modifier
@@ -139,24 +127,15 @@ fun LargePlaylistHeader(
       )
     }
 
-    Column(
-      Modifier
-        .background(
-          brush = Brush.verticalGradient(
-            colors = listOf(dominantColorAsBg.value.blendWith(MaterialTheme.colorScheme.surface, 0.5f), Color.Transparent)
-          )
-        ).fillMaxWidth()
-    ) {
-      Text(
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-        fontSize = 12.sp,
-        lineHeight = 18.sp,
-        text = item.text?.subtitle!!, modifier = Modifier
-          .padding(horizontal = 16.dp)
-          .padding(top = 16.dp)
-      )
+    Text(
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+      fontSize = 12.sp,
+      lineHeight = 18.sp,
+      text = item.text?.subtitle!!, modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .padding(top = 16.dp)
+    )
 
-      EntityActionStrip(navController, delegate, item)
-    }
+    EntityActionStrip(navController, delegate, item)
   }
 }
