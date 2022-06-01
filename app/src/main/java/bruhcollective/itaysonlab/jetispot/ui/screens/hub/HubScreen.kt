@@ -95,7 +95,7 @@ fun HubScreen(
       }
     }
     
-    is HubScreenViewModel.State.Error -> PagingErrorPage(onReload = { scope.launch { viewModel.reload(onAppBarTitleChange, loader) } }, modifier = Modifier.fillMaxSize())
+    is HubScreenViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HubScreenViewModel.State.Error).error, onReload = { scope.launch { viewModel.reload(onAppBarTitleChange, loader) } }, modifier = Modifier.fillMaxSize())
     HubScreenViewModel.State.Loading -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
   }
 }

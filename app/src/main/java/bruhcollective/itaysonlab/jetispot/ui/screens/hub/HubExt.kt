@@ -90,14 +90,14 @@ fun HubScaffold(
         }
       }
     }
-    is HubState.Error -> PagingErrorPage(onReload = { scope.launch { reloadFunc() } }, modifier = Modifier.fillMaxSize())
+    is HubState.Error -> PagingErrorPage(exception = state.error, onReload = { scope.launch { reloadFunc() } }, modifier = Modifier.fillMaxSize())
     HubState.Loading -> PagingLoadingPage(Modifier.fillMaxSize())
   }
 }
 
 sealed class HubState {
   object Loading: HubState()
-  class Error (val ex: Exception): HubState()
+  class Error (val error: Exception): HubState()
   class Loaded (val data: HubResponse): HubState()
 }
 

@@ -84,7 +84,7 @@ fun ListeningHistoryScreen(
         }
       }
     }
-    is HistoryViewModel.State.Error -> PagingErrorPage(onReload = { scope.launch(block = loadFunc) }, modifier = Modifier.fillMaxSize())
+    is HistoryViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HistoryViewModel.State.Error).error, onReload = { scope.launch(block = loadFunc) }, modifier = Modifier.fillMaxSize())
     HistoryViewModel.State.Loading -> PagingLoadingPage(Modifier.fillMaxSize())
   }
 }

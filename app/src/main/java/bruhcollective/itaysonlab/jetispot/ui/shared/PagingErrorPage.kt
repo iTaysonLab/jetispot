@@ -9,14 +9,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import bruhcollective.itaysonlab.jetispot.ui.ext.copy
 
 @Composable
-fun PagingErrorPage (
+fun PagingErrorPage(
   onReload: () -> Unit,
+  exception: Exception,
   modifier: Modifier
 ) {
+  val ctx = LocalContext.current
+
   Box(modifier) {
     Column(
       Modifier
@@ -34,12 +38,24 @@ fun PagingErrorPage (
       )
     }
 
-    OutlinedButton(
-      onClick = { onReload() }, modifier = Modifier
+    Row(
+      modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(bottom = 16.dp)
     ) {
-      Text("Reload")
+      OutlinedButton(
+        onClick = {
+          ctx.copy("Message: ${exception.message}\n\n" + exception.stackTraceToString())
+        }) {
+        Text("Copy exception")
+      }
+      
+      Spacer(modifier = Modifier.width(8.dp))
+
+      OutlinedButton(
+        onClick = { onReload() }) {
+        Text("Reload")
+      }
     }
   }
 }

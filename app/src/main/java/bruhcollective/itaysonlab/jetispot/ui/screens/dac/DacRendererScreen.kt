@@ -130,7 +130,7 @@ fun DacRendererScreen(
     }
 
     is DacViewModel.State.Error -> {
-      PagingErrorPage(onReload = { scope.launch { viewModel.reload(loader) } }, modifier = Modifier.fillMaxSize())
+      PagingErrorPage(exception = (viewModel.state as DacViewModel.State.Error).error, onReload = { scope.launch { viewModel.reload(loader) } }, modifier = Modifier.fillMaxSize())
     }
 
     DacViewModel.State.Loading -> {
