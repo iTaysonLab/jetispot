@@ -34,13 +34,31 @@ object PlaylistEntityView {
       PlaylistId.fromUri("spotify:playlist:$id")) }
     val playlistTracks = playlist.contents.itemsList
 
-    Log.d("SCM", playlist.toString())
-
     val playlistHeader = HubItem(
       component = if (playlist.attributes.formatAttributesList.firstOrNull { it.key == "image_url" } != null) HubComponent.LargePlaylistHeader else HubComponent.PlaylistHeader,
       text = HubText(
         title = playlist.attributes.name,
         subtitle = playlist.attributes.description
+      ),
+      children = listOf(
+        HubItem(
+          component = HubComponent.OutlinedButton,
+          events = HubEvents(
+            click = HubEvent.PlayFromContext(
+              data = PlayFromContextData(
+                "spotify:playlist:$id",
+                PlayFromContextPlayerData(
+                  context = PfcContextData(
+                    url = "context://spotify:playlist:$id",
+                    uri = "spotify:playlist:$id"
+                  ),
+                  state = PfcState(options = PfcStateOptions(shuffling_context = true)),
+                  options = PfcOptions(player_options_override = PfcStateOptions(shuffling_context = true))
+                )
+              )
+            )
+          )
+        )
       ),
       images = HubImages(
         HubImage(

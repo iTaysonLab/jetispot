@@ -1,9 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -30,7 +27,7 @@ fun ImageRow(
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  Row(Modifier.clickableHub(navController, delegate, item).padding(horizontal = 16.dp, vertical = 12.dp)) {
+  Row(Modifier.clickableHub(navController, delegate, item).fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
     PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
       .size(42.dp)
       .clip(CircleShape))

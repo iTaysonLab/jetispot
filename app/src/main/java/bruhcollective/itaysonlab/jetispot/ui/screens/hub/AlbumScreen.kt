@@ -1,7 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import bruhcollective.itaysonlab.jetispot.core.util.Log
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,13 +14,13 @@ import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionAlbum
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.ext.collectAsStateLifecycleAware
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import xyz.gianlu.librespot.metadata.AlbumId
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumScreen(
   navController: NavController,

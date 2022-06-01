@@ -39,9 +39,9 @@ fun GridMediumCard(
     }
 
     if (!item.text?.subtitle.isNullOrEmpty()) {
-      Subtext(item.text!!.subtitle!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 8.dp).padding(horizontal = 16.dp))
+      Subtext(item.text!!.subtitle!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp).padding(horizontal = 16.dp))
     } else if (!item.text?.description.isNullOrEmpty()) {
-      Subtext(item.text!!.description!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 8.dp).padding(horizontal = 16.dp))
+      Subtext(item.text!!.description!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp).padding(horizontal = 16.dp))
     }
   }
 }

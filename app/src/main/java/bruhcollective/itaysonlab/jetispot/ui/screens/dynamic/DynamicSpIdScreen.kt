@@ -38,6 +38,7 @@ fun DynamicSpIdScreen(
     "album" -> AlbumScreen(navController, id)
     "playlist" -> PlaylistScreen(navController, id)
     "config" -> ConfigScreen(navController)
+    "radio" -> BrowseRadioScreen(navController)
 
     "collection" -> when (id) {
       "artist" -> LikedSongsScreen(navController, argument, fullUri)

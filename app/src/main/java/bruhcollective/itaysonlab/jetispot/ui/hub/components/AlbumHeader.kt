@@ -7,11 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -30,10 +24,9 @@ import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
+import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
@@ -115,45 +108,6 @@ fun AlbumHeader(
 
     Subtext(text = "${item.metadata.album!!.type} • ${item.metadata.album.year}", modifier = Modifier.padding(horizontal = 16.dp))
 
-    Row(Modifier.padding(horizontal = 16.dp).padding(bottom = 4.dp)) {
-      IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
-        Icon(if (delegate.getMainObjectAddedState().value) Icons.Default.Favorite else Icons.Default.FavoriteBorder, null)
-      }
-
-      Spacer(Modifier.width(16.dp))
-
-      IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
-        Icon(Icons.Default.MoreVert, null)
-      }
-
-      Spacer(Modifier.weight(1f))
-
-      Box(Modifier.size(48.dp)) {
-        Box(
-          Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(navController, delegate, item.children!![0])
-        ) {
-          Icon(
-            imageVector = Icons.Default.PlayArrow,
-            tint = MaterialTheme.colorScheme.onPrimary,
-            contentDescription = null,
-            modifier = Modifier.size(32.dp).align(Alignment.Center)
-          )
-        }
-
-        if (!((item.children[0].events?.click as? HubEvent.PlayFromContext)?.data?.player?.options?.player_options_override?.shuffling_context == false)) {
-          Box(
-            Modifier.align(Alignment.BottomEnd).offset(4.dp, 4.dp).clip(CircleShape).size(22.dp)
-              .background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
-          ) {
-            Icon(
-              imageVector = Icons.Default.Shuffle,
-              tint = MaterialTheme.colorScheme.primary,
-              contentDescription = null,
-              modifier = Modifier.padding(4.dp).align(Alignment.Center)
-            )
-          }
-        }
-      }
-    }
+    EntityActionStrip(navController, delegate, item)
   }
 }

@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
-import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpBlendApi
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
-import bruhcollective.itaysonlab.jetispot.ui.ext.openUrl
 import bruhcollective.itaysonlab.jetispot.ui.ext.shareUrl
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.BaseConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigItem

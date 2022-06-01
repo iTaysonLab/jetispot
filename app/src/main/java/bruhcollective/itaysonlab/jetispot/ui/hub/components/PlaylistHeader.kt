@@ -19,9 +19,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
@@ -81,6 +84,8 @@ fun PlaylistHeader(
         .padding(horizontal = 16.dp)
         .padding(top = 8.dp)
     )
+
+    EntityActionStrip(navController, delegate, item)
   }
 }
 
@@ -134,11 +139,11 @@ fun LargePlaylistHeader(
       )
     }
 
-    Box(
+    Column(
       Modifier
         .background(
           brush = Brush.verticalGradient(
-            colors = listOf(dominantColorAsBg.value, Color.Transparent)
+            colors = listOf(dominantColorAsBg.value.blendWith(MaterialTheme.colorScheme.surface, 0.5f), Color.Transparent)
           )
         ).fillMaxWidth()
     ) {
@@ -150,6 +155,8 @@ fun LargePlaylistHeader(
           .padding(horizontal = 16.dp)
           .padding(top = 16.dp)
       )
+
+      EntityActionStrip(navController, delegate, item)
     }
   }
 }

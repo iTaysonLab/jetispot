@@ -15,6 +15,12 @@ interface SpInternalApi {
   @GET("/homeview/v1/home")
   suspend fun getHomeView(@Query("is_car_connected") carConnected: Boolean): HubResponse
 
+  @GET("/chartview/v5/overview/android")
+  suspend fun getChartView(): HubResponse
+
+  @GET("/radio-apollo/v5/radio-hub")
+  suspend fun getRadioHub(): HubResponse
+
   @GET("/hubview-mobile-v1/browse/{id}")
   suspend fun getBrowseView(@Path("id") pageId: String = ""): HubResponse
 
