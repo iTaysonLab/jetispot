@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
@@ -25,22 +26,22 @@ fun GridMediumCard(
 ) {
   val size = 160.dp
   
-  Column(Modifier.width(size).clickableHub(navController, delegate, item)) {
+  Column(Modifier.fillMaxWidth().clickableHub(navController, delegate, item)) {
     var drawnTitle = false
 
     PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(size).clip(
       RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
-    ))
+    ).align(Alignment.CenterHorizontally))
 
     if (!item.text?.title.isNullOrEmpty()) {
       drawnTitle = true
-      MediumText(item.text!!.title!!, modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = 8.dp))
+      MediumText(item.text!!.title!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 8.dp).padding(horizontal = 16.dp))
     }
 
     if (!item.text?.subtitle.isNullOrEmpty()) {
-      Subtext(item.text!!.subtitle!!, modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = if (drawnTitle) 4.dp else 8.dp))
+      Subtext(item.text!!.subtitle!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 8.dp).padding(horizontal = 16.dp))
     } else if (!item.text?.description.isNullOrEmpty()) {
-      Subtext(item.text!!.description!!, modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally).padding(top = if (drawnTitle) 4.dp else 8.dp))
+      Subtext(item.text!!.description!!, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 8.dp).padding(horizontal = 16.dp))
     }
   }
 }

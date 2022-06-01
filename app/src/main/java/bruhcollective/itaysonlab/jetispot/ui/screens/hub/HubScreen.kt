@@ -79,7 +79,7 @@ fun HubScreen(
               items(item.children, key = { dItem -> dItem.id }, contentType = {
                 item.component.javaClass.simpleName
               }) { cItem ->
-                HubBinder(navController, viewModel, cItem, isRenderingInGrid = true)
+                HubBinder(navController, viewModel, cItem)
               }
             } else {
               item(span = {
@@ -87,7 +87,7 @@ fun HubScreen(
               }, key = item.id, contentType = {
                 item.component.javaClass.simpleName
               }) {
-                HubBinder(navController, viewModel, item)
+                HubBinder(navController, viewModel, item, isRenderingInGrid = item.component.isGrid())
               }
             }
           }
