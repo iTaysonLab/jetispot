@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.collection.LruCache
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
@@ -94,6 +95,7 @@ fun NowPlayingScreen(
     NowPlayingMiniplayer(
       viewModel,
       Modifier
+        .clickable { scope.launch { bottomSheetState.expand() } }
         .fillMaxWidth()
         .height(72.dp)
         .align(Alignment.TopStart)
@@ -344,6 +346,7 @@ class NowPlayingViewModel @Inject constructor(
       "collection" -> R.string.playing_src_library
       "playlist" -> R.string.playing_src_playlist
       "album" -> R.string.playing_src_album
+      "artist" -> R.string.playing_src_artist
       else -> R.string.playing_src_unknown
     }
   }
