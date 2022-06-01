@@ -14,8 +14,8 @@ android {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "poc_v6.1"
         resConfigs "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -112,7 +112,8 @@ dependencies {
         //exclude group: 'com.google.protobuf'
     }
 
-    implementation 'uk.uuid.slf4j:slf4j-android:1.7.30-0'
+    // implementation 'uk.uuid.slf4j:slf4j-android:1.7.30-0'
+    implementation 'com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30'
 
     implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
 
