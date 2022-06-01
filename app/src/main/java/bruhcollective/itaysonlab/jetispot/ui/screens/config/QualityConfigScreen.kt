@@ -13,7 +13,6 @@ import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QualityConfigScreen(
   navController: NavController,

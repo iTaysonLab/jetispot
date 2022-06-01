@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.Context
 import androidx.datastore.core.CorruptionException
+import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
@@ -10,6 +11,8 @@ import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import bruhcollective.itaysonlab.jetispot.proto.PlayerConfig
 import com.google.protobuf.InvalidProtocolBufferException
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -23,6 +26,11 @@ class SpConfigurationManager @Inject constructor(
   @ApplicationContext private val appContext: Context
 ) {
   companion object {
+    val EMPTY = object: DataStore<AppConfig> {
+      override val data: Flow<AppConfig> get() = emptyFlow()
+      override suspend fun updateData(transform: suspend (t: AppConfig) -> AppConfig) = TODO("This is an empty DataStore!")
+    }
+
     val DEFAULT = AppConfig.newBuilder().apply {
       setPlayerConfig(PlayerConfig.newBuilder().apply {
         autoplay = true

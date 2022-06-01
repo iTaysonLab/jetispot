@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.screens.blend.BlendCreateInvitationScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.history.ListeningHistoryScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.*
@@ -48,6 +49,10 @@ fun DynamicSpIdScreen(
       when (id) {
         "listeninghistory" -> ListeningHistoryScreen(navController)
       }
+    }
+
+    "blend" -> when (id) {
+      "invitation" -> BlendCreateInvitationScreen(navController)
     }
 
     else -> {

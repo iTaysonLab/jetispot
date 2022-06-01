@@ -2,11 +2,9 @@ package bruhcollective.itaysonlab.jetispot.core.di
 
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
-import bruhcollective.itaysonlab.jetispot.core.api.ClientTokenHandler
-import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
-import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
+import bruhcollective.itaysonlab.jetispot.core.api.*
 import bruhcollective.itaysonlab.jetispot.core.di.ext.interceptRequest
+import bruhcollective.itaysonlab.jetispot.core.util.create
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -70,13 +68,17 @@ object ApiModule {
 
   @Provides
   @Singleton
-  fun provideInternalApi(retrofit: Retrofit): SpInternalApi = retrofit.newBuilder().baseUrl("https://spclient.wg.spotify.com").build().create(SpInternalApi::class.java)
+  fun provideInternalApi(retrofit: Retrofit): SpInternalApi = retrofit.create("https://spclient.wg.spotify.com")
 
   @Provides
   @Singleton
-  fun providePartnersApi(retrofit: Retrofit): SpPartnersApi = retrofit.newBuilder().baseUrl("https://api-partner.spotify.com").build().create(SpPartnersApi::class.java)
+  fun providePartnersApi(retrofit: Retrofit): SpPartnersApi = retrofit.create("https://api-partner.spotify.com")
 
   @Provides
   @Singleton
-  fun provideCollectionApi(retrofit: Retrofit): SpCollectionApi = retrofit.newBuilder().baseUrl("https://spclient.wg.spotify.com/collection/v2/").build().create(SpCollectionApi::class.java)
+  fun provideCollectionApi(retrofit: Retrofit): SpCollectionApi = retrofit.create("https://spclient.wg.spotify.com/collection/v2/")
+
+  @Provides
+  @Singleton
+  fun provideBlendApi(retrofit: Retrofit): SpBlendApi = retrofit.create("https://spclient.wg.spotify.com")
 }
