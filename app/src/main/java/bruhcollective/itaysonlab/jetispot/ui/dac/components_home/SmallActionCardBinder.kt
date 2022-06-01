@@ -45,15 +45,15 @@ fun SmallActionCardBinder(
       Box(
         Modifier
           .fillMaxSize()
-          .padding(16.dp)) {
+          .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Column(Modifier.align(Alignment.TopStart)) {
           MediumText(text = title)
           Subtext(text = subtitle)
         }
 
-        Box(modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart)) {
-          DynamicLikeButton(objectUrl = likeUri, Modifier.size(42.dp).align(Alignment.CenterStart))
-          DynamicPlayButton(command = playCommand, Modifier.size(42.dp).align(Alignment.CenterEnd))
+        Box(modifier = Modifier.offset(y = 4.dp).fillMaxWidth().align(Alignment.BottomStart)) {
+          DynamicLikeButton(objectUrl = likeUri, Modifier.offset(x = (-8).dp).size(42.dp).align(Alignment.CenterStart))
+          DynamicPlayButton(command = playCommand, Modifier.offset(x = 8.dp).size(42.dp).align(Alignment.CenterEnd))
         }
       }
     }
