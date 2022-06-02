@@ -91,5 +91,6 @@ private fun placeholderToIcon (type: String?) = when (type) {
   "album" -> Icons.Default.Album
   "podcasts" -> Icons.Default.Podcasts
   "playlist" -> Icons.Default.PlaylistPlay
+  "user" -> Icons.Default.Person
   else -> Icons.Default.Audiotrack
 }

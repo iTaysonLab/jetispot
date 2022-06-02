@@ -42,7 +42,7 @@ object PlaylistEntityView {
       ),
       custom = mapOf(
         "owner_name" to playlistOwner.name.value,
-        "owner_pic" to playlistOwner.imagesList.first().url,
+        "owner_pic" to (playlistOwner.imagesList.firstOrNull()?.url ?: ""),
         "owner_username" to playlistOwnerUsername,
         "total_duration" to DateUtils.formatElapsedTime(mappedDuration),
         "likes_count" to popCount.count

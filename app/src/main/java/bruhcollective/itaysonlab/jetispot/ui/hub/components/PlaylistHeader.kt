@@ -34,6 +34,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
+import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
@@ -71,14 +72,10 @@ fun PlaylistHeader(
       .padding(top = 16.dp)
       .statusBarsPadding()
   ) {
-    Image(
-      painter = rememberAsyncImagePainter(model = item.images?.main?.uri),
-      contentDescription = null,
-      modifier = Modifier
-        .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
-        .align(Alignment.CenterHorizontally)
-        .padding(bottom = 8.dp)
-    )
+    PreviewableAsyncImage(item.images?.main?.uri, "playlist", modifier = Modifier
+      .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
+      .align(Alignment.CenterHorizontally)
+      .padding(bottom = 8.dp))
 
     MediumText(
       text = item.text?.title!!, fontSize = 21.sp, modifier = Modifier
@@ -129,7 +126,8 @@ fun LargePlaylistHeader(
               colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
             )
           )
-          .fillMaxSize())
+          .fillMaxSize()
+      )
 
       MediumText(
         text = item.text?.title!!,
@@ -176,24 +174,34 @@ fun PlaylistHeaderAdditionalInfo(
     ) { navController.navigate(custom["owner_username"] as String) }
     .fillMaxWidth()
     .padding(horizontal = 16.dp)) {
-    PreviewableAsyncImage(imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
-      .clip(CircleShape)
-      .size(32.dp))
-    MediumText(text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
-      .align(Alignment.CenterVertically)
-      .padding(start = 12.dp))
+    PreviewableAsyncImage(
+      imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
+        .clip(CircleShape)
+        .size(32.dp)
+    )
+    MediumText(
+      text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
+        .align(Alignment.CenterVertically)
+        .padding(start = 12.dp)
+    )
   }
-  
+
   Spacer(modifier = Modifier.height(12.dp))
 
   Row(
     Modifier
       .fillMaxWidth()
-      .padding(horizontal = 16.dp)) {
+      .padding(horizontal = 16.dp)
+  ) {
     Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(26.dp))
-    Text(text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}", fontSize = 12.sp, maxLines = 1, modifier = Modifier
-      .align(Alignment.CenterVertically)
-      .padding(start = 8.dp))
+    Text(
+      text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}",
+      fontSize = 12.sp,
+      maxLines = 1,
+      modifier = Modifier
+        .align(Alignment.CenterVertically)
+        .padding(start = 8.dp)
+    )
   }
 
   Spacer(modifier = Modifier.height(6.dp))
