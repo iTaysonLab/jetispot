@@ -1,20 +1,19 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.virt
 
+import android.text.format.DateUtils
 import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import com.google.protobuf.ByteString
-import com.spotify.extendedmetadata.ExtendedMetadata
-import com.spotify.extendedmetadata.ExtensionKindOuterClass
+import com.google.protobuf.StringValue
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
-import xyz.gianlu.librespot.metadata.LocalId
 import xyz.gianlu.librespot.metadata.PlaylistId
 
 object PlaylistEntityView {
@@ -25,17 +24,28 @@ object PlaylistEntityView {
     val hubResponse: HubResponse
   )
 
-  suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager, spMetadataRequester: SpMetadataRequester): ApiPlaylist {
-    // get tracks ids
-    val playlist = withContext(Dispatchers.IO) { sessionManager.session.api().getPlaylist(
-      PlaylistId.fromUri("spotify:playlist:$id")) }
+  suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager, spInternalApi: SpInternalApi, spMetadataRequester: SpMetadataRequester): ApiPlaylist {
+    val playlist = withContext(Dispatchers.IO) { sessionManager.session.api().getPlaylist(PlaylistId.fromUri("spotify:playlist:$id")) }
     val playlistTracks = playlist.contents.itemsList.distinctBy { it.uri }.filterNot { it.uri.startsWith("spotify:local:") }
+    val playlistOwnerUsername = "spotify:user:${playlist.ownerUsername}"
+
+    val mappedMetadata = spMetadataRequester.request(mutableListOf(playlistOwnerUsername) + playlistTracks.map { it.uri })
+    val mappedDuration = mappedMetadata.tracks.map { it.value.duration / 1000L }.sum()
+    val playlistOwner = mappedMetadata.userProfiles[playlistOwnerUsername]!!
+    val popCount = spInternalApi.getPlaylistPopCount(id)
 
     val playlistHeader = HubItem(
       component = if (playlist.attributes.formatAttributesList.firstOrNull { it.key == "image_url" } != null) HubComponent.LargePlaylistHeader else HubComponent.PlaylistHeader,
       text = HubText(
         title = playlist.attributes.name,
         subtitle = playlist.attributes.description
+      ),
+      custom = mapOf(
+        "owner_name" to playlistOwner.name.value,
+        "owner_pic" to playlistOwner.imagesList.first().url,
+        "owner_username" to playlistOwnerUsername,
+        "total_duration" to DateUtils.formatElapsedTime(mappedDuration),
+        "likes_count" to popCount.count
       ),
       children = listOf(
         HubItem(
@@ -67,13 +77,12 @@ object PlaylistEntityView {
       )
     )
 
-    val mappedMetadata = spMetadataRequester.request(playlistTracks.map { it.uri }).tracks // TODO attrs
-    val playlistItems = extensionResponseToHub(id, playlistTracks, mappedMetadata)
+    val playlistItems = extensionResponseToHub(id, playlistTracks, mappedMetadata.tracks) // TODO attrs
 
     return ApiPlaylist(
       playlist = playlist,
       playlistTrackMetadata = playlistTracks,
-      trackMetadata = mappedMetadata,
+      trackMetadata = mappedMetadata.tracks,
       hubResponse = HubResponse(
         header = playlistHeader,
         body = playlistItems

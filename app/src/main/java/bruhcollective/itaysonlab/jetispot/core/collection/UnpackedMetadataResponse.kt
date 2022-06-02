@@ -29,6 +29,7 @@ class UnpackedMetadataResponse(
     artists += other.artists
     albums += other.albums
     descriptors += other.descriptors
+    userProfiles += other.userProfiles
   }
 
   init {

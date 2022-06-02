@@ -3,8 +3,16 @@ package bruhcollective.itaysonlab.jetispot.ui.hub.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lan
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Web
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -26,6 +35,7 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -85,6 +95,7 @@ fun PlaylistHeader(
         .padding(top = 8.dp)
     )
 
+    PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
     EntityActionStrip(navController, delegate, item)
   }
 }
@@ -109,11 +120,14 @@ fun LargePlaylistHeader(
           .fillMaxSize()
       )
 
-      Box(Modifier.background(
-        brush = Brush.verticalGradient(
-          colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
-        )
-      ).fillMaxSize())
+      Box(
+        Modifier
+          .background(
+            brush = Brush.verticalGradient(
+              colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
+            )
+          )
+          .fillMaxSize())
 
       MediumText(
         text = item.text?.title!!,
@@ -136,6 +150,47 @@ fun LargePlaylistHeader(
         .padding(top = 16.dp)
     )
 
+    PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
     EntityActionStrip(navController, delegate, item)
   }
+}
+
+@Composable
+fun PlaylistHeaderAdditionalInfo(
+  navController: NavController,
+  delegate: HubScreenDelegate,
+  custom: Map<String, Any>?
+) {
+  custom ?: return
+
+  Spacer(modifier = Modifier.height(12.dp))
+
+  Row(Modifier
+    .clickable(
+      interactionSource = remember { MutableInteractionSource() },
+      indication = null
+    ) { navController.navigate(custom["owner_username"] as String) }
+    .fillMaxWidth()
+    .padding(horizontal = 16.dp)) {
+    PreviewableAsyncImage(imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
+      .clip(CircleShape)
+      .size(32.dp))
+    MediumText(text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
+      .align(Alignment.CenterVertically)
+      .padding(start = 12.dp))
+  }
+  
+  Spacer(modifier = Modifier.height(12.dp))
+
+  Row(
+    Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp)) {
+    Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(26.dp))
+    Text(text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}", fontSize = 12.sp, maxLines = 1, modifier = Modifier
+      .align(Alignment.CenterVertically)
+      .padding(start = 8.dp))
+  }
+
+  Spacer(modifier = Modifier.height(6.dp))
 }

@@ -8,6 +8,7 @@ import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.home.dac.viewservice.v1.proto.HomeViewServiceRequest
 import com.spotify.playlist4.Playlist4ApiProto
 import retrofit2.http.*
+import spotify.popcount2.proto.Popcount2External
 import java.util.*
 
 // TODO: Leave as it right now, later separate into other interfaces
@@ -48,6 +49,9 @@ interface SpInternalApi {
 
   @GET("/pam-view-service/v1/PlanOverview")
   suspend fun getPlanOverview(): DacResponse
+
+  @GET("/popcount/v2/playlist/{id}/count")
+  suspend fun getPlaylistPopCount(@Path("id") id: String = ""): Popcount2External.PopcountResult
 
   @GET("/playlist/v2/user/{username}/rootlist")
   suspend fun getRootlist(

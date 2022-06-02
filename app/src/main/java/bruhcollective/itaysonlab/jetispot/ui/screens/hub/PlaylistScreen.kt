@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.virt.PlaylistEntityView
@@ -39,6 +40,7 @@ fun PlaylistScreen(
 @HiltViewModel
 class PlaylistViewModel @Inject constructor(
   private val spSessionManager: SpSessionManager,
+  private val spInternalApi: SpInternalApi,
   private val spPartnersApi: SpPartnersApi,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spMetadataRequester: SpMetadataRequester
@@ -50,7 +52,7 @@ class PlaylistViewModel @Inject constructor(
 
   suspend fun loadPlaylist(id: String) = load { loadPlaylistInternal(id) }
   suspend fun reloadPlaylist(id: String) = reload { loadPlaylistInternal(id) }
-  suspend fun loadPlaylistInternal(id: String) = PlaylistEntityView.getPlaylistView(id, spSessionManager, spMetadataRequester).also { _playlistMetadata.value = it; title.value = it.playlist.attributes.name; }.hubResponse
+  suspend fun loadPlaylistInternal(id: String) = PlaylistEntityView.getPlaylistView(id, spSessionManager, spInternalApi, spMetadataRequester).also { _playlistMetadata.value = it; title.value = it.playlist.attributes.name; }.hubResponse
 
   override fun play(data: PlayFromContextData) = play(spPlayerServiceManager, data)
   override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spPartnersApi, url, dark)

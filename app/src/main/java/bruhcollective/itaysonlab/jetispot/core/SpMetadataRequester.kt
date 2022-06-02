@@ -13,6 +13,8 @@ import javax.inject.Singleton
 class SpMetadataRequester @Inject constructor(
   private val spSessionManager: SpSessionManager
 ) {
+  // TODO: wire this up to some sort of DB (probably LevelDB like Spotify does)
+
   suspend fun request(uris: List<String>) = withContext(Dispatchers.IO) {
     val result = UnpackedMetadataResponse(emptyList())
 
@@ -30,8 +32,6 @@ class SpMetadataRequester @Inject constructor(
         .extendedMetadataList
       )
     }
-
-    Log.d("Processed", "${result.tracks} items")
 
     return@withContext result
   }
