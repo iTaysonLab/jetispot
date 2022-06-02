@@ -8,17 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.*
-import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.BenefitListComponentBinder
-import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.DisclaimerComponentBinder
-import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.MultiUserMemberComponentBinder
-import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.PlanComponentBinder
+import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.*
 import com.google.protobuf.Message
 import com.spotify.allplans.v1.DisclaimerComponent
 import com.spotify.allplans.v1.PlanComponent
 import com.spotify.home.dac.component.experimental.v1.proto.FilterComponent
 import com.spotify.home.dac.component.v1.proto.*
-import com.spotify.planoverview.v1.BenefitListComponent
-import com.spotify.planoverview.v1.MultiUserMemberComponent
+import com.spotify.planoverview.v1.*
 
 @Composable
 fun DacRender (
@@ -31,6 +27,9 @@ fun DacRender (
     is BenefitListComponent -> BenefitListComponentBinder(navController, item)
     is PlanComponent -> PlanComponentBinder(navController, item)
     is DisclaimerComponent -> DisclaimerComponentBinder(navController, item)
+    is SingleUserRecurringComponent -> SingleUserComponentBinder(item)
+    is SingleUserPrepaidComponent -> SingleUserComponentBinder(item)
+    is SingleUserTrialComponent -> SingleUserComponentBinder(item)
     // Home
     is ToolbarComponent -> ToolbarComponentBinder(navController, item)
     is ShortcutsSectionComponent -> ShortcutsBinder(navController, item)
