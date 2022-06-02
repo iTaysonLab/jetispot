@@ -69,6 +69,9 @@ class SpPlayerServiceManager @Inject constructor(
     }
   }
 
+  fun skipNext() = impl.awaitService { this.skipToNextPlaylistItem() }
+  fun skipPrevious() = impl.awaitService { this.skipToPreviousPlaylistItem() }
+
   enum class PlaybackState {
     Idle, Playing, Paused
   }

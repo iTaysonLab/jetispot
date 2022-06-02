@@ -262,7 +262,7 @@ fun NowPlayingControls(
       Spacer(modifier = Modifier.weight(1f))
 
       IconButton(
-        onClick = { /*TODO*/ },
+        onClick = { viewModel.skipPrevious() },
         modifier = Modifier.size(56.dp),
         colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
       ) {
@@ -273,19 +273,17 @@ fun NowPlayingControls(
 
       Surface(color = Color.White, modifier = Modifier.clip(CircleShape)) {
         PlayPauseButton(
-          viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-          { viewModel.togglePlayPause() },
-          Color.Black,
-          Modifier
-            .size(56.dp)
-            .align(Alignment.CenterVertically)
+          isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+          onClick = { viewModel.togglePlayPause() },
+          color = Color.Black,
+          modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
         )
       }
 
       Spacer(modifier = Modifier.width(24.dp))
 
       IconButton(
-        onClick = { /*TODO*/ },
+        onClick = { viewModel.skipNext() },
         modifier = Modifier.size(56.dp),
         colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
       ) {
@@ -398,9 +396,9 @@ class NowPlayingViewModel @Inject constructor(
   private val imageCache = LruCache<String, Color>(10)
   private var imageColorTask: Job? = null
 
-  fun togglePlayPause() {
-    spPlayerServiceManager.playPause()
-  }
+  fun skipPrevious() = spPlayerServiceManager.skipPrevious()
+  fun togglePlayPause() = spPlayerServiceManager.playPause()
+  fun skipNext() = spPlayerServiceManager.skipNext()
 
   init {
     spPlayerServiceManager.registerExtra(this)
