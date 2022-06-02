@@ -1,17 +1,19 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
+import android.text.format.DateUtils
 import androidx.annotation.StringRes
 import androidx.collection.LruCache
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,10 +39,8 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
-import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
-import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableSyncImage
+import bruhcollective.itaysonlab.jetispot.ui.shared.*
+import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -68,7 +69,7 @@ fun NowPlayingScreen(
   }
 
   Box(Modifier.fillMaxSize()) {
-    Surface(tonalElevation = 4.dp, modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
       NowPlayingBackground(
         state = mainPagerState,
         viewModel = viewModel,
@@ -78,16 +79,22 @@ fun NowPlayingScreen(
       // main content
       NowPlayingHeader(
         stateTitle = viewModel.getHeaderTitle(),
-        state = viewModel.getHeaderText(), modifier = Modifier
+        onCloseClick = {
+          scope.launch { bottomSheetState.collapse() }
+        },
+        state = viewModel.getHeaderText(),
+        modifier = Modifier
+          .statusBarsPadding()
           .align(Alignment.TopCenter)
           .fillMaxWidth()
           .padding(horizontal = 16.dp)
-          .statusBarsPadding()
       )
 
       NowPlayingControls(
         viewModel = viewModel, modifier = Modifier
-          .padding(horizontal = 16.dp)
+          .align(Alignment.BottomCenter)
+          .padding(horizontal = 8.dp)
+          .padding(bottom = 24.dp)
           .navigationBarsPadding()
       )
     }
@@ -111,21 +118,13 @@ fun NowPlayingMiniplayer(
 ) {
   Surface(tonalElevation = 8.dp, modifier = modifier) {
     Box(Modifier.fillMaxSize()) {
-      LinearProgressIndicator(progress = viewModel.currentPosition.value.progressRange, color = MaterialTheme.colorScheme.primary, modifier = Modifier
-        .height(2.dp)
-        .fillMaxWidth())
-
-      /*Surface(
-        Modifier
+      LinearProgressIndicator(
+        progress = viewModel.currentPosition.value.progressRange,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
           .height(2.dp)
-          .fillMaxWidth(1f), color = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
-      ) {}
-      Surface(
-        Modifier
-          .height(2.dp)
-          .fillMaxWidth(viewModel.currentPosition.value.progressRange),
-        color = MaterialTheme.colorScheme.primary
-      ) {}*/
+          .fillMaxWidth()
+      )
 
       Row(
         Modifier
@@ -182,10 +181,11 @@ fun NowPlayingMiniplayer(
 fun NowPlayingHeader(
   @StringRes stateTitle: Int,
   state: String,
+  onCloseClick: () -> Unit,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
+  Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
       Icon(imageVector = Icons.Default.ArrowDownward, tint = Color.White, contentDescription = null)
     }
 
@@ -229,27 +229,103 @@ fun NowPlayingControls(
 ) {
   Column(modifier, verticalArrangement = Arrangement.Bottom) {
     // Header
-    MediumText(text = viewModel.currentTrack.value.title, fontSize = 24.sp, color = Color.White)
+    MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp), fontSize = 24.sp, color = Color.White,)
     Spacer(Modifier.height(2.dp))
-    Text(text = viewModel.currentTrack.value.artist, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
-    Spacer(Modifier.height(4.dp))
+    Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
+    Spacer(Modifier.height(8.dp))
 
     // Progressbar
     Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
       thumbColor = Color.White,
       activeTrackColor = Color.White,
       inactiveTrackColor = Color.White.copy(alpha = 0.5f)
-    ), onValueChange = {})
+    ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
 
-    Row {
-      Text(text = viewModel.currentPosition.value.progressMilliseconds.toString())
+    Row(Modifier.padding(horizontal = 14.dp).offset(y = (-4).dp)) {
+      Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
       Spacer(modifier = Modifier.weight(1f))
-      Text(text = viewModel.currentTrack.value.duration.toString())
+      Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
     }
 
+    Spacer(Modifier.height(16.dp))
+
     // Control Buttons
+    Row {
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.Shuffle, contentDescription = null)
+      }
+
+      Spacer(modifier = Modifier.weight(1f))
+
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
+      }
+
+      Spacer(modifier = Modifier.width(24.dp))
+
+      Surface(color = Color.White, modifier = Modifier.clip(CircleShape)) {
+        PlayPauseButton(
+          viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+          { viewModel.togglePlayPause() },
+          Color.Black,
+          Modifier
+            .size(56.dp)
+            .align(Alignment.CenterVertically)
+        )
+      }
+
+      Spacer(modifier = Modifier.width(24.dp))
+
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+      }
+
+      Spacer(modifier = Modifier.weight(1f))
+
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
+      }
+    }
+
+    Spacer(Modifier.height(16.dp))
 
     // Additional Buttons
+
+    Row {
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.Share, contentDescription = null)
+      }
+
+      Spacer(modifier = Modifier.weight(1f))
+
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.size(56.dp),
+        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      ) {
+        Icon(imageVector = Icons.Default.QueueMusic, contentDescription = null)
+      }
+    }
   }
 }
 
@@ -267,13 +343,19 @@ fun NowPlayingBackground(
       state = state,
       modifier = modifier
     ) { page ->
-      NowPlayingBackgroundItem(
-        track = viewModel.currentQueue.value[page],
-        modifier = Modifier
-          .align(Alignment.Center)
-          .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.25).dp)
-          .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-      )
+      val artworkModifier = Modifier
+        .align(Alignment.Center)
+        .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.25).dp)
+        .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+
+      if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
+        Image(viewModel.currentTrack.value.artworkCompose!!, contentDescription = null, modifier = artworkModifier, contentScale = ContentScale.Crop)
+      } else {
+        NowPlayingBackgroundItem(
+          track = viewModel.currentQueue.value[page],
+          modifier = artworkModifier
+        )
+      }
     }
   }
 }
@@ -283,11 +365,15 @@ fun NowPlayingBackgroundItem(
   track: Metadata.Track,
   modifier: Modifier,
 ) {
-  PreviewableAsyncImage(
-    SpUtils.getImageUrl(track.album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId),
-    "track",
-    modifier = modifier
-  )
+  Box(modifier) {
+    ImagePreview("track", Modifier.fillMaxSize())
+    AsyncImage(
+      model = SpUtils.getImageUrl(track.album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId),
+      contentDescription = null,
+      modifier = Modifier.fillMaxSize(),
+      contentScale = ContentScale.Crop,
+    )
+  }
 }
 
 @HiltViewModel
@@ -332,7 +418,8 @@ class NowPlayingViewModel @Inject constructor(
     imageColorTask = launch(Dispatchers.IO) {
       currentBgColor.value = calculateDominantColor(
         spPartnersApi,
-        SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId) ?: return@launch,
+        SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
+          ?: return@launch,
         false
       )
     }
