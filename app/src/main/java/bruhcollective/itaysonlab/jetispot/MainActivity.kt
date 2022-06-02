@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.M3Navigation
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,6 +52,7 @@ class MainActivity : ComponentActivity() {
   @Inject lateinit var playerServiceManager: SpPlayerServiceManager
 
   private var provider: (() -> NavController)? = null
+  private var providerBackPress: () -> Boolean = { false }
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
@@ -59,6 +62,11 @@ class MainActivity : ComponentActivity() {
   override fun onDestroy() {
     provider = null
     super.onDestroy()
+  }
+
+  override fun onBackPressed() {
+    if (providerBackPress()) return
+    super.onBackPressed()
   }
 
   @OptIn(ExperimentalMaterialApi::class)
@@ -71,6 +79,7 @@ class MainActivity : ComponentActivity() {
       ApplicationTheme {
         val rootDestination = remember { mutableStateOf(Screen.CoreLoadingScreen.route) }
 
+        val scope = rememberCoroutineScope()
         val navController = rememberNavController()
         val sysUiController = rememberSystemUiController()
         val isDark = isSystemInDarkTheme()
@@ -91,6 +100,14 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(Unit) {
           provider = { navController }
+
+          // TODO: figure out how to globally intercept with BackHandler, because NavHost takes it over
+          providerBackPress = {
+            if (bsState.bottomSheetState.isExpanded) {
+              scope.launch { bsState.bottomSheetState.collapse() }
+              true
+            } else false
+          }
 
           if (sessionManager.isSignedIn()) {
             if (rootDestination.value == Screen.CoreLoadingScreen.route) {
@@ -148,13 +165,19 @@ class MainActivity : ComponentActivity() {
                 }, text = {
                   Text(stringResource(id = R.string.logout_message))
                 }, confirmButton = {
-                  Text(stringResource(id = R.string.logout_confirm), Modifier.clickable {
-                    navController.popBackStack()
-                    authManager.reset()
-                    android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
-                  }.padding(16.dp))
+                  Text(stringResource(id = R.string.logout_confirm),
+                    Modifier
+                      .clickable {
+                        navController.popBackStack()
+                        authManager.reset()
+                        android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
+                      }
+                      .padding(16.dp))
                 }, dismissButton = {
-                  Text(stringResource(id = R.string.logout_cancel), Modifier.clickable { navController.popBackStack() }.padding(16.dp))
+                  Text(stringResource(id = R.string.logout_cancel),
+                    Modifier
+                      .clickable { navController.popBackStack() }
+                      .padding(16.dp))
                 })
               }
             }
