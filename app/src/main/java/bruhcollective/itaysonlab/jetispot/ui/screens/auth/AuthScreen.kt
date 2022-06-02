@@ -1,7 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.auth
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -13,13 +15,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.Autofill
+import androidx.compose.ui.autofill.AutofillNode
+import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.focus.*
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalAutofillTree
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +43,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(
   navController: NavController,
@@ -42,6 +52,9 @@ fun AuthScreen(
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
   val disclaimerDialog = remember { mutableStateOf(false) }
+  val autofill = LocalAutofill.current
+  val passwordFocusRequester = remember { FocusRequester() }
+  val focusManager = LocalFocusManager.current
 
   Box(
     Modifier
@@ -80,41 +93,80 @@ fun AuthScreen(
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
     ) {
-      OutlinedTextField(value = viewModel.username.value,
-        singleLine = true,
-        label = {
-          Text(stringResource(R.string.username))
-        }, onValueChange = { viewModel.username.value = it }, modifier = Modifier.fillMaxWidth()
-      )
+      Autofill(
+        autofillTypes = listOf(AutofillType.EmailAddress, AutofillType.Username),
+        onFill = { viewModel.username.value = TextFieldValue(it) }
+      ) { autofillNode ->
+        OutlinedTextField(value = viewModel.username.value,
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+          ),
+          keyboardActions = KeyboardActions(onNext = {
+            passwordFocusRequester.requestFocus()
+          }),
+          singleLine = true,
+          label = {
+            Text(stringResource(R.string.username))
+          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier.fillMaxWidth().onFocusChanged {
+            autofill?.apply {
+              if (it.isFocused) {
+                requestAutofillForNode(autofillNode)
+              } else {
+                cancelAutofillForNode(autofillNode)
+              }
+            }
+          }.focusable().focusProperties { next = passwordFocusRequester },
+        )
+      }
 
       Spacer(Modifier.height(8.dp))
 
-      OutlinedTextField(
-        value = viewModel.password.value,
-        label = {
-          Text(stringResource(R.string.password))
-        },
-        singleLine = true,
-        onValueChange = { viewModel.password.value = it },
-        visualTransformation = if (viewModel.passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-        modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-          val image = if (viewModel.passwordVisible.value)
-            Icons.Filled.Visibility
-          else Icons.Filled.VisibilityOff
+      Autofill(
+        autofillTypes = listOf(AutofillType.Password),
+        onFill = { viewModel.username.value = TextFieldValue(it) }
+      ) { autofillNode ->
+        OutlinedTextField(
+          value = viewModel.password.value,
+          label = {
+            Text(stringResource(R.string.password))
+          },
+          singleLine = true,
+          onValueChange = { viewModel.password.value = it },
+          visualTransformation = if (viewModel.passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+          modifier = Modifier.fillMaxWidth().focusTarget().focusRequester(passwordFocusRequester).onFocusChanged {
+            autofill?.apply {
+              if (it.isFocused) {
+                requestAutofillForNode(autofillNode)
+              } else {
+                cancelAutofillForNode(autofillNode)
+              }
+            }
+          },
+          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+          keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+            scope.launch {
+              viewModel.auth(snackbarHostState, navController)
+            }
+          }),
+          trailingIcon = {
+            val image = if (viewModel.passwordVisible.value)
+              Icons.Filled.Visibility
+            else Icons.Filled.VisibilityOff
 
-          // Please provide localized description for accessibility services
-          val description =
-            if (viewModel.passwordVisible.value) "Hide password" else "Show password"
+            // Please provide localized description for accessibility services
+            val description =
+              if (viewModel.passwordVisible.value) "Hide password" else "Show password"
 
-          IconButton(onClick = {
-            viewModel.passwordVisible.value = !viewModel.passwordVisible.value
-          }) {
-            Icon(imageVector = image, description)
+            IconButton(onClick = {
+              viewModel.passwordVisible.value = !viewModel.passwordVisible.value
+            }) {
+              Icon(imageVector = image, description)
+            }
           }
-        }
-      )
+        )
+      }
     }
 
     Box(
@@ -166,6 +218,27 @@ fun AuthScreen(
       Text(stringResource(id = R.string.logout_confirm),
         Modifier.clickable { disclaimerDialog.value = false }.padding(16.dp))
     })
+  }
+}
+
+@ExperimentalComposeUiApi
+@Composable
+private fun Autofill(
+  autofillTypes: List<AutofillType>,
+  onFill: ((String) -> Unit),
+  content: @Composable (AutofillNode) -> Unit
+) {
+  val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes)
+
+  val autofillTree = LocalAutofillTree.current
+  autofillTree += autofillNode
+
+  Box(
+    Modifier.onGloballyPositioned {
+      autofillNode.boundingBox = it.boundsInWindow()
+    }
+  ) {
+    content(autofillNode)
   }
 }
 
