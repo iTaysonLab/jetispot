@@ -20,7 +20,7 @@ fun DynamicSpIdScreen(
   fullUri: String,
 ) {
   var uriSeparated = uri.split(":")
-  if (uriSeparated[0] == "user") uriSeparated = uriSeparated.drop(2)
+  if (uriSeparated[0] == "user" && uriSeparated.size > 2) uriSeparated = uriSeparated.drop(2)
   val id = uriSeparated.getOrElse(1) { "" }
   val argument = uriSeparated.getOrElse(2) { "" }
 
