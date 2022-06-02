@@ -14,6 +14,10 @@
     <string name="auth_disclaimer">Disclaimers</string>
     <string name="auth_err_badcreds">Incorrect username or password.</string>
     <string name="auth_err_premium">To use Jetispot, you must have a Spotify Premium account.</string>
+    <string name="auth_err_empty">Username or password field is empty.</string>
+    <string name="auth_disclaimer_text">
+        Jetispot is an unofficial application which is not connected in any ways to Spotify AB.\n\nBy entering your account details and pressing \"Sign in\", you confirm that:\n- you own your account\n- you have an active Spotify Premium subscription\n- you know that Jetispot can\'t download music, save it to offline storage or bypass DRM (and never will be)
+    </string>
 
     <string name="config_root">Settings</string>
 
@@ -80,7 +84,7 @@
 
     <string name="listening_history">Listening history</string>
 
-    <string name="playing_src_library">playing from library</string>
+    <string name="playing_src_library">playing from your library</string>
     <string name="playing_src_album">playing from album</string>
     <string name="playing_src_artist">playing from artist</string>
     <string name="playing_src_playlist">playing from playlist</string>

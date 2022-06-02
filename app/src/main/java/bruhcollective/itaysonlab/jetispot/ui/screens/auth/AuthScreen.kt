@@ -1,10 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.auth
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,7 @@ fun AuthScreen(
 ) {
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
+  val disclaimerDialog = remember { mutableStateOf(false) }
 
   Box(
     Modifier
@@ -118,9 +121,12 @@ fun AuthScreen(
       Modifier
         .align(Alignment.BottomStart)
         .fillMaxWidth()
-        .padding(vertical = 32.dp, horizontal = 16.dp)
+        .padding(horizontal = 16.dp)
+        .offset(y = (80).dp)
     ) {
-      OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.CenterStart)) {
+      OutlinedButton(onClick = {
+        disclaimerDialog.value = true
+      }, modifier = Modifier.align(Alignment.CenterStart)) {
         Text(stringResource(R.string.auth_disclaimer))
       }
 
@@ -148,6 +154,19 @@ fun AuthScreen(
         )
       })
   }
+
+  if (disclaimerDialog.value) {
+    AlertDialog(onDismissRequest = { disclaimerDialog.value = false }, icon = {
+      Icon(Icons.Default.Warning, null)
+    }, title = {
+      Text(stringResource(id = R.string.auth_disclaimer))
+    }, text = {
+      Text(stringResource(id = R.string.auth_disclaimer_text))
+    }, confirmButton = {
+      Text(stringResource(id = R.string.logout_confirm),
+        Modifier.clickable { disclaimerDialog.value = false }.padding(16.dp))
+    })
+  }
 }
 
 @HiltViewModel
@@ -163,6 +182,13 @@ class AuthScreenViewModel @Inject constructor(
   suspend fun auth(shs: SnackbarHostState, nc: NavController) {
     if (isAuthInProcess.value) return
     isAuthInProcess.value = true
+
+    if (username.value.text.isEmpty() || password.value.text.isEmpty()) {
+      shs.showSnackbar(nc.context.getString(R.string.auth_err_empty))
+      isAuthInProcess.value = false
+      return
+    }
+
     when (val result = authManager.authWith(username.value.text, password.value.text)) {
       is SpAuthManager.AuthResult.Exception -> {
         shs.showSnackbar("Java Error: ${result.e.message}")
@@ -171,7 +197,7 @@ class AuthScreenViewModel @Inject constructor(
         shs.showSnackbar(
           when (result.msg) {
             "BadCredentials" -> nc.context.getString(R.string.auth_err_badcreds)
-            "PremiumAccountRequired" ->  nc.context.getString(R.string.auth_err_premium)
+            "PremiumAccountRequired" -> nc.context.getString(R.string.auth_err_premium)
             else -> "Spotify API error: ${result.msg}"
           }
         )
@@ -181,6 +207,7 @@ class AuthScreenViewModel @Inject constructor(
         nc.navigate(Screen.Feed.route)
       }
     }
+
     isAuthInProcess.value = false
   }
 }
