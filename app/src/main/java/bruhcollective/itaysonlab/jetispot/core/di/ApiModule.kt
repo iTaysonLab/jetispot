@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.di
 
+import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.*
@@ -81,4 +82,7 @@ object ApiModule {
   @Provides
   @Singleton
   fun provideBlendApi(retrofit: Retrofit): SpBlendApi = retrofit.create("https://spclient.wg.spotify.com")
+
+  @Provides
+  fun provideMetadataRequester(spSessionManager: SpSessionManager): SpMetadataRequester = SpMetadataRequester(spSessionManager)
 }

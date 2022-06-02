@@ -1,9 +1,11 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.virt
 
-import bruhcollective.itaysonlab.jetispot.core.util.Log
+import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
+import bruhcollective.itaysonlab.jetispot.core.util.Log
+import com.google.protobuf.ByteString
 import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
@@ -12,8 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
+import xyz.gianlu.librespot.metadata.LocalId
 import xyz.gianlu.librespot.metadata.PlaylistId
-import java.util.ArrayList
 
 object PlaylistEntityView {
   class ApiPlaylist(
@@ -23,16 +25,11 @@ object PlaylistEntityView {
     val hubResponse: HubResponse
   )
 
-  suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager): ApiPlaylist {
-    val extensionQuery = ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(
-      ExtensionKindOuterClass.ExtensionKind.TRACK_V4
-    ).build()
-    val entities: MutableList<ExtendedMetadata.EntityRequest> = ArrayList()
-
+  suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager, spMetadataRequester: SpMetadataRequester): ApiPlaylist {
     // get tracks ids
     val playlist = withContext(Dispatchers.IO) { sessionManager.session.api().getPlaylist(
       PlaylistId.fromUri("spotify:playlist:$id")) }
-    val playlistTracks = playlist.contents.itemsList
+    val playlistTracks = playlist.contents.itemsList.distinctBy { it.uri }.filterNot { it.uri.startsWith("spotify:local:") }
 
     val playlistHeader = HubItem(
       component = if (playlist.attributes.formatAttributesList.firstOrNull { it.key == "image_url" } != null) HubComponent.LargePlaylistHeader else HubComponent.PlaylistHeader,
@@ -70,26 +67,7 @@ object PlaylistEntityView {
       )
     )
 
-    playlistTracks.listIterator().forEach { track ->
-      entities.add(ExtendedMetadata.EntityRequest.newBuilder().apply {
-        entityUri = track.uri
-        addQuery(extensionQuery)
-      }.build())
-    }
-
-    val playlistData = withContext(Dispatchers.IO) {
-      sessionManager.session.api()
-        .getExtendedMetadata(
-          ExtendedMetadata.BatchedEntityRequest.newBuilder()
-            .addAllEntityRequest(entities)
-            .build()
-        )
-    }
-
-    val mappedMetadata =
-      playlistData.getExtendedMetadata(0).extensionDataList.associateBy { it.entityUri }
-        .mapValues { Metadata.Track.parseFrom(it.value.extensionData.value) }
-
+    val mappedMetadata = spMetadataRequester.request(playlistTracks.map { it.uri }).tracks // TODO attrs
     val playlistItems = extensionResponseToHub(id, playlistTracks, mappedMetadata)
 
     return ApiPlaylist(
@@ -113,13 +91,17 @@ object PlaylistEntityView {
       val track = mappedMetadata[trackItem.uri]!!
       hubItems.add(
         HubItem(
-          HubComponent.PlaylistTrackRow,
-          id = track.gid.toStringUtf8(),
+          component = HubComponent.PlaylistTrackRow,
+          id = trackItem.uri,
           text = HubText(
             title = track.name,
             subtitle = track.artistList.joinToString(", ") {
               it.name
             }
+          ),
+          custom = mapOf(
+            "explicit" to track.explicit,
+            "lyrics" to track.hasLyrics
           ),
           images = HubImages(
             main = HubImage(
@@ -128,7 +110,7 @@ object PlaylistEntityView {
                   Utils.bytesToHex(
                     track.album.coverGroup.imageList.find {
                       it.size == Metadata.Image.Size.SMALL
-                    }?.fileId!!
+                    }?.fileId ?: ByteString.EMPTY
                   )
                 ).hexId()
               }"
