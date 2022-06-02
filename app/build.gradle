@@ -14,8 +14,8 @@ android {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
         targetSdk 31
-        versionCode 3
-        versionName "poc_v7"
+        versionCode 4
+        versionName "poc_v7.1"
         resConfigs "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
