@@ -86,14 +86,16 @@ fun PlaylistHeader(
         .padding(top = 8.dp)
     )
 
-    Text(
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-      fontSize = 12.sp,
-      lineHeight = 18.sp,
-      text = item.text.subtitle!!, modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .padding(top = 8.dp)
-    )
+    if (!item.text.subtitle.isNullOrEmpty()) {
+      Text(
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        text = item.text.subtitle, modifier = Modifier
+          .padding(horizontal = 16.dp)
+          .padding(top = 8.dp)
+      )
+    }
 
     PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
     EntityActionStrip(navController, delegate, item)
@@ -141,14 +143,16 @@ fun LargePlaylistHeader(
       )
     }
 
-    Text(
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-      fontSize = 12.sp,
-      lineHeight = 18.sp,
-      text = item.text?.subtitle!!, modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .padding(top = 16.dp)
-    )
+    if (!item.text?.subtitle.isNullOrEmpty()) {
+      Text(
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        text = item.text?.subtitle!!, modifier = Modifier
+          .padding(horizontal = 16.dp)
+          .padding(top = 16.dp)
+      )
+    }
 
     PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
     EntityActionStrip(navController, delegate, item)

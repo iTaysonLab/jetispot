@@ -26,7 +26,7 @@ object PlaylistEntityView {
 
   suspend fun getPlaylistView(id: String, sessionManager: SpSessionManager, spInternalApi: SpInternalApi, spMetadataRequester: SpMetadataRequester): ApiPlaylist {
     val playlist = withContext(Dispatchers.IO) { sessionManager.session.api().getPlaylist(PlaylistId.fromUri("spotify:playlist:$id")) }
-    val playlistTracks = playlist.contents.itemsList.distinctBy { it.uri }.filterNot { it.uri.startsWith("spotify:local:") }
+    val playlistTracks = playlist.contents.itemsList.distinctBy { it.uri }.filter { it.uri.startsWith("spotify:track:") }
     val playlistOwnerUsername = "spotify:user:${playlist.ownerUsername}"
 
     val mappedMetadata = spMetadataRequester.request(mutableListOf(playlistOwnerUsername) + playlistTracks.map { it.uri })
