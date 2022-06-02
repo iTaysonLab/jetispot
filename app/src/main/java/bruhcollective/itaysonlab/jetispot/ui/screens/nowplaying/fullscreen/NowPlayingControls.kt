@@ -25,101 +25,119 @@ fun NowPlayingControls(
   modifier: Modifier
 ) {
   Column(modifier, verticalArrangement = Arrangement.Bottom) {
-    // Header
-    MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp), fontSize = 24.sp, color = Color.White,)
-    Spacer(Modifier.height(2.dp))
-    Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
+    ControlsHeader(viewModel)
     Spacer(Modifier.height(8.dp))
+    ControlsSeekbar(viewModel)
+    Spacer(Modifier.height(16.dp))
+    ControlsMainButtons(viewModel)
+    Spacer(Modifier.height(16.dp))
+    ControlsBottomAccessories(viewModel)
+  }
+}
 
-    // Progressbar
-    Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
-      thumbColor = Color.White,
-      activeTrackColor = Color.White,
-      inactiveTrackColor = Color.White.copy(alpha = 0.5f)
-    ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
+@Composable
+private fun ControlsHeader(
+  viewModel: NowPlayingViewModel,
+) {
+  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp), fontSize = 24.sp, color = Color.White,)
+  Spacer(Modifier.height(2.dp))
+  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
+}
 
-    Row(Modifier.padding(horizontal = 14.dp).offset(y = (-4).dp)) {
-      Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
-      Spacer(modifier = Modifier.weight(1f))
-      Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+@Composable
+private fun ControlsSeekbar(
+  viewModel: NowPlayingViewModel,
+) {
+  Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
+    thumbColor = Color.White,
+    activeTrackColor = Color.White,
+    inactiveTrackColor = Color.White.copy(alpha = 0.5f)
+  ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
+
+  Row(Modifier.padding(horizontal = 14.dp).offset(y = (-6).dp)) {
+    Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+    Spacer(modifier = Modifier.weight(1f))
+    Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+  }
+}
+
+@Composable
+private fun ControlsMainButtons(
+  viewModel: NowPlayingViewModel,
+) {
+  Row {
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.Shuffle, contentDescription = null)
     }
 
-    Spacer(Modifier.height(16.dp))
+    Spacer(modifier = Modifier.weight(1f))
 
-    // Control Buttons
-    Row {
-      IconButton(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.Shuffle, contentDescription = null)
-      }
-
-      Spacer(modifier = Modifier.weight(1f))
-
-      IconButton(
-        onClick = { viewModel.skipPrevious() },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
-      }
-
-      Spacer(modifier = Modifier.width(24.dp))
-
-      Surface(color = Color.White, modifier = Modifier.clip(CircleShape)) {
-        PlayPauseButton(
-          isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-          onClick = { viewModel.togglePlayPause() },
-          color = Color.Black,
-          modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
-        )
-      }
-
-      Spacer(modifier = Modifier.width(24.dp))
-
-      IconButton(
-        onClick = { viewModel.skipNext() },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
-      }
-
-      Spacer(modifier = Modifier.weight(1f))
-
-      IconButton(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
-      }
+    IconButton(
+      onClick = { viewModel.skipPrevious() },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
     }
 
-    Spacer(Modifier.height(16.dp))
+    Spacer(modifier = Modifier.width(24.dp))
 
-    // Additional Buttons
+    Surface(color = Color.White, modifier = Modifier.clip(CircleShape)) {
+      PlayPauseButton(
+        isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+        onClick = { viewModel.togglePlayPause() },
+        color = Color.Black,
+        modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
+      )
+    }
 
-    Row {
-      IconButton(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.Share, contentDescription = null)
-      }
+    Spacer(modifier = Modifier.width(24.dp))
 
-      Spacer(modifier = Modifier.weight(1f))
+    IconButton(
+      onClick = { viewModel.skipNext() },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+    }
 
-      IconButton(
-        onClick = { /*TODO*/ },
-        modifier = Modifier.size(56.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-      ) {
-        Icon(imageVector = Icons.Default.QueueMusic, contentDescription = null)
-      }
+    Spacer(modifier = Modifier.weight(1f))
+
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
+    }
+  }
+}
+
+@Composable
+private fun ControlsBottomAccessories(
+  viewModel: NowPlayingViewModel,
+) {
+  Row {
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.Share, contentDescription = null)
+    }
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    ) {
+      Icon(imageVector = Icons.Default.QueueMusic, contentDescription = null)
     }
   }
 }
