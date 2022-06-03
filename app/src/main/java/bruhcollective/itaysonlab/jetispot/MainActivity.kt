@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -33,6 +34,7 @@ import androidx.navigation.navDeepLink
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.allScreens
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
@@ -82,20 +84,26 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         val navController = rememberNavController()
         val sysUiController = rememberSystemUiController()
-        val isDark = isSystemInDarkTheme()
+        val bsState = rememberBottomSheetScaffoldState()
         val currentTab = remember { mutableStateOf(Screen.Feed.route) }
 
+        val isDark = isSystemInDarkTheme()
+
         val navBarHeight = with(LocalDensity.current) { WindowInsets.navigationBars.getBottom(LocalDensity.current).toDp() }
+
         val bsVisible = playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
-        val bsState = rememberBottomSheetScaffoldState()
         val bsPeek by animateDpAsState(if (bsVisible) 80.dp + 72.dp + navBarHeight else 0.dp)
-        val bsDirection = bsState.bottomSheetState.direction
-        val bsProgress = bsState.bottomSheetState.progress.fraction
-        val bsOffset = when {
-          bsDirection == 0f -> if (bsState.bottomSheetState.isCollapsed) 1f - bsProgress else bsProgress
-          bsState.bottomSheetState.isCollapsed && bsDirection == 1f && bsProgress == 1f -> 0f
-          bsState.bottomSheetState.isExpanded && bsDirection == -1f && bsProgress == 1f -> 0f
-          else -> if (bsState.bottomSheetState.direction == 1f) 1f - bsProgress else bsProgress
+
+        val bsOffset = {
+          val bsProgress = bsState.bottomSheetState.progress
+
+          when {
+            bsProgress.from == BottomSheetValue.Collapsed && bsProgress.to == BottomSheetValue.Collapsed -> 0f
+            bsProgress.from == BottomSheetValue.Expanded && bsProgress.to == BottomSheetValue.Expanded -> 1f
+            bsProgress.to == BottomSheetValue.Expanded -> bsProgress.fraction
+            bsProgress.to == BottomSheetValue.Collapsed -> 1f - bsProgress.fraction
+            else -> bsProgress.fraction
+          }.coerceIn(0f..1f)
         }
 
         LaunchedEffect(Unit) {

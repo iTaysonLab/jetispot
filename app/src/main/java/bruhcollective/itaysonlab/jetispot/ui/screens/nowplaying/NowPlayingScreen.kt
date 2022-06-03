@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 fun NowPlayingScreen(
   navController: NavController,
   bottomSheetState: BottomSheetState,
-  bsOffset: Float,
+  bsOffset: () -> Float,
   viewModel: NowPlayingViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
@@ -53,7 +53,7 @@ fun NowPlayingScreen(
         .fillMaxWidth()
         .height(72.dp)
         .align(Alignment.TopStart)
-        .alpha(1f - bsOffset)
+        .alpha(1f - bsOffset())
     )
   }
 }
