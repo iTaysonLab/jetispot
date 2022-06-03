@@ -83,7 +83,7 @@ moshi {
 dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1'
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
 
     implementation "androidx.datastore:datastore:1.0.0"
     implementation  "com.google.protobuf:protobuf-java:3.20.1"
