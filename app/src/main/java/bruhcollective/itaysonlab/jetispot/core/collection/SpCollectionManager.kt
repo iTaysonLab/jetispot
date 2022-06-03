@@ -31,7 +31,7 @@ class SpCollectionManager @Inject constructor(
 
   fun init() {
     spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
-    spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
     scope.launch {
       scan()
       writer.performContentFiltersScan()
