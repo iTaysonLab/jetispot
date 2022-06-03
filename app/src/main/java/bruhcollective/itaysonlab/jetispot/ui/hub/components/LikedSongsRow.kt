@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
@@ -34,7 +34,7 @@ import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
 fun LikedSongsRow(
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {

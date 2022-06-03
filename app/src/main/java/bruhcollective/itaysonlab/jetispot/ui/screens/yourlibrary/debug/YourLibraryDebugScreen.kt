@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun YourLibraryDebugScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: YourLibraryDebugScreenViewModel = hiltViewModel()
 ) {
   val sbd = rememberSplineBasedDecay<Float>()

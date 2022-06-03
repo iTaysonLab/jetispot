@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
@@ -46,7 +46,7 @@ interface ConfigViewModel {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseConfigScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: ConfigViewModel
 ) {
   val sbd = rememberSplineBasedDecay<Float>()
@@ -328,7 +328,7 @@ sealed class ConfigItem {
   class Preference(
     @StringRes val title: Int,
     val subtitle: (Context, AppConfig) -> String,
-    val onClick: (NavController) -> Unit
+    val onClick: (LambdaNavigationController) -> Unit
   ) : ConfigItem()
 
   class Switch(

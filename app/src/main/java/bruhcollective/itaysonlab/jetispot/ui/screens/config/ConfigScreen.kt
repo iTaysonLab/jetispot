@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
 import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
@@ -39,7 +39,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: ConfigScreenViewModel = hiltViewModel()
 ) {
   BaseConfigScreen(navController, viewModel)
@@ -123,11 +123,11 @@ class ConfigScreenViewModel @Inject constructor(
     }, {}))
 
     add(ConfigItem.Preference(R.string.about_sources, { ctx, _ -> "" }, {
-      openLink(it.context, "https://github.com/itaysonlab/jetispot")
+      it.openInBrowser("https://github.com/itaysonlab/jetispot")
     }))
 
     add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
-      openLink(it.context, "https://t.me/bruhcollective")
+      it.openInBrowser("https://t.me/bruhcollective")
     }))
   }
 

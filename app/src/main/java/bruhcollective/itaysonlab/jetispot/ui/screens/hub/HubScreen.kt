@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 @Composable
 fun HubScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   needContentPadding: Boolean = true,
   loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),

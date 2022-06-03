@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.blend.BlendCreateInvitationScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.history.ListeningHistoryScreen
@@ -15,7 +15,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.*
 
 @Composable
 fun DynamicSpIdScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   uri: String,
   fullUri: String,
 ) {

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.SubtextOverline
@@ -17,7 +17,7 @@ import com.spotify.home.dac.component.v1.proto.RecsplanationHeadingComponent
 
 @Composable
 fun RecsplanationHeadingComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: RecsplanationHeadingComponent
 ) {
   Row(Modifier.padding(vertical = 8.dp).clickable {

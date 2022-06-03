@@ -8,13 +8,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
 import com.spotify.home.dac.component.v1.proto.SnappyGridSectionComponent
 
 @Composable
 fun SnappyGridSectionComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: SnappyGridSectionComponent
 ) {
   LazyHorizontalGrid(rows = GridCells.Fixed(item.componentsCount), Modifier.fillMaxWidth().height(56.dp * item.componentsCount)) {

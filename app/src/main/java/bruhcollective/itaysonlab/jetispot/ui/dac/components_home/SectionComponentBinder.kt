@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -20,7 +20,7 @@ import com.spotify.home.dac.component.v1.proto.*
 
 @Composable
 fun SectionComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: SectionComponent
 ) {
   val list = item.componentsList.map { it.dynamicUnpack() }
@@ -78,7 +78,7 @@ fun SectionComponentBinder(
 
 @Composable
 fun MediumCard(
-  navController: NavController,
+  navController: LambdaNavigationController,
   title: String,
   subtitle: String,
   navigateUri: String,

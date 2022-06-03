@@ -1,11 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import kotlinx.coroutines.CoroutineScope
 
+@Stable
 interface HubScreenDelegate {
   fun play(data: PlayFromContextData)
   fun isSurroundedWithPadding(): Boolean

@@ -6,14 +6,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubComponent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
 
 @Composable
 fun HubBinder (
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   isRenderingInGrid: Boolean = false,

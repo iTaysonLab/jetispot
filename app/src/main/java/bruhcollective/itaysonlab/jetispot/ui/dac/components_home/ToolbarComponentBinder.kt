@@ -9,7 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import com.spotify.home.dac.component.v1.proto.ToolbarComponent
 import com.spotify.home.dac.component.v1.proto.ToolbarItemListeningHistoryComponent
@@ -19,7 +19,7 @@ import com.spotify.home.dac.component.v1.proto.ToolbarItemFeedComponent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolbarComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: ToolbarComponent
 ) {
   SmallTopAppBar(title = {
@@ -37,7 +37,7 @@ fun ToolbarComponentBinder(
 
 @Composable
 private fun ToolbarItem(
-  navController: NavController,
+  navController: LambdaNavigationController,
   icon: ImageVector,
   navigateTo: String,
   contentDesc: String

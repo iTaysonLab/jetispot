@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
@@ -37,7 +37,7 @@ import javax.inject.Inject
 )
 @Composable
 fun YourLibraryContainerScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: YourLibraryContainerViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
@@ -54,16 +54,12 @@ fun YourLibraryContainerScreen(
       SmallTopAppBar(title = {
         Text("Your Library")
       }, navigationIcon = {
-        IconButton(onClick = { navController.popBackStack() }) {
+        IconButton(onClick = { /* TODO */ }) {
           Icon(Icons.Default.AccountCircle, null)
         }
       }, actions = {
-        IconButton(onClick = { navController.popBackStack() }) {
+        IconButton(onClick = { /* TODO */ }) {
           Icon(Icons.Default.Search, null)
-        }
-
-        IconButton(onClick = { navController.navigate("library/debug") }) {
-          Icon(Icons.Default.BugReport, null)
         }
       }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(

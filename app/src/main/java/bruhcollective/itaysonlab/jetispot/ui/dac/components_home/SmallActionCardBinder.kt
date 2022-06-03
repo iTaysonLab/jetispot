@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -22,7 +22,7 @@ import com.spotify.dac.player.v1.proto.PlayCommand
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SmallActionCardBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   title: String,
   subtitle: String,
   navigateUri: String,

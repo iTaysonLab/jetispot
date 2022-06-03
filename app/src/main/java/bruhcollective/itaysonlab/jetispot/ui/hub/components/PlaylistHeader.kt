@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PlaylistHeader(
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -101,7 +101,7 @@ fun PlaylistHeader(
 
 @Composable
 fun LargePlaylistHeader(
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -159,7 +159,7 @@ fun LargePlaylistHeader(
 
 @Composable
 fun PlaylistHeaderAdditionalInfo(
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   custom: Map<String, Any>?
 ) {

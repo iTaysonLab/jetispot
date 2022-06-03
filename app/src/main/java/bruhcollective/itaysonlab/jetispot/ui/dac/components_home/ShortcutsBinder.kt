@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -18,7 +18,7 @@ import com.spotify.home.dac.component.v1.proto.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShortcutsBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: ShortcutsSectionComponent
 ) {
   item.shortcutsList.map { it.dynamicUnpack() }.chunked(2).forEachIndexed { idx, pairs ->
@@ -41,7 +41,7 @@ fun ShortcutsBinder(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShortcutComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   navigateUri: String,
   imageUrl: String,
   imagePlaceholder: String,

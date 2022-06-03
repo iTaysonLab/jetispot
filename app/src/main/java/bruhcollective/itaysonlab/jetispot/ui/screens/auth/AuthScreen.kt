@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.auth
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -8,7 +7,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.Autofill
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.*
@@ -34,10 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -46,15 +44,17 @@ import javax.inject.Inject
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
-  val disclaimerDialog = remember { mutableStateOf(false) }
+
   val autofill = LocalAutofill.current
-  val passwordFocusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
+
+  val usernameFocusRequester = remember { FocusRequester() }
+  val passwordFocusRequester = remember { FocusRequester() }
 
   Box(
     Modifier
@@ -108,7 +108,7 @@ fun AuthScreen(
           singleLine = true,
           label = {
             Text(stringResource(R.string.username))
-          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier.fillMaxWidth().onFocusChanged {
+          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier.fillMaxWidth().focusTarget().focusRequester(usernameFocusRequester).onFocusChanged {
             autofill?.apply {
               if (it.isFocused) {
                 requestAutofillForNode(autofillNode)
@@ -116,7 +116,7 @@ fun AuthScreen(
                 cancelAutofillForNode(autofillNode)
               }
             }
-          }.focusable().focusProperties { next = passwordFocusRequester },
+          }.focusProperties { next = passwordFocusRequester },
         )
       }
 
@@ -124,7 +124,7 @@ fun AuthScreen(
 
       Autofill(
         autofillTypes = listOf(AutofillType.Password),
-        onFill = { viewModel.username.value = TextFieldValue(it) }
+        onFill = { viewModel.password.value = TextFieldValue(it) }
       ) { autofillNode ->
         OutlinedTextField(
           value = viewModel.password.value,
@@ -142,7 +142,7 @@ fun AuthScreen(
                 cancelAutofillForNode(autofillNode)
               }
             }
-          },
+          }.focusProperties { previous = usernameFocusRequester },
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
           keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
@@ -177,7 +177,7 @@ fun AuthScreen(
         .offset(y = (80).dp)
     ) {
       OutlinedButton(onClick = {
-        disclaimerDialog.value = true
+        navController.navigate(Dialog.AuthDisclaimer)
       }, modifier = Modifier.align(Alignment.CenterStart)) {
         Text(stringResource(R.string.auth_disclaimer))
       }
@@ -205,19 +205,6 @@ fun AuthScreen(
           snackbarData = data
         )
       })
-  }
-
-  if (disclaimerDialog.value) {
-    AlertDialog(onDismissRequest = { disclaimerDialog.value = false }, icon = {
-      Icon(Icons.Default.Warning, null)
-    }, title = {
-      Text(stringResource(id = R.string.auth_disclaimer))
-    }, text = {
-      Text(stringResource(id = R.string.auth_disclaimer_text))
-    }, confirmButton = {
-      Text(stringResource(id = R.string.logout_confirm),
-        Modifier.clickable { disclaimerDialog.value = false }.padding(16.dp))
-    })
   }
 }
 
@@ -252,12 +239,12 @@ class AuthScreenViewModel @Inject constructor(
   val passwordVisible = mutableStateOf(false)
   val isAuthInProcess = mutableStateOf(false)
 
-  suspend fun auth(shs: SnackbarHostState, nc: NavController) {
+  suspend fun auth(shs: SnackbarHostState, nc: LambdaNavigationController) {
     if (isAuthInProcess.value) return
     isAuthInProcess.value = true
 
     if (username.value.text.isEmpty() || password.value.text.isEmpty()) {
-      shs.showSnackbar(nc.context.getString(R.string.auth_err_empty))
+      shs.showSnackbar(nc.string(R.string.auth_err_empty))
       isAuthInProcess.value = false
       return
     }
@@ -269,15 +256,14 @@ class AuthScreenViewModel @Inject constructor(
       is SpAuthManager.AuthResult.SpError -> {
         shs.showSnackbar(
           when (result.msg) {
-            "BadCredentials" -> nc.context.getString(R.string.auth_err_badcreds)
-            "PremiumAccountRequired" -> nc.context.getString(R.string.auth_err_premium)
+            "BadCredentials" -> nc.string(R.string.auth_err_badcreds)
+            "PremiumAccountRequired" -> nc.string(R.string.auth_err_premium)
             else -> "Spotify API error: ${result.msg}"
           }
         )
       }
       SpAuthManager.AuthResult.Success -> {
-        nc.popBackStack()
-        nc.navigate(Screen.Feed.route)
+        nc.navigateAndClearStack(Screen.Feed)
       }
     }
 

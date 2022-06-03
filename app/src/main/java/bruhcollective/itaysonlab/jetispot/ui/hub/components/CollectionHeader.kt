@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionContentFilter
@@ -33,7 +33,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionHeader(
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
@@ -20,7 +20,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 
 @Composable
 fun OutlineButton(
-    navController: NavController,
+    navController: LambdaNavigationController,
     delegate: HubScreenDelegate,
     item: HubItem
 ) {

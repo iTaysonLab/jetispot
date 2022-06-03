@@ -4,7 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import bruhcollective.itaysonlab.jetispot.R
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @Composable
 fun QualityConfigScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   viewModel: QualityConfigScreenViewModel = hiltViewModel()
 ) {
   BaseConfigScreen(navController, viewModel)

@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
@@ -27,7 +27,7 @@ import com.spotify.planoverview.v1.UserType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MultiUserMemberComponentBinder(
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: MultiUserMemberComponent
 ) {
   Card(

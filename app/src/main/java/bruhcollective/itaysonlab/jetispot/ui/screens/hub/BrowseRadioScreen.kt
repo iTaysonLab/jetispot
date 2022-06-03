@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BrowseRadioScreen(
-  navController: NavController
+  navController: LambdaNavigationController
 ) {
   val sbd = rememberSplineBasedDecay<Float>()
   val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }

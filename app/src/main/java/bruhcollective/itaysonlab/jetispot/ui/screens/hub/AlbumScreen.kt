@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @Composable
 fun AlbumScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   id: String,
   viewModel: AlbumViewModel = hiltViewModel()
 ) {

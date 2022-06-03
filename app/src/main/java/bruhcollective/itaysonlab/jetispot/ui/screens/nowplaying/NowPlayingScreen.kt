@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 fun NowPlayingScreen(
-  navController: NavController,
+  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   bsOffset: () -> Float,
   viewModel: NowPlayingViewModel = hiltViewModel()

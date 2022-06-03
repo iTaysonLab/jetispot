@@ -6,19 +6,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.*
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.*
 import com.google.protobuf.Message
 import com.spotify.allplans.v1.DisclaimerComponent
 import com.spotify.allplans.v1.PlanComponent
-import com.spotify.home.dac.component.experimental.v1.proto.FilterComponent
 import com.spotify.home.dac.component.v1.proto.*
 import com.spotify.planoverview.v1.*
 
 @Composable
 fun DacRender (
-  navController: NavController,
+  navController: LambdaNavigationController,
   item: Message
 ) {
   when (item) {

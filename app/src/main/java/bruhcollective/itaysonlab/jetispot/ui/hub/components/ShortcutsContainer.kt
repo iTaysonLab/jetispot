@@ -1,14 +1,14 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 
 @Composable
 fun ShortcutsContainer (
-  navController: NavController,
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   children: List<HubItem>
 ) {
