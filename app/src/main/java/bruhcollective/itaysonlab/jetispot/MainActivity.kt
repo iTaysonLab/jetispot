@@ -85,6 +85,7 @@ class MainActivity : ComponentActivity() {
 
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val lambdaNavController = LambdaNavigationController { navController }
 
         val isDark = isSystemInDarkTheme()
         val navBarHeight = WindowInsets.navigationBars.getBottom(LocalDensity.current)
@@ -121,12 +122,6 @@ class MainActivity : ComponentActivity() {
               true
             } else false
           }
-
-          if (sessionManager.isSignedIn()) return@LaunchedEffect
-          authManager.authStored()
-          navController.navigate(if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route) {
-            popUpTo(Screen.NavGraph.route)
-          }
         }
 
         SideEffect {
@@ -148,7 +143,7 @@ class MainActivity : ComponentActivity() {
                 NavigationBarItem(
                   icon = { Icon(screen.icon!!, contentDescription = stringResource(screen.title)) },
                   label = { Text(stringResource(screen.title)) },
-                  selected = currentDestination?.hierarchy?.any { it.route?.startsWith(screen.route) == true } == true,
+                  selected = lambdaNavController.controller().backQueue.any { it.destination.route?.startsWith(screen.route) == true },
                   onClick = {
                     navController.navigate(screen.route) {
                       popUpTo(Screen.NavGraph.route) {
@@ -164,8 +159,6 @@ class MainActivity : ComponentActivity() {
             }
           }
         ) { innerPadding ->
-          val lambdaNavController = LambdaNavigationController { navController }
-
           BottomSheetScaffold(
             sheetContent = {
               NowPlayingScreen(
@@ -179,7 +172,7 @@ class MainActivity : ComponentActivity() {
             backgroundColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier
           ) { innerScaffoldPadding ->
-            AppNavigation(navController = navController, provideLambdaController = lambdaNavController, authManager = authManager, modifier = Modifier
+            AppNavigation(navController = navController, provideLambdaController = lambdaNavController, sessionManager = sessionManager, authManager = authManager, modifier = Modifier
               .padding(innerScaffoldPadding)
               .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp))
           }

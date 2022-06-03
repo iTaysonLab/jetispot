@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.navDeepLink
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
+import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
@@ -45,9 +47,18 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryCon
 fun AppNavigation(
   navController: NavHostController,
   provideLambdaController: LambdaNavigationController,
+  sessionManager: SpSessionManager,
   authManager: SpAuthManager,
   modifier: Modifier
 ) {
+  LaunchedEffect(Unit) {
+    if (sessionManager.isSignedIn()) return@LaunchedEffect
+    authManager.authStored()
+    navController.navigate(if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route) {
+      popUpTo(Screen.NavGraph.route)
+    }
+  }
+
   NavHost(
     navController = navController,
     startDestination = Screen.CoreLoading.route,

@@ -17,23 +17,31 @@ class SpMetadataRequester @Inject constructor(
 
   suspend fun request(uris: List<String>) = withContext(Dispatchers.IO) {
     val result = UnpackedMetadataResponse(emptyList())
+    if (uris.isEmpty()) return@withContext result
 
     uris.chunked(400).forEach { chunkedUris ->
-      result += UnpackedMetadataResponse(spSessionManager.session.api()
-        .getExtendedMetadata(
-          ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
-            chunkedUris.map { uri ->
-              ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(uri).addQuery(
-                ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(spotifyIdToKind(uri)).build()
-              ).build()
-            }.distinctBy { it.entityUri }
-          ).build()
-        )
-        .extendedMetadataList
-      )
+      result += requestImpl(chunkedUris)
     }
 
     return@withContext result
+  }
+
+  private fun requestImpl(chunkedUris: List<String>): UnpackedMetadataResponse {
+    return try {
+      UnpackedMetadataResponse(spSessionManager.session.api().getExtendedMetadata(
+        ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
+          chunkedUris.map { uri ->
+            ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(uri).addQuery(
+              ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(spotifyIdToKind(uri))
+                .build()
+            ).build()
+          }.distinctBy { it.entityUri }
+        ).build()
+      ).extendedMetadataList)
+    } catch (e: Exception) {
+      e.printStackTrace()
+      UnpackedMetadataResponse(emptyList())
+    }
   }
 
   private fun spotifyIdToKind(id: String) = when (id.split(":")[1]) {

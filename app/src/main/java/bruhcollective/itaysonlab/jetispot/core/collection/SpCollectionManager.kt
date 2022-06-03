@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
+import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
@@ -19,17 +20,18 @@ class SpCollectionManager @Inject constructor(
   private val internalApi: SpInternalApi,
   private val collectionApi: SpCollectionApi,
   private val dbRepository: LocalCollectionRepository,
-  private val dao: LocalCollectionDao
+  private val dao: LocalCollectionDao,
+  private val metadataRequester: SpMetadataRequester
 ): DealerClient.MessageListener {
   // it's important to use queuing here
   private val scopeDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
   private val scope = CoroutineScope(scopeDispatcher + SupervisorJob())
 
-  private val writer = SpCollectionWriter(spSessionManager, internalApi, collectionApi, dbRepository, dao, scope)
+  private val writer = SpCollectionWriter(spSessionManager, internalApi, collectionApi, dbRepository, metadataRequester, dao, scope)
 
   fun init() {
     spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
-    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+    spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
     scope.launch {
       scan()
       writer.performContentFiltersScan()

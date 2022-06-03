@@ -26,6 +26,7 @@ class SpPlayerServiceManager @Inject constructor(
   @ApplicationContext private val context: Context,
   private val moshi: Moshi,
   val sessionManager: SpSessionManager,
+  val metadataRequester: SpMetadataRequester
 ) {
   private val impl = SpPlayerServiceImpl(context, this)
   private var extraListeners = mutableListOf<ServiceExtraListener>()

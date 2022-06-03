@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.ComponentName
 import android.content.Context
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import androidx.core.content.ContextCompat
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
@@ -10,11 +9,9 @@ import androidx.media2.common.SessionPlayer
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
 import androidx.media2.session.SessionToken
-import bruhcollective.itaysonlab.jetispot.core.collection.UnpackedMetadataResponse
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import bruhcollective.itaysonlab.jetispot.playback.service.SpPlaybackService
-import com.spotify.extendedmetadata.ExtendedMetadata
-import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
@@ -106,15 +103,9 @@ class SpPlayerServiceImpl (
     list ?: return
     queueMetaTask?.cancel()
     queueMetaTask = launch(Dispatchers.IO) {
-      val meta = UnpackedMetadataResponse(manager.sessionManager.session.api().getExtendedMetadata(
-        ExtendedMetadata.BatchedEntityRequest.newBuilder()
-        .addAllEntityRequest(list.map {
-          ExtendedMetadata.EntityRequest.newBuilder().apply {
-            entityUri = it.metadata!!.getString(MediaMetadata.METADATA_KEY_MEDIA_URI)
-            addQuery(ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(ExtensionKindOuterClass.ExtensionKind.TRACK_V4).build())
-          }.build()
-        })
-        .build()).extendedMetadataList)
+      val meta = manager.metadataRequester.request(list.mapNotNull {
+        it.metadata?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI)
+      })
 
       manager.currentQueue.value = list.map { meta.tracks[it.metadata?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI) ?: ""] }.map { it ?: Metadata.Track.getDefaultInstance() }
     }

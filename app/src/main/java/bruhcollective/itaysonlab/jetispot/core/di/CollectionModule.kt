@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core.di
 
 import android.content.Context
 import androidx.room.Room
+import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
@@ -38,6 +39,7 @@ object CollectionModule {
     internalApi: SpInternalApi,
     collectionApi: SpCollectionApi,
     repository: LocalCollectionRepository,
-    dao: LocalCollectionDao
-  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository, dao)
+    dao: LocalCollectionDao,
+    metadataRequester: SpMetadataRequester
+  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository, dao, metadataRequester)
 }

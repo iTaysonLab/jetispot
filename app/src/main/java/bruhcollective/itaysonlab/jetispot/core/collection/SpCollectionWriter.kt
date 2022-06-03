@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
+import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
@@ -19,9 +20,7 @@ import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.*
 
@@ -30,6 +29,7 @@ class SpCollectionWriter(
   private val internalApi: SpInternalApi,
   private val collectionApi: SpCollectionApi,
   private val dbRepository: LocalCollectionRepository,
+  private val metadataRequester: SpMetadataRequester,
   private val dao: LocalCollectionDao,
   private val scope: CoroutineScope,
 ): CoroutineScope by MainScope() {
@@ -323,29 +323,7 @@ class SpCollectionWriter(
     }
   }
 
-  private suspend fun getExtendedMetadata(of: List<String>): UnpackedMetadataResponse {
-    if (of.isEmpty()) return UnpackedMetadataResponse(emptyList())
-
-    val requests = mutableListOf<ExtendedMetadata.EntityRequest>()
-
-    of.forEach { ci ->
-      val kind = spotifyIdToKind(ci)
-
-      if (kind != ExtensionKindOuterClass.ExtensionKind.UNKNOWN_EXTENSION) {
-        requests.add(
-          ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(ci)
-            .addQuery(ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(kind).build())
-            .build()
-        )
-      }
-    }
-
-    return UnpackedMetadataResponse(
-      spSessionManager.session.api().getExtendedMetadata(
-        ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(requests).build()
-      ).extendedMetadataList
-    )
-  }
+  private suspend fun getExtendedMetadata(of: List<String>) = metadataRequester.request(of)
 
   suspend fun performRootlistScan(updateToRevision: String? = null) {
     val localRevision = dao.getCollection("rootlist")?.syncToken
