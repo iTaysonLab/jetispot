@@ -1,6 +1,8 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
 import androidx.collection.LruCache
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -8,9 +10,12 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import com.spotify.metadata.Metadata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import xyz.gianlu.librespot.common.Utils
+import xyz.gianlu.librespot.metadata.ArtistId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,9 +40,23 @@ class NowPlayingViewModel @Inject constructor(
   private val imageCache = LruCache<String, Color>(10)
   private var imageColorTask: Job? = null
 
+  private fun getCurrentTrackAsMetadata() = currentQueue.value[currentQueuePosition.value]
+
   fun skipPrevious() = spPlayerServiceManager.skipPrevious()
   fun togglePlayPause() = spPlayerServiceManager.playPause()
   fun skipNext() = spPlayerServiceManager.skipNext()
+
+  @OptIn(ExperimentalMaterialApi::class)
+  fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
+    scope.launch { sheetState.collapse() }
+    navigationController.navigate(currentContextUri.value)
+  }
+
+  @OptIn(ExperimentalMaterialApi::class)
+  fun navigateToArtist(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
+    scope.launch { sheetState.collapse() }
+    navigationController.navigate(ArtistId.fromHex(Utils.bytesToHex(getCurrentTrackAsMetadata().artistList.first().gid)).toSpotifyUri())
+  }
 
   init {
     spPlayerServiceManager.registerExtra(this)

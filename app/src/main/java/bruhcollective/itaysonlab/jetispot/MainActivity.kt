@@ -13,7 +13,10 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
@@ -22,9 +25,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.*
-import androidx.navigation.navDeepLink
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -32,7 +34,6 @@ import bruhcollective.itaysonlab.jetispot.ui.AppNavigation
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
-import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingScreen
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController

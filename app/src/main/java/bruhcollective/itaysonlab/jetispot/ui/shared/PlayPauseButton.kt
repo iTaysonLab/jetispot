@@ -31,7 +31,6 @@ class PlayPauseButtonDimens(
 @Composable
 fun PlayPauseButton (
   isPlaying: Boolean,
-  onClick: () -> Unit,
   color: Color,
   modifier: Modifier
 ) {
@@ -42,9 +41,7 @@ fun PlayPauseButton (
     state.isFinallyPlay.value = it == 1f
   })
 
-  Canvas(modifier.clickable {
-    onClick()
-  }) {
+  Canvas(modifier) {
     val progress = progressAnimator.value
     val pauseBarDistance = dimens.distance.toPx()
     val pauseBarWidth = dimens.width.toPx()

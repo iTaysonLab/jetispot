@@ -1,12 +1,18 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,17 +21,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
+import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NowPlayingControls(
+  scope: CoroutineScope,
+  navController: LambdaNavigationController,
+  bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
   Column(modifier, verticalArrangement = Arrangement.Bottom) {
-    ControlsHeader(viewModel)
+    ControlsHeader(scope, navController, bottomSheetState, viewModel)
     Spacer(Modifier.height(8.dp))
     ControlsSeekbar(viewModel)
     Spacer(Modifier.height(16.dp))
@@ -35,13 +47,27 @@ fun NowPlayingControls(
   }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ControlsHeader(
+  scope: CoroutineScope,
+  navController: LambdaNavigationController,
+  bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel,
 ) {
-  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp), fontSize = 24.sp, color = Color.White,)
+  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp).clickable(
+    interactionSource = remember { MutableInteractionSource() },
+    indication = null
+  ) {
+    viewModel.navigateToSource(scope, bottomSheetState, navController)
+  }, fontSize = 24.sp, color = Color.White,)
   Spacer(Modifier.height(2.dp))
-  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
+  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp).clickable(
+    interactionSource = remember { MutableInteractionSource() },
+    indication = null
+  ) {
+    viewModel.navigateToArtist(scope, bottomSheetState, navController)
+  }, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
 }
 
 @Composable
@@ -86,10 +112,14 @@ private fun ControlsMainButtons(
 
     Spacer(modifier = Modifier.width(24.dp))
 
-    Surface(color = Color.White, modifier = Modifier.clip(CircleShape)) {
+    Surface(color = Color.White, modifier = Modifier.clip(CircleShape).clickable(
+      interactionSource = remember { MutableInteractionSource() },
+      indication = rememberRipple(color = Color.Black)
+    ) {
+      viewModel.togglePlayPause()
+    }) {
       PlayPauseButton(
         isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        onClick = { viewModel.togglePlayPause() },
         color = Color.Black,
         modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
       )

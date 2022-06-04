@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
@@ -71,12 +72,13 @@ fun NowPlayingMiniplayer(
 
         PlayPauseButton(
           viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-          { viewModel.togglePlayPause() },
           MaterialTheme.colorScheme.onSurface,
           Modifier
             .fillMaxHeight()
             .width(56.dp)
-            .align(Alignment.CenterVertically)
+            .align(Alignment.CenterVertically).clickable {
+              viewModel.togglePlayPause()
+            }
         )
       }
     }

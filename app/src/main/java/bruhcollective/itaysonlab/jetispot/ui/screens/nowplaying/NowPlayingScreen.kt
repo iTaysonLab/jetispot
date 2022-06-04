@@ -41,6 +41,7 @@ fun NowPlayingScreen(
 
   Box(Modifier.fillMaxSize()) {
     NowPlayingFullscreenComposition(
+      navController = navController,
       bottomSheetState = bottomSheetState,
       mainPagerState = mainPagerState,
       viewModel = viewModel
