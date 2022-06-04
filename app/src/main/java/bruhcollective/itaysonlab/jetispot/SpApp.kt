@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot
 import android.app.Application
 import android.os.Build
 import bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder
+import com.tencent.mmkv.MMKV
 import dagger.hilt.android.HiltAndroidApp
 import org.slf4j.LoggerFactory
 import org.slf4j.impl.HandroidLoggerAdapter
@@ -19,5 +20,10 @@ class SpApp: Application() {
     HandroidLoggerAdapter.DEBUG = BuildConfig.DEBUG
     HandroidLoggerAdapter.ANDROID_API_LEVEL = Build.VERSION.SDK_INT
     HandroidLoggerAdapter.APP_NAME = "SpApp"
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+    MMKV.initialize(this, "${filesDir.absolutePath}/spa_meta")
   }
 }

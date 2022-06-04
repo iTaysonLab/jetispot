@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.core.di
 import android.content.Context
 import bruhcollective.itaysonlab.jetispot.core.*
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
+import bruhcollective.itaysonlab.jetispot.core.metadata_db.SpMetadataDb
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,4 +39,8 @@ object SpModule {
     spPlayerManager: SpPlayerManager,
     spCollectionManager: SpCollectionManager
   ) = SpAuthManager(spSessionManager, spPlayerManager, spCollectionManager)
+
+  fun provideSpMetadataDb(
+    @ApplicationContext context: Context,
+  ) = SpMetadataDb(context)
 }
