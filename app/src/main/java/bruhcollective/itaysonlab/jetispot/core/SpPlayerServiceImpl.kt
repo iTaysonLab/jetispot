@@ -108,6 +108,8 @@ class SpPlayerServiceImpl (
       })
 
       manager.currentQueue.value = list.map { meta.tracks[it.metadata?.getString(MediaMetadata.METADATA_KEY_MEDIA_URI) ?: ""] }.map { it ?: Metadata.Track.getDefaultInstance() }
+      manager.currentQueuePosition.value = controller.currentMediaItemIndex
+      manager.runExtra { it.onTrackIndexChanged(manager.currentQueuePosition.value) }
     }
   }
 

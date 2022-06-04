@@ -19,6 +19,7 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,7 +36,14 @@ fun NowPlayingScreen(
   LaunchedEffect(Unit) {
     // one-time VM-UI connection
     viewModel.uiOnTrackIndexChanged = { new ->
-      scope.launch { mainPagerState.animateScrollToPage(new) }
+      scope.launch {
+        try {
+          mainPagerState.animateScrollToPage(new)
+        } catch (e: IllegalArgumentException) {
+          delay(100L)
+          mainPagerState.scrollToPage(new)
+        }
+      }
     }
   }
 
