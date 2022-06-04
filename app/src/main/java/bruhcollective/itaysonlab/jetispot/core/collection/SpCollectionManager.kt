@@ -30,8 +30,7 @@ class SpCollectionManager @Inject constructor(
   private val writer = SpCollectionWriter(spSessionManager, internalApi, collectionApi, dbRepository, metadataRequester, dao, scope)
 
   fun init() {
-    spSessionManager.session.dealer().addMessageListener(this, "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
-    //spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist")
+    spSessionManager.session.dealer().addMessageListener(this, "hm://playlist/v2/user/${spSessionManager.session.username()}/rootlist", "hm://collection/collection/" + spSessionManager.session.username(), "hm://collection/artist/" + spSessionManager.session.username())
     scope.launch {
       scan()
       writer.performContentFiltersScan()
