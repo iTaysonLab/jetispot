@@ -120,7 +120,7 @@ private fun ControlsMainButtons(
     }) {
       PlayPauseButton(
         isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        color = Color.Black,
+        color = if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black,
         modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
       )
     }
