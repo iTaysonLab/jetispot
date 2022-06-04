@@ -2,8 +2,8 @@ package bruhcollective.itaysonlab.jetispot.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.LibraryMusic
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,8 +22,8 @@ enum class Screen(
   SpotifyIdRedirect("spotify:{uri}"),
   // bottom
   Feed("feed", title = R.string.tab_home, icon = Icons.Rounded.Home),
-  Search("search", title = R.string.tab_home, icon = Icons.Default.Search),
-  Library("library", title = R.string.tab_library, icon = Icons.Default.LibraryMusic),
+  Search("search", title = R.string.tab_search, icon = Icons.Rounded.Search),
+  Library("library", title = R.string.tab_library, icon = Icons.Rounded.LibraryMusic),
   // hubs/dac
   DacViewCurrentPlan("dac/viewCurrentPlan", title = R.string.plan_overview),
   DacViewAllPlans("dac/viewAllPlans", title = R.string.all_plans),

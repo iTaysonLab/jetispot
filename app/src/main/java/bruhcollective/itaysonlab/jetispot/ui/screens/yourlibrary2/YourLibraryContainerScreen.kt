@@ -8,10 +8,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.BugReport
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -55,11 +55,11 @@ fun YourLibraryContainerScreen(
         Text("Your Library")
       }, navigationIcon = {
         IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Default.AccountCircle, null)
+          Icon(Icons.Rounded.AccountCircle, null)
         }
       }, actions = {
         IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Default.Search, null)
+          Icon(Icons.Rounded.Search, null)
         }
       }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(
@@ -135,7 +135,7 @@ fun AnimatedChipRow(
       }, label = {
         Text(item.name)
       }, selectedIcon = {
-        Icon(Icons.Default.Check, null)
+        Icon(Icons.Rounded.Check, null)
       }, modifier = Modifier.animateItemPlacement())
     }
   }

@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -72,7 +72,7 @@ fun LikedSongsRow(
               .align(Alignment.Center)
           ) {
             Icon(
-              imageVector = Icons.Default.Favorite,
+              imageVector = Icons.Rounded.Favorite,
               tint = MaterialTheme.colorScheme.onPrimary,
               contentDescription = null,
               modifier = Modifier.padding(4.dp)

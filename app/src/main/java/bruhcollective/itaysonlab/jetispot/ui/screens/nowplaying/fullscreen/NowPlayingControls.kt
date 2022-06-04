@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -97,7 +97,7 @@ private fun ControlsMainButtons(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.Shuffle, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
     Spacer(modifier = Modifier.weight(1f))
@@ -107,7 +107,7 @@ private fun ControlsMainButtons(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.SkipPrevious, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
     }
 
     Spacer(modifier = Modifier.width(24.dp))
@@ -132,7 +132,7 @@ private fun ControlsMainButtons(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.SkipNext, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
     }
 
     Spacer(modifier = Modifier.weight(1f))
@@ -142,7 +142,7 @@ private fun ControlsMainButtons(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.Repeat, contentDescription = null)
     }
   }
 }
@@ -157,7 +157,7 @@ private fun ControlsBottomAccessories(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.Share, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
     }
 
     Spacer(modifier = Modifier.weight(1f))
@@ -167,7 +167,7 @@ private fun ControlsBottomAccessories(
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
     ) {
-      Icon(imageVector = Icons.Default.QueueMusic, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
     }
   }
 }

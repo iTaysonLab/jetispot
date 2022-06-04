@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -46,7 +46,7 @@ fun YourLibraryDebugScreen(
       Text("Your Library: debugging")
     }, navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
-        Icon(Icons.Default.ArrowBack, null)
+        Icon(Icons.Rounded.ArrowBack, null)
       }
     }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
       LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)

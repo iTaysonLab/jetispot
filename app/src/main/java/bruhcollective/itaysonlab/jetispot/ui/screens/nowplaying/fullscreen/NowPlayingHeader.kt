@@ -2,8 +2,8 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,7 +27,7 @@ fun NowPlayingHeader(
 ) {
   Row(modifier, verticalAlignment = Alignment.CenterVertically) {
     IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Default.KeyboardArrowDown, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = Color.White, contentDescription = null)
     }
 
     Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
@@ -59,7 +59,7 @@ fun NowPlayingHeader(
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Default.MoreVert, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.MoreVert, tint = Color.White, contentDescription = null)
     }
   }
 }

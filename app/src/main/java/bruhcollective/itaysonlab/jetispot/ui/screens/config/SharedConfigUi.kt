@@ -12,8 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -62,7 +62,7 @@ fun BaseConfigScreen(
     }, navigationIcon = {
       if (!viewModel.isRoot()) {
         IconButton(onClick = { navController.popBackStack() }) {
-          Icon(Icons.Default.ArrowBack, null)
+          Icon(Icons.Rounded.ArrowBack, null)
         }
       }
     }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
@@ -138,7 +138,7 @@ fun ConfigInfo(
   text: String
 ) {
   Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-    Icon(Icons.Default.Info, contentDescription = null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    Icon(Icons.Rounded.Info, contentDescription = null, Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
 
     Text(
       text = text,

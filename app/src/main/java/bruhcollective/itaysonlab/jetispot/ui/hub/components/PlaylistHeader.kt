@@ -9,9 +9,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lan
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Web
+import androidx.compose.material.icons.rounded.Lan
+import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.Web
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -193,7 +193,7 @@ fun PlaylistHeaderAdditionalInfo(
       .fillMaxWidth()
       .padding(horizontal = 16.dp)
   ) {
-    Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(26.dp))
+    Icon(Icons.Rounded.Language, contentDescription = null, modifier = Modifier.size(26.dp))
     Text(
       text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}",
       fontSize = 12.sp,

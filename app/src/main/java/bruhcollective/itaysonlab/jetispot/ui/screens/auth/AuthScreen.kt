@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -152,8 +152,8 @@ fun AuthScreen(
           }),
           trailingIcon = {
             val image = if (viewModel.passwordVisible.value)
-              Icons.Filled.Visibility
-            else Icons.Filled.VisibilityOff
+              Icons.Rounded.Visibility
+            else Icons.Rounded.VisibilityOff
 
             // Please provide localized description for accessibility services
             val description =

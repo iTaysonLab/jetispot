@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.shared.dynamic_blocks
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -15,6 +15,6 @@ fun DynamicLikeButton(
   IconButton(onClick = {
     // todo
   }, modifier = modifier) {
-    Icon(Icons.Default.Favorite, contentDescription = null)
+    Icon(Icons.Rounded.Favorite, contentDescription = null)
   }
 }

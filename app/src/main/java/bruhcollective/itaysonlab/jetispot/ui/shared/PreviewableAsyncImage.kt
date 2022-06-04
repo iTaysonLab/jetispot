@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -87,10 +87,10 @@ fun ImagePreview (
 }
 
 private fun placeholderToIcon (type: String?) = when (type) {
-  "artist" -> Icons.Default.Mic
-  "album" -> Icons.Default.Album
-  "podcasts" -> Icons.Default.Podcasts
-  "playlist" -> Icons.Default.PlaylistPlay
-  "user" -> Icons.Default.Person
-  else -> Icons.Default.Audiotrack
+  "artist" -> Icons.Rounded.Mic
+  "album" -> Icons.Rounded.Album
+  "podcasts" -> Icons.Rounded.Podcasts
+  "playlist" -> Icons.Rounded.PlaylistPlay
+  "user" -> Icons.Rounded.Person
+  else -> Icons.Rounded.Audiotrack
 }

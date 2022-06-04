@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Paid
+import androidx.compose.material.icons.rounded.Paid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -32,7 +32,7 @@ fun PlanComponentBinder(
         .size(56.dp)
     ) {
       Icon(
-        Icons.Default.Paid,
+        Icons.Rounded.Paid,
         null,
         tint = Color(android.graphics.Color.parseColor(item.planColor)),
         modifier = Modifier

@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,13 +28,13 @@ fun EntityActionStrip (
 ) {
   Row(Modifier.padding(horizontal = 16.dp).padding(bottom = 4.dp)) {
     IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
-      Icon(if (delegate.getMainObjectAddedState().value) Icons.Default.Favorite else Icons.Default.FavoriteBorder, null)
+      Icon(if (delegate.getMainObjectAddedState().value) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder, null)
     }
 
     Spacer(Modifier.width(16.dp))
 
     IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
-      Icon(Icons.Default.MoreVert, null)
+      Icon(Icons.Rounded.MoreVert, null)
     }
 
     Spacer(Modifier.weight(1f))
@@ -44,7 +44,7 @@ fun EntityActionStrip (
         Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(navController, delegate, item.children!![0])
       ) {
         Icon(
-          imageVector = Icons.Default.PlayArrow,
+          imageVector = Icons.Rounded.PlayArrow,
           tint = MaterialTheme.colorScheme.onPrimary,
           contentDescription = null,
           modifier = Modifier.size(32.dp).align(Alignment.Center)
@@ -57,7 +57,7 @@ fun EntityActionStrip (
             .background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
         ) {
           Icon(
-            imageVector = Icons.Default.Shuffle,
+            imageVector = Icons.Rounded.Shuffle,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = null,
             modifier = Modifier.padding(4.dp).align(Alignment.Center)

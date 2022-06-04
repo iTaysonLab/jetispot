@@ -3,8 +3,8 @@ package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,7 +51,7 @@ fun BenefitListComponentBinder(
             .padding(vertical = 12.dp)
         ) {
           Icon(
-            Icons.Default.Check,
+            Icons.Rounded.Check,
             null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -86,7 +86,7 @@ fun BenefitListComponentBinder(
             .align(Alignment.CenterVertically))
 
           Icon(
-            Icons.Default.ChevronRight,
+            Icons.Rounded.ChevronRight,
             null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier

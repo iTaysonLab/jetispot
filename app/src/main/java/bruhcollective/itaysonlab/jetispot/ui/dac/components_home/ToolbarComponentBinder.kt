@@ -2,9 +2,9 @@ package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,9 +27,9 @@ fun ToolbarComponentBinder(
   }, actions = {
     item.itemsList.forEach {
       when (val protoItem = it.dynamicUnpack()) {
-        is ToolbarItemFeedComponent -> ToolbarItem(navController, Icons.Default.Notifications, protoItem.navigateUri, protoItem.title)
-        is ToolbarItemListeningHistoryComponent -> ToolbarItem(navController, Icons.Default.History, protoItem.navigateUri, protoItem.title)
-        is ToolbarItemSettingsComponent -> ToolbarItem(navController, Icons.Default.Settings, protoItem.navigateUri, protoItem.title)
+        is ToolbarItemFeedComponent -> ToolbarItem(navController, Icons.Rounded.Notifications, protoItem.navigateUri, protoItem.title)
+        is ToolbarItemListeningHistoryComponent -> ToolbarItem(navController, Icons.Rounded.History, protoItem.navigateUri, protoItem.title)
+        is ToolbarItemSettingsComponent -> ToolbarItem(navController, Icons.Rounded.Settings, protoItem.navigateUri, protoItem.title)
       }
     }
   }, modifier = Modifier.statusBarsPadding())

@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -67,7 +67,7 @@ fun CollectionHeader(
           .offset(y = 2.dp)
           .align(Alignment.CenterVertically)
           .size(28.dp)) {
-        Icon(Icons.Default.AddCircle, null)
+        Icon(Icons.Rounded.AddCircle, null)
       }
 
       Spacer(Modifier.width(20.dp))
@@ -77,7 +77,7 @@ fun CollectionHeader(
           .offset(y = 2.dp)
           .align(Alignment.CenterVertically)
           .size(28.dp)) {
-        Icon(Icons.Default.Search, null)
+        Icon(Icons.Rounded.Search, null)
       }
 
       Spacer(Modifier.width(20.dp))
@@ -91,7 +91,7 @@ fun CollectionHeader(
         },
           Modifier
             .size(28.dp)) {
-          Icon(Icons.Default.Sort, null)
+          Icon(Icons.Rounded.Sort, null)
         }
 
         DropdownMenu(expanded = expandSortDropdown, offset = DpOffset(4.dp, 4.dp), onDismissRequest = { expandSortDropdown = false }) {
@@ -106,7 +106,7 @@ fun CollectionHeader(
             delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByTime))
           }, trailingIcon = {
             if (sel == LocalCollectionDao.TrackSorts.ByTime) {
-              Icon(Icons.Default.Check, null, modifier = Modifier.padding(start = 12.dp))
+              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
             }
           })
 
@@ -116,7 +116,7 @@ fun CollectionHeader(
             delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByName))
           }, trailingIcon = {
             if (sel == LocalCollectionDao.TrackSorts.ByName) {
-              Icon(Icons.Default.Check, null, modifier = Modifier.padding(start = 12.dp))
+              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
             }
           })
 
@@ -126,7 +126,7 @@ fun CollectionHeader(
             delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByArtist))
           }, trailingIcon = {
             if (sel == LocalCollectionDao.TrackSorts.ByArtist) {
-              Icon(Icons.Default.Check, null, modifier = Modifier.padding(start = 12.dp))
+              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
             }
           })
 
@@ -136,7 +136,7 @@ fun CollectionHeader(
             delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByAlbum))
           }, trailingIcon = {
             if (sel == LocalCollectionDao.TrackSorts.ByAlbum) {
-              Icon(Icons.Default.Check, null, modifier = Modifier.padding(start = 12.dp))
+              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
             }
           })
 
@@ -165,7 +165,7 @@ fun CollectionHeader(
             }
         ) {
           Icon(
-            imageVector = Icons.Default.PlayArrow,
+            imageVector = Icons.Rounded.PlayArrow,
             tint = MaterialTheme.colorScheme.onPrimary,
             contentDescription = null,
             modifier = Modifier
@@ -183,7 +183,7 @@ fun CollectionHeader(
             .background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
         ) {
           Icon(
-            imageVector = Icons.Default.Shuffle,
+            imageVector = Icons.Rounded.Shuffle,
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = null,
             modifier = Modifier
@@ -205,7 +205,7 @@ fun CollectionHeader(
         }, label = {
           Text(item.name)
         }, selectedIcon = {
-          Icon(Icons.Default.Check, null)
+          Icon(Icons.Rounded.Check, null)
         })
       }
     }

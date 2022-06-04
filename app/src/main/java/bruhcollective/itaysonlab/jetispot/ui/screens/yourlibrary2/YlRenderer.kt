@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,7 +49,7 @@ fun YLRPinned(
 
     if (isPredef) {
       ImagePreview(
-        if (item.predefType == PredefCeType.COLLECTION) Icons.Default.Favorite else Icons.Default.Podcasts,
+        if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
         true,
         modifier = Modifier
           .size(64.dp)
@@ -58,7 +58,7 @@ fun YLRPinned(
     } else {
       if (item.picture.isEmpty()) {
         ImagePreview(
-          Icons.Default.Photo,
+          Icons.Rounded.Photo,
           false,
           modifier = Modifier
             .size(64.dp)
@@ -85,7 +85,7 @@ fun YLRPinned(
         null -> item.name
       }, maxLines = 1, overflow = TextOverflow.Ellipsis)
       Row(Modifier.padding(top = 4.dp)) {
-        Icon(Icons.Default.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
+        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
           .size(16.dp)
           .align(Alignment.CenterVertically))
         Text(

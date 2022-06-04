@@ -3,8 +3,8 @@ package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
@@ -26,7 +26,7 @@ fun SingleUserComponentBinder(
   item: SingleUserRecurringComponent
 ) {
   SingleUserComponentImplBinder(
-    icon = Icons.Default.Person,
+    icon = Icons.Rounded.Person,
     planName = item.planName,
     planDesc = item.planPrice,
     planText = item.planDescription,
@@ -39,7 +39,7 @@ fun SingleUserComponentBinder(
   item: SingleUserPrepaidComponent
 ) {
   SingleUserComponentImplBinder(
-    icon = Icons.Default.Person,
+    icon = Icons.Rounded.Person,
     planName = item.planName,
     planDesc = "prepaid",
     planText = item.planDescription,
@@ -52,7 +52,7 @@ fun SingleUserComponentBinder(
   item: SingleUserTrialComponent
 ) {
   SingleUserComponentImplBinder(
-    icon = Icons.Default.Schedule,
+    icon = Icons.Rounded.Schedule,
     planName = item.planName,
     planDesc = item.planPrice,
     planText = item.planDescription,

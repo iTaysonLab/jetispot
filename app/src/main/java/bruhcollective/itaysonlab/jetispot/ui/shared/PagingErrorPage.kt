@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.jetispot.ui.shared
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -27,7 +27,7 @@ fun PagingErrorPage(
         .align(Alignment.Center)
     ) {
       Icon(
-        Icons.Default.Error, contentDescription = null, modifier = Modifier
+        Icons.Rounded.Error, contentDescription = null, modifier = Modifier
           .align(Alignment.CenterHorizontally)
           .size(56.dp)
           .padding(bottom = 12.dp)

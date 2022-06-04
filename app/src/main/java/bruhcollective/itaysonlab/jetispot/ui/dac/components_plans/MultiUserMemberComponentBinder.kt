@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Group
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,7 +45,7 @@ fun MultiUserMemberComponentBinder(
             .size(48.dp)
         ) {
           Icon(
-            Icons.Default.Group,
+            Icons.Rounded.Group,
             null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -103,7 +103,7 @@ fun MultiUserMemberComponentBinder(
 
           if (member.isCurrentUser) {
             Icon(
-              Icons.Default.Check,
+              Icons.Rounded.Check,
               null,
               tint = MaterialTheme.colorScheme.primary,
               modifier = Modifier

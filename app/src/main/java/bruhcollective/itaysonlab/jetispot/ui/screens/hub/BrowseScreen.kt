@@ -3,7 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -28,7 +28,7 @@ fun BrowseScreen(
       Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }, navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
-        Icon(Icons.Default.ArrowBack, null)
+        Icon(Icons.Rounded.ArrowBack, null)
       }
     }, colors = TopAppBarDefaults.largeTopAppBarColors(), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
   }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->

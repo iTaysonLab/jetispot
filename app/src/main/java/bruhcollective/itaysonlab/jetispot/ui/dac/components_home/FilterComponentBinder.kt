@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -30,7 +30,7 @@ fun FilterComponentBinder (
       }, label = {
         Text(item.title)
       }, selectedIcon = {
-        Icon(Icons.Default.Check, null)
+        Icon(Icons.Rounded.Check, null)
       })
     }
   }
