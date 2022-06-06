@@ -24,6 +24,7 @@
     <string name="config_playback">Playback</string>
     <string name="config_account">Account</string>
     <string name="config_about">About</string>
+    <string name="config_device">Device</string>
 
     <string name="config_pbquality">Audio quality</string>
 
@@ -106,4 +107,27 @@
     <string name="blend_create_btn">Generate invitation link</string>
     <string name="blend_info">Invite up to 10 friends to a Blend, a shared playlist that gives you social recommendations based on all of your music tastes.\n\nNote: People in this Blend will be able to add their friends and see your profile picture and username.</string>
     <string name="blend_invite">Blend Invitation</string>
+
+    <string name="storage">Storage</string>
+    <string name="storage_entry_metadata">Content metadata</string>
+    <string name="storage_entry_metadata_desc">for accelerating playlist/queue loading</string>
+    <string name="storage_entry_tmpcache">Temporary cache</string>
+    <string name="storage_entry_tmpcache_desc">for saving data on frequent track replays</string>
+    <string name="storage_entry_imgcache">Image cache</string>
+    <string name="storage_entry_imgcache_desc">network images cache</string>
+    <string name="storage_info">You can manage application\'s cache on this screen.\n\nSome of this data is cleared automatically after a certain period of time.</string>
+    <string name="storage_used">used</string>
+    <string name="storage_total_fmt">%s total</string>
+    <string name="storage_legend_app">Application</string>
+    <string name="storage_legend_other">Other</string>
+    <string name="storage_actions">Actions</string>
+    <string name="storage_clear">Clear application cache</string>
+    <string name="storage_clear_metadata">Clear content metadata</string>
+
+    <string name="err_text">An error occurred while loading the page.</string>
+    <string name="err_act_copy">Copy details</string>
+    <string name="err_act_reload">Reload</string>
+
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
 </resources>

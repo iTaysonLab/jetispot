@@ -108,15 +108,20 @@ fun AuthScreen(
           singleLine = true,
           label = {
             Text(stringResource(R.string.username))
-          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier.fillMaxWidth().focusTarget().focusRequester(usernameFocusRequester).onFocusChanged {
-            autofill?.apply {
-              if (it.isFocused) {
-                requestAutofillForNode(autofillNode)
-              } else {
-                cancelAutofillForNode(autofillNode)
+          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier
+            .fillMaxWidth()
+            .focusTarget()
+            .focusRequester(usernameFocusRequester)
+            .onFocusChanged {
+              autofill?.apply {
+                if (it.isFocused) {
+                  requestAutofillForNode(autofillNode)
+                } else {
+                  cancelAutofillForNode(autofillNode)
+                }
               }
             }
-          }.focusProperties { next = passwordFocusRequester },
+            .focusProperties { next = passwordFocusRequester },
         )
       }
 
@@ -134,15 +139,20 @@ fun AuthScreen(
           singleLine = true,
           onValueChange = { viewModel.password.value = it },
           visualTransformation = if (viewModel.passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-          modifier = Modifier.fillMaxWidth().focusTarget().focusRequester(passwordFocusRequester).onFocusChanged {
-            autofill?.apply {
-              if (it.isFocused) {
-                requestAutofillForNode(autofillNode)
-              } else {
-                cancelAutofillForNode(autofillNode)
+          modifier = Modifier
+            .fillMaxWidth()
+            .focusTarget()
+            .focusRequester(passwordFocusRequester)
+            .onFocusChanged {
+              autofill?.apply {
+                if (it.isFocused) {
+                  requestAutofillForNode(autofillNode)
+                } else {
+                  cancelAutofillForNode(autofillNode)
+                }
               }
             }
-          }.focusProperties { previous = usernameFocusRequester },
+            .focusProperties { previous = usernameFocusRequester },
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
           keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
@@ -155,9 +165,7 @@ fun AuthScreen(
               Icons.Rounded.Visibility
             else Icons.Rounded.VisibilityOff
 
-            // Please provide localized description for accessibility services
-            val description =
-              if (viewModel.passwordVisible.value) "Hide password" else "Show password"
+            val description = stringResource(id = if (viewModel.passwordVisible.value) R.string.hide_password else R.string.show_password)
 
             IconButton(onClick = {
               viewModel.passwordVisible.value = !viewModel.passwordVisible.value

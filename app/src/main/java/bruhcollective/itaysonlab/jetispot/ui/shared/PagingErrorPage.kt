@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.copy
+import bruhcollective.itaysonlab.jetispot.R
 
 @Composable
 fun PagingErrorPage(
@@ -33,7 +35,7 @@ fun PagingErrorPage(
           .padding(bottom = 12.dp)
       )
       Text(
-        "An error occurred while loading the page.",
+        stringResource(id = R.string.err_text),
         modifier = Modifier.align(Alignment.CenterHorizontally)
       )
     }
@@ -47,14 +49,14 @@ fun PagingErrorPage(
         onClick = {
           ctx.copy("Message: ${exception.message}\n\n" + exception.stackTraceToString())
         }) {
-        Text("Copy exception")
+        Text(stringResource(id = R.string.err_act_copy))
       }
       
       Spacer(modifier = Modifier.width(8.dp))
 
       OutlinedButton(
         onClick = { onReload() }) {
-        Text("Reload")
+        Text(stringResource(id = R.string.err_act_reload))
       }
     }
   }

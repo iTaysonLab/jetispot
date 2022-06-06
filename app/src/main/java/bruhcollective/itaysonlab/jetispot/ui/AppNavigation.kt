@@ -38,6 +38,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.auth.AuthScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.NormalizationConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.config.StorageScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
@@ -107,6 +108,7 @@ fun AppNavigation(
     }
 
     composable(Screen.Config.route) { ConfigScreen(provideLambdaController) }
+    composable(Screen.StorageConfig.route) { StorageScreen(provideLambdaController) }
     composable(Screen.QualityConfig.route) { QualityConfigScreen(provideLambdaController) }
     composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen(provideLambdaController) }
     composable(Screen.Search.route) { BrowseRootScreen(provideLambdaController) }

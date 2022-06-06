@@ -37,7 +37,6 @@ fun ListeningHistoryScreen(
   navController: LambdaNavigationController,
   viewModel: HistoryViewModel = hiltViewModel()
 ) {
-
   val sbd = rememberSplineBasedDecay<Float>()
   val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
   val scope = rememberCoroutineScope()

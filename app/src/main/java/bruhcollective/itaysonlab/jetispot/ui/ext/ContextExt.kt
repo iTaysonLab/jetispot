@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.ext
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.app.Activity
+import android.content.*
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.navigation.NavController
@@ -19,4 +17,14 @@ fun Context.shareUrl(url: String, title: String? = null) = startActivity(Intent(
 
 fun Context.copy(txt: String) {
   getSystemService<ClipboardManager>()?.setPrimaryClip(ClipData.newPlainText("jetispot", txt))
+}
+
+// Shamelessly taken from Google
+internal fun Context.findActivity(): Activity {
+  var context = this
+  while (context is ContextWrapper) {
+    if (context is Activity) return context
+    context = context.baseContext
+  }
+  throw IllegalStateException("Not an Activity context!")
 }

@@ -11,6 +11,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import com.spotify.metadata.Metadata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -77,7 +78,7 @@ class NowPlayingViewModel @Inject constructor(
         SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
           ?: return@launch,
         false
-      )
+      ).blendWith(Color.Black, 0.1f)
     }
   }
 

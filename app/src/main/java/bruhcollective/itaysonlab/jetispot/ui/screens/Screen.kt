@@ -29,6 +29,7 @@ enum class Screen(
   DacViewAllPlans("dac/viewAllPlans", title = R.string.all_plans),
   // config
   Config("config"),
+  StorageConfig("config/storage"),
   QualityConfig("config/playbackQuality"),
   NormalizationConfig("config/playbackNormalization");
 

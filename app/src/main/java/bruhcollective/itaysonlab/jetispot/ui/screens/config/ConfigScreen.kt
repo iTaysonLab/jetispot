@@ -32,6 +32,8 @@ import bruhcollective.itaysonlab.jetispot.BuildConfig
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
+import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,7 +64,7 @@ class ConfigScreenViewModel @Inject constructor(
           else -> R.string.quality_very_high
         }
       )
-    }, { it.navigate("config/playbackQuality") }))
+    }, { it.navigate(Screen.QualityConfig) }))
 
     add(ConfigItem.Preference(R.string.config_normalization, { ctx, cfg ->
       if (!cfg.playerConfig.normalization) return@Preference ctx.getString(R.string.normalization_disabled)
@@ -73,7 +75,7 @@ class ConfigScreenViewModel @Inject constructor(
           else -> R.string.normalization_loud
         }
       )
-    }, { it.navigate("config/playbackNormalization") }))
+    }, { it.navigate(Screen.NormalizationConfig) }))
 
     add(ConfigItem.Slider(R.string.config_crossfade, { ctx, value ->
       when (value) {
@@ -98,6 +100,12 @@ class ConfigScreenViewModel @Inject constructor(
 
     add(ConfigItem.Info(R.string.warn_restart))
 
+    add(ConfigItem.Category(R.string.config_device))
+
+    add(ConfigItem.Preference(R.string.storage, { ctx, cfg -> "" }, {
+      it.navigate(Screen.StorageConfig)
+    }))
+
     add(ConfigItem.Category(R.string.config_account))
 
     add(ConfigItem.Preference(R.string.config_logout, { ctx, cfg ->
@@ -105,13 +113,13 @@ class ConfigScreenViewModel @Inject constructor(
         R.string.config_logout_as, spSessionManager.session.username()
       )
     }, {
-      it.navigate("dialogs/logout")
+      it.navigate(Dialog.Logout)
     }))
 
     add(ConfigItem.Preference(R.string.config_viewplan, { ctx, cfg ->
       ctx.getString(R.string.config_viewplan_desc)
     }, {
-      it.navigate("dac/viewCurrentPlan")
+      it.navigate(Screen.DacViewCurrentPlan)
     }))
 
     add(ConfigItem.Category(R.string.config_about))

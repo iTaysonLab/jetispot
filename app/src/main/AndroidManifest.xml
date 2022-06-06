@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:manageSpaceActivity=".ManageStorageActivity"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/nsc"
         android:name=".SpApp"
@@ -33,6 +34,11 @@
                 <data android:scheme="https" android:host="open.spotify.com" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ManageStorageActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Jetispot" />
 
         <service android:name=".playback.service.SpPlaybackService" android:exported="true" android:foregroundServiceType="mediaPlayback">
             <intent-filter>
