@@ -3,14 +3,12 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.config
 import android.content.Context
 import android.text.format.Formatter
 import androidx.annotation.StringRes
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -27,8 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,18 +33,15 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.metadata_db.SpMetadataDb
 import bruhcollective.itaysonlab.jetispot.core.util.Device
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.findActivity
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
-import bruhcollective.itaysonlab.jetispot.ui.screens.history.HistoryViewModel
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
-import coil.util.CoilUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
@@ -63,8 +56,7 @@ fun StorageScreen(
   val scope = rememberCoroutineScope()
   val ctx = LocalContext.current
 
-  val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
+  val scrollBehavior = rememberEUCScrollBehavior()
 
   LaunchedEffect(Unit) {
     viewModel.load(ctx)

@@ -40,7 +40,8 @@ fun HubScaffold(
 ) {
   val scope = rememberCoroutineScope()
   val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) else TopAppBarDefaults.pinnedScrollBehavior() }
+  val topBarState = rememberTopAppBarScrollState()
+  val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) else TopAppBarDefaults.pinnedScrollBehavior(topBarState) }
 
   when (state) {
     is HubState.Loaded -> {

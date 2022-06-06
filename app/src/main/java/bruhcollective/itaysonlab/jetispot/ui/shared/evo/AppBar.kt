@@ -1,12 +1,22 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package bruhcollective.itaysonlab.jetispot.ui.shared.evo
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,19 +33,20 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
- * ![Small top app bar image](https://developer.android.com/images/reference/androidx/compose/material3/small-top-app-bar.png)
+ * <a href="https://m3.material.io/components/top-app-bar/overview" class="external" target="_blank">Material Design small top app bar</a>.
  *
- * Material Design small top app bar.
- *
- * The top app bar displays information and actions relating to the current screen.
+ * Top app bars display information and actions at the top of a screen.
  *
  * This SmallTopAppBar has slots for a title, navigation icon, and actions.
+ *
+ * ![Small top app bar image](https://developer.android.com/images/reference/androidx/compose/material3/small-top-app-bar.png)
  *
  * A simple top app bar looks like:
  * @sample androidx.compose.material3.samples.SimpleSmallTopAppBar
@@ -46,11 +57,11 @@ import kotlin.math.roundToInt
  *
  * @param title the title to be displayed in the top app bar
  * @param modifier the [Modifier] to be applied to this top app bar
- * @param navigationIcon The navigation icon displayed at the start of the top app bar. This should
+ * @param navigationIcon the navigation icon displayed at the start of the top app bar. This should
  * typically be an [IconButton] or [IconToggleButton].
  * @param actions the actions displayed at the end of the top app bar. This should typically be
  * [IconButton]s. The default layout here is a [Row], so icons inside will be placed horizontally.
- * @param colors a [TopAppBarColors] that will be used to resolve the colors used for this top app
+ * @param colors [TopAppBarColors] that will be used to resolve the colors used for this top app
  * bar in different states. See [TopAppBarDefaults.smallTopAppBarColors].
  * @param scrollBehavior a [TopAppBarScrollBehavior] which holds various offset values that will be
  * applied by this top app bar to set up its height and colors. A scroll behavior is designed to
@@ -81,11 +92,13 @@ fun SmallTopAppBar(
 }
 
 /**
+ * <a href="https://m3.material.io/components/top-app-bar/overview" class="external" target="_blank">Material Design center-aligned small top app bar</a>.
+ *
+ * Top app bars display information and actions at the top of a screen.
+ *
+ * This small top app bar has a header title that is horizontally aligned to the center.
+ *
  * ![Center-aligned top app bar image](https://developer.android.com/images/reference/androidx/compose/material3/center-aligned-top-app-bar.png)
- *
- * Material Design small top app bar with a header title that is horizontally aligned to the center.
- *
- * The top app bar displays information and actions relating to the current screen.
  *
  * This CenterAlignedTopAppBar has slots for a title, navigation icon, and actions.
  *
@@ -95,11 +108,11 @@ fun SmallTopAppBar(
  *
  * @param title the title to be displayed in the top app bar
  * @param modifier the [Modifier] to be applied to this top app bar
- * @param navigationIcon The navigation icon displayed at the start of the top app bar. This should
+ * @param navigationIcon the navigation icon displayed at the start of the top app bar. This should
  * typically be an [IconButton] or [IconToggleButton].
  * @param actions the actions displayed at the end of the top app bar. This should typically be
  * [IconButton]s. The default layout here is a [Row], so icons inside will be placed horizontally.
- * @param colors a [TopAppBarColors] that will be used to resolve the colors used for this top app
+ * @param colors [TopAppBarColors] that will be used to resolve the colors used for this top app
  * bar in different states. See [TopAppBarDefaults.centerAlignedTopAppBarColors].
  * @param scrollBehavior a [TopAppBarScrollBehavior] which holds various offset values that will be
  * applied by this top app bar to set up its height and colors. A scroll behavior is designed to
@@ -130,11 +143,11 @@ fun CenterAlignedTopAppBar(
 }
 
 /**
+ * <a href="https://m3.material.io/components/top-app-bar/overview" class="external" target="_blank">Material Design medium top app bar</a>.
+ *
+ * Top app bars display information and actions at the top of a screen.
+ *
  * ![Medium top app bar image](https://developer.android.com/images/reference/androidx/compose/material3/medium-top-app-bar.png)
- *
- * Material Design medium top app bar.
- *
- * The top app bar displays information and actions relating to the current screen.
  *
  * This MediumTopAppBar has slots for a title, navigation icon, and actions. In its default expanded
  * state, the title is displayed in a second row under the navigation and actions.
@@ -151,7 +164,7 @@ fun CenterAlignedTopAppBar(
  * typically be an [IconButton] or [IconToggleButton].
  * @param actions the actions displayed at the end of the top app bar. This should typically be
  * [IconButton]s. The default layout here is a [Row], so icons inside will be placed horizontally.
- * @param colors a [TopAppBarColors] that will be used to resolve the colors used for this top app
+ * @param colors [TopAppBarColors] that will be used to resolve the colors used for this top app
  * bar in different states. See [TopAppBarDefaults.mediumTopAppBarColors].
  * @param scrollBehavior a [TopAppBarScrollBehavior] which holds various offset values that will be
  * applied by this top app bar to set up its height and colors. A scroll behavior is designed to
@@ -186,11 +199,11 @@ fun MediumTopAppBar(
 }
 
 /**
+ * <a href="https://m3.material.io/components/top-app-bar/overview" class="external" target="_blank">Material Design large top app bar</a>.
+ *
+ * Top app bars display information and actions at the top of a screen.
+ *
  * ![Large top app bar image](https://developer.android.com/images/reference/androidx/compose/material3/large-top-app-bar.png)
- *
- * Material Design large top app bar.
- *
- * The top app bar displays information and actions relating to the current screen.
  *
  * This LargeTopAppBar has slots for a title, navigation icon, and actions. In its default expanded
  * state, the title is displayed in a second row under the navigation and actions.
@@ -202,12 +215,12 @@ fun MediumTopAppBar(
  * @param title the title to be displayed in the top app bar. This title will be used in the app
  * bar's expanded and collapsed states, although in its collapsed state it will be composed with a
  * smaller sized [TextStyle]
- * @param modifier The [Modifier] to be applied to this top app bar
- * @param navigationIcon The navigation icon displayed at the start of the top app bar. This should
+ * @param modifier the [Modifier] to be applied to this top app bar
+ * @param navigationIcon the navigation icon displayed at the start of the top app bar. This should
  * typically be an [IconButton] or [IconToggleButton].
- * @param actions The actions displayed at the end of the top app bar. This should typically be
+ * @param actions the actions displayed at the end of the top app bar. This should typically be
  * [IconButton]s. The default layout here is a [Row], so icons inside will be placed horizontally.
- * @param colors a [TopAppBarColors] that will be used to resolve the colors used for this top app
+ * @param colors [TopAppBarColors] that will be used to resolve the colors used for this top app
  * bar in different states. See [TopAppBarDefaults.largeTopAppBarColors].
  * @param scrollBehavior a [TopAppBarScrollBehavior] which holds various offset values that will be
  * applied by this top app bar to set up its height and colors. A scroll behavior is designed to
@@ -265,8 +278,8 @@ private fun SingleRowTopAppBar(
     // Set a scroll offset limit to hide the entire app bar area when scrolling.
     val offsetLimit = with(LocalDensity.current) { -64.dp.toPx() }
     SideEffect {
-        if (scrollBehavior?.offsetLimit != offsetLimit) {
-            scrollBehavior?.offsetLimit = offsetLimit
+        if (scrollBehavior?.state?.offsetLimit != offsetLimit) {
+            scrollBehavior?.state?.offsetLimit = offsetLimit
         }
     }
 
@@ -289,7 +302,7 @@ private fun SingleRowTopAppBar(
     // scroll-state offset.
     Surface(modifier = modifier, color = appBarContainerColor) {
         val height = LocalDensity.current.run {
-            64.dp.toPx() + (scrollBehavior?.offset ?: 0f)
+            64.dp.toPx() + (scrollBehavior?.state?.offset ?: 0f)
         }
         TopAppBarLayout(
             modifier = Modifier.padding(contentPadding),
@@ -301,7 +314,8 @@ private fun SingleRowTopAppBar(
             titleTextStyle = titleTextStyle,
             titleAlpha = 1f,
             titleVerticalArrangement = Arrangement.Center,
-            titleHorizontalArrangement = if (centeredTitle) Arrangement.Center else Arrangement.Start,
+            titleHorizontalArrangement =
+            if (centeredTitle) Arrangement.Center else Arrangement.Start,
             titleBottomPadding = 0,
             hideTitleSemantics = false,
             navigationIcon = navigationIcon,
@@ -350,16 +364,16 @@ private fun TwoRowsTopAppBar(
     // Set a scroll offset limit that will hide just the title area and will keep the small title
     // area visible.
     SideEffect {
-        if (scrollBehavior?.offsetLimit != pinnedHeightPx - maxHeightPx) {
-            scrollBehavior?.offsetLimit = pinnedHeightPx - maxHeightPx
+        if (scrollBehavior?.state?.offsetLimit != pinnedHeightPx - maxHeightPx) {
+            scrollBehavior?.state?.offsetLimit = pinnedHeightPx - maxHeightPx
         }
     }
 
     val scrollPercentage =
-        if (scrollBehavior == null || scrollBehavior.offsetLimit == 0f) {
+        if (scrollBehavior == null || scrollBehavior.state.offsetLimit == 0f) {
             0f
         } else {
-            scrollBehavior.offset / scrollBehavior.offsetLimit
+            scrollBehavior.state.offset / scrollBehavior.state.offsetLimit
         }
 
     // Obtain the container Color from the TopAppBarColors.
@@ -404,7 +418,7 @@ private fun TwoRowsTopAppBar(
             )
             TopAppBarLayout(
                 modifier = Modifier.clipToBounds(),
-                heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.offset ?: 0f),
+                heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.offset ?: 0f),
                 navigationIconContentColor =
                 colors.navigationIconContentColor(scrollFraction).value,
                 titleContentColor = colors.titleContentColor(scrollFraction).value,
@@ -468,14 +482,19 @@ private fun TopAppBarLayout(
 ) {
     Layout(
         {
-            Box(Modifier.layoutId("navigationIcon").padding(start = TopAppBarHorizontalPadding)) {
+            Box(
+                Modifier
+                    .layoutId("navigationIcon")
+                    .padding(start = TopAppBarHorizontalPadding)) {
                 CompositionLocalProvider(
                     LocalContentColor provides navigationIconContentColor,
                     content = navigationIcon
                 )
             }
             Box(
-                Modifier.layoutId("title").padding(horizontal = TopAppBarHorizontalPadding)
+                Modifier
+                    .layoutId("title")
+                    .padding(horizontal = TopAppBarHorizontalPadding)
                     .then(if (hideTitleSemantics) Modifier.clearAndSetSemantics { } else Modifier)
             ) {
                 ProvideTextStyle(value = titleTextStyle) {
@@ -485,7 +504,10 @@ private fun TopAppBarLayout(
                     )
                 }
             }
-            Box(Modifier.layoutId("actionIcons").padding(end = TopAppBarHorizontalPadding)) {
+            Box(
+                Modifier
+                    .layoutId("actionIcons")
+                    .padding(end = TopAppBarHorizontalPadding)) {
                 CompositionLocalProvider(
                     LocalContentColor provides actionIconContentColor,
                     content = actions
@@ -495,16 +517,22 @@ private fun TopAppBarLayout(
         modifier = modifier
     ) { measurables, constraints ->
         val navigationIconPlaceable =
-            measurables.first { it.layoutId == "navigationIcon" }.measure(constraints)
+            measurables.first { it.layoutId == "navigationIcon" }
+                .measure(constraints.copy(minWidth = 0))
         val actionIconsPlaceable =
-            measurables.first { it.layoutId == "actionIcons" }.measure(constraints)
+            measurables.first { it.layoutId == "actionIcons" }
+                .measure(constraints.copy(minWidth = 0))
 
-        val maxTitleWidth =
-            constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width
+        val maxTitleWidth = if (constraints.maxWidth == Constraints.Infinity) {
+            constraints.maxWidth
+        } else {
+            (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width)
+                .coerceAtLeast(0)
+        }
         val titlePlaceable =
-            measurables
-                .first { it.layoutId == "title" }
-                .measure(constraints.copy(maxWidth = maxTitleWidth))
+            measurables.first { it.layoutId == "title" }
+                .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
+
         // Locate the title's baseline.
         val titleBaseline =
             if (titlePlaceable[LastBaseline] != AlignmentLine.Unspecified) {
@@ -552,6 +580,117 @@ private fun TopAppBarLayout(
             actionIconsPlaceable.placeRelative(
                 x = constraints.maxWidth - actionIconsPlaceable.width,
                 y = (layoutHeight - actionIconsPlaceable.height) / 2
+            )
+        }
+    }
+}
+
+
+/**
+ * A two-rows top app bar that is designed to be called by the Large and Medium top app bar
+ * composables.
+ *
+ * @throws [IllegalArgumentException] if the given [maxHeight] is equal or smaller than the
+ * [pinnedHeight]
+ */
+@Composable
+private fun TwoRowsTopAppBar(
+    modifier: Modifier = Modifier,
+    title: @Composable () -> Unit,
+    titleTextStyle: TextStyle,
+    titleBottomPadding: Dp,
+    smallTitle: @Composable () -> Unit,
+    smallTitleTextStyle: TextStyle,
+    navigationIcon: @Composable () -> Unit,
+    actions: @Composable RowScope.() -> Unit,
+    colors: TopAppBarColors,
+    maxHeight: Dp,
+    pinnedHeight: Dp,
+    scrollBehavior: TopAppBarScrollBehavior?
+) {
+    if (maxHeight <= pinnedHeight) {
+        throw IllegalArgumentException(
+            "A TwoRowsTopAppBar max height should be greater than its pinned height"
+        )
+    }
+    val pinnedHeightPx: Float
+    val maxHeightPx: Float
+    val titleBottomPaddingPx: Int
+    LocalDensity.current.run {
+        pinnedHeightPx = pinnedHeight.toPx()
+        maxHeightPx = maxHeight.toPx()
+        titleBottomPaddingPx = titleBottomPadding.roundToPx()
+    }
+
+    // Set a scroll offset limit that will hide just the title area and will keep the small title
+    // area visible.
+    SideEffect {
+        if (scrollBehavior?.state?.offsetLimit != pinnedHeightPx - maxHeightPx) {
+            scrollBehavior?.state?.offsetLimit = pinnedHeightPx - maxHeightPx
+        }
+    }
+
+    val scrollPercentage =
+        if (scrollBehavior == null || scrollBehavior.state.offsetLimit == 0f) {
+            0f
+        } else {
+            scrollBehavior.state.offset / scrollBehavior.state.offsetLimit
+        }
+
+    // Obtain the container Color from the TopAppBarColors.
+    // This will potentially animate or interpolate a transition between the container color and the
+    // container's scrolled color according to the app bar's scroll state.
+    val scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+    val appBarContainerColor by colors.containerColor(scrollFraction)
+
+    // Wrap the given actions in a Row.
+    val actionsRow = @Composable {
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+            content = actions
+        )
+    }
+    val titleAlpha = 1f - scrollPercentage
+    // Hide the top row title semantics when its alpha value goes below 0.5 threshold.
+    // Hide the bottom row title semantics when the top title semantics are active.
+    val hideTopRowSemantics = scrollPercentage < 0.5f
+    val hideBottomRowSemantics = !hideTopRowSemantics
+    Surface(modifier = modifier, color = appBarContainerColor) {
+        Column {
+            TopAppBarLayout(
+                modifier = Modifier,
+                heightPx = pinnedHeightPx,
+                navigationIconContentColor =
+                colors.navigationIconContentColor(scrollFraction).value,
+                titleContentColor = colors.titleContentColor(scrollFraction).value,
+                actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
+                title = smallTitle,
+                titleTextStyle = smallTitleTextStyle,
+                titleAlpha = 1f - titleAlpha,
+                titleVerticalArrangement = Arrangement.Center,
+                titleHorizontalArrangement = Arrangement.Start,
+                titleBottomPadding = 0,
+                hideTitleSemantics = hideTopRowSemantics,
+                navigationIcon = navigationIcon,
+                actions = actionsRow,
+            )
+            TopAppBarLayout(
+                modifier = Modifier.clipToBounds(),
+                heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.offset ?: 0f),
+                navigationIconContentColor =
+                colors.navigationIconContentColor(scrollFraction).value,
+                titleContentColor = colors.titleContentColor(scrollFraction).value,
+                actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
+                title = title,
+                titleTextStyle = titleTextStyle,
+                titleAlpha = titleAlpha,
+                titleVerticalArrangement = Arrangement.Bottom,
+                titleHorizontalArrangement = Arrangement.Start,
+                titleBottomPadding = titleBottomPaddingPx,
+                hideTitleSemantics = hideBottomRowSemantics,
+                navigationIcon = {},
+                actions = {}
             )
         }
     }

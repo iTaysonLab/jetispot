@@ -170,8 +170,7 @@ class MainActivity : ComponentActivity() {
             },
             scaffoldState = bsState,
             sheetPeekHeight = bsPeek,
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            modifier = Modifier
+            backgroundColor = MaterialTheme.colorScheme.surface
           ) { innerScaffoldPadding ->
             AppNavigation(navController = navController, provideLambdaController = lambdaNavController, sessionManager = sessionManager, authManager = authManager, modifier = Modifier
               .padding(innerScaffoldPadding)

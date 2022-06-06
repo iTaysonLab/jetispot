@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,8 +32,7 @@ fun YourLibraryDebugScreen(
   navController: LambdaNavigationController,
   viewModel: YourLibraryDebugScreenViewModel = hiltViewModel()
 ) {
-  val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
+  val scrollBehavior = rememberEUCScrollBehavior()
   val scope = rememberCoroutineScope()
 
   val items = listOf(

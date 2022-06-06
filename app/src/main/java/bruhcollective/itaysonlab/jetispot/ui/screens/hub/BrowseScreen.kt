@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -11,6 +10,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -19,8 +19,7 @@ fun BrowseScreen(
   navController: LambdaNavigationController,
   id: String
 ) {
-  val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
+  val scrollBehavior = rememberEUCScrollBehavior()
   var appBarTitle by remember { mutableStateOf("") }
 
   Scaffold(topBar = {

@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.history
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +20,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
@@ -37,8 +37,7 @@ fun ListeningHistoryScreen(
   navController: LambdaNavigationController,
   viewModel: HistoryViewModel = hiltViewModel()
 ) {
-  val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
+  val scrollBehavior = rememberEUCScrollBehavior()
   val scope = rememberCoroutineScope()
   val loadFunc: suspend CoroutineScope.() -> Unit = remember {{
     viewModel.load {
@@ -53,7 +52,7 @@ fun ListeningHistoryScreen(
   when (viewModel.state) {
     is HistoryViewModel.State.Loaded -> {
       Scaffold(topBar = {
-        LargeTopAppBar(title = { 
+        LargeTopAppBar(title = {
           Text(stringResource(id = R.string.listening_history))
         }, navigationIcon = {
           IconButton(onClick = { navController.popBackStack() }) {

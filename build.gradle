@@ -1,9 +1,10 @@
 buildscript {
     ext {
         compose_version = '1.2.0-beta02'
-        compose_m3_version = '1.0.0-alpha12'
+        compose_m3_version = '1.0.0-alpha13'
         media2_version = "1.2.1"
-        roomVersion = "2.4.2"
+        accompanist_version = "0.24.9-beta"
+        room_version = "2.4.2"
     }
 }
 

@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
-        targetSdk 31
+        targetSdk 32
         versionCode 5
         versionName "poc_v8"
         resConfigs "en"
@@ -81,62 +81,64 @@ moshi {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1'
+    // AndroidX
+    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.palette:palette-ktx:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-
-    implementation "androidx.datastore:datastore:1.0.0"
-    implementation  "com.google.protobuf:protobuf-java:3.21.1"
-
+    // Compose
+    implementation "androidx.navigation:navigation-compose:2.4.2"
+    implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material:1.2.0-beta02"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material3:material3:$compose_m3_version"
-    implementation "androidx.navigation:navigation-compose:2.4.2"
-    implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.customview:customview:1.2.0-alpha01"
     debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-beta02"
 
+    // Compose - Additions
+    implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+
+    // Images
     implementation "io.coil-kt:coil-compose:2.0.0-rc03"
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.6-alpha'
-    implementation 'com.google.accompanist:accompanist-pager:0.24.7-alpha'
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
-    implementation 'androidx.activity:activity-compose:1.4.0'
-
-    implementation('com.github.iTaysonLab.librespot-java:librespot-player:e95c4f0529:thin') {
-        exclude group: 'xyz.gianlu.librespot', module: 'librespot-sink'
-        exclude group: 'com.lmax', module: 'disruptor'
-        exclude group: 'org.apache.logging.log4j'
-        //exclude group: 'com.google.protobuf'
-    }
-
-    // implementation 'uk.uuid.slf4j:slf4j-android:1.7.30-0'
-    implementation 'com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30'
-
-    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    // DI
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     implementation "com.google.dagger:hilt-android:2.41"
     kapt "com.google.dagger:hilt-compiler:2.41"
 
+    // Playback
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1"
+    implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"
+    implementation ("com.github.iTaysonLab.librespot-java:librespot-player:e95c4f0529:thin") {
+        exclude group: 'xyz.gianlu.librespot', module: 'librespot-sink'
+        exclude group: 'com.lmax', module: 'disruptor'
+        exclude group: 'org.apache.logging.log4j'
+    }
 
+    // Data - Network
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.retrofit2:converter-protobuf:2.9.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
 
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    implementation("androidx.room:room-paging:2.5.0-alpha01")
-    kapt "androidx.room:room-compiler:$roomVersion"
+    // Data - SQL
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:2.5.0-alpha01"
+    kapt "androidx.room:room-compiler:$room_version"
 
-    implementation 'com.tencent:mmkv:1.2.13'
+    // Data - Proto
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "com.google.protobuf:protobuf-java:3.21.1"
+    implementation "com.tencent:mmkv:1.2.13"
 }
 
 protobuf {

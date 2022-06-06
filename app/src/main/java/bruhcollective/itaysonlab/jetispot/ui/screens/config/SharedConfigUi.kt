@@ -32,6 +32,7 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -49,8 +50,7 @@ fun BaseConfigScreen(
   navController: LambdaNavigationController,
   viewModel: ConfigViewModel
 ) {
-  val sbd = rememberSplineBasedDecay<Float>()
-  val scrollBehavior = remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd) }
+  val scrollBehavior = rememberEUCScrollBehavior()
 
   val scope = rememberCoroutineScope()
   val dsConfigState = viewModel.provideDataStore().data.collectAsState(initial = SpConfigurationManager.DEFAULT)
