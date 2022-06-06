@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -122,11 +119,9 @@ fun AppNavigation(
       }, text = {
         Text(stringResource(id = R.string.auth_disclaimer_text))
       }, confirmButton = {
-        Text(
-          stringResource(id = R.string.logout_confirm),
-          Modifier
-            .clickable { navController.popBackStack() }
-            .padding(16.dp))
+        TextButton(onClick = { navController.popBackStack() }) {
+          Text(stringResource(id = R.string.logout_confirm))
+        }
       })
     }
 
@@ -138,19 +133,17 @@ fun AppNavigation(
       }, text = {
         Text(stringResource(id = R.string.logout_message))
       }, confirmButton = {
-        Text(stringResource(id = R.string.logout_confirm),
-          Modifier
-            .clickable {
-              navController.popBackStack()
-              authManager.reset()
-              android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
-            }
-            .padding(16.dp))
+        TextButton(onClick = {
+          navController.popBackStack()
+          authManager.reset()
+          android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
+        }) {
+          Text(stringResource(id = R.string.logout_confirm))
+        }
       }, dismissButton = {
-        Text(stringResource(id = R.string.logout_cancel),
-          Modifier
-            .clickable { navController.popBackStack() }
-            .padding(16.dp))
+        TextButton(onClick = { navController.popBackStack() }) {
+          Text(stringResource(id = R.string.logout_cancel))
+        }
       })
     }
   }
