@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'dev.zacsweers.moshix' version '0.17.1'
+    id 'dev.zacsweers.moshix' version '0.17.2'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
     id "com.google.protobuf" version "0.8.18"
@@ -14,8 +14,8 @@ android {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
         targetSdk 32
-        versionCode 5
-        versionName "poc_v8"
+        versionCode 6
+        versionName "poc_v9"
         resConfigs "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -90,7 +90,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.2"
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:1.2.0-beta02"
+    implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material3:material3:$compose_m3_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"

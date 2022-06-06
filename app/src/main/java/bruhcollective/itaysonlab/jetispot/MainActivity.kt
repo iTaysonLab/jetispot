@@ -36,6 +36,9 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingScreen
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -71,7 +74,7 @@ class MainActivity : ComponentActivity() {
     super.onBackPressed()
   }
 
-  @OptIn(ExperimentalMaterialApi::class)
+  @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -84,7 +87,8 @@ class MainActivity : ComponentActivity() {
         val sysUiController = rememberSystemUiController()
         val bsState = rememberBottomSheetScaffoldState()
 
-        val navController = rememberNavController()
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val navController = rememberNavController(bottomSheetNavigator)
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val lambdaNavController = LambdaNavigationController { navController }
 
@@ -160,21 +164,23 @@ class MainActivity : ComponentActivity() {
             }
           }
         ) { innerPadding ->
-          BottomSheetScaffold(
-            sheetContent = {
-              NowPlayingScreen(
-                navController = lambdaNavController,
-                bottomSheetState = bsState.bottomSheetState,
-                bsOffset = bsOffset
-              )
-            },
-            scaffoldState = bsState,
-            sheetPeekHeight = bsPeek,
-            backgroundColor = MaterialTheme.colorScheme.surface
-          ) { innerScaffoldPadding ->
-            AppNavigation(navController = navController, provideLambdaController = lambdaNavController, sessionManager = sessionManager, authManager = authManager, modifier = Modifier
-              .padding(innerScaffoldPadding)
-              .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp))
+          ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+            BottomSheetScaffold(
+              sheetContent = {
+                NowPlayingScreen(
+                  navController = lambdaNavController,
+                  bottomSheetState = bsState.bottomSheetState,
+                  bsOffset = bsOffset
+                )
+              },
+              scaffoldState = bsState,
+              sheetPeekHeight = bsPeek,
+              backgroundColor = MaterialTheme.colorScheme.surface
+            ) { innerScaffoldPadding ->
+              AppNavigation(navController = navController, provideLambdaController = lambdaNavController, sessionManager = sessionManager, authManager = authManager, modifier = Modifier
+                .padding(innerScaffoldPadding)
+                .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp))
+            }
           }
         }
       }
