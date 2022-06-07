@@ -1,3 +1,7 @@
+Design credits to <a href="https://dribbble.com/shots/15706284-Spotify-You-Material-You-Redesign/attachments/7505834?mode=media" target="_blank">Nazım Can Tunç</a>
+<p>
+<img src="https://github.com/DotsTeaLab/jetispot/blob/master/image.png?raw=true">
+</p>
 ## Jetispot
 _probably usable __UNOFFICIAL__ Spotify client for Android, built with Jetpack Compose and librespot-java_
 
