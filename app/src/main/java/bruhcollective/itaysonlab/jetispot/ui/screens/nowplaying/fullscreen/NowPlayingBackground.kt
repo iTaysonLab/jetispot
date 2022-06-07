@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
@@ -36,7 +38,7 @@ fun NowPlayingBackground(
   ApplicationTheme {
     val currentColor = viewModel.currentBgColor.value
     val dominantColorAsBg = if (isSystemInDarkTheme())
-      monet.primary.copy(red = 0.2f, green = 0.2f, blue = 0.2f)
+      Color.Black.blendWith(monet.primary, ratio = 0.1f)
     else
       monet.primary.copy(0.1f)/* animateColorAsState(
     if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor

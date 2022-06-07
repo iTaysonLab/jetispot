@@ -111,7 +111,6 @@ private fun ControlsHeader(
 
 @Composable
 private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
-
   Box() {
     Slider(
       value = viewModel.currentPosition.value.progressRange,
@@ -121,12 +120,12 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
         inactiveTrackColor = monet.onPrimaryContainer.copy(alpha = 0.2f)
       ),
       onValueChange = {},
-      modifier = Modifier.padding(start = 8.dp)
+      modifier = Modifier.padding(horizontal = 8.dp)
     )
 
     Column(
       modifier = Modifier
-        .padding(horizontal = 8.dp)
+        .padding(horizontal = 16.dp)
         .fillMaxWidth(),
       horizontalAlignment = Alignment.End,
       verticalArrangement = Arrangement.Bottom
@@ -160,7 +159,7 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 @Composable
 private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
   Row(
-    horizontalArrangement = Arrangement.SpaceAround,
+    horizontalArrangement = Arrangement.Center,
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier.fillMaxWidth()
   ) {
@@ -172,7 +171,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
-    Spacer(modifier = Modifier.width(8.dp))
+    Spacer(modifier = Modifier.width(12.dp))
 
     IconButton(
       onClick = { viewModel.skipPrevious() },
@@ -187,7 +186,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         .padding(end = 2.dp))
     }
 
-    Spacer(modifier = Modifier.width(12.dp))
+    Spacer(modifier = Modifier.width(20.dp))
 
     Surface(
       color = monet.primaryContainer,
@@ -209,7 +208,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       )
     }
 
-    Spacer(modifier = Modifier.width(12.dp))
+    Spacer(modifier = Modifier.width(20.dp))
 
     IconButton(
       onClick = { viewModel.skipNext() },
@@ -224,7 +223,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         .padding(start = 2.dp))
     }
 
-    Spacer(modifier = Modifier.width(8.dp))
+    Spacer(modifier = Modifier.width(12.dp))
 
     IconButton(
       onClick = { /*TODO*/ },
