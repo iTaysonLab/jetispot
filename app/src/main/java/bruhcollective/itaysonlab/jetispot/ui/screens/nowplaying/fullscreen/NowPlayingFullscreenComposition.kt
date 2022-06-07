@@ -38,7 +38,7 @@ fun NowPlayingFullscreenComposition (
 
     // main content
     NowPlayingHeader(
-      stateTitle = stringResource(id = viewModel.getHeaderTitle()),
+      stateTitle = "" /*stringResource(id = viewModel.getHeaderTitle())*/,
       onCloseClick = {
         scope.launch { bottomSheetState.collapse() }
       },
@@ -51,10 +51,14 @@ fun NowPlayingFullscreenComposition (
     )
 
     NowPlayingControls(
-      scope = scope, viewModel = viewModel, navController = navController, bottomSheetState = bottomSheetState, modifier = Modifier
+      scope = scope,
+      viewModel = viewModel,
+      navController = navController,
+      bottomSheetState = bottomSheetState,
+      modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(horizontal = 8.dp)
-        .padding(bottom = 24.dp)
+        .padding(bottom = 38.dp)
         .navigationBarsPadding()
     )
   }

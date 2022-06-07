@@ -1,12 +1,15 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
@@ -17,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +30,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewMo
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import kotlinx.coroutines.CoroutineScope
+import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -38,7 +43,7 @@ fun NowPlayingControls(
 ) {
   Column(modifier, verticalArrangement = Arrangement.Bottom) {
     ControlsHeader(scope, navController, bottomSheetState, viewModel)
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(1.dp))
     ControlsSeekbar(viewModel)
     Spacer(Modifier.height(16.dp))
     ControlsMainButtons(viewModel)
@@ -53,94 +58,148 @@ private fun ControlsHeader(
   scope: CoroutineScope,
   navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
-  viewModel: NowPlayingViewModel,
+  viewModel: NowPlayingViewModel
 ) {
-  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp).clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null
-  ) {
-    viewModel.navigateToSource(scope, bottomSheetState, navController)
-  }, fontSize = 24.sp, color = Color.White,)
+  MediumText(
+    text = viewModel.currentTrack.value.title,
+    modifier = Modifier
+      .padding(horizontal = 14.dp)
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null
+      ) {
+        viewModel.navigateToSource(scope, bottomSheetState, navController)
+      },
+    fontSize = 24.sp,
+    color = monet.onBackground
+  )
   Spacer(Modifier.height(2.dp))
-  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp).clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null
-  ) {
-    viewModel.navigateToArtist(scope, bottomSheetState, navController)
-  }, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
+  Text(
+    text = viewModel.currentTrack.value.artist,
+    modifier = Modifier
+      .padding(horizontal = 14.dp)
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null
+      ) {
+        viewModel.navigateToArtist(scope, bottomSheetState, navController)
+      },
+    maxLines = 1,
+    overflow = TextOverflow.Ellipsis,
+    fontSize = 16.sp,
+    color = monet.onBackground.copy(alpha = 0.7f)
+  )
 }
 
 @Composable
-private fun ControlsSeekbar(
-  viewModel: NowPlayingViewModel,
-) {
-  Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
-    thumbColor = Color.White,
-    activeTrackColor = Color.White,
-    inactiveTrackColor = Color.White.copy(alpha = 0.5f)
-  ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
+private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 
-  Row(Modifier.padding(horizontal = 14.dp).offset(y = (-6).dp)) {
-    Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
-    Spacer(modifier = Modifier.weight(1f))
-    Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+  Box() {
+    Slider(
+      value = viewModel.currentPosition.value.progressRange,
+      colors = SliderDefaults.colors(
+        thumbColor = monet.onSecondaryContainer,
+        activeTrackColor = monet.onSecondaryContainer,
+        inactiveTrackColor = monet.onPrimaryContainer.copy(alpha = 0.2f)
+      ),
+      onValueChange = {},
+      modifier = Modifier.padding(start = 8.dp)
+    )
+
+    Column(
+      modifier = Modifier
+        .padding(horizontal = 8.dp)
+        .fillMaxWidth(),
+      horizontalAlignment = Alignment.End,
+      verticalArrangement = Arrangement.Bottom
+    ) {
+      Row(Modifier.height(52.dp), verticalAlignment = Alignment.Bottom) {
+        Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = monet.onBackground, fontSize = 12.sp)
+        Text(text = " / ", color = monet.onBackground, fontSize = 12.sp)
+        Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = monet.onBackground, fontSize = 12.sp)
+      }
+    }
   }
+
+
+
 }
 
 @Composable
-private fun ControlsMainButtons(
-  viewModel: NowPlayingViewModel,
-) {
-  Row {
+private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
+  Row(
+    horizontalArrangement = Arrangement.SpaceAround,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.fillMaxWidth()
+  ) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onBackground)
     ) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
-    Spacer(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.width(8.dp))
 
     IconButton(
       onClick = { viewModel.skipPrevious() },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .size(56.dp)
+        .clip(CircleShape)
+        .background(monet.surfaceVariant),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSurfaceVariant)
     ) {
-      Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null, modifier = Modifier
+        .size(42.dp)
+        .padding(end = 2.dp))
     }
 
-    Spacer(modifier = Modifier.width(24.dp))
+    Spacer(modifier = Modifier.width(12.dp))
 
-    Surface(color = Color.White, modifier = Modifier.clip(CircleShape).clickable(
-      interactionSource = remember { MutableInteractionSource() },
-      indication = rememberRipple(color = Color.Black)
+    Surface(
+      color = monet.primaryContainer,
+      modifier = Modifier
+        .clip(RoundedCornerShape(26.dp))
+        .height(70.dp)
+        .width(112.dp)
+        .clickable(
+          interactionSource = remember { MutableInteractionSource() },
+          indication = rememberRipple(color = Color.Black)
+        ) { viewModel.togglePlayPause() }
     ) {
-      viewModel.togglePlayPause()
-    }) {
       PlayPauseButton(
         isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        color = if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black,
-        modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
+        color = monet.onPrimaryContainer /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
+        modifier = Modifier
+          .size(64.dp)
+          .align(Alignment.CenterVertically)
       )
     }
 
-    Spacer(modifier = Modifier.width(24.dp))
+    Spacer(modifier = Modifier.width(12.dp))
 
     IconButton(
       onClick = { viewModel.skipNext() },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .size(56.dp)
+        .clip(CircleShape)
+        .background(monet.surfaceVariant),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSurfaceVariant)
     ) {
-      Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null, modifier = Modifier
+        .size(42.dp)
+        .padding(start = 2.dp))
     }
 
-    Spacer(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.width(8.dp))
 
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .size(56.dp)
+        .clip(CircleShape),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onBackground)
     ) {
       Icon(imageVector = Icons.Rounded.Repeat, contentDescription = null)
     }
@@ -151,13 +210,23 @@ private fun ControlsMainButtons(
 private fun ControlsBottomAccessories(
   viewModel: NowPlayingViewModel,
 ) {
-  Row {
+  Row(horizontalArrangement = Arrangement.Center) {
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .padding(start = 0.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+        .size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
     ) {
-      Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
+      Icon(
+        imageVector = Icons.Rounded.Share,
+        contentDescription = null,
+        modifier = Modifier
+          .size(32.dp)
+          .clip(CircleShape)
+          .background(monet.primaryContainer)
+          .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 8.dp)
+      )
     }
 
     Spacer(modifier = Modifier.weight(1f))
@@ -165,7 +234,7 @@ private fun ControlsBottomAccessories(
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSecondaryContainer)
     ) {
       Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
     }

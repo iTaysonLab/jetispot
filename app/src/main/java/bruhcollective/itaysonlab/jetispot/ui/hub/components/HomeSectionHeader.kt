@@ -19,6 +19,6 @@ fun HomeSectionHeader (
   delegate: HubScreenDelegate,
 ) {
   Box(Modifier.padding(vertical = 8.dp).padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)) {
-    Text(text = text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 21.sp, modifier = Modifier.align(Alignment.CenterStart))
+    Text(text = text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.align(Alignment.CenterStart))
   }
 }

@@ -6,6 +6,7 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 @Composable
 fun NowPlayingHeader(
@@ -27,17 +29,17 @@ fun NowPlayingHeader(
 ) {
   Row(modifier, verticalAlignment = Alignment.CenterVertically) {
     IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = monet.onBackground, contentDescription = null)
     }
 
-    Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
+    Column(Modifier.weight(1f).padding(vertical = 16.dp)) {
       Text(
         text = stateTitle.uppercase(),
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
         textAlign = TextAlign.Center,
-        color = Color.White.copy(alpha = 0.7f),
+        color = Color.Transparent.copy(alpha = 0.7f),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         letterSpacing = 2.sp,
@@ -49,7 +51,7 @@ fun NowPlayingHeader(
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
-        color = Color.White,
+        color = Color.Transparent,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         textAlign = TextAlign.Center,
@@ -59,7 +61,7 @@ fun NowPlayingHeader(
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.MoreVert, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.MoreVert, tint = monet.onBackground, contentDescription = null)
     }
   }
 }
