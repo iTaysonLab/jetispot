@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +72,8 @@ private fun ControlsHeader(
         viewModel.navigateToSource(scope, bottomSheetState, navController)
       },
     fontSize = 24.sp,
-    color = monet.onBackground
+    color = monet.onPrimaryContainer,
+    fontWeight = FontWeight.Bold
   )
   Spacer(Modifier.height(2.dp))
   Text(
@@ -86,8 +88,8 @@ private fun ControlsHeader(
       },
     maxLines = 1,
     overflow = TextOverflow.Ellipsis,
-    fontSize = 16.sp,
-    color = monet.onBackground.copy(alpha = 0.7f)
+    fontSize = 18.sp,
+    color = monet.onPrimaryContainer.copy(alpha = 0.7f)
   )
 }
 
@@ -114,9 +116,23 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
       verticalArrangement = Arrangement.Bottom
     ) {
       Row(Modifier.height(52.dp), verticalAlignment = Alignment.Bottom) {
-        Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = monet.onBackground, fontSize = 12.sp)
-        Text(text = " / ", color = monet.onBackground, fontSize = 12.sp)
-        Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = monet.onBackground, fontSize = 12.sp)
+        Text(
+          text = DateUtils.formatElapsedTime(
+            viewModel.currentPosition.value.progressMilliseconds / 1000L
+          ),
+          color = monet.onPrimaryContainer,
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Bold
+        )
+        Text(text = " / ", color = monet.onPrimaryContainer, fontSize = 12.sp)
+        Text(
+          text = DateUtils.formatElapsedTime(
+            viewModel.currentTrack.value.duration / 1000L
+          ),
+          color = monet.onPrimaryContainer,
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Bold
+        )
       }
     }
   }
@@ -135,7 +151,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onBackground)
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
     ) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
@@ -161,8 +177,8 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       color = monet.primaryContainer,
       modifier = Modifier
         .clip(RoundedCornerShape(26.dp))
-        .height(70.dp)
-        .width(112.dp)
+        .height(72.dp)
+        .width(106.dp)
         .clickable(
           interactionSource = remember { MutableInteractionSource() },
           indication = rememberRipple(color = Color.Black)
@@ -199,7 +215,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       modifier = Modifier
         .size(56.dp)
         .clip(CircleShape),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onBackground)
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
     ) {
       Icon(imageVector = Icons.Rounded.Repeat, contentDescription = null)
     }
@@ -219,13 +235,13 @@ private fun ControlsBottomAccessories(
       colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
     ) {
       Icon(
-        imageVector = Icons.Rounded.Share,
+        imageVector = Icons.Rounded.Speaker,
         contentDescription = null,
         modifier = Modifier
-          .size(32.dp)
+          .size(28.dp)
           .clip(CircleShape)
           .background(monet.primaryContainer)
-          .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 8.dp)
+          .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 6.dp)
       )
     }
 
