@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
@@ -61,36 +58,55 @@ private fun ControlsHeader(
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel
 ) {
-  MediumText(
-    text = viewModel.currentTrack.value.title,
-    modifier = Modifier
-      .padding(horizontal = 14.dp)
-      .clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = null
-      ) {
-        viewModel.navigateToSource(scope, bottomSheetState, navController)
-      },
-    fontSize = 24.sp,
-    color = monet.onPrimaryContainer,
-    fontWeight = FontWeight.Bold
-  )
-  Spacer(Modifier.height(2.dp))
-  Text(
-    text = viewModel.currentTrack.value.artist,
-    modifier = Modifier
-      .padding(horizontal = 14.dp)
-      .clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = null
-      ) {
-        viewModel.navigateToArtist(scope, bottomSheetState, navController)
-      },
-    maxLines = 1,
-    overflow = TextOverflow.Ellipsis,
-    fontSize = 18.sp,
-    color = monet.onPrimaryContainer.copy(alpha = 0.7f)
-  )
+  Row() {
+    Column() {
+      Text(
+        text = viewModel.currentTrack.value.title,
+        modifier = Modifier
+          .padding(horizontal = 14.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {
+            viewModel.navigateToSource(scope, bottomSheetState, navController)
+          },
+        fontSize = 24.sp,
+        color = monet.onPrimaryContainer,
+        fontWeight = FontWeight.ExtraBold,
+        maxLines = 1
+      )
+
+      Spacer(Modifier.height(2.dp))
+
+      Text(
+        text = viewModel.currentTrack.value.artist,
+        modifier = Modifier
+          .padding(horizontal = 14.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {
+            viewModel.navigateToArtist(scope, bottomSheetState, navController)
+          },
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        fontSize = 18.sp,
+        color = monet.onPrimaryContainer.copy(alpha = 0.7f)
+      )
+    }
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    Icon(
+      imageVector = Icons.Rounded.Favorite,
+      contentDescription = "",
+      tint = monet.onPrimaryContainer,
+      modifier = Modifier
+        .align(Alignment.CenterVertically)
+        .padding(end = 12.dp)
+        .size(26.dp)
+    )
+  }
 }
 
 @Composable
@@ -235,10 +251,10 @@ private fun ControlsBottomAccessories(
       colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
     ) {
       Icon(
-        imageVector = Icons.Rounded.Speaker,
+        imageVector = Icons.Rounded.VolumeUp,
         contentDescription = null,
         modifier = Modifier
-          .size(28.dp)
+          .size(32.dp)
           .clip(CircleShape)
           .background(monet.primaryContainer)
           .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 6.dp)
