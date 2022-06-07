@@ -47,7 +47,7 @@ fun NowPlayingControls(
     ControlsSeekbar(viewModel)
     Spacer(Modifier.height(16.dp))
     ControlsMainButtons(viewModel)
-    Spacer(Modifier.height(16.dp))
+    Spacer(Modifier.height(32.dp))
     ControlsBottomAccessories(viewModel)
   }
 }
