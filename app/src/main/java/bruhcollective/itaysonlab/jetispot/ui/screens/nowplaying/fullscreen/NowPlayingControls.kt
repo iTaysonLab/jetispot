@@ -115,8 +115,8 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
     Slider(
       value = viewModel.currentPosition.value.progressRange,
       colors = SliderDefaults.colors(
-        thumbColor = monet.onSecondaryContainer,
-        activeTrackColor = monet.onSecondaryContainer,
+        thumbColor = monet.onPrimaryContainer,
+        activeTrackColor = monet.onPrimaryContainer,
         inactiveTrackColor = monet.onPrimaryContainer.copy(alpha = 0.2f)
       ),
       onValueChange = {},
