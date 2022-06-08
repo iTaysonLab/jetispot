@@ -21,10 +21,12 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
+import bruhcollective.itaysonlab.jetispot.ui.theme.PlayerTheme
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.spotify.connectstate.Player
 import com.spotify.metadata.Metadata
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
@@ -35,44 +37,47 @@ fun NowPlayingBackground(
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
-  ApplicationTheme {
-    val currentColor = viewModel.currentBgColor.value
-    val dominantColorAsBg = if (isSystemInDarkTheme())
-      monet.surface.blendWith(monet.primary, ratio = 0.05f)
-    else
-      monet.primary.copy(0.1f)/* animateColorAsState(
-    if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor
-  ) */
+  PlayerTheme(
+    viewModel = viewModel,
+    darkTheme = isSystemInDarkTheme(),
+    content = {
+      val currentColor = viewModel.currentBgColor.value
+      val dominantColorAsBg = if (isSystemInDarkTheme())
+        monet.surface.blendWith(monet.primary, ratio = 0.05f)
+      else
+        monet.primary.copy(0.1f)/* animateColorAsState(
+      if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor
+    ) */
 
-    Box(modifier = modifier.background(dominantColorAsBg)) {
-      HorizontalPager(
-        count = viewModel.currentQueue.value.size,
-        state = state,
-        modifier = modifier
-      ) { page ->
-        val artworkModifier = Modifier
-          .align(Alignment.Center)
-          .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.30).dp)
-          .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-          .clip(RoundedCornerShape(32.dp))
+      Box(modifier = modifier.background(dominantColorAsBg)) {
+        HorizontalPager(
+          count = viewModel.currentQueue.value.size,
+          state = state,
+          modifier = modifier
+        ) { page ->
+          val artworkModifier = Modifier
+            .align(Alignment.Center)
+            .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.30).dp)
+            .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+            .clip(RoundedCornerShape(32.dp))
 
-        if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
-          Image(
-            viewModel.currentTrack.value.artworkCompose!!,
-            contentDescription = null,
-            modifier = artworkModifier,
-            contentScale = ContentScale.Crop
-          )
-        } else {
-          NowPlayingBackgroundItem(
-            track = viewModel.currentQueue.value[page],
-            modifier = artworkModifier
-          )
+          if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
+            Image(
+              viewModel.currentTrack.value.artworkCompose!!,
+              contentDescription = null,
+              modifier = artworkModifier,
+              contentScale = ContentScale.Crop
+            )
+          } else {
+            NowPlayingBackgroundItem(
+              track = viewModel.currentQueue.value[page],
+              modifier = artworkModifier
+            )
+          }
         }
       }
     }
-  }
-
+  )
 }
 
 @Composable

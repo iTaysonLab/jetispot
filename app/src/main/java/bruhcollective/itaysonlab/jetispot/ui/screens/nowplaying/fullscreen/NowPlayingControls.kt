@@ -42,7 +42,7 @@ fun NowPlayingControls(
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
-  Column(modifier, verticalArrangement = Arrangement.Bottom) {
+  Column(modifier, verticalArrangement = Arrangement.SpaceAround) {
     ControlsHeader(scope, navController, bottomSheetState, viewModel)
     Spacer(Modifier.height(1.dp))
     ControlsSeekbar(viewModel)
@@ -161,7 +161,7 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 @Composable
 private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
   Row(
-    horizontalArrangement = Arrangement.Center,
+    horizontalArrangement = Arrangement.SpaceAround,
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier.fillMaxWidth()
   ) {
@@ -173,7 +173,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
-    Spacer(modifier = Modifier.width(12.dp))
+    Spacer(modifier = Modifier.width(8.dp))
 
     IconButton(
       onClick = { viewModel.skipPrevious() },
@@ -190,7 +190,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         .padding(end = 2.dp))
     }
 
-    Spacer(modifier = Modifier.width(20.dp))
+    Spacer(modifier = Modifier.width(22.dp))
 
     Surface(
       color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
@@ -212,7 +212,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       )
     }
 
-    Spacer(modifier = Modifier.width(20.dp))
+    Spacer(modifier = Modifier.width(22.dp))
 
     IconButton(
       onClick = { viewModel.skipNext() },
@@ -232,7 +232,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         .padding(start = 2.dp))
     }
 
-    Spacer(modifier = Modifier.width(12.dp))
+    Spacer(modifier = Modifier.width(8.dp))
 
     IconButton(
       onClick = { /*TODO*/ },
