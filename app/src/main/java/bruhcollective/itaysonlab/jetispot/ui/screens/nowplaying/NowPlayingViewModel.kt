@@ -48,9 +48,6 @@ class NowPlayingViewModel @Inject constructor(
   fun skipPrevious() = spPlayerServiceManager.skipPrevious()
   fun togglePlayPause() = spPlayerServiceManager.playPause()
   fun skipNext() = spPlayerServiceManager.skipNext()
-  fun skipToCurrentPage() {
-    if (SpPlayerServiceManager.ServiceExtraListener.onTrackIndexChanged()) skipNext() else skipPrevious()
-  }
 
   @OptIn(ExperimentalMaterialApi::class)
   fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
