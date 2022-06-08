@@ -31,11 +31,11 @@ class SpAuthManager @Inject constructor(
 
   @Suppress("BlockingMethodInNonBlockingContext")
   suspend fun authStored() = withContext(Dispatchers.IO) {
-    try {
+    runCatching {
       spSessionManager.setSession(spSessionManager.createSession().stored().create())
       spPlayerManager.createPlayer()
       spCollectionManager.init()
-    } catch (e: Exception) {}
+    }
   }
 
   sealed class AuthResult {
