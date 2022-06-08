@@ -2,12 +2,9 @@ package bruhcollective.itaysonlab.jetispot.ui
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
@@ -18,9 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
+import androidx.navigation.compose.*
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -40,8 +35,6 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import com.spotify.metadata.Metadata
-import java.io.Serializable
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @Composable
@@ -108,7 +101,7 @@ fun AppNavigation(
     }
 
     composable(Screen.Config.route) { ConfigScreen(provideLambdaController) }
-    composable(Screen.StorageConfig.route) { StorageScreen(provideLambdaController) }
+    composable(Screen.StorageConfig.route) { StorageScreen() }
     composable(Screen.QualityConfig.route) { QualityConfigScreen(provideLambdaController) }
     composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen(provideLambdaController) }
     composable(Screen.Search.route) { BrowseRootScreen(provideLambdaController) }
