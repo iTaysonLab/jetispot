@@ -144,9 +144,9 @@ class MainActivity : ComponentActivity() {
               .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
               contentPadding = PaddingValues(bottom = navBarHeightDp)
             ) {
-              Screen.showInBottomNavigation.forEach { screen ->
+              Screen.showInBottomNavigation.forEach { (screen, icon) ->
                 NavigationBarItem(
-                  icon = { Icon(screen.icon!!, contentDescription = stringResource(screen.title)) },
+                  icon = { Icon(icon, contentDescription = stringResource(screen.title)) },
                   label = { Text(stringResource(screen.title)) },
                   selected = lambdaNavController.controller().backQueue.any { it.destination.route?.startsWith(screen.route) == true },
                   onClick = {
