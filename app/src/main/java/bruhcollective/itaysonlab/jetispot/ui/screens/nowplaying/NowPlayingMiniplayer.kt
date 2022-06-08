@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableSyncImage
 
@@ -24,7 +26,7 @@ fun NowPlayingMiniplayer(
   modifier: Modifier
 ) {
   Surface(tonalElevation = 8.dp, modifier = modifier) {
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp)).fillMaxSize()) {
       LinearProgressIndicator(
         progress = viewModel.currentPosition.value.progressRange,
         color = MaterialTheme.colorScheme.primary,
