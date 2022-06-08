@@ -22,15 +22,30 @@ fun BrowseScreen(
   val scrollBehavior = rememberEUCScrollBehavior()
   var appBarTitle by remember { mutableStateOf("") }
 
-  Scaffold(topBar = {
-    LargeTopAppBar(title = {
-      Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
-    }, navigationIcon = {
-      IconButton(onClick = { navController.popBackStack() }) {
-        Icon(Icons.Rounded.ArrowBack, null)
-      }
-    }, colors = TopAppBarDefaults.largeTopAppBarColors(), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-  }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+  Scaffold(
+    topBar = {
+      LargeTopAppBar(
+        title = {
+          Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        },
+        navigationIcon = {
+          IconButton(onClick = { navController.popBackStack() }) {
+            Icon(Icons.Rounded.ArrowBack, null)
+          }
+        },
+        colors = TopAppBarDefaults.largeTopAppBarColors(),
+        contentPadding = PaddingValues(
+          top = with(LocalDensity.current) {
+            WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+          }
+        ),
+        scrollBehavior = scrollBehavior
+      )
+    },
+    modifier = Modifier
+      .fillMaxSize()
+      .nestedScroll(scrollBehavior.nestedScrollConnection)
+  ) { padding ->
     Box(Modifier.padding(padding)) {
       HubScreen(
         navController,

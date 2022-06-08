@@ -51,20 +51,26 @@ fun ListeningHistoryScreen(
 
   when (viewModel.state) {
     is HistoryViewModel.State.Loaded -> {
-      Scaffold(topBar = {
-        LargeTopAppBar(title = {
-          Text(stringResource(id = R.string.listening_history))
-        }, navigationIcon = {
-          IconButton(onClick = { navController.popBackStack() }) {
-            Icon(Icons.Rounded.ArrowBack, null)
-          }
-        }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
-        LazyColumn(
-          modifier = Modifier
-            .fillMaxHeight()
-            .padding(padding)
-        ) {
+      Scaffold(
+        topBar = {
+          LargeTopAppBar(
+            title = { Text(stringResource(id = R.string.listening_history)) },
+            navigationIcon = {
+              IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.Rounded.ArrowBack, null)
+              }
+            },
+            contentPadding = PaddingValues(
+              top = with(LocalDensity.current) {
+                WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+              }
+            ),
+            scrollBehavior = scrollBehavior
+          )
+      },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+      { padding ->
+        LazyColumn(modifier = Modifier.fillMaxHeight().padding(padding)) {
           (viewModel.state as HistoryViewModel.State.Loaded).data.apply {
             if (header != null) {
               item(
@@ -82,6 +88,7 @@ fun ListeningHistoryScreen(
         }
       }
     }
+
     is HistoryViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HistoryViewModel.State.Error).error, onReload = { scope.launch(block = loadFunc) }, modifier = Modifier.fillMaxSize())
     HistoryViewModel.State.Loading -> PagingLoadingPage(Modifier.fillMaxSize())
   }
