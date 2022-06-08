@@ -10,9 +10,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
+import androidx.compose.runtime.SideEffect
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun ApplicationTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun ApplicationTheme(
+  darkTheme: Boolean = isSystemInDarkTheme(),
+  content: @Composable () -> Unit
+) {
+  val sysUiController = rememberSystemUiController()
+
+  SideEffect {
+    sysUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !darkTheme)
+  }
+
   MaterialTheme(
     colorScheme = provideColorScheme(darkTheme),
     shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(8.dp)),
@@ -35,22 +46,6 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     }
   }
 }
-
-//@Composable
-//private fun providePlayerColorScheme(darkTheme: Boolean): ColorScheme {
-//  return when {
-//    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> if (darkTheme) {
-//      dynamicDarkColorScheme(LocalContext.current)
-//    } else {
-//      dynamicLightColorScheme(LocalContext.current)
-//    }
-//    else -> if (darkTheme) {
-//      darkColorScheme()
-//    } else {
-//      lightColorScheme()
-//    }
-//  }
-//}
 
 @Composable
 fun PlayerTheme(

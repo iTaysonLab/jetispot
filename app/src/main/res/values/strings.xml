@@ -130,4 +130,13 @@
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
+
+    <string name="artist_role_main">main artist</string>
+    <string name="artist_role_feat">featured artist</string>
+    <string name="artist_role_remixer">remixer</string>
+    <string name="artist_role_actor">actor</string>
+    <string name="artist_role_composer">composer</string>
+    <string name="artist_role_conductor">conductor</string>
+    <string name="artist_role_orchestra">orchestra</string>
+    <string name="artist_role_unknown">unknown role</string>
 </resources>

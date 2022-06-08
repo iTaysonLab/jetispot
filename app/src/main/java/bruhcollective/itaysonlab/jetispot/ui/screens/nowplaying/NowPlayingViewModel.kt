@@ -12,6 +12,7 @@ import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
+import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import com.spotify.metadata.Metadata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -56,7 +57,11 @@ class NowPlayingViewModel @Inject constructor(
   @OptIn(ExperimentalMaterialApi::class)
   fun navigateToArtist(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
     scope.launch { sheetState.collapse() }
-    navigationController.navigate(ArtistId.fromHex(Utils.bytesToHex(getCurrentTrackAsMetadata().artistList.first().gid)).toSpotifyUri())
+    navigationController.navigate(
+      BottomSheet.JumpToArtist, mapOf(
+        "artistIdsAndRoles" to getCurrentTrackAsMetadata().artistWithRoleList.joinToString("|") { Utils.bytesToHex(it.toByteString()) }
+      )
+    )
   }
 
   init {

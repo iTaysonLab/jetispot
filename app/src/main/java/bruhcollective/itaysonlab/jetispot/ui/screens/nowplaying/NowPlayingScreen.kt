@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +33,8 @@ fun NowPlayingScreen(
   val scope = rememberCoroutineScope()
   val mainPagerState = rememberPagerState()
 
-  LaunchedEffect(Unit) {
+  // TODO migrate to using state & SideEffect
+  DisposableEffect(Unit) {
     // one-time VM-UI connection
     viewModel.uiOnTrackIndexChanged = { new ->
       scope.launch {
@@ -44,6 +45,10 @@ fun NowPlayingScreen(
           mainPagerState.scrollToPage(new)
         }
       }
+    }
+
+    onDispose {
+      viewModel.uiOnTrackIndexChanged = {}
     }
   }
 
