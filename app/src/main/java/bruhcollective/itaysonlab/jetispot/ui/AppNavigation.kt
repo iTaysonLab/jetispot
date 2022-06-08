@@ -3,32 +3,25 @@ package bruhcollective.itaysonlab.jetispot.ui
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
-import androidx.navigation.navDeepLink
+import androidx.navigation.*
+import androidx.navigation.compose.*
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.ui.bottomsheets.jump_to_artist.JumpToArtistBottomSheet
+import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.auth.AuthScreen
@@ -40,7 +33,10 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 
+@OptIn(ExperimentalMaterialNavigationApi::class)
 @Composable
 fun AppNavigation(
   navController: NavHostController,
@@ -105,7 +101,7 @@ fun AppNavigation(
     }
 
     composable(Screen.Config.route) { ConfigScreen(provideLambdaController) }
-    composable(Screen.StorageConfig.route) { StorageScreen(provideLambdaController) }
+    composable(Screen.StorageConfig.route) { StorageScreen() }
     composable(Screen.QualityConfig.route) { QualityConfigScreen(provideLambdaController) }
     composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen(provideLambdaController) }
     composable(Screen.Search.route) { BrowseRootScreen(provideLambdaController) }
@@ -146,6 +142,11 @@ fun AppNavigation(
         }
       })
     }
+
+    bottomSheet(BottomSheet.JumpToArtist.route) { entry ->
+      val data = remember { entry.arguments!!.getString("artistIdsAndRoles")!! }
+      JumpToArtistBottomSheet(navController = provideLambdaController, data = data)
+    }
   }
 }
 
@@ -160,6 +161,16 @@ value class LambdaNavigationController(
 
   fun navigate(screen: Screen) = controller().navigate(screen.route)
   fun navigate(dialog: Dialog) = controller().navigate(dialog.route)
+
+  fun navigate(sheet: BottomSheet, args: Map<String, String>) {
+    var url = sheet.route
+
+    args.forEach { entry ->
+      url = url.replace("{${entry.key}}", entry.value)
+    }
+
+    controller().navigate(url)
+  }
 
   fun navigateAndClearStack(screen: Screen) = controller().navigate(screen.route) { popUpTo(Screen.NavGraph.route) }
 
