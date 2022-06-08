@@ -30,13 +30,13 @@ fun NowPlayingHeader(
     IconButton(onClick = onCloseClick, Modifier.size(35.dp)) {
       Icon(
         imageVector = Icons.Rounded.KeyboardArrowDown,
-        tint = monet.onSecondaryContainer.copy(0.85f),
+        tint = monet.onSecondaryContainer.copy(0.7f),
         contentDescription = null,
         modifier = Modifier.size(35.dp)
       )
     }
 
-    Column(Modifier.weight(1f).padding(vertical = 16.dp)) {
+    Column(Modifier.weight(1f).padding(top = 32.dp)) {
       Text(
         text = stateTitle.uppercase(),
         modifier = Modifier
@@ -62,12 +62,14 @@ fun NowPlayingHeader(
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp
       )
+
+
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
       Icon(
         imageVector = Icons.Rounded.MoreVert,
-        tint = monet.onSecondaryContainer.copy(0.85f),
+        tint = monet.onSecondaryContainer.copy(0.7f),
         contentDescription = null
       )
     }

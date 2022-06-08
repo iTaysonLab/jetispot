@@ -48,9 +48,11 @@ fun NowPlayingControls(
   pagerState: PagerState
 ) {
   Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
+    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+
     ArtworkPager(viewModel, pagerState)
 
-    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 20.dp, top = 0.dp))
 
     Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
@@ -65,7 +67,7 @@ fun NowPlayingControls(
 
     ControlsBottomAccessories(viewModel)
 
-    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
   }
 }
 
@@ -191,67 +193,65 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
-    Spacer(modifier = Modifier.padding(start = 4.dp, end = 0.dp))
-
-    IconButton(
-      onClick = { viewModel.skipPrevious() },
-      modifier = Modifier
-        .size(56.dp)
-        .clip(CircleShape)
-        .background(monet.onPrimaryContainer.copy(0.1f)),
-      colors = IconButtonDefaults.iconButtonColors(
-        contentColor = monet.onSecondaryContainer.copy(0.85f)
-      )
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceEvenly,
+      modifier = Modifier.fillMaxWidth(0.85f)
     ) {
-      Icon(
-        imageVector = Icons.Rounded.SkipPrevious,
-        contentDescription = null,
-        modifier = Modifier.size(42.dp)
-      )
-    }
-
-    Spacer(modifier = Modifier.padding(start = 0.dp, end = 0.dp))
-
-    Surface(
-      color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
-      modifier = Modifier
-        .clip(RoundedCornerShape(26.dp))
-        .height(72.dp)
-        .width(106.dp)
-        .clickable(
-          interactionSource = remember { MutableInteractionSource() },
-          indication = rememberRipple(color = monet.primary)
-        ) { viewModel.togglePlayPause() }
-    ) {
-      PlayPauseButton(
-        isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        color = monet.onSecondaryContainer.copy(0.85f) /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
+      IconButton(
+        onClick = { viewModel.skipPrevious() },
         modifier = Modifier
-          .size(64.dp)
-          .align(Alignment.CenterVertically)
-      )
+          .size(56.dp)
+          .clip(CircleShape)
+          .background(monet.onPrimaryContainer.copy(0.1f)),
+        colors = IconButtonDefaults.iconButtonColors(
+          contentColor = monet.onSecondaryContainer.copy(0.85f)
+        )
+      ) {
+        Icon(
+          imageVector = Icons.Rounded.SkipPrevious,
+          contentDescription = null,
+          modifier = Modifier.size(42.dp)
+        )
+      }
+
+      Surface(
+        color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
+        modifier = Modifier
+          .clip(RoundedCornerShape(26.dp))
+          .height(72.dp)
+          .width(106.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(color = monet.primary)
+          ) { viewModel.togglePlayPause() }
+      ) {
+        PlayPauseButton(
+          isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+          color = monet.onSecondaryContainer.copy(0.85f) /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
+          modifier = Modifier
+            .size(64.dp)
+            .align(Alignment.CenterVertically)
+        )
+      }
+
+      IconButton(
+        onClick = { viewModel.skipNext() },
+        modifier = Modifier
+          .size(56.dp)
+          .clip(CircleShape)
+          .background(monet.onPrimaryContainer.copy(0.1f)),
+        colors = IconButtonDefaults.iconButtonColors(
+          contentColor = monet.onSecondaryContainer.copy(0.85f)
+        )
+      ) {
+        Icon(
+          imageVector = Icons.Rounded.SkipNext,
+          contentDescription = null,
+          modifier = Modifier.size(42.dp)
+        )
+      }
     }
-
-    Spacer(modifier = Modifier.padding(start = 0.dp, end = 0.dp))
-
-    IconButton(
-      onClick = { viewModel.skipNext() },
-      modifier = Modifier
-        .size(56.dp)
-        .clip(CircleShape)
-        .background(monet.onPrimaryContainer.copy(0.1f)),
-      colors = IconButtonDefaults.iconButtonColors(
-        contentColor = monet.onSecondaryContainer.copy(0.85f)
-      )
-    ) {
-      Icon(
-        imageVector = Icons.Rounded.SkipNext,
-        contentDescription = null,
-        modifier = Modifier.size(42.dp)
-      )
-    }
-
-    Spacer(modifier = Modifier.padding(start = 4.dp, end = 0.dp))
 
     IconButton(
       onClick = { /*TODO*/ },
@@ -287,7 +287,7 @@ private fun ControlsBottomAccessories(
       )
     ) {
       Icon(
-        imageVector = Icons.Rounded.VolumeUp,
+        imageVector = Icons.Rounded.VolumeDown,
         contentDescription = null,
         modifier = Modifier
           .size(32.dp)
@@ -326,7 +326,6 @@ private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState)
     count = viewModel.currentQueue.value.size,
     state = pagerState,
     modifier = Modifier
-      .padding(top = 16.dp, bottom = 0.dp)
       .fillMaxWidth()
       .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
   ) { page ->
