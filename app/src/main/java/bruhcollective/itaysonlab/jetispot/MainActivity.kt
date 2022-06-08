@@ -133,38 +133,47 @@ class MainActivity : ComponentActivity() {
           sysUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isDark)
         }
 
-        Scaffold(
-          bottomBar = {
-            val currentDestination = navBackStackEntry?.destination
-            if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
-            bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(modifier = Modifier
-              .offset {
-                IntOffset(0, ((80.dp.toPx() + navBarHeight) * bsOffset()).toInt())
-              }
-              .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
-              contentPadding = PaddingValues(bottom = navBarHeightDp)
-            ) {
-              Screen.showInBottomNavigation.forEach { screen ->
-                NavigationBarItem(
-                  icon = { Icon(screen.icon!!, contentDescription = stringResource(screen.title)) },
-                  label = { Text(stringResource(screen.title)) },
-                  selected = lambdaNavController.controller().backQueue.any { it.destination.route?.startsWith(screen.route) == true },
-                  onClick = {
-                    navController.navigate(screen.route) {
-                      popUpTo(Screen.NavGraph.route) {
-                        saveState = true
-                      }
+        ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+          Scaffold(
+            bottomBar = {
+              val currentDestination = navBackStackEntry?.destination
+              if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
+              bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(modifier = Modifier
+                .offset {
+                  IntOffset(0, ((80.dp.toPx() + navBarHeight) * bsOffset()).toInt())
+                }
+                .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
+                contentPadding = PaddingValues(bottom = navBarHeightDp)
+              ) {
+                Screen.showInBottomNavigation.forEach { screen ->
+                  NavigationBarItem(
+                    icon = {
+                      Icon(
+                        screen.icon!!,
+                        contentDescription = stringResource(screen.title)
+                      )
+                    },
+                    label = { Text(stringResource(screen.title)) },
+                    selected = lambdaNavController.controller().backQueue.any {
+                      it.destination.route?.startsWith(
+                        screen.route
+                      ) == true
+                    },
+                    onClick = {
+                      navController.navigate(screen.route) {
+                        popUpTo(Screen.NavGraph.route) {
+                          saveState = true
+                        }
 
-                      launchSingleTop = true
-                      restoreState = true
+                        launchSingleTop = true
+                        restoreState = true
+                      }
                     }
-                  }
-                )
+                  )
+                }
               }
             }
-          }
-        ) { innerPadding ->
-          ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+          ) { innerPadding ->
             BottomSheetScaffold(
               sheetContent = {
                 NowPlayingScreen(
@@ -177,9 +186,15 @@ class MainActivity : ComponentActivity() {
               sheetPeekHeight = bsPeek,
               backgroundColor = MaterialTheme.colorScheme.surface
             ) { innerScaffoldPadding ->
-              AppNavigation(navController = navController, provideLambdaController = lambdaNavController, sessionManager = sessionManager, authManager = authManager, modifier = Modifier
-                .padding(innerScaffoldPadding)
-                .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp))
+              AppNavigation(
+                navController = navController,
+                provideLambdaController = lambdaNavController,
+                sessionManager = sessionManager,
+                authManager = authManager,
+                modifier = Modifier
+                  .padding(innerScaffoldPadding)
+                  .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
+              )
             }
           }
         }

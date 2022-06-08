@@ -47,3 +47,10 @@ enum class Dialog(
   AuthDisclaimer("dialogs/disclaimers"),
   Logout("dialogs/logout")
 }
+
+@Immutable
+enum class BottomSheet(
+  val route: String
+) {
+  JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}") // ID=ROLE|ID=ROLE
+}
