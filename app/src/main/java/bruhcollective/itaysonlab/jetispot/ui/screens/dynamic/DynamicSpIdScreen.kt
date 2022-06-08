@@ -25,7 +25,7 @@ fun DynamicSpIdScreen(
   val argument = uriSeparated.getOrElse(2) { "" }
 
   when (uriSeparated[0]) {
-    "genre" -> BrowseScreen(navController = navController, id)
+    "genre" -> BrowseScreen(navController, id)
 
     "artist" -> HubScreen(
       navController = navController,
