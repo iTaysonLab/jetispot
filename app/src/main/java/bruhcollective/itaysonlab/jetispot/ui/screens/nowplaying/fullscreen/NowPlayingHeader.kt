@@ -27,8 +27,13 @@ fun NowPlayingHeader(
   modifier: Modifier
 ) {
   Row(modifier, verticalAlignment = Alignment.CenterVertically) {
-    IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = monet.onBackground, contentDescription = null)
+    IconButton(onClick = onCloseClick, Modifier.size(35.dp)) {
+      Icon(
+        imageVector = Icons.Rounded.KeyboardArrowDown,
+        tint = monet.onSecondaryContainer.copy(0.85f),
+        contentDescription = null,
+        modifier = Modifier.size(35.dp)
+      )
     }
 
     Column(Modifier.weight(1f).padding(vertical = 16.dp)) {
@@ -60,7 +65,11 @@ fun NowPlayingHeader(
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.MoreVert, tint = monet.onBackground, contentDescription = null)
+      Icon(
+        imageVector = Icons.Rounded.MoreVert,
+        tint = monet.onSecondaryContainer.copy(0.85f),
+        contentDescription = null
+      )
     }
   }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
@@ -25,10 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -71,7 +74,7 @@ private fun ControlsHeader(
             viewModel.navigateToSource(scope, bottomSheetState, navController)
           },
         fontSize = 24.sp,
-        color = monet.onPrimaryContainer,
+        color = monet.onSecondaryContainer.copy(0.85f),
         fontWeight = FontWeight.ExtraBold,
         maxLines = 1
       )
@@ -91,7 +94,7 @@ private fun ControlsHeader(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 18.sp,
-        color = monet.onPrimaryContainer.copy(alpha = 0.7f)
+        color = monet.onSecondaryContainer.copy(alpha = 0.7f)
       )
     }
 
@@ -100,7 +103,7 @@ private fun ControlsHeader(
     Icon(
       imageVector = Icons.Rounded.Favorite,
       contentDescription = "",
-      tint = monet.onPrimaryContainer,
+      tint = monet.onSecondaryContainer.copy(0.85f),
       modifier = Modifier
         .align(Alignment.CenterVertically)
         .padding(end = 12.dp)
@@ -115,9 +118,9 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
     Slider(
       value = viewModel.currentPosition.value.progressRange,
       colors = SliderDefaults.colors(
-        thumbColor = monet.onPrimaryContainer,
-        activeTrackColor = monet.onPrimaryContainer,
-        inactiveTrackColor = monet.onPrimaryContainer.copy(alpha = 0.2f)
+        thumbColor = monet.onSecondaryContainer,
+        activeTrackColor = monet.onSecondaryContainer.copy(0.85f),
+        inactiveTrackColor = monet.onSecondaryContainer.copy(alpha = 0.2f)
       ),
       onValueChange = {},
       modifier = Modifier.padding(horizontal = 8.dp)
@@ -135,25 +138,24 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
           text = DateUtils.formatElapsedTime(
             viewModel.currentPosition.value.progressMilliseconds / 1000L
           ),
-          color = monet.onPrimaryContainer,
+          color = monet.onSecondaryContainer.copy(0.85f),
           fontSize = 12.sp,
           fontWeight = FontWeight.Bold
         )
-        Text(text = " / ", color = monet.onPrimaryContainer, fontSize = 12.sp)
+
+        Text(text = " / ", color = monet.onSecondaryContainer.copy(0.85f), fontSize = 12.sp)
+
         Text(
           text = DateUtils.formatElapsedTime(
             viewModel.currentTrack.value.duration / 1000L
           ),
-          color = monet.onPrimaryContainer,
+          color = monet.onSecondaryContainer.copy(0.85f),
           fontSize = 12.sp,
           fontWeight = FontWeight.Bold
         )
       }
     }
   }
-
-
-
 }
 
 @Composable
@@ -166,7 +168,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
+      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSecondaryContainer.copy(0.85f))
     ) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
@@ -178,8 +180,10 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       modifier = Modifier
         .size(56.dp)
         .clip(CircleShape)
-        .background(monet.surfaceVariant),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSurfaceVariant)
+        .background(monet.onPrimaryContainer.copy(0.1f)),
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null, modifier = Modifier
         .size(42.dp)
@@ -189,19 +193,19 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
     Spacer(modifier = Modifier.width(20.dp))
 
     Surface(
-      color = monet.primaryContainer,
+      color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
       modifier = Modifier
         .clip(RoundedCornerShape(26.dp))
         .height(72.dp)
         .width(106.dp)
         .clickable(
           interactionSource = remember { MutableInteractionSource() },
-          indication = rememberRipple(color = Color.Black)
+          indication = rememberRipple(color = monet.primary)
         ) { viewModel.togglePlayPause() }
     ) {
       PlayPauseButton(
         isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        color = monet.onPrimaryContainer /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
+        color = monet.onSecondaryContainer.copy(0.85f) /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
         modifier = Modifier
           .size(64.dp)
           .align(Alignment.CenterVertically)
@@ -215,8 +219,10 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       modifier = Modifier
         .size(56.dp)
         .clip(CircleShape)
-        .background(monet.surfaceVariant),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSurfaceVariant)
+        .background(monet.onPrimaryContainer.copy(0.1f)),
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null, modifier = Modifier
         .size(42.dp)
@@ -230,7 +236,9 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       modifier = Modifier
         .size(56.dp)
         .clip(CircleShape),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.Repeat, contentDescription = null)
     }
@@ -255,7 +263,7 @@ private fun ControlsBottomAccessories(
         modifier = Modifier
           .size(32.dp)
           .clip(CircleShape)
-          .background(monet.primaryContainer)
+          .background(monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f))
           .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 6.dp)
       )
     }
@@ -265,9 +273,15 @@ private fun ControlsBottomAccessories(
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSecondaryContainer)
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
-      Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
+      Icon(
+        imageVector = Icons.Rounded.QueueMusic,
+        contentDescription = null,
+        modifier = Modifier.size(26.dp)
+      )
     }
   }
 }

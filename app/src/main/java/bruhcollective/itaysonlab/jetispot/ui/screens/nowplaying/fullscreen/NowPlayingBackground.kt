@@ -38,7 +38,7 @@ fun NowPlayingBackground(
   ApplicationTheme {
     val currentColor = viewModel.currentBgColor.value
     val dominantColorAsBg = if (isSystemInDarkTheme())
-      Color.Black.blendWith(monet.primary, ratio = 0.1f)
+      monet.surface.blendWith(monet.primary, ratio = 0.05f)
     else
       monet.primary.copy(0.1f)/* animateColorAsState(
     if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor
