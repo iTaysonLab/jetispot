@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +52,7 @@ fun NowPlayingControls(
 
     Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
 
-    Column() {
+    Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
       Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
       ControlsSeekbar(viewModel)
@@ -183,7 +181,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = 8.dp)
+      .padding(horizontal = 16.dp)
   ) {
     IconButton(
       onClick = { /*TODO*/ },
@@ -272,7 +270,12 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
 private fun ControlsBottomAccessories(
   viewModel: NowPlayingViewModel,
 ) {
-  Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(bottom = 16.dp)) {
+  Row(
+    horizontalArrangement = Arrangement.Center,
+    modifier = Modifier
+      .padding(bottom = 16.dp)
+      .padding(horizontal = 8.dp)
+  ) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier
@@ -321,7 +324,9 @@ private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState)
   HorizontalPager(
     count = viewModel.currentQueue.value.size,
     state = pagerState,
-    modifier = Modifier.padding(top = 16.dp, bottom = 0.dp)
+    modifier = Modifier
+      .padding(top = 16.dp, bottom = 0.dp)
+      .fillMaxWidth()
   ) { page ->
     val artworkModifier = Modifier
       .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)

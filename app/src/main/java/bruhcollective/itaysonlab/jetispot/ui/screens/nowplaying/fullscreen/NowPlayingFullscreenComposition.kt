@@ -28,7 +28,7 @@ fun NowPlayingFullscreenComposition (
     NowPlayingBackground(
       state = mainPagerState,
       viewModel = viewModel,
-      modifier = Modifier.fillMaxSize(),
+      modifier = Modifier.fillMaxSize()
     )
 
     Column() {
@@ -51,7 +51,6 @@ fun NowPlayingFullscreenComposition (
         navController = navController,
         bottomSheetState = bottomSheetState,
         modifier = Modifier
-          .padding(horizontal = 8.dp)
           .padding(bottom = 0.dp)
           .navigationBarsPadding()
           .fillMaxHeight(),
