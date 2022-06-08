@@ -3,6 +3,8 @@ package bruhcollective.itaysonlab.jetispot
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -38,7 +40,6 @@ import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,7 +57,6 @@ class MainActivity : ComponentActivity() {
   lateinit var playerServiceManager: SpPlayerServiceManager
 
   private var provider: (() -> NavController)? = null
-  private var providerBackPress: () -> Boolean = { false }
 
   override fun onNewIntent(intent: Intent?) {
     super.onNewIntent(intent)
@@ -68,11 +68,6 @@ class MainActivity : ComponentActivity() {
     super.onDestroy()
   }
 
-  override fun onBackPressed() {
-    if (providerBackPress()) return
-    super.onBackPressed()
-  }
-
   @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -81,6 +76,7 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       ApplicationTheme {
+        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
         // remembers
         val scope = rememberCoroutineScope()
         val bsState = rememberBottomSheetScaffoldState()
@@ -115,15 +111,26 @@ class MainActivity : ComponentActivity() {
           }.coerceIn(0f..1f)
         }
 
-        LaunchedEffect(Unit) {
+        DisposableEffect(backPressedDispatcherOwner, scope, bsState.bottomSheetState.isExpanded) {
+          val callback = backPressedDispatcherOwner?.onBackPressedDispatcher?.addCallback(
+            owner = backPressedDispatcherOwner,
+            enabled = bsState.bottomSheetState.isExpanded,
+          ) {
+            scope.launch {
+              bsState.bottomSheetState.collapse()
+            }
+          }
+
+          onDispose {
+            callback?.remove()
+          }
+        }
+
+        DisposableEffect(navController) {
           provider = { navController }
 
-          // TODO: figure out how to globally intercept with BackHandler, because NavHost takes it over
-          providerBackPress = {
-            if (bsState.bottomSheetState.isExpanded) {
-              scope.launch { bsState.bottomSheetState.collapse() }
-              true
-            } else false
+          onDispose {
+            provider = null
           }
         }
 
