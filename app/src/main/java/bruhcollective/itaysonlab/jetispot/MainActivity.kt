@@ -14,13 +14,10 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -86,16 +83,11 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val lambdaNavController = LambdaNavigationController { navController }
 
-        val isDark = isSystemInDarkTheme()
-        val navBarHeight = WindowInsets.navigationBars.getBottom(LocalDensity.current)
-        val navBarHeightDp = with(LocalDensity.current) { navBarHeight.toDp() }
+        val navBarHeightDp = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
-        val bsVisible =
-          playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
+        val bsVisible = playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
         val bsPeek by animateDpAsState(
-          if (bsVisible) {
-            with(LocalDensity.current) { (80.dp + 72.dp + navBarHeight.toDp()) }
-          } else 0.dp
+          if (bsVisible) 80.dp + 72.dp + navBarHeightDp else 0.dp
         )
 
         // lambdas
@@ -140,7 +132,7 @@ class MainActivity : ComponentActivity() {
             if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
             bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(modifier = Modifier
               .offset {
-                IntOffset(0, ((80.dp.toPx() + navBarHeight) * bsOffset()).toInt())
+                IntOffset(0, ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt())
               }
               .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
               contentPadding = PaddingValues(bottom = navBarHeightDp)
