@@ -50,30 +50,7 @@ fun NowPlayingControls(
   pagerState: PagerState
 ) {
   Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
-    HorizontalPager(
-      count = viewModel.currentQueue.value.size,
-      state = pagerState,
-      modifier = Modifier.padding(top = 16.dp, bottom = 0.dp)
-    ) { page ->
-      val artworkModifier = Modifier
-        .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
-        .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-        .clip(RoundedCornerShape(28.dp))
-
-      if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
-        Image(
-          viewModel.currentTrack.value.artworkCompose!!,
-          contentDescription = null,
-          modifier = artworkModifier,
-          contentScale = ContentScale.Crop
-        )
-      } else {
-        NowPlayingBackgroundItem(
-          track = viewModel.currentQueue.value[page],
-          modifier = artworkModifier
-        )
-      }
-    }
+    ArtworkPager(viewModel, pagerState)
 
     Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
 
@@ -204,7 +181,9 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
   Row(
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 8.dp)
   ) {
     IconButton(
       onClick = { /*TODO*/ },
@@ -331,6 +310,35 @@ private fun ControlsBottomAccessories(
         imageVector = Icons.Rounded.QueueMusic,
         contentDescription = null,
         modifier = Modifier.size(26.dp)
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState) {
+  HorizontalPager(
+    count = viewModel.currentQueue.value.size,
+    state = pagerState,
+    modifier = Modifier.padding(top = 16.dp, bottom = 0.dp)
+  ) { page ->
+    val artworkModifier = Modifier
+      .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
+      .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+      .clip(RoundedCornerShape(28.dp))
+
+    if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
+      Image(
+        viewModel.currentTrack.value.artworkCompose!!,
+        contentDescription = null,
+        modifier = artworkModifier,
+        contentScale = ContentScale.Crop
+      )
+    } else {
+      NowPlayingBackgroundItem(
+        track = viewModel.currentQueue.value[page],
+        modifier = artworkModifier
       )
     }
   }
