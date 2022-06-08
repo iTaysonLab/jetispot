@@ -91,7 +91,7 @@ private fun ShortcutComponentBinder(
 ) {
   Card(
     colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
-    shape = RoundedCornerShape(4.dp),
+    shape = RoundedCornerShape(8.dp),
     modifier = Modifier
       .height(56.dp)
       .fillMaxWidth()
@@ -113,7 +113,7 @@ private fun ShortcutComponentBinder(
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
           .align(Alignment.CenterVertically)
-          .padding(horizontal = 8.dp)
+          .padding(start = 12.dp, end = 8.dp)
       )
     }
   }

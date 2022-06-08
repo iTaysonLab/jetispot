@@ -38,7 +38,6 @@ import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
-
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingControls(
@@ -53,11 +52,10 @@ fun NowPlayingControls(
     HorizontalPager(
       count = viewModel.currentQueue.value.size,
       state = pagerState,
-      modifier = Modifier.padding(top = 16.dp, bottom = 0.dp)
+      modifier = Modifier.padding(top = 16.dp)
     ) { page ->
       val artworkModifier = Modifier
-        .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
-        .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+        .size((LocalConfiguration.current.screenWidthDp * 0.9).dp) // TODO: depend on view height
         .clip(RoundedCornerShape(28.dp))
 
       if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
@@ -75,19 +73,15 @@ fun NowPlayingControls(
       }
     }
 
-    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+    Spacer(Modifier.height(16.dp))
 
-    Column() {
+    Column {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
-      Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
       ControlsSeekbar(viewModel)
       Spacer(Modifier.padding(bottom = 8.dp, top = 0.dp))
     }
 
     ControlsMainButtons(viewModel)
-
-//    Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
-
     ControlsBottomAccessories(viewModel)
   }
 }
@@ -100,8 +94,8 @@ private fun ControlsHeader(
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel
 ) {
-  Row() {
-    Column() {
+  Row {
+    Column {
       Text(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
@@ -153,7 +147,7 @@ private fun ControlsHeader(
 
 @Composable
 private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
-  Box() {
+  Box {
     Slider(
       value = viewModel.currentPosition.value.progressRange,
       colors = SliderDefaults.colors(
@@ -225,8 +219,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       )
     ) {
       Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null, modifier = Modifier
-        .size(42.dp)
-        .padding(end = 2.dp))
+        .size(32.dp).align(Alignment.CenterVertically))
     }
 
     Spacer(modifier = Modifier.padding(start = 0.dp, end = 0.dp))
@@ -267,8 +260,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         imageVector = Icons.Rounded.SkipNext,
         contentDescription = null,
         modifier = Modifier
-          .size(42.dp)
-          .padding(start = 2.dp))
+          .size(32.dp).align(Alignment.CenterVertically))
     }
 
     Spacer(modifier = Modifier.padding(start = 4.dp, end = 0.dp))
