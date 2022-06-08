@@ -328,6 +328,7 @@ private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState)
     modifier = Modifier
       .padding(top = 16.dp, bottom = 0.dp)
       .fillMaxWidth()
+      .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
   ) { page ->
     val artworkModifier = Modifier
       .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
