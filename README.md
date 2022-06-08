@@ -36,4 +36,4 @@ __Credits:__
 _* I heard some people can log in with a free account, but I won't provide any assistance to people without premium subscription. There is a possibility that a subscription check may be added to the client side in the future._
 
 Now Playing design credits to <a href="https://dribbble.com/shots/15706284-Spotify-You-Material-You-Redesign/attachments/7505834?mode=media" target="_blank">Nazım Can Tunç</a>
-<p>. Now Playing design implementation credits to <a href="t.me/DotsTeaLab" target="_blank">Dot's Tea Lab</a>
+<p>Now Playing design implementation credits to <a href="t.me/DotsTeaLab" target="_blank">Dot's Tea Lab</a>
