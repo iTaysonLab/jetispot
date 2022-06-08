@@ -25,15 +25,19 @@ fun DynamicSpIdScreen(
   val argument = uriSeparated.getOrElse(2) { "" }
 
   when (uriSeparated[0]) {
-    "genre" -> BrowseScreen(navController = navController, id)
+    "genre" -> BrowseScreen(navController, id)
 
-    "artist" -> HubScreen(navController, needContentPadding = false, loader = {
-      if (argument == "releases") {
-        getReleasesView(id)
-      } else {
-        getArtistView(id)
+    "artist" -> HubScreen(
+      navController = navController,
+      needContentPadding = false,
+      loader = {
+        if (argument == "releases") {
+          getReleasesView(id)
+        } else {
+          getArtistView(id)
+        }
       }
-    })
+    )
 
     "album" -> AlbumScreen(navController, id)
     "playlist" -> PlaylistScreen(navController, id)
@@ -41,15 +45,17 @@ fun DynamicSpIdScreen(
     "radio" -> BrowseRadioScreen(navController)
 
     "collection" -> when (id) {
-      "artist" -> LikedSongsScreen(navController, argument, fullUri)
+      "artist" -> LikedSongsScreen(
+        navController = navController,
+        id = argument,
+        fullUri = fullUri
+      )
       "" -> CollectionScreen(navController)
       /* else -> {  TODO  } */
     }
 
-    "internal" -> {
-      when (id) {
-        "listeninghistory" -> ListeningHistoryScreen(navController)
-      }
+    "internal" -> when (id) {
+      "listeninghistory" -> ListeningHistoryScreen(navController)
     }
 
     "blend" -> when (id) {

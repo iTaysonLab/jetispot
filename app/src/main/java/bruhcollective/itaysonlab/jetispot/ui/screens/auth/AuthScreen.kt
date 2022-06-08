@@ -1,23 +1,46 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.auth
 
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.focus.*
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalAutofill
@@ -25,21 +48,18 @@ import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -47,68 +67,71 @@ fun AuthScreen(
   navController: LambdaNavigationController,
   viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
-  val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
+  val (snackbarContent, setSnackbarContent) = remember { mutableStateOf("", neverEqualPolicy()) }
+
+  LaunchedEffect(snackbarContent) {
+    if (snackbarContent.isNotEmpty()) {
+      snackbarHostState.showSnackbar(snackbarContent)
+    }
+  }
 
   val autofill = LocalAutofill.current
   val focusManager = LocalFocusManager.current
 
-  val usernameFocusRequester = remember { FocusRequester() }
-  val passwordFocusRequester = remember { FocusRequester() }
+  val (username, setUsername) = rememberSaveable { mutableStateOf("") }
+  val (password, setPassword) = rememberSaveable { mutableStateOf("") }
+  val (usernameFocusRequester, passwordFocusRequester) = remember { FocusRequester.createRefs() }
+
+  var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
   Box(
-    Modifier
+    modifier = Modifier
       .fillMaxSize()
-      .statusBarsPadding()
-      .navigationBarsPadding()
+      .systemBarsPadding()
   ) {
     Column(
-      Modifier
-        .align(Alignment.TopCenter)
-        .padding(top = 32.dp)
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+      modifier = Modifier.padding(top = 32.dp)
     ) {
       Text(
         text = stringResource(R.string.auth_welcome),
         fontSize = 24.sp,
         fontWeight = FontWeight.SemiBold,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp)
       )
-      Spacer(Modifier.height(8.dp))
       Text(
         text = stringResource(R.string.auth_welcome_text),
         fontSize = 14.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp)
       )
     }
 
     Column(
-      Modifier
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+      modifier = Modifier
         .align(Alignment.Center)
         .fillMaxWidth()
-        .padding(horizontal = 16.dp)
+        .padding(horizontal = 16.dp),
     ) {
       Autofill(
         autofillTypes = listOf(AutofillType.EmailAddress, AutofillType.Username),
-        onFill = { viewModel.username.value = TextFieldValue(it) }
+        onFill = setUsername
       ) { autofillNode ->
-        OutlinedTextField(value = viewModel.username.value,
+        OutlinedTextField(
+          value = username,
+          onValueChange = setUsername,
           keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
           ),
-          keyboardActions = KeyboardActions(onNext = {
+          keyboardActions = KeyboardActions {
             passwordFocusRequester.requestFocus()
-          }),
+          },
           singleLine = true,
-          label = {
-            Text(stringResource(R.string.username))
-          }, onValueChange = { viewModel.username.value = it }, modifier = Modifier
+          label = { Text(stringResource(R.string.username)) },
+          modifier = Modifier
             .fillMaxWidth()
             .focusTarget()
             .focusRequester(usernameFocusRequester)
@@ -125,20 +148,19 @@ fun AuthScreen(
         )
       }
 
-      Spacer(Modifier.height(8.dp))
-
       Autofill(
         autofillTypes = listOf(AutofillType.Password),
-        onFill = { viewModel.password.value = TextFieldValue(it) }
+        onFill = setPassword
       ) { autofillNode ->
         OutlinedTextField(
-          value = viewModel.password.value,
-          label = {
-            Text(stringResource(R.string.password))
-          },
+          value = password,
+          onValueChange = setPassword,
+          label = { Text(stringResource(R.string.password)) },
           singleLine = true,
-          onValueChange = { viewModel.password.value = it },
-          visualTransformation = if (viewModel.passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+          visualTransformation = if (passwordVisible)
+            VisualTransformation.None
+          else
+            PasswordVisualTransformation(),
           modifier = Modifier
             .fillMaxWidth()
             .focusTarget()
@@ -154,23 +176,23 @@ fun AuthScreen(
             }
             .focusProperties { previous = usernameFocusRequester },
           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-          keyboardActions = KeyboardActions(onDone = {
+          keyboardActions = KeyboardActions {
             focusManager.clearFocus()
-            scope.launch {
-              viewModel.auth(snackbarHostState, navController)
-            }
-          }),
+            viewModel.auth(
+              username = username,
+              password = password,
+              onSuccess = { navController.navigateAndClearStack(Screen.Feed) },
+              onFailure = setSnackbarContent,
+            )
+          },
           trailingIcon = {
-            val image = if (viewModel.passwordVisible.value)
-              Icons.Rounded.Visibility
-            else Icons.Rounded.VisibilityOff
-
-            val description = stringResource(id = if (viewModel.passwordVisible.value) R.string.hide_password else R.string.show_password)
-
-            IconButton(onClick = {
-              viewModel.passwordVisible.value = !viewModel.passwordVisible.value
-            }) {
-              Icon(imageVector = image, description)
+            IconButton(
+              onClick = { passwordVisible = !passwordVisible }
+            ) {
+              if (passwordVisible)
+                Icon(Icons.Rounded.Visibility, stringResource(R.string.hide_password))
+              else
+                Icon(Icons.Rounded.VisibilityOff, stringResource(R.string.show_password))
             }
           }
         )
@@ -182,21 +204,25 @@ fun AuthScreen(
         .align(Alignment.BottomStart)
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
-        .offset(y = (80).dp)
+        .offset(y = 80.dp)
     ) {
-      OutlinedButton(onClick = {
-        navController.navigate(Dialog.AuthDisclaimer)
-      }, modifier = Modifier.align(Alignment.CenterStart)) {
+      OutlinedButton(
+        onClick = { navController.navigate(Dialog.AuthDisclaimer) },
+        modifier = Modifier.align(Alignment.CenterStart)
+      ) {
         Text(stringResource(R.string.auth_disclaimer))
       }
 
       Button(
         onClick = {
-          scope.launch {
-            viewModel.auth(snackbarHostState, navController)
-          }
+          viewModel.auth(
+            username = username,
+            password = password,
+            onSuccess = { navController.navigateAndClearStack(Screen.Feed) },
+            onFailure = setSnackbarContent,
+          )
         },
-        enabled = !viewModel.isAuthInProcess.value,
+        enabled = !viewModel.isAuthInProgress.value,
         modifier = Modifier.align(Alignment.CenterEnd)
       ) {
         Text(stringResource(R.string.auth_next))
@@ -205,18 +231,20 @@ fun AuthScreen(
 
     SnackbarHost(
       hostState = snackbarHostState,
-      Modifier.align(Alignment.BottomStart),
+      modifier = Modifier.align(Alignment.BottomStart),
       snackbar = { data ->
         Snackbar(
           containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(12.dp),
           contentColor = MaterialTheme.colorScheme.onSurface,
           snackbarData = data
         )
-      })
+      }
+    )
   }
 }
 
-@ExperimentalComposeUiApi
+// TODO migrate from Composable wrapper to modifier
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Autofill(
   autofillTypes: List<AutofillType>,
@@ -229,52 +257,10 @@ private fun Autofill(
   autofillTree += autofillNode
 
   Box(
-    Modifier.onGloballyPositioned {
+    modifier = Modifier.onGloballyPositioned {
       autofillNode.boundingBox = it.boundsInWindow()
     }
   ) {
     content(autofillNode)
-  }
-}
-
-@HiltViewModel
-class AuthScreenViewModel @Inject constructor(
-  private val authManager: SpAuthManager
-) : ViewModel() {
-  val username = mutableStateOf(TextFieldValue())
-  val password = mutableStateOf(TextFieldValue())
-
-  val passwordVisible = mutableStateOf(false)
-  val isAuthInProcess = mutableStateOf(false)
-
-  suspend fun auth(shs: SnackbarHostState, nc: LambdaNavigationController) {
-    if (isAuthInProcess.value) return
-    isAuthInProcess.value = true
-
-    if (username.value.text.isEmpty() || password.value.text.isEmpty()) {
-      shs.showSnackbar(nc.string(R.string.auth_err_empty))
-      isAuthInProcess.value = false
-      return
-    }
-
-    when (val result = authManager.authWith(username.value.text, password.value.text)) {
-      is SpAuthManager.AuthResult.Exception -> {
-        shs.showSnackbar("Java Error: ${result.e.message}")
-      }
-      is SpAuthManager.AuthResult.SpError -> {
-        shs.showSnackbar(
-          when (result.msg) {
-            "BadCredentials" -> nc.string(R.string.auth_err_badcreds)
-            "PremiumAccountRequired" -> nc.string(R.string.auth_err_premium)
-            else -> "Spotify API error: ${result.msg}"
-          }
-        )
-      }
-      SpAuthManager.AuthResult.Success -> {
-        nc.navigateAndClearStack(Screen.Feed)
-      }
-    }
-
-    isAuthInProcess.value = false
   }
 }

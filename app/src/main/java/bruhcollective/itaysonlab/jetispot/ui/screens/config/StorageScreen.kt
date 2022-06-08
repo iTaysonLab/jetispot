@@ -33,7 +33,6 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.metadata_db.SpMetadataDb
 import bruhcollective.itaysonlab.jetispot.core.util.Device
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.findActivity
@@ -50,7 +49,6 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorageScreen(
-  navController: LambdaNavigationController,
   viewModel: StorageViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
