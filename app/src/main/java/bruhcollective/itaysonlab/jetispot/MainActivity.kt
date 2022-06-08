@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
@@ -84,7 +83,6 @@ class MainActivity : ComponentActivity() {
       ApplicationTheme {
         // remembers
         val scope = rememberCoroutineScope()
-        val sysUiController = rememberSystemUiController()
         val bsState = rememberBottomSheetScaffoldState()
 
         val bottomSheetNavigator = rememberBottomSheetNavigator()
@@ -127,10 +125,6 @@ class MainActivity : ComponentActivity() {
               true
             } else false
           }
-        }
-
-        SideEffect {
-          sysUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isDark)
         }
 
         Scaffold(
