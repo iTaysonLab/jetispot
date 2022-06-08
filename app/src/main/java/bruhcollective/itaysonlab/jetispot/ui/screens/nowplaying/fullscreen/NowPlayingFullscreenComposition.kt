@@ -31,30 +31,32 @@ fun NowPlayingFullscreenComposition (
       modifier = Modifier.fillMaxSize(),
     )
 
-    // main content
-    NowPlayingHeader(
-      stateTitle = "" /*stringResource(id = viewModel.getHeaderTitle())*/,
-      onCloseClick = {
-        scope.launch { bottomSheetState.collapse() }
-      },
-      state = viewModel.getHeaderText(),
-      modifier = Modifier
-        .statusBarsPadding()
-        .align(Alignment.TopCenter)
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp)
-    )
+    Column() {
+      // main content
+      NowPlayingHeader(
+        stateTitle = "" /*stringResource(id = viewModel.getHeaderTitle())*/,
+        onCloseClick = {
+          scope.launch { bottomSheetState.collapse() }
+        },
+        state = viewModel.getHeaderText(),
+        modifier = Modifier
+          .statusBarsPadding()
+          .fillMaxWidth()
+          .padding(horizontal = 16.dp)
+      )
 
-    NowPlayingControls(
-      scope = scope,
-      viewModel = viewModel,
-      navController = navController,
-      bottomSheetState = bottomSheetState,
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .padding(horizontal = 8.dp)
-        .padding(bottom = 38.dp)
-        .navigationBarsPadding()
-    )
+      NowPlayingControls(
+        scope = scope,
+        viewModel = viewModel,
+        navController = navController,
+        bottomSheetState = bottomSheetState,
+        modifier = Modifier
+          .padding(horizontal = 8.dp)
+          .padding(bottom = 0.dp)
+          .navigationBarsPadding()
+          .fillMaxHeight(),
+        pagerState = mainPagerState
+      )
+    }
   }
 }

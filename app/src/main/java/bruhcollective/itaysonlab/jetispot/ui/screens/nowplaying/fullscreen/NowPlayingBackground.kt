@@ -50,31 +50,31 @@ fun NowPlayingBackground(
     ) */
 
       Box(modifier = modifier.background(dominantColorAsBg)) {
-        HorizontalPager(
-          count = viewModel.currentQueue.value.size,
-          state = state,
-          modifier = modifier
-        ) { page ->
-          val artworkModifier = Modifier
-            .align(Alignment.Center)
-            .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.30).dp)
-            .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-            .clip(RoundedCornerShape(32.dp))
-
-          if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
-            Image(
-              viewModel.currentTrack.value.artworkCompose!!,
-              contentDescription = null,
-              modifier = artworkModifier,
-              contentScale = ContentScale.Crop
-            )
-          } else {
-            NowPlayingBackgroundItem(
-              track = viewModel.currentQueue.value[page],
-              modifier = artworkModifier
-            )
-          }
-        }
+//        HorizontalPager(
+//          count = viewModel.currentQueue.value.size,
+//          state = state,
+//          modifier = modifier
+//        ) { page ->
+//          val artworkModifier = Modifier
+//            .align(Alignment.Center)
+//            .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.30).dp)
+//            .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+//            .clip(RoundedCornerShape(32.dp))
+//
+//          if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
+//            Image(
+//              viewModel.currentTrack.value.artworkCompose!!,
+//              contentDescription = null,
+//              modifier = artworkModifier,
+//              contentScale = ContentScale.Crop
+//            )
+//          } else {
+//            NowPlayingBackgroundItem(
+//              track = viewModel.currentQueue.value[page],
+//              modifier = artworkModifier
+//            )
+//          }
+//        }
       }
     }
   )
