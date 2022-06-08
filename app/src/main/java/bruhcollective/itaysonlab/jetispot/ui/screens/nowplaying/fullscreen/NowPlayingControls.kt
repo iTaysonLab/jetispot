@@ -203,9 +203,11 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         contentColor = monet.onSecondaryContainer.copy(0.85f)
       )
     ) {
-      Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null, modifier = Modifier
-        .size(42.dp)
-        .padding(end = 2.dp))
+      Icon(
+        imageVector = Icons.Rounded.SkipPrevious,
+        contentDescription = null,
+        modifier = Modifier.size(42.dp)
+      )
     }
 
     Spacer(modifier = Modifier.padding(start = 0.dp, end = 0.dp))
@@ -245,9 +247,8 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       Icon(
         imageVector = Icons.Rounded.SkipNext,
         contentDescription = null,
-        modifier = Modifier
-          .size(42.dp)
-          .padding(start = 2.dp))
+        modifier = Modifier.size(42.dp)
+      )
     }
 
     Spacer(modifier = Modifier.padding(start = 4.dp, end = 0.dp))

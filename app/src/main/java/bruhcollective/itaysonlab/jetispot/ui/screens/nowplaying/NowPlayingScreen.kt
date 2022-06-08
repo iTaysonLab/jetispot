@@ -40,6 +40,7 @@ fun NowPlayingScreen(
       scope.launch {
         try {
           mainPagerState.animateScrollToPage(new)
+          viewModel.skipPrevious()
         } catch (e: IllegalArgumentException) {
           delay(100L)
           mainPagerState.scrollToPage(new)

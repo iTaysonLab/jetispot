@@ -6,6 +6,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
@@ -47,6 +48,9 @@ class NowPlayingViewModel @Inject constructor(
   fun skipPrevious() = spPlayerServiceManager.skipPrevious()
   fun togglePlayPause() = spPlayerServiceManager.playPause()
   fun skipNext() = spPlayerServiceManager.skipNext()
+  fun skipToCurrentPage() {
+    if (SpPlayerServiceManager.ServiceExtraListener.onTrackIndexChanged()) skipNext() else skipPrevious()
+  }
 
   @OptIn(ExperimentalMaterialApi::class)
   fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
