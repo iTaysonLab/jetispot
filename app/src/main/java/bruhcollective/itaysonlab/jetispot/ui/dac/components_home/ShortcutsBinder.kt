@@ -91,7 +91,7 @@ private fun ShortcutComponentBinder(
 ) {
   Card(
     colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
-    shape = RoundedCornerShape(32.dp),
+    shape = RoundedCornerShape(4.dp),
     modifier = Modifier
       .height(56.dp)
       .fillMaxWidth()
@@ -101,7 +101,7 @@ private fun ShortcutComponentBinder(
       PreviewableAsyncImage(
         imageUrl = imageUrl,
         placeholderType = imagePlaceholder,
-        modifier = Modifier.size(56.dp).clip(RoundedCornerShape(32.dp))
+        modifier = Modifier.size(56.dp).clip(RoundedCornerShape(4.dp))
       )
 
       Text(
