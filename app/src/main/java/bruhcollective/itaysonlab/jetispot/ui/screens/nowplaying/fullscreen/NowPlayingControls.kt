@@ -224,7 +224,10 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         contentColor = monet.onSecondaryContainer.copy(0.85f)
       )
     ) {
-      Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null, modifier = Modifier
+      Icon(
+        imageVector = Icons.Rounded.SkipNext,
+        contentDescription = null,
+        modifier = Modifier
         .size(42.dp)
         .padding(start = 2.dp))
     }
@@ -255,7 +258,9 @@ private fun ControlsBottomAccessories(
       modifier = Modifier
         .padding(start = 0.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
         .size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onPrimaryContainer)
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(
         imageVector = Icons.Rounded.VolumeUp,
