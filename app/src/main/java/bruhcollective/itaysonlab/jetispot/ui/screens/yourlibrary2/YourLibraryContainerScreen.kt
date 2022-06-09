@@ -29,10 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun YourLibraryContainerScreen(
   navController: LambdaNavigationController,
@@ -100,11 +97,14 @@ fun YourLibraryContainerScreen(
           viewModel.content,
           key = { it.javaClass.simpleName + "_" + it.ceId() },
           contentType = { it.javaClass.simpleName }) { item ->
-          YlRenderer(item, modifier = Modifier
-            .clickable { navController.navigate(item.ceUri()) }
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .animateItemPlacement())
+          YlRenderer(
+            item,
+            modifier = Modifier
+              .clickable { navController.navigate(item.ceUri()) }
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 8.dp)
+              .animateItemPlacement()
+          )
         }
       }
     } else {
