@@ -49,7 +49,10 @@ fun YLRPinned(
 
     if (isPredef) {
       ImagePreview(
-        if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
+        if (item.predefType == PredefCeType.COLLECTION)
+          Icons.Rounded.Favorite
+        else
+          Icons.Rounded.Podcasts,
         true,
         modifier = Modifier
           .size(64.dp)
@@ -78,16 +81,26 @@ fun YLRPinned(
     Column(
       Modifier
         .padding(start = 16.dp)
-        .align(Alignment.CenterVertically)) {
-      Text(text = when (item.predefType) {
-        PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs)
-        PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes)
-        null -> item.name
-      }, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        .align(Alignment.CenterVertically)
+    ) {
+      Text(
+        text = when (item.predefType) {
+          PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs)
+          PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes)
+          null -> item.name
+        },
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+      )
+
       Row(Modifier.padding(top = 4.dp)) {
-        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
-          .size(16.dp)
-          .align(Alignment.CenterVertically))
+        Icon(
+          Icons.Rounded.PushPin,
+          tint = MaterialTheme.colorScheme.primary,
+          contentDescription = null,
+          modifier = Modifier.size(16.dp).align(Alignment.CenterVertically)
+        )
+
         Text(
           text = when (item.predefType) {
             PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs_desc, item.predefDyn)
@@ -169,11 +182,9 @@ fun YLRGenericItem(
         .clip(if (picCircle) CircleShape else RoundedCornerShape(8.dp))
     )
 
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.CenterVertically)) {
+    Column(Modifier.padding(start = 16.dp).align(Alignment.CenterVertically)) {
       Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+
       if (!subtitle.isNullOrEmpty()) {
         Text(
           text = subtitle,
