@@ -100,10 +100,7 @@ fun ImagePreview (
       Box(Modifier.fillMaxSize()) {
         Icon(
           imageVector = of,
-          tint = if (colorful)
-            monet.onPrimary
-          else
-            monet.onSurface,
+          tint = if (colorful) monet.onPrimary else monet.onSurface,
           contentDescription = null,
           modifier = Modifier.fillMaxSize().padding(8.dp))
       }

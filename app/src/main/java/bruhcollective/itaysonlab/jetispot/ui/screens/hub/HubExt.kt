@@ -41,38 +41,74 @@ fun HubScaffold(
   val scope = rememberCoroutineScope()
   val sbd = rememberSplineBasedDecay<Float>()
   val topBarState = rememberTopAppBarScrollState()
-  val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) else TopAppBarDefaults.pinnedScrollBehavior(topBarState) }
+  val scrollBehavior = remember {
+    if (toolbarOptions.alwaysVisible)
+      TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState)
+    else
+      TopAppBarDefaults.pinnedScrollBehavior(topBarState)
+  }
 
   when (state) {
     is HubState.Loaded -> {
-      Scaffold(topBar = {
-        if (toolbarOptions.big) {
-          LargeTopAppBar(title = {
-            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
-          }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-              Icon(Icons.Rounded.ArrowBack, null)
-            }
-          }, colors = TopAppBarDefaults.largeTopAppBarColors(), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
-            LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-        } else {
-          SmallTopAppBar(title = {
-            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.scrollFraction))
-          }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-              Icon(Icons.Rounded.ArrowBack, null)
-            }
-          }, colors = if (toolbarOptions.alwaysVisible)  TopAppBarDefaults.smallTopAppBarColors() else TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
-          ), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
-            LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
-        }
-      }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      Scaffold(
+        topBar = {
+          if (toolbarOptions.big) {
+            LargeTopAppBar(
+              title = {
+                Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+              },
+              navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                  Icon(Icons.Rounded.ArrowBack, null)
+                }
+              },
+              colors = TopAppBarDefaults.largeTopAppBarColors(),
+              contentPadding = PaddingValues(
+                top = with(LocalDensity.current) {
+                  WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+                }
+              ),
+              scrollBehavior = scrollBehavior
+            )
+          } else {
+            SmallTopAppBar(
+              title = {
+                Text(
+                  appBarTitle,
+                  maxLines = 1,
+                  overflow = TextOverflow.Ellipsis,
+                  modifier = Modifier.alpha(scrollBehavior.scrollFraction)
+                )
+              },
+              navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                  Icon(Icons.Rounded.ArrowBack, null)
+                }
+              },
+              colors = if (toolbarOptions.alwaysVisible)
+                TopAppBarDefaults.smallTopAppBarColors()
+              else
+                TopAppBarDefaults.smallTopAppBarColors(
+                  containerColor = Color.Transparent,
+                  scrolledContainerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
+                ),
+              contentPadding = PaddingValues(
+                top = with(LocalDensity.current) {
+                  WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+                }
+              ),
+              scrollBehavior = scrollBehavior
+            )
+          }
+        },
+        modifier = Modifier
+          .fillMaxSize()
+          .nestedScroll(scrollBehavior.nestedScrollConnection)
+      ) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
-            .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
+            .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it },
         ) {
           state.data.apply {
             if (header != null) {
@@ -91,7 +127,11 @@ fun HubScaffold(
         }
       }
     }
-    is HubState.Error -> PagingErrorPage(exception = state.error, onReload = { scope.launch { reloadFunc() } }, modifier = Modifier.fillMaxSize())
+    is HubState.Error -> PagingErrorPage(
+      exception = state.error,
+      onReload = { scope.launch { reloadFunc() } },
+      modifier = Modifier.fillMaxSize()
+    )
     HubState.Loading -> PagingLoadingPage(Modifier.fillMaxSize())
   }
 }

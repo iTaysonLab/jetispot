@@ -100,10 +100,10 @@ fun YourLibraryContainerScreen(
           YlRenderer(
             item,
             modifier = Modifier
-              .clickable { navController.navigate(item.ceUri()) }
-              .fillMaxWidth()
-              .padding(horizontal = 16.dp, vertical = 8.dp)
-              .animateItemPlacement()
+            .clickable { navController.navigate(item.ceUri()) }
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .animateItemPlacement()
           )
         }
       }

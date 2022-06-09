@@ -42,12 +42,11 @@ fun NowPlayingFullscreenComposition (
   ) {
     Column {
       Spacer(modifier = Modifier.padding(top = 16.dp))
+
       // main content
       NowPlayingHeader(
         stateTitle = stringResource(id = viewModel.getHeaderTitle()),
-        onCloseClick = {
-          scope.launch { bottomSheetState.collapse() }
-        },
+        onCloseClick = { scope.launch { bottomSheetState.collapse() } },
         state = viewModel.getHeaderText(),
         modifier = Modifier
           .statusBarsPadding()
