@@ -43,7 +43,6 @@ fun NowPlayingScreen(
         try {
           mainPagerState.animateScrollToPage(new)
         } catch (e: IllegalArgumentException) {
-
           mainPagerState.scrollToPage(new)
         }
       }
