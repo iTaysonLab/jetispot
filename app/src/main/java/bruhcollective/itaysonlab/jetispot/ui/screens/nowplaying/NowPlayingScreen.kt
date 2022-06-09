@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
