@@ -62,8 +62,6 @@ fun NowPlayingHeader(
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp
       )
-
-
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {

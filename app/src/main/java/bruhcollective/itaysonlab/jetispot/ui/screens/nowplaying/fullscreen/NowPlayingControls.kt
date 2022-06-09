@@ -63,8 +63,6 @@ fun NowPlayingControls(
 
     ControlsMainButtons(viewModel)
 
-//    Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
-
     ControlsBottomAccessories(viewModel)
 
     Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
