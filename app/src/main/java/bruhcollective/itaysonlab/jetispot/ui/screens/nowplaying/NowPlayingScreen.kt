@@ -57,9 +57,11 @@ fun NowPlayingScreen(
   }
 
   Box(Modifier.fillMaxSize()) {
-    MaterialTheme(colorScheme = viewModel.currentColorScheme.value.let {
-      if (isSystemInDarkTheme()) it.second else it.first
-    }) {
+    MaterialTheme(
+      colorScheme = viewModel.currentColorScheme.value.let {
+        if (isSystemInDarkTheme()) it.second else it.first
+      }
+    ) {
       NowPlayingFullscreenComposition(
         navController = navController,
         bottomSheetState = bottomSheetState,
