@@ -133,7 +133,7 @@ dependencies {
     // Data - SQL
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-paging:2.5.0-alpha01"
+    implementation "androidx.room:room-paging:2.5.0-alpha02"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Data - Proto

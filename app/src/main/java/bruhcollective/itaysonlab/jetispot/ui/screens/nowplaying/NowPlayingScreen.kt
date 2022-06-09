@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -45,7 +44,7 @@ fun NowPlayingScreen(
         try {
           mainPagerState.animateScrollToPage(new)
         } catch (e: IllegalArgumentException) {
-          delay(5L)
+
           mainPagerState.scrollToPage(new)
         }
       }
