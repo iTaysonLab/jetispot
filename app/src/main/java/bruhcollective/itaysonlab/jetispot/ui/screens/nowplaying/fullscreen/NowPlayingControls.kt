@@ -56,7 +56,6 @@ fun NowPlayingControls(
 
     Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
-      Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
       ControlsSeekbar(viewModel)
       Spacer(Modifier.padding(bottom = 8.dp, top = 0.dp))
     }
@@ -64,8 +63,6 @@ fun NowPlayingControls(
     ControlsMainButtons(viewModel)
 
     ControlsBottomAccessories(viewModel)
-
-    Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
   }
 }
 
