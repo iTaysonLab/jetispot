@@ -201,7 +201,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipPrevious,
           contentDescription = null,
-          modifier = Modifier.size(32.dp)
+          modifier = Modifier.size(42.dp)
         )
       }
 
@@ -238,7 +238,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipNext,
           contentDescription = null,
-          modifier = Modifier.size(32.dp)
+          modifier = Modifier.size(42.dp)
         )
       }
     }
