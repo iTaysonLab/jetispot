@@ -46,16 +46,16 @@ fun NowPlayingControls(
   pagerState: PagerState
 ) {
   Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
-    Spacer(Modifier.padding(bottom = 16.dp))
+    Spacer(Modifier.height(16.dp))
 
     ArtworkPager(viewModel, pagerState)
 
-    Spacer(Modifier.padding(bottom = 20.dp))
+    Spacer(Modifier.padding(20.dp))
 
     Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
       ControlsSeekbar(viewModel)
-      Spacer(Modifier.padding(bottom = 8.dp))
+      Spacer(Modifier.height(8.dp))
     }
 
     ControlsMainButtons(viewModel)
@@ -199,7 +199,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipPrevious,
           contentDescription = null,
-          modifier = Modifier.size(42.dp)
+          modifier = Modifier.size(32.dp)
         )
       }
 
@@ -236,7 +236,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipNext,
           contentDescription = null,
-          modifier = Modifier.size(42.dp)
+          modifier = Modifier.size(32.dp)
         )
       }
     }
