@@ -37,31 +37,31 @@ fun NowPlayingHeader(
     }
 
     Column(Modifier.weight(1f)) {
-      Text(
-        text = stateTitle.uppercase(),
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 16.dp),
-        textAlign = TextAlign.Center,
-        color = monet.onSecondaryContainer.copy(0.7f),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        letterSpacing = 2.sp,
-        fontSize = 10.sp
-      )
-
-      Text(
-        text = state,
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 16.dp),
-        color = monet.onSecondaryContainer.copy(0.85f),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        textAlign = TextAlign.Center,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp
-      )
+//      Text(
+//        text = stateTitle.uppercase(),
+//        modifier = Modifier
+//          .fillMaxWidth()
+//          .padding(horizontal = 16.dp),
+//        textAlign = TextAlign.Center,
+//        color = monet.onSecondaryContainer.copy(0.7f),
+//        maxLines = 1,
+//        overflow = TextOverflow.Ellipsis,
+//        letterSpacing = 2.sp,
+//        fontSize = 10.sp
+//      )
+//
+//      Text(
+//        text = state,
+//        modifier = Modifier
+//          .fillMaxWidth()
+//          .padding(horizontal = 16.dp),
+//        color = monet.onSecondaryContainer.copy(0.85f),
+//        maxLines = 1,
+//        overflow = TextOverflow.Ellipsis,
+//        textAlign = TextAlign.Center,
+//        fontWeight = FontWeight.Bold,
+//        fontSize = 14.sp
+//      )
     }
 
     IconButton(onClick = {  }, Modifier.size(35.dp)) {
