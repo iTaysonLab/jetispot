@@ -23,7 +23,7 @@ class PlayPauseButtonState (isPlaying: Boolean) {
 }
 
 class PlayPauseButtonDimens(
-  val distance: Dp = 4.dp,
+  val distance: Dp = 3.dp,
   val width: Dp = 6.dp,
   val height: Dp = 16.dp
 )
