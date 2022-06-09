@@ -193,7 +193,7 @@ class YourLibraryContainerViewModel @Inject constructor(
           }
         }
       }
-            )
+    )
   }
 
   enum class FetchType {
