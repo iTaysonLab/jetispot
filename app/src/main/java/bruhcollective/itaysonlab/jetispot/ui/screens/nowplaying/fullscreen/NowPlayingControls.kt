@@ -35,7 +35,6 @@ import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
-
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingControls(
@@ -47,24 +46,20 @@ fun NowPlayingControls(
   pagerState: PagerState
 ) {
   Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
-    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 16.dp))
 
     ArtworkPager(viewModel, pagerState)
 
-    Spacer(Modifier.padding(bottom = 20.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 20.dp))
 
     Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
-      Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
       ControlsSeekbar(viewModel)
-      Spacer(Modifier.padding(bottom = 8.dp, top = 0.dp))
+      Spacer(Modifier.padding(bottom = 8.dp))
     }
 
     ControlsMainButtons(viewModel)
-
     ControlsBottomAccessories(viewModel)
-
-    Spacer(Modifier.padding(bottom = 0.dp, top = 0.dp))
   }
 }
 
@@ -76,8 +71,8 @@ private fun ControlsHeader(
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel
 ) {
-  Row() {
-    Column() {
+  Row {
+    Column {
       Text(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
@@ -323,7 +318,6 @@ private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState)
       .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
   ) { page ->
     val artworkModifier = Modifier
-      .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
       .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
       .clip(RoundedCornerShape(28.dp))
 

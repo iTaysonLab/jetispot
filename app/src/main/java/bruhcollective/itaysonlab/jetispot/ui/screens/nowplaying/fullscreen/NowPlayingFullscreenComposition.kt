@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
@@ -39,10 +40,10 @@ fun NowPlayingFullscreenComposition (
           monet.primary.copy(0.1f)
       )
   ) {
-    Column() {
+    Column {
       // main content
       NowPlayingHeader(
-        stateTitle = "" /*stringResource(id = viewModel.getHeaderTitle())*/,
+        stateTitle = stringResource(id = viewModel.getHeaderTitle()),
         onCloseClick = {
           scope.launch { bottomSheetState.collapse() }
         },
