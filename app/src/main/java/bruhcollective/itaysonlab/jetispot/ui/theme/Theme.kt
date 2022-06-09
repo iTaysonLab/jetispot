@@ -46,20 +46,3 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     }
   }
 }
-
-@Composable
-fun PlayerTheme(
-  darkTheme: Boolean = isSystemInDarkTheme(),
-  content: @Composable () -> Unit,
-  viewModel: NowPlayingViewModel
-) {
-//  val currentColor = viewModel.currentBgColor.value
-//  val dominantColorAsBg = animateColorAsState(
-//    if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor
-//  )
-  MaterialTheme(
-    colorScheme = provideColorScheme(darkTheme),
-    shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(8.dp)),
-    content = content
-  )
-}
