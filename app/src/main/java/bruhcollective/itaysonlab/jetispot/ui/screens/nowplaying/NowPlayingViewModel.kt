@@ -44,6 +44,7 @@ class NowPlayingViewModel @Inject constructor(
 
   // ui bridges
   var uiOnTrackIndexChanged: (Int) -> Unit = {}
+  val currentTrackDurationFmt get() = spPlayerServiceManager.currentTrackDurationFmt
 
   // caches
   private val imageCache = LruCache<String, Pair<ColorScheme, ColorScheme>>(10)
