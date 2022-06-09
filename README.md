@@ -37,3 +37,4 @@ _* I heard some people can log in with a free account, but I won't provide any a
 
 Now Playing design credits to <a href="https://dribbble.com/shots/15706284-Spotify-You-Material-You-Redesign/attachments/7505834?mode=media" target="_blank">Nazım Can Tunç</a>
 <p>Now Playing design implementation credits to <a href="https://t.me/DotsTeaLab/119" target="_blank">Dot's Tea Lab</a>
+  Now Playing dynamic color scheme implementation credits to <a href="https://github.com/iTaysonLab" target="_blank">iTaysonLab</a> 
