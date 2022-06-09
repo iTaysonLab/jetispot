@@ -1,4 +1,3 @@
-</p>
 ## Jetispot
 _probably usable __UNOFFICIAL__ Spotify client for Android, built with Jetpack Compose and librespot-java_
 
@@ -31,10 +30,7 @@ __Credits:__
 - [moshi](https://github.com/square/moshi/) and [moshix](https://github.com/ZacSweers/MoshiX/) for the undocumented API JSON parsing
 - [VK Icons](https://github.com/VKCOM/icons) for the amazing icon set used in the application's icon
 - [MMKV](https://github.com/Tencent/MMKV) for ultra-fast way to cache entity extended metadata
+- Now Playing: design by [Nazım Can Tunç](https://dribbble.com/shots/15706284-Spotify-You-Material-You-Redesign/attachments/7505834?mode=media), implementation by [Dot's Tea Lab](https://t.me/DotsTeaLab/119)
 - Google for Android/Jetpack/Hilt
 
 _* I heard some people can log in with a free account, but I won't provide any assistance to people without premium subscription. There is a possibility that a subscription check may be added to the client side in the future._
-
-Now Playing design credits to <a href="https://dribbble.com/shots/15706284-Spotify-You-Material-You-Redesign/attachments/7505834?mode=media" target="_blank">Nazım Can Tunç</a>
-<p>Now Playing design implementation credits to <a href="https://t.me/DotsTeaLab/119" target="_blank">Dot's Tea Lab</a>
-<p>Now Playing dynamic color scheme implementation credits to <a href="https://github.com/iTaysonLab" target="_blank">iTaysonLab</a> 

@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
-import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,16 +47,16 @@ fun NowPlayingControls(
   pagerState: PagerState
 ) {
   Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
-    Spacer(Modifier.padding(bottom = 16.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 16.dp))
 
     ArtworkPager(viewModel, pagerState)
 
-    Spacer(Modifier.padding(bottom = 20.dp, top = 0.dp))
+    Spacer(Modifier.padding(bottom = 20.dp))
 
     Column(Modifier.padding(horizontal = 8.dp)) {
       ControlsHeader(scope, navController, bottomSheetState, viewModel)
       ControlsSeekbar(viewModel)
-      Spacer(Modifier.padding(bottom = 8.dp, top = 0.dp))
+      Spacer(Modifier.height(8.dp))
     }
 
     ControlsMainButtons(viewModel)
@@ -148,9 +147,7 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
     ) {
       Row(Modifier.height(52.dp), verticalAlignment = Alignment.Bottom) {
         Text(
-          text = DateUtils.formatElapsedTime(
-            viewModel.currentPosition.value.progressMilliseconds / 1000L
-          ),
+          text = viewModel.currentPosition.value.progressFmt,
           color = monet.onSecondaryContainer.copy(0.85f),
           fontSize = 12.sp,
           fontWeight = FontWeight.Bold
@@ -159,9 +156,7 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
         Text(text = " / ", color = monet.onSecondaryContainer.copy(0.85f), fontSize = 12.sp)
 
         Text(
-          text = DateUtils.formatElapsedTime(
-            viewModel.currentTrack.value.duration / 1000L
-          ),
+          text = viewModel.currentTrackDurationFmt.value,
           color = monet.onSecondaryContainer.copy(0.85f),
           fontSize = 12.sp,
           fontWeight = FontWeight.Bold
@@ -206,7 +201,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipPrevious,
           contentDescription = null,
-          modifier = Modifier.size(42.dp)
+          modifier = Modifier.size(32.dp)
         )
       }
 
@@ -243,7 +238,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         Icon(
           imageVector = Icons.Rounded.SkipNext,
           contentDescription = null,
-          modifier = Modifier.size(42.dp)
+          modifier = Modifier.size(32.dp)
         )
       }
     }
@@ -325,7 +320,6 @@ private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState)
       .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
   ) { page ->
     val artworkModifier = Modifier
-      .padding(bottom = 0.dp/*(LocalConfiguration.current.screenHeightDp * 0.0).dp*/)
       .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
       .clip(RoundedCornerShape(28.dp))
 

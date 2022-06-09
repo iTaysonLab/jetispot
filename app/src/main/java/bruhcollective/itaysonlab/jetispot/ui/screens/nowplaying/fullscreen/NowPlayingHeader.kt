@@ -64,11 +64,12 @@ fun NowPlayingHeader(
       )
     }
 
-    IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
+    IconButton(onClick = {  }, Modifier.size(35.dp)) {
       Icon(
         imageVector = Icons.Rounded.MoreVert,
         tint = monet.onSecondaryContainer.copy(0.7f),
-        contentDescription = null
+        contentDescription = null,
+        modifier = Modifier.size(28.dp)
       )
     }
   }
