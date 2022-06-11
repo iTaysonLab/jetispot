@@ -73,8 +73,8 @@ private fun ControlsHeader(
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel
 ) {
-  Row() {
-    Column() {
+  Row(horizontalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.weight(0.9f)) {
       Text(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
@@ -110,8 +110,6 @@ private fun ControlsHeader(
       )
     }
 
-    Spacer(modifier = Modifier.weight(1f))
-
     Icon(
       imageVector = Icons.Rounded.Favorite,
       contentDescription = "",
@@ -120,6 +118,7 @@ private fun ControlsHeader(
         .align(Alignment.CenterVertically)
         .padding(end = 12.dp)
         .size(26.dp)
+        .weight(0.1f)
     )
   }
 }

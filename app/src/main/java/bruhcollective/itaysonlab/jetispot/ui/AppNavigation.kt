@@ -166,7 +166,7 @@ fun AppNavigation(
 
     bottomSheet(BottomSheet.JumpToArtist.route) { entry ->
       val data = remember { entry.arguments!!.getString("artistIdsAndRoles")!! }
-      JumpToArtistBottomSheet(navController = provideLambdaController, data = data, item = item)
+      JumpToArtistBottomSheet(navController = provideLambdaController, data = data)
     }
   }
 }
