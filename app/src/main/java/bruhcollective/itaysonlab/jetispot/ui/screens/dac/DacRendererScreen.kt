@@ -56,23 +56,36 @@ fun DacRendererScreen(
 
   when (viewModel.state) {
     is DacViewModel.State.Loaded -> {
-      Scaffold(topBar = {
-        if (fullscreen) {
-          SmallTopAppBar(title = {}, colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
-          ), scrollBehavior = scrollBehavior)
+      Scaffold(
+        topBar = {
+          if (fullscreen) {
+            SmallTopAppBar(
+              title = {},
+              colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+              ),
+              scrollBehavior = scrollBehavior
+            )
         } else {
-          LargeTopAppBar(title = {
-            Text(title)
-          }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-              Icon(Icons.Rounded.ArrowBack, null)
-            }
-          }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
-            LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
+          LargeTopAppBar(
+            title = { Text(title) },
+            navigationIcon = {
+              IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.Rounded.ArrowBack, null)
+              }
+          },
+            contentPadding = PaddingValues(top = with(LocalDensity.current) {
+              WindowInsets.statusBars.getTop(
+                LocalDensity.current).toDp() }
+            ),
+            scrollBehavior = scrollBehavior
+          )
         }
-      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+      )
+      { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
@@ -94,7 +107,10 @@ fun DacRendererScreen(
                   when (exception) {
                     is ClassNotFoundException -> {
                       Text("DAC unsupported component", Modifier.padding(horizontal = 16.dp))
-                      Text(exception.message ?: "", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), modifier = Modifier.padding(top = 4.dp).padding(horizontal = 16.dp))
+                      Text(exception.message ?: "",
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(top = 4.dp).padding(horizontal = 16.dp)
+                      )
                     }
                     else -> {
                       Text("DAC rendering error: ${exception.message}\n\n${exception.stackTraceToString()}")
@@ -131,7 +147,11 @@ fun DacRendererScreen(
     }
 
     is DacViewModel.State.Error -> {
-      PagingErrorPage(exception = (viewModel.state as DacViewModel.State.Error).error, onReload = { scope.launch { viewModel.reload(loader) } }, modifier = Modifier.fillMaxSize())
+      PagingErrorPage(
+        exception = (viewModel.state as DacViewModel.State.Error).error,
+        onReload = { scope.launch { viewModel.reload(loader) } },
+        modifier = Modifier.fillMaxSize()
+      )
     }
 
     DacViewModel.State.Loading -> {

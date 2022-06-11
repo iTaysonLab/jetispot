@@ -9,13 +9,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.*
-import androidx.navigation.compose.*
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
+import androidx.navigation.navDeepLink
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -48,7 +54,12 @@ fun AppNavigation(
   LaunchedEffect(Unit) {
     if (sessionManager.isSignedIn()) return@LaunchedEffect
     authManager.authStored()
-    navController.navigate(if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route) {
+    navController.navigate(
+      if (sessionManager.isSignedIn())
+        Screen.Feed.route
+      else
+        Screen.Authorization.route
+    ) {
       popUpTo(Screen.NavGraph.route)
     }
   }
@@ -67,20 +78,26 @@ fun AppNavigation(
       }
     }
 
-    composable(Screen.Authorization.route) {
-      AuthScreen(provideLambdaController)
-    }
+    composable(Screen.Authorization.route) { AuthScreen(provideLambdaController) }
 
     composable(Screen.Feed.route) {
-      DacRendererScreen(provideLambdaController, "", true, {
-        getDacHome(SpInternalApi.buildDacRequestForHome(it))
-      })
+      DacRendererScreen(
+        provideLambdaController,
+        "",
+        true,
+        { getDacHome(SpInternalApi.buildDacRequestForHome(it)) }
+      )
     }
 
-    composable(Screen.SpotifyIdRedirect.route, deepLinks = listOf(navDeepLink {
-      uriPattern = Screen.deeplinkCapable[Screen.SpotifyIdRedirect]
-      action = Intent.ACTION_VIEW
-    })) {
+    composable(
+      Screen.SpotifyIdRedirect.route,
+      deepLinks = listOf(
+        navDeepLink {
+          uriPattern = Screen.deeplinkCapable[Screen.SpotifyIdRedirect]
+          action = Intent.ACTION_VIEW
+        }
+      )
+    ) {
       val fullUrl = it.arguments?.getString("uri")
       val dpLinkType = it.arguments?.getString("type")
       val dpLinkTypeId = it.arguments?.getString("typeId")
@@ -89,15 +106,21 @@ fun AppNavigation(
     }
 
     composable(Screen.DacViewCurrentPlan.route) {
-      DacRendererScreen(provideLambdaController, stringResource(id = Screen.DacViewCurrentPlan.title), false, {
-        getPlanOverview()
-      })
+      DacRendererScreen(
+        provideLambdaController,
+        stringResource(id = Screen.DacViewCurrentPlan.title),
+        false,
+        { getPlanOverview() }
+      )
     }
 
     composable(Screen.DacViewAllPlans.route) {
-      DacRendererScreen(provideLambdaController, stringResource(id = Screen.DacViewAllPlans.title), false, {
-        getAllPlans()
-      })
+      DacRendererScreen(
+        provideLambdaController,
+        stringResource(id = Screen.DacViewAllPlans.title),
+        false,
+        { getAllPlans() }
+      )
     }
 
     composable(Screen.Config.route) { ConfigScreen(provideLambdaController) }
@@ -108,44 +131,42 @@ fun AppNavigation(
     composable(Screen.Library.route) { YourLibraryContainerScreen(provideLambdaController) }
 
     dialog(Dialog.AuthDisclaimer.route) {
-      AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
-        Icon(Icons.Rounded.Warning, null)
-      }, title = {
-        Text(stringResource(id = R.string.auth_disclaimer))
-      }, text = {
-        Text(stringResource(id = R.string.auth_disclaimer_text))
-      }, confirmButton = {
-        TextButton(onClick = { navController.popBackStack() }) {
-          Text(stringResource(id = R.string.logout_confirm))
+      AlertDialog(onDismissRequest = { navController.popBackStack() },
+        icon = { Icon(Icons.Rounded.Warning, null) },
+        title = { Text(stringResource(id = R.string.auth_disclaimer)) },
+        text = { Text(stringResource(id = R.string.auth_disclaimer_text)) },
+        confirmButton = { TextButton(onClick = { navController.popBackStack() }) {
+          Text(stringResource(id = R.string.logout_confirm)) }
         }
-      })
+      )
     }
 
     dialog(Dialog.Logout.route) {
-      AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
-        Icon(Icons.Rounded.Warning, null)
-      }, title = {
-        Text(stringResource(id = R.string.logout_title))
-      }, text = {
-        Text(stringResource(id = R.string.logout_message))
-      }, confirmButton = {
-        TextButton(onClick = {
-          navController.popBackStack()
-          authManager.reset()
-          android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
-        }) {
-          Text(stringResource(id = R.string.logout_confirm))
+      AlertDialog(
+        onDismissRequest = { navController.popBackStack() },
+        icon = { Icon(Icons.Rounded.Warning, null) },
+        title = { Text(stringResource(id = R.string.logout_title)) },
+        text = { Text(stringResource(id = R.string.logout_message)) },
+        confirmButton = {
+          TextButton(
+            onClick = {
+              navController.popBackStack()
+              authManager.reset()
+              android.os.Process.killProcess(android.os.Process.myPid()) // TODO: maybe dynamic restart the session instances?
+            }
+          ) { Text(stringResource(id = R.string.logout_confirm)) }
+      },
+        dismissButton = {
+          TextButton(onClick = { navController.popBackStack() }) {
+            Text(stringResource(id = R.string.logout_cancel))
+          }
         }
-      }, dismissButton = {
-        TextButton(onClick = { navController.popBackStack() }) {
-          Text(stringResource(id = R.string.logout_cancel))
-        }
-      })
+      )
     }
 
     bottomSheet(BottomSheet.JumpToArtist.route) { entry ->
       val data = remember { entry.arguments!!.getString("artistIdsAndRoles")!! }
-      JumpToArtistBottomSheet(navController = provideLambdaController, data = data)
+      JumpToArtistBottomSheet(navController = provideLambdaController, data = data, item = item)
     }
   }
 }
