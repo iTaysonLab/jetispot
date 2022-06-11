@@ -101,7 +101,7 @@ private fun ShortcutComponentBinder(
       PreviewableAsyncImage(
         imageUrl = imageUrl,
         placeholderType = imagePlaceholder,
-        modifier = Modifier.size(56.dp).clip(RoundedCornerShape(8.dp))
+        modifier = Modifier.size(56.dp).clip(RoundedCornerShape(4.dp))
       )
 
       Text(
