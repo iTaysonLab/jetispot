@@ -7,6 +7,7 @@ import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.identity.proto.v3.IdentityV3
 import com.spotify.metadata.Metadata
+import com.spotify.podcastextensions.proto.PodcastTopics
 
 class UnpackedMetadataResponse(
   dataArray: List<ExtendedMetadata.EntityExtensionDataArray>
@@ -32,6 +33,9 @@ class UnpackedMetadataResponse(
   var episodes: StringMap<Metadata.Episode> = mutableMapOf()
     private set
 
+  var podcastTopics: StringMap<PodcastTopics> = mutableMapOf()
+    private set
+
   init {
     dataArray.forEach { arr ->
       when (arr.extensionKind) {
@@ -42,6 +46,7 @@ class UnpackedMetadataResponse(
         ExtensionKindOuterClass.ExtensionKind.USER_PROFILE -> userProfiles += arr.extensionDataList dataPair { IdentityV3.UserProfile.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.SHOW_V4 -> shows += arr.extensionDataList dataPair { Metadata.Show.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.EPISODE_V4 -> episodes += arr.extensionDataList dataPair { Metadata.Episode.parseFrom(it) }
+        ExtensionKindOuterClass.ExtensionKind.PODCAST_TOPICS -> podcastTopics += arr.extensionDataList dataPair { PodcastTopics.parseFrom(it) }
       }
     }
   }

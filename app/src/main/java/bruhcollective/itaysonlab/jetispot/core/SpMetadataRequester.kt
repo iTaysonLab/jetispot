@@ -111,6 +111,7 @@ fun MutableRequestEntities.artist(uri: String) = add(uri to listOf(ExtensionKind
 fun MutableRequestEntities.track(uri: String) = add(uri to listOf(ExtensionKindOuterClass.ExtensionKind.TRACK_V4))
 
 fun MutableRequestEntities.tracks(uris: List<String>) = addAll(uris.map { it to listOf(ExtensionKindOuterClass.ExtensionKind.TRACK_V4) })
+fun MutableRequestEntities.episodes(uris: List<String>) = addAll(uris.map { it to listOf(ExtensionKindOuterClass.ExtensionKind.EPISODE_V4) })
 fun MutableRequestEntities.raw(uris: List<String>) = addAll(uris.map { it to listOf(spotifyIdToKind(it)) })
 
 private fun spotifyIdToKind(id: String) = when (id.split(":")[1]) {

@@ -85,6 +85,17 @@ sealed class HubComponent {
   @TypeLabel("synth:collectionHeader")
   object CollectionHeader: HubComponent()
 
+  @TypeLabel("synth:showHeader")
+  object ShowHeader: HubComponent()
+
+  @TypeLabel("synth:showTopics")
+  object PodcastTopics: HubComponent()
+
+  @TypeLabel("synth:episodeItem")
+  object EpisodeListItem: HubComponent()
+
+  // IGNORING
+
   @TypeLabel("listeninghistory:dividerAfterEntityRow")
   object EmptySpace: HubComponent()
 
