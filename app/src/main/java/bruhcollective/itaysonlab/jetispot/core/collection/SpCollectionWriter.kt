@@ -250,24 +250,10 @@ class SpCollectionWriter(
     if (mappedRequest.isNotEmpty()) {
       val metadata = getExtendedMetadata(mappedRequest.keys.toList())
 
-      val trackDescriptors = if (metadata.tracks.isNotEmpty()) {
-        // also request descriptors to get genre data
-        UnpackedMetadataResponse(spSessionManager.session.api()
-          .getExtendedMetadata(
-            ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
-              metadata.tracks.keys.map { ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(it
-                ).addQuery(
-                  ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR).build()
-                ).build()
-              }.distinctBy { it.entityUri }
-            ).build()
-          )
-          .extendedMetadataList
-        ).descriptors.mapValues { e ->
-          e.value.descriptorsList.joinToString("|") { it.text }
-        }
-      } else {
-        emptyMap()
+      if (metadata.tracks.isNotEmpty()) {
+        metadata += metadataRequester.request(
+          metadata.tracks.map { it.key to listOf(ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR) }
+        )
       }
 
       dao.addTracks(*metadata.tracks.values.map { track ->
@@ -285,7 +271,7 @@ class SpCollectionWriter(
           isExplicit = track.explicit,
           duration = track.duration,
           picture = bytesToPicUrl(track.album.coverGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
-          descriptors = trackDescriptors[spUri] ?: "",
+          descriptors = metadata.descriptors[spUri]?.descriptorsList?.joinToString("|") ?: "",
           addedAt = mappedRequest[TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri()]!!
         )
       }.toTypedArray())
