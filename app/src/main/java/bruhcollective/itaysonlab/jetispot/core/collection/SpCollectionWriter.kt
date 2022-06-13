@@ -323,7 +323,7 @@ class SpCollectionWriter(
     }
   }
 
-  private suspend fun getExtendedMetadata(of: List<String>) = metadataRequester.request(of)
+  private suspend fun getExtendedMetadata(of: List<String>) = metadataRequester.request(of.map { id -> id to listOf(spotifyIdToKind(id)) })
 
   suspend fun performRootlistScan(updateToRevision: String? = null) {
     val localRevision = dao.getCollection("rootlist")?.syncToken

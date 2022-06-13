@@ -6,6 +6,8 @@ import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
+import bruhcollective.itaysonlab.jetispot.core.tracks
+import bruhcollective.itaysonlab.jetispot.core.user
 import com.google.protobuf.ByteString
 import com.google.protobuf.StringValue
 import com.spotify.metadata.Metadata
@@ -29,7 +31,11 @@ object PlaylistEntityView {
     val playlistTracks = playlist.contents.itemsList.distinctBy { it.uri }.filter { it.uri.startsWith("spotify:track:") }
     val playlistOwnerUsername = "spotify:user:${playlist.ownerUsername}"
 
-    val mappedMetadata = spMetadataRequester.request(mutableListOf(playlistOwnerUsername) + playlistTracks.map { it.uri })
+    val mappedMetadata = spMetadataRequester.request {
+      user(playlistOwnerUsername)
+      tracks(playlistTracks.map { it.uri })
+    }
+
     val mappedDuration = mappedMetadata.tracks.map { it.value.duration / 1000L }.sum()
     val playlistOwner = mappedMetadata.userProfiles[playlistOwnerUsername]!!
     val popCount = spInternalApi.getPlaylistPopCount(id)
