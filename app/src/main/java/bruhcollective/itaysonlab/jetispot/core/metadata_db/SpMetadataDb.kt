@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.metadata_db
 
 import android.content.Context
-import com.google.protobuf.MessageLite
+import com.google.protobuf.ByteString
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
