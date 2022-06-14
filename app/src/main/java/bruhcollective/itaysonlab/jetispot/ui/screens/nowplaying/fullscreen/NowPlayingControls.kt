@@ -177,7 +177,9 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(32.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = monet.onSecondaryContainer.copy(0.85f))
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
@@ -207,7 +209,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
       Surface(
         color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
         modifier = Modifier
-          .clip(RoundedCornerShape(26.dp))
+          .clip(RoundedCornerShape(28.dp))
           .height(72.dp)
           .width(106.dp)
           .clickable(
