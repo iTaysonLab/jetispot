@@ -39,6 +39,7 @@ fun DynamicSpIdScreen(
       }
     )
 
+    "show" -> PodcastShowScreen(navController, id)
     "album" -> AlbumScreen(navController, id)
     "playlist" -> PlaylistScreen(navController, id)
     "config" -> ConfigScreen(navController)
