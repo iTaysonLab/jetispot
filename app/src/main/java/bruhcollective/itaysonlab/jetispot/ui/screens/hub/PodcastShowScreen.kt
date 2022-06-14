@@ -22,7 +22,7 @@ fun PodcastShowScreen(
   viewModel: PodcastShowViewModel = hiltViewModel()
 ) {
   LaunchedEffect(Unit) {
-    viewModel.load(id)
+    viewModel.load { viewModel.loadInternal(id) }
   }
 
   HubScaffold(
@@ -31,7 +31,7 @@ fun PodcastShowScreen(
     state = viewModel.state,
     viewModel = viewModel
   ) {
-    viewModel.reload { viewModel.load(id) }
+    viewModel.reload { viewModel.loadInternal(id) }
   }
 }
 
@@ -44,7 +44,7 @@ class PodcastShowViewModel @Inject constructor(
 ) : AbsHubViewModel() {
   val title = mutableStateOf("")
 
-  suspend fun load(id: String) = ShowEntityView.create(spSessionManager, spMetadataRequester, id).also { title.value = it.title ?: "" }
+  suspend fun loadInternal(id: String) = ShowEntityView.create(spSessionManager, spMetadataRequester, id).also { title.value = it.title ?: "" }
 
   override fun play(data: PlayFromContextData) = play(spPlayerServiceManager, data)
   override suspend fun calculateDominantColor(url: String, dark: Boolean) = calculateDominantColor(spPartnersApi, url, dark)

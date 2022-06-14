@@ -10,6 +10,7 @@ import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import xyz.gianlu.librespot.common.Utils
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -51,7 +52,7 @@ class SpMetadataRequester @Inject constructor(
       entity.second.forEach { kind ->
         val kindInDbUri = if (coreKinds.contains(kind)) uri else "$uri:${kind.ordinal}"
         if (spMetadataDb.contains(kindInDbUri)) {
-          val extensionData = EntityExtensionDataOuterClass.EntityExtensionData.newBuilder().setEntityUri(uri).setExtensionData(Any.newBuilder().setValue(ByteString.copyFrom(spMetadataDb.get(uri))).build()).build()
+          val extensionData = EntityExtensionDataOuterClass.EntityExtensionData.newBuilder().setEntityUri(uri).setExtensionData(Any.newBuilder().setValue(ByteString.copyFrom(spMetadataDb.get(kindInDbUri))).build()).build()
           alreadyCached.runOrAdd(kind, ifExists = {
             it.addExtensionData(extensionData)
           }, ifNotExists = {

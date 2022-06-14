@@ -7,6 +7,7 @@ import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.identity.proto.v3.IdentityV3
 import com.spotify.metadata.Metadata
+import com.spotify.podcastcreatorinteractivity.v1.PodcastRating
 import com.spotify.podcastextensions.proto.PodcastTopics
 
 class UnpackedMetadataResponse(
@@ -36,6 +37,9 @@ class UnpackedMetadataResponse(
   var podcastTopics: StringMap<PodcastTopics> = mutableMapOf()
     private set
 
+  var podcastRatings: StringMap<PodcastRating> = mutableMapOf()
+    private set
+
   init {
     dataArray.forEach { arr ->
       when (arr.extensionKind) {
@@ -47,6 +51,7 @@ class UnpackedMetadataResponse(
         ExtensionKindOuterClass.ExtensionKind.SHOW_V4 -> shows += arr.extensionDataList dataPair { Metadata.Show.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.EPISODE_V4 -> episodes += arr.extensionDataList dataPair { Metadata.Episode.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.PODCAST_TOPICS -> podcastTopics += arr.extensionDataList dataPair { PodcastTopics.parseFrom(it) }
+        ExtensionKindOuterClass.ExtensionKind.PODCAST_RATING -> podcastRatings += arr.extensionDataList dataPair { PodcastRating.parseFrom(it) }
       }
     }
   }
@@ -59,17 +64,12 @@ class UnpackedMetadataResponse(
     userProfiles += other.userProfiles
     shows += other.shows
     episodes += other.episodes
+    podcastTopics += other.podcastTopics
+    podcastRatings += other.podcastRatings
   }
 
   private inline infix fun <T> List<EntityExtensionDataOuterClass.EntityExtensionData>.dataPair(crossinline parse: (ByteString) -> T) = associate {
     it.entityUri to parse(it.extensionData.value)
-  }
-
-  @JvmInline
-  value class SingleMsg(private val tr: Triple<String, ExtensionKindOuterClass.ExtensionKind, ByteArray>) {
-    val uri get() = tr.first
-    val kind get() = tr.second
-    val protobuf get() = tr.third
   }
 }
 

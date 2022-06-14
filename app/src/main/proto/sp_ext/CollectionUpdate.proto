@@ -16,6 +16,8 @@ message CollectionUpdateEntry {
     TRACK = 0;
     ALBUM = 1;
     ARTIST = 4;
+    SHOW = 5;
+    EPISODE = 6;
   }
 
   Type type = 1;

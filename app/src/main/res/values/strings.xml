@@ -103,6 +103,11 @@
     <string name="sort_album">Album</string>
     <string name="sort_invert">Invert</string>
 
+    <string name="filter_playlist">Playlists</string>
+    <string name="filter_album">Albums</string>
+    <string name="filter_artist">Artists</string>
+    <string name="filter_show">Podcasts</string>
+
     <string name="blend_create">Create a Blend</string>
     <string name="blend_create_btn">Generate invitation link</string>
     <string name="blend_info">Invite up to 10 friends to a Blend, a shared playlist that gives you social recommendations based on all of your music tastes.\n\nNote: People in this Blend will be able to add their friends and see your profile picture and username.</string>
