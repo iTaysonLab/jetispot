@@ -91,7 +91,7 @@ private fun ShortcutComponentBinder(
 ) {
   Card(
     colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
-    shape = RoundedCornerShape(4.dp),
+    shape = RoundedCornerShape(8.dp),
     modifier = Modifier
       .height(56.dp)
       .fillMaxWidth()
