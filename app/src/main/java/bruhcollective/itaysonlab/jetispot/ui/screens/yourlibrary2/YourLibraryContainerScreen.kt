@@ -15,9 +15,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
@@ -66,9 +68,10 @@ fun YourLibraryContainerScreen(
       }))
       AnimatedChipRow(
         listOf(
-          ChipItem("playlists", "Playlists"),
-          ChipItem("artists", "Artists"),
-          ChipItem("albums", "Albums")
+          ChipItem("playlists", stringResource(id = R.string.filter_playlist)),
+          ChipItem("artists", stringResource(id = R.string.filter_artist)),
+          ChipItem("albums", stringResource(id = R.string.filter_album)),
+          ChipItem("shows", stringResource(id = R.string.filter_show))
         ),
         viewModel.selectedTabId
       ) {
@@ -151,17 +154,21 @@ class YourLibraryContainerViewModel @Inject constructor(
       "playlists" -> FetchType.Playlists
       "albums" -> FetchType.Albums
       "artists" -> FetchType.Artists
+      "shows" -> FetchType.Shows
       else -> FetchType.All
     }
 
     val albums = dao.getAlbums()
     val artists = dao.getArtists()
     val playlists = dao.getRootlist()
+    val shows = dao.getShows()
+
     val pins = dao.getPins().filter { p ->
       when (type) {
         FetchType.Playlists -> p.uri.contains("playlist")
         FetchType.Artists -> p.uri.contains("artist")
         FetchType.Albums -> p.uri.contains("album")
+        FetchType.Shows -> p.uri.contains("show")
         FetchType.All -> true
       }
     }
@@ -170,8 +177,9 @@ class YourLibraryContainerViewModel @Inject constructor(
       FetchType.Playlists -> playlists
       FetchType.Artists -> artists
       FetchType.Albums -> albums
+      FetchType.Shows -> shows
       FetchType.All -> {
-        (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }
+        (albums + artists + playlists + shows).sortedByDescending { it.ceTimestamp() }
       }
     }.toMutableList().also {
       it.addAll(0, pins)
@@ -188,6 +196,7 @@ class YourLibraryContainerViewModel @Inject constructor(
     All,
     Playlists,
     Artists,
-    Albums
+    Albums,
+    Shows
   }
 }

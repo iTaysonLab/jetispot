@@ -16,17 +16,21 @@ object ShowEntityView {
     metadataRequester: SpMetadataRequester,
     id: String
   ): HubResponse {
+    val spId = "spotify:show:$id"
+
     val showMetadata = metadataRequester.request {
       add(
-        "spotify:show:$id" to listOf(
+        spId to listOf(
           ExtensionKindOuterClass.ExtensionKind.SHOW_V4,
           ExtensionKindOuterClass.ExtensionKind.PODCAST_TOPICS,
+          ExtensionKindOuterClass.ExtensionKind.PODCAST_RATING,
         )
       )
     }
 
-    val show = showMetadata.shows[id]!!
-    val topics = showMetadata.podcastTopics[id]!!
+    val show = showMetadata.shows[spId]!!
+    val topics = showMetadata.podcastTopics[spId]!!
+    val ratings = showMetadata.podcastRatings[spId]!!
 
     val episodeMetadata = metadataRequester.request {
       episodes(show.episodeList.map { EpisodeId.fromHex(Utils.bytesToHex(it.gid)).toSpotifyUri() })
@@ -39,10 +43,12 @@ object ShowEntityView {
         custom = mapOf("show" to show)
       ),
       body = buildList {
-        add(HubItem(
-          component = HubComponent.PodcastTopics,
-          custom = mapOf("topics" to topics)
-        ))
+        add(
+          HubItem(
+            component = HubComponent.PodcastTopics,
+            custom = mapOf("topics" to topics, "ratings" to ratings)
+          )
+        )
 
         addAll(
           show.episodeList.map {
