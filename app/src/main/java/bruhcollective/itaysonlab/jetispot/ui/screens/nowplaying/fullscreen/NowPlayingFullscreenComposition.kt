@@ -57,7 +57,10 @@ fun NowPlayingFullscreenComposition (
             .padding(horizontal = 16.dp)
         )
 
-        ArtworkPager(viewModel, mainPagerState)
+        Column(modifier = Modifier.padding(vertical = 16.dp)) {
+          ArtworkPager(viewModel, mainPagerState)
+        }
+
 
         Column(Modifier.padding(horizontal = 8.dp)) {
           ControlsHeader(scope, navController, bottomSheetState, viewModel)
