@@ -45,7 +45,7 @@ fun ControlsHeader(
   viewModel: NowPlayingViewModel
 ) {
   Row(horizontalArrangement = Arrangement.SpaceBetween) {
-    Column(modifier = Modifier.weight(0.9f)) {
+    Column(modifier = Modifier.weight(0.7f)) {
       Text(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
@@ -89,7 +89,7 @@ fun ControlsHeader(
         .align(Alignment.CenterVertically)
         .padding(end = 12.dp)
         .size(26.dp)
-        .weight(0.13f)
+        .weight(0.1f)
     )
   }
 }
