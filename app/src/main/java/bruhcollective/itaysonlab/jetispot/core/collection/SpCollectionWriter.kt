@@ -23,6 +23,7 @@ import com.spotify.playlist4.Playlist4ApiProto
 import kotlinx.coroutines.*
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.*
+import java.nio.charset.StandardCharsets
 
 class SpCollectionWriter(
   private val spSessionManager: SpSessionManager,
@@ -137,6 +138,8 @@ class SpCollectionWriter(
         ExtensionKindOuterClass.ExtensionKind.ARTIST_V4 -> CollectionUpdateEntry.Type.ARTIST
         ExtensionKindOuterClass.ExtensionKind.ALBUM_V4 -> CollectionUpdateEntry.Type.ALBUM
         ExtensionKindOuterClass.ExtensionKind.TRACK_V4 -> CollectionUpdateEntry.Type.TRACK
+        ExtensionKindOuterClass.ExtensionKind.SHOW_V4 -> CollectionUpdateEntry.Type.SHOW
+        ExtensionKindOuterClass.ExtensionKind.EPISODE_V4 -> CollectionUpdateEntry.Type.EPISODE
         else -> error("unsupported")
       }}.mapValues { it.value.map { li -> li.uri } }
 
@@ -214,6 +217,16 @@ class SpCollectionWriter(
         )
       })
 
+      toBeAdded.addAll(metadata.shows.values.map { show ->
+        CollectionPinnedItem(
+          uri = ShowId.fromHex(Utils.bytesToHex(show.gid)).toSpotifyUri(),
+          name = show.name,
+          subtitle = show.publisher,
+          picture = bytesToPicUrl(show.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
+          addedAt = mappedRequest[ShowId.fromHex(Utils.bytesToHex(show.gid)).toSpotifyUri()]!!
+        )
+      })
+
       toBeAdded.addAll(playlistItems.map {
         Triple(it.key, it.value, spSessionManager.session.api().getPlaylist(PlaylistId.fromUri(it.key)))
       }.map { playlist ->
@@ -250,27 +263,14 @@ class SpCollectionWriter(
     if (mappedRequest.isNotEmpty()) {
       val metadata = getExtendedMetadata(mappedRequest.keys.toList())
 
-      val trackDescriptors = if (metadata.tracks.isNotEmpty()) {
-        // also request descriptors to get genre data
-        UnpackedMetadataResponse(spSessionManager.session.api()
-          .getExtendedMetadata(
-            ExtendedMetadata.BatchedEntityRequest.newBuilder().addAllEntityRequest(
-              metadata.tracks.keys.map { ExtendedMetadata.EntityRequest.newBuilder().setEntityUri(it
-                ).addQuery(
-                  ExtendedMetadata.ExtensionQuery.newBuilder().setExtensionKind(ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR).build()
-                ).build()
-              }.distinctBy { it.entityUri }
-            ).build()
-          )
-          .extendedMetadataList
-        ).descriptors.mapValues { e ->
-          e.value.descriptorsList.joinToString("|") { it.text }
-        }
-      } else {
-        emptyMap()
+      if (metadata.tracks.isNotEmpty()) {
+        metadata += metadataRequester.request(
+          metadata.tracks.map { it.key to listOf(ExtensionKindOuterClass.ExtensionKind.TRACK_DESCRIPTOR) }
+        )
       }
 
-      dao.addTracks(*metadata.tracks.values.map { track ->
+      dao.addTracks(*metadata.tracks.values.mapNotNull { track ->
+        if (!track.hasGid() || track.gid.isEmpty) return@mapNotNull null
         val spUri = TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri()
         CollectionTrack(
           id = TrackId.fromHex(Utils.bytesToHex(track.gid)).hexId(),
@@ -285,12 +285,13 @@ class SpCollectionWriter(
           isExplicit = track.explicit,
           duration = track.duration,
           picture = bytesToPicUrl(track.album.coverGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
-          descriptors = trackDescriptors[spUri] ?: "",
+          descriptors = metadata.descriptors[spUri]?.descriptorsList?.joinToString("|") ?: "",
           addedAt = mappedRequest[TrackId.fromHex(Utils.bytesToHex(track.gid)).toSpotifyUri()]!!
         )
       }.toTypedArray())
 
-      dao.addAlbums(*metadata.albums.values.map { album ->
+      dao.addAlbums(*metadata.albums.values.mapNotNull { album ->
+        if (!album.hasGid() || album.gid.isEmpty) return@mapNotNull null
         CollectionAlbum(
           id = AlbumId.fromHex(Utils.bytesToHex(album.gid)).hexId(),
           uri = AlbumId.fromHex(Utils.bytesToHex(album.gid)).toSpotifyUri(),
@@ -301,13 +302,38 @@ class SpCollectionWriter(
         )
       }.toTypedArray())
 
-      dao.addArtists(*metadata.artists.values.map { artist ->
+      dao.addArtists(*metadata.artists.values.mapNotNull { artist ->
+        if (!artist.hasGid() || artist.gid.isEmpty) return@mapNotNull null
         CollectionArtist(
           id = ArtistId.fromHex(Utils.bytesToHex(artist.gid)).hexId(),
           uri = ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri(),
           name = artist.name,
           picture = bytesToPicUrl(artist.portraitGroup.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
           addedAt = mappedRequest[ArtistId.fromHex(Utils.bytesToHex(artist.gid)).toSpotifyUri()]!!
+        )
+      }.toTypedArray())
+
+      dao.addShows(*metadata.shows.values.mapNotNull { show ->
+        if (!show.hasGid() || show.gid.isEmpty) return@mapNotNull null
+        CollectionShow(
+          uri = ShowId.fromHex(Utils.bytesToHex(show.gid)).toSpotifyUri(),
+          name = show.name,
+          publisher = show.publisher,
+          picture = bytesToPicUrl(show.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
+          addedAt = mappedRequest[ShowId.fromHex(Utils.bytesToHex(show.gid)).toSpotifyUri()]!!
+        )
+      }.toTypedArray())
+
+      dao.addEpisodes(*metadata.episodes.values.mapNotNull { episode ->
+        if (!episode.hasGid() || episode.gid.isEmpty) return@mapNotNull null
+        CollectionEpisode(
+          uri = EpisodeId.fromHex(Utils.bytesToHex(episode.gid)).toSpotifyUri(),
+          name = episode.name,
+          description = episode.description,
+          showUri = ShowId.fromHex(Utils.bytesToHex(episode.show.gid)).toSpotifyUri(),
+          showName = episode.show.name,
+          picture = bytesToPicUrl(episode.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId),
+          addedAt = mappedRequest[EpisodeId.fromHex(Utils.bytesToHex(episode.gid)).toSpotifyUri()]!!
         )
       }.toTypedArray())
     }
@@ -318,12 +344,14 @@ class SpCollectionWriter(
           CollectionUpdateEntry.Type.TRACK -> dao.deleteTracks(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.ALBUM -> dao.deleteAlbums(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.ARTIST -> dao.deleteArtists(*del.value.toTypedArray())
+          CollectionUpdateEntry.Type.SHOW -> dao.deleteShows(*del.value.toTypedArray())
+          CollectionUpdateEntry.Type.EPISODE -> dao.deleteEpisodes(*del.value.toTypedArray())
         }
       }
     }
   }
 
-  private suspend fun getExtendedMetadata(of: List<String>) = metadataRequester.request(of)
+  private suspend fun getExtendedMetadata(of: List<String>) = metadataRequester.request(of.map { id -> id to listOf(spotifyIdToKind(id)) })
 
   suspend fun performRootlistScan(updateToRevision: String? = null) {
     val localRevision = dao.getCollection("rootlist")?.syncToken
@@ -381,6 +409,8 @@ class SpCollectionWriter(
     "track" -> ExtensionKindOuterClass.ExtensionKind.TRACK_V4
     "album" -> ExtensionKindOuterClass.ExtensionKind.ALBUM_V4
     "artist" -> ExtensionKindOuterClass.ExtensionKind.ARTIST_V4
+    "show" -> ExtensionKindOuterClass.ExtensionKind.SHOW_V4
+    "episode" -> ExtensionKindOuterClass.ExtensionKind.EPISODE_V4
     else -> ExtensionKindOuterClass.ExtensionKind.UNKNOWN_EXTENSION
   }
 
@@ -388,6 +418,8 @@ class SpCollectionWriter(
     CollectionUpdateEntry.Type.TRACK -> TrackId.fromHex(id).toSpotifyUri()
     CollectionUpdateEntry.Type.ALBUM -> AlbumId.fromHex(id).toSpotifyUri()
     CollectionUpdateEntry.Type.ARTIST -> ArtistId.fromHex(id).toSpotifyUri()
+    CollectionUpdateEntry.Type.SHOW -> ShowId.fromHex(id).toSpotifyUri()
+    CollectionUpdateEntry.Type.EPISODE -> EpisodeId.fromHex(id).toSpotifyUri()
     CollectionUpdateEntry.Type.UNRECOGNIZED -> ""
   }
 

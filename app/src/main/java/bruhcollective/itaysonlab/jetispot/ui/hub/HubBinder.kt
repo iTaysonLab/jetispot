@@ -55,6 +55,10 @@ fun HubBinder (
     HubComponent.TextRow -> TextRow(item.text!!)
     HubComponent.ImageRow -> ImageRow(navController, delegate, item)
 
+    HubComponent.ShowHeader -> ShowHeader(navController, delegate, item)
+    HubComponent.EpisodeListItem -> EpisodeListItem(navController, delegate, item)
+    HubComponent.PodcastTopics -> PodcastTopicsStrip(navController, delegate, item)
+
     HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 

@@ -35,6 +35,7 @@ fun YlRenderer(
     is CollectionRootlistItem -> YLRRootlist(item, modifier)
     is CollectionAlbum -> YLRAlbum(item, modifier)
     is CollectionArtist -> YLRArtist(item, modifier)
+    is CollectionShow -> YLRShow(item, modifier)
     else -> Text(item.toString())
   }
 }
@@ -160,6 +161,21 @@ fun YLRArtist(
     picPlaceholder = "artist",
     title = item.name,
     subtitle = null,
+    modifier = modifier
+  )
+}
+
+@Composable
+fun YLRShow(
+  item: CollectionShow,
+  modifier: Modifier
+) {
+  YLRGenericItem(
+    picUrl = "https://i.scdn.co/image/${item.picture}",
+    picCircle = false,
+    picPlaceholder = "podcast",
+    title = item.name,
+    subtitle = item.publisher,
     modifier = modifier
   )
 }

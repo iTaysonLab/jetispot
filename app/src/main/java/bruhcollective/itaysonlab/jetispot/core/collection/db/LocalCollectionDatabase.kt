@@ -18,12 +18,15 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.Col
     CollectionRootlistItem::class,
     CollectionContentFilter::class,
     CollectionPinnedItem::class,
-  ], version = 6, autoMigrations = [
+    CollectionShow::class,
+    CollectionEpisode::class,
+  ], version = 7, autoMigrations = [
     AutoMigration(from = 1, to = 2),
     AutoMigration(from = 2, to = 3),
     AutoMigration(from = 3, to = 4),
     AutoMigration(from = 4, to = 5, spec = LocalCollectionDatabase.RemoveArtistsMeta::class),
     AutoMigration(from = 5, to = 6),
+    AutoMigration(from = 6, to = 7),
   ], exportSchema = true
 )
 abstract class LocalCollectionDatabase : RoomDatabase() {

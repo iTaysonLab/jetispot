@@ -31,6 +31,12 @@ interface LocalCollectionDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addPins(vararg items: CollectionPinnedItem)
 
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun addShows(vararg items: CollectionShow)
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun addEpisodes(vararg items: CollectionEpisode)
+
   @Query("SELECT * from lcTypes WHERE type = :of")
   suspend fun getCollection(of: String): LocalCollectionCategory?
 
@@ -51,6 +57,12 @@ interface LocalCollectionDao {
 
   @Query("SELECT * from lcAlbums ORDER BY addedAt DESC")
   suspend fun getAlbums(): List<CollectionAlbum>
+
+  @Query("SELECT * from lcShows ORDER BY addedAt DESC")
+  suspend fun getShows(): List<CollectionShow>
+
+  @Query("SELECT * from lcEpisodes ORDER BY addedAt DESC")
+  suspend fun getEpisodes(): List<CollectionEpisode>
 
   @Query("SELECT * from lcTracks WHERE mainArtistId = :id")
   suspend fun getTracksByArtist(id: String): List<CollectionTrack>
@@ -81,6 +93,12 @@ interface LocalCollectionDao {
 
   @Query("DELETE FROM lcPins WHERE uri IN (:uris)")
   suspend fun deletePins(vararg uris: String)
+
+  @Query("DELETE FROM lcShows WHERE uri IN (:uris)")
+  suspend fun deleteShows(vararg uris: String)
+
+  @Query("DELETE FROM lcEpisodes WHERE uri IN (:uris)")
+  suspend fun deleteEpisodes(vararg uris: String)
 
   // Flows
 

@@ -92,13 +92,6 @@ class NowPlayingViewModel @Inject constructor(
         SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
           ?: return@launch
       )
-
-      /*currentBgColor.value = calculateDominantColor(
-        spPartnersApi,
-        SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
-          ?: return@launch,
-        false
-      ).blendWith(Color.Black, 0.1f)*/
     }
   }
 
