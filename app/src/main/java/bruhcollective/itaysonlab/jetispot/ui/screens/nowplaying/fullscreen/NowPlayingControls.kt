@@ -36,38 +36,9 @@ import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-@Composable
-fun NowPlayingControls(
-  scope: CoroutineScope,
-  navController: LambdaNavigationController,
-  bottomSheetState: BottomSheetState,
-  viewModel: NowPlayingViewModel,
-  modifier: Modifier,
-  pagerState: PagerState
-) {
-  Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
-    Spacer(Modifier.padding(bottom = 16.dp))
-
-    ArtworkPager(viewModel, pagerState)
-
-    Spacer(Modifier.padding(bottom = 20.dp))
-
-    Column(Modifier.padding(horizontal = 8.dp)) {
-      ControlsHeader(scope, navController, bottomSheetState, viewModel)
-      ControlsSeekbar(viewModel)
-      Spacer(Modifier.height(8.dp))
-    }
-
-    ControlsMainButtons(viewModel)
-
-    ControlsBottomAccessories(viewModel)
-  }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ControlsHeader(
+fun ControlsHeader(
   scope: CoroutineScope,
   navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
@@ -118,14 +89,14 @@ private fun ControlsHeader(
         .align(Alignment.CenterVertically)
         .padding(end = 12.dp)
         .size(26.dp)
-        .weight(0.1f)
+        .weight(0.13f)
     )
   }
 }
 
 @Composable
-private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
-  Box() {
+fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
+  Box {
     Slider(
       value = viewModel.currentPosition.value.progressRange,
       colors = SliderDefaults.colors(
@@ -166,7 +137,7 @@ private fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 }
 
 @Composable
-private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
+fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
   Row(
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
@@ -193,7 +164,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         onClick = { viewModel.skipPrevious() },
         modifier = Modifier
           .size(56.dp)
-          .clip(CircleShape)
+          .clip(RoundedCornerShape(28.dp))
           .background(monet.onPrimaryContainer.copy(0.1f)),
         colors = IconButtonDefaults.iconButtonColors(
           contentColor = monet.onSecondaryContainer.copy(0.85f)
@@ -230,7 +201,7 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
         onClick = { viewModel.skipNext() },
         modifier = Modifier
           .size(56.dp)
-          .clip(CircleShape)
+          .clip(RoundedCornerShape(28.dp))
           .background(monet.onPrimaryContainer.copy(0.1f)),
         colors = IconButtonDefaults.iconButtonColors(
           contentColor = monet.onSecondaryContainer.copy(0.85f)
@@ -259,19 +230,19 @@ private fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
 }
 
 @Composable
-private fun ControlsBottomAccessories(
+fun ControlsBottomAccessories(
   viewModel: NowPlayingViewModel,
 ) {
   Row(
-    horizontalArrangement = Arrangement.Center,
     modifier = Modifier
-      .padding(bottom = 16.dp)
       .padding(horizontal = 8.dp)
+      .padding(bottom = 16.dp)
+      .fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween
   ) {
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier
-        .padding(start = 0.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
         .size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(0.85f)
@@ -288,11 +259,9 @@ private fun ControlsBottomAccessories(
               .blendWith(monet.primary, 0.3f)
               .copy(0.5f)
           )
-          .padding(top = 6.dp, bottom = 6.dp, start = 6.dp, end = 6.dp)
+          .padding(6.dp)
       )
     }
-
-    Spacer(modifier = Modifier.weight(1f))
 
     IconButton(
       onClick = { /*TODO*/ },
@@ -312,7 +281,7 @@ private fun ControlsBottomAccessories(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState) {
+fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState) {
   HorizontalPager(
     count = viewModel.currentQueue.value.size,
     state = pagerState,
