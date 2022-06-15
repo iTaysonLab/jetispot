@@ -46,7 +46,7 @@ fun ControlsHeader(
   viewModel: NowPlayingViewModel
 ) {
   Row(horizontalArrangement = Arrangement.SpaceBetween) {
-    Column(modifier = Modifier.weight(0.7f)) {
+    Column(modifier = Modifier.weight(0.9f)) {
       Text(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
@@ -90,7 +90,6 @@ fun ControlsHeader(
         .align(Alignment.CenterVertically)
         .padding(end = 12.dp)
         .size(26.dp)
-        .weight(0.1f)
     )
   }
 }
@@ -106,7 +105,7 @@ fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
         inactiveTrackColor = monet.onSecondaryContainer.copy(alpha = 0.2f)
       ),
       onValueChange = {},
-      modifier = Modifier.padding(horizontal = 8.dp)
+      modifier = Modifier.padding(horizontal = 6.dp)
     )
 
     Column(
