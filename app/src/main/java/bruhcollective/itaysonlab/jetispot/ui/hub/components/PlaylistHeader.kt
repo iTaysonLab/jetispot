@@ -64,11 +64,14 @@ fun PlaylistHeader(
     Modifier
       .fillMaxHeight()
       .fillMaxWidth()
-      .background(
-        brush = Brush.verticalGradient(
-          colors = listOf(dominantColorAsBg.value, Color.Transparent)
-        )
-      )
+//      .background(
+//        brush = Brush.verticalGradient(
+//          colors = listOf(
+//            dominantColorAsBg.value.copy(0.3f),
+//            MaterialTheme.colorScheme.background
+//          )
+//        )
+//      )
       .padding(top = 16.dp)
       .statusBarsPadding()
   ) {
