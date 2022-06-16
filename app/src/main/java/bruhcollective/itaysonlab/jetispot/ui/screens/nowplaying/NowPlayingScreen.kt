@@ -43,7 +43,10 @@ fun NowPlayingScreen(
         try {
           mainPagerState.animateScrollToPage(new)
         } catch (e: IllegalArgumentException) {
-          mainPagerState.scrollToPage(new)
+          when (mainPagerState.pageCount == 0 ) {
+            true -> delay(100L)
+            else -> mainPagerState.scrollToPage(new)
+          }
         }
       }
     }
