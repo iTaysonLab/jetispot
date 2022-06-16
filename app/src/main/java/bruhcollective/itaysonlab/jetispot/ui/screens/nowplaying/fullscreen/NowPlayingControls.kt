@@ -110,7 +110,7 @@ fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 
     Column(
       modifier = Modifier
-        .padding(horizontal = 16.dp)
+        .padding(horizontal = 13.dp)
         .fillMaxWidth(),
       horizontalAlignment = Alignment.End,
       verticalArrangement = Arrangement.Bottom
