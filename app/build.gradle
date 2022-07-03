@@ -85,11 +85,11 @@ dependencies {
     // AndroidX
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
 
     // Compose
-    implementation "androidx.navigation:navigation-compose:2.4.2"
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation "androidx.navigation:navigation-compose:2.5.0"
+    implementation 'androidx.activity:activity-compose:1.5.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
@@ -98,7 +98,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-util:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.customview:customview:1.2.0-alpha01"
-    debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-beta02"
+    debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-rc01"
 
     // Compose - Additions
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
@@ -133,7 +133,7 @@ dependencies {
     // Data - SQL
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-paging:2.5.0-alpha01"
+    implementation "androidx.room:room-paging:2.5.0-alpha02"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Data - Proto
