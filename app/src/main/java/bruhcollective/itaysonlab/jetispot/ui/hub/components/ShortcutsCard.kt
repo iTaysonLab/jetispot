@@ -24,7 +24,15 @@ fun ShortcutsCard(
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth().clickableHub(navController, delegate, item)) {
+  Card(
+    colors = CardDefaults.cardColors(
+      containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
+    ),
+    modifier = Modifier
+      .height(56.dp)
+      .fillMaxWidth()
+      .clickableHub(navController, delegate, item)
+  ) {
     Row {
       PreviewableAsyncImage(
         imageUrl = item.images?.main?.uri,

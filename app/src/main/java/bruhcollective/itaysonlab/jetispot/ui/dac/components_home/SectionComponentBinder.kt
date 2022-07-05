@@ -24,7 +24,11 @@ fun SectionComponentBinder(
   item: SectionComponent
 ) {
   val list = item.componentsList.map { it.dynamicUnpack() }
-  LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+  LazyRow(
+    contentPadding = PaddingValues(horizontal = 16.dp),
+    horizontalArrangement = Arrangement.spacedBy(12.dp),
+    modifier = Modifier.fillMaxWidth()
+  ) {
     items(list) { listItem ->
       when (listItem) {
         is AlbumCardMediumComponent -> MediumCard(
