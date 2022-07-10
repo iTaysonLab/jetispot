@@ -1,9 +1,13 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
+import android.view.Window
 import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
@@ -12,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -59,13 +65,11 @@ fun DacRendererScreen(
       Scaffold(
         topBar = {
           if (fullscreen) {
-            SmallTopAppBar(
-              title = {},
-              colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
-              ),
-              scrollBehavior = scrollBehavior
+            Surface(
+              content = { Column(Modifier.statusBarsPadding()) {} },
+              modifier = Modifier
+                .fillMaxWidth(),
+              color = MaterialTheme.colorScheme.background.copy(alpha = 0.9f)
             )
         } else {
           LargeTopAppBar(
@@ -109,7 +113,9 @@ fun DacRendererScreen(
                       Text("DAC unsupported component", Modifier.padding(horizontal = 16.dp))
                       Text(exception.message ?: "",
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                        modifier = Modifier.padding(top = 4.dp).padding(horizontal = 16.dp)
+                        modifier = Modifier
+                          .padding(top = 4.dp)
+                          .padding(horizontal = 16.dp)
                       )
                     }
                     else -> {
