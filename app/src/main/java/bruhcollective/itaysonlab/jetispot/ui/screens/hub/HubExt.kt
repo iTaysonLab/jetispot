@@ -89,7 +89,7 @@ fun HubScaffold(
                 TopAppBarDefaults.smallTopAppBarColors()
               else
                 TopAppBarDefaults.smallTopAppBarColors(
-                  containerColor = Color.Transparent,
+                  containerColor = MaterialTheme.colorScheme.background.copy(0f),
                   scrolledContainerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
                 ),
               contentPadding = PaddingValues(
