@@ -93,18 +93,18 @@ fun AuthScreen(
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.spacedBy(8.dp),
-      modifier = Modifier.padding(top = 32.dp)
+      modifier = Modifier.padding(top = 32.dp).fillMaxWidth()
     ) {
       Text(
         text = stringResource(R.string.auth_welcome),
         fontSize = 24.sp,
         fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterHorizontally)
       )
       Text(
         text = stringResource(R.string.auth_welcome_text),
         fontSize = 14.sp,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterHorizontally)
       )
     }
 

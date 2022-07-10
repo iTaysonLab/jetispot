@@ -28,7 +28,7 @@ object CollectionEntityView {
         id = track.id,
         text = HubText(
           title = track.name,
-          subtitle = track.rawArtistsData.split("|").joinToString { it.split("=")[1] } + " • " + track.albumName
+          subtitle = track.rawArtistsData.split("|").joinToString { it.split("=").getOrElse(1) { "" } } + " • " + track.albumName
         ),
         images = HubImages(
           main = HubImage(
