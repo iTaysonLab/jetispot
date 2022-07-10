@@ -89,7 +89,7 @@ fun HubScaffold(
                 TopAppBarDefaults.smallTopAppBarColors()
               else
                 TopAppBarDefaults.smallTopAppBarColors(
-                  containerColor = MaterialTheme.colorScheme.background.copy(0f),
+                  containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp),
                   scrolledContainerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
                 ),
               contentPadding = PaddingValues(
@@ -97,7 +97,8 @@ fun HubScaffold(
                   WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
                 }
               ),
-              scrollBehavior = scrollBehavior
+              scrollBehavior = scrollBehavior,
+              modifier = Modifier.alpha(scrollBehavior.scrollFraction)
             )
           }
         },
