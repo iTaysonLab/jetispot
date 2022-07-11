@@ -1,13 +1,14 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Photo
+import androidx.compose.material.icons.rounded.Podcasts
+import androidx.compose.material.icons.rounded.PushPin
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +23,9 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
+import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
+import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
 @Composable
@@ -35,7 +38,6 @@ fun YlRenderer(
     is CollectionRootlistItem -> YLRRootlist(item, modifier)
     is CollectionAlbum -> YLRAlbum(item, modifier)
     is CollectionArtist -> YLRArtist(item, modifier)
-    is CollectionShow -> YLRShow(item, modifier)
     else -> Text(item.toString())
   }
 }
@@ -50,13 +52,10 @@ fun YLRPinned(
 
     if (isPredef) {
       ImagePreview(
-        if (item.predefType == PredefCeType.COLLECTION)
-          Icons.Rounded.Favorite
-        else
-          Icons.Rounded.Podcasts,
+        if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
         true,
         modifier = Modifier
-          .size(64.dp)
+          .size(75.dp)
           .clip(RoundedCornerShape(8.dp))
       )
     } else {
@@ -65,7 +64,7 @@ fun YLRPinned(
           Icons.Rounded.Photo,
           false,
           modifier = Modifier
-            .size(64.dp)
+            .size(75.dp)
             .clip(RoundedCornerShape(8.dp))
         )
       } else {
@@ -73,7 +72,7 @@ fun YLRPinned(
           model = "https://i.scdn.co/image/${item.picture}",
           contentDescription = null,
           modifier = Modifier
-            .size(64.dp)
+            .size(75.dp)
             .clip(RoundedCornerShape(8.dp))
         )
       }
@@ -82,26 +81,40 @@ fun YLRPinned(
     Column(
       Modifier
         .padding(start = 16.dp)
-        .align(Alignment.CenterVertically)
-    ) {
-      Text(
-        text = when (item.predefType) {
-          PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs)
-          PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes)
-          null -> item.name
-        },
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-      )
-
+        .align(Alignment.Top)) {
+      when (item.predefType){
+        PredefCeType.COLLECTION -> {
+          MediumText(
+            text = stringResource(id = R.string.liked_songs)
+          )
+        }
+        PredefCeType.EPISODES -> {
+          MediumText(
+            text = stringResource(id = R.string.new_episodes)
+          )
+        }
+        null -> {
+          Row(
+            modifier = Modifier
+              .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ){
+            MediumText(
+              text = item.name
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+            Subtext(
+              text = "Time",
+              maxLines = 1
+            )
+          }
+        }
+      }
       Row(Modifier.padding(top = 4.dp)) {
-        Icon(
-          Icons.Rounded.PushPin,
-          tint = MaterialTheme.colorScheme.primary,
-          contentDescription = null,
-          modifier = Modifier.size(16.dp).align(Alignment.CenterVertically)
-        )
-
+        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
+          .size(16.dp)
+          .align(Alignment.CenterVertically))
         Text(
           text = when (item.predefType) {
             PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs_desc, item.predefDyn)
@@ -118,6 +131,11 @@ fun YLRPinned(
       }
     }
   }
+  Divider(
+    modifier = Modifier.padding(horizontal = 16.dp),
+    color = MaterialTheme.colorScheme.onSurface,
+    thickness = 0.5f.dp
+  )
 }
 
 @Composable
@@ -125,9 +143,8 @@ fun YLRRootlist(
   item: CollectionRootlistItem,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericAlbumItem(
     picUrl = item.picture,
-    picCircle = false,
     picPlaceholder = "playlist",
     title = item.name,
     subtitle = item.ownerUsername,
@@ -140,9 +157,8 @@ fun YLRAlbum(
   item: CollectionAlbum,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericAlbumItem(
     picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = false,
     picPlaceholder = "album",
     title = item.name,
     subtitle = item.rawArtistsData.split("|").joinToString { it.split("=")[1] },
@@ -155,9 +171,8 @@ fun YLRArtist(
   item: CollectionArtist,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericArtistItem(
     picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = true,
     picPlaceholder = "artist",
     title = item.name,
     subtitle = null,
@@ -166,24 +181,8 @@ fun YLRArtist(
 }
 
 @Composable
-fun YLRShow(
-  item: CollectionShow,
-  modifier: Modifier
-) {
-  YLRGenericItem(
-    picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = false,
-    picPlaceholder = "podcast",
-    title = item.name,
-    subtitle = item.publisher,
-    modifier = modifier
-  )
-}
-
-@Composable
-fun YLRGenericItem(
+fun YLRGenericAlbumItem(
   picUrl: String,
-  picCircle: Boolean,
   picPlaceholder: String,
   title: String,
   subtitle: String?,
@@ -194,12 +193,29 @@ fun YLRGenericItem(
       imageUrl = picUrl,
       placeholderType = picPlaceholder,
       modifier = Modifier
-        .size(64.dp)
-        .clip(if (picCircle) CircleShape else RoundedCornerShape(8.dp))
+        .size(75.dp)
+        .clip(RoundedCornerShape(8.dp))
     )
 
-    Column(Modifier.padding(start = 16.dp).align(Alignment.CenterVertically)) {
-      Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    Column(
+      Modifier
+        .padding(start = 16.dp)
+        .align(Alignment.Top)) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+      ){
+        MediumText(
+          text = title
+        )
+        Spacer(modifier = Modifier.width(2.dp))
+        Subtext(
+          text = "Time",
+          maxLines = 1
+        )
+      }
 
       if (!subtitle.isNullOrEmpty()) {
         Text(
@@ -212,4 +228,45 @@ fun YLRGenericItem(
       }
     }
   }
+  Divider(
+    modifier = Modifier.padding(horizontal = 16.dp),
+    color = MaterialTheme.colorScheme.onSurface,
+    thickness = 0.5f.dp
+  )
+}
+
+
+
+@Composable
+fun YLRGenericArtistItem(
+  picUrl: String,
+  picPlaceholder: String,
+  title: String,
+  subtitle: String?,
+  modifier: Modifier
+) {
+  Row(modifier) {
+    PreviewableAsyncImage(
+      imageUrl = picUrl,
+      placeholderType = picPlaceholder,
+      modifier = Modifier
+        .size(75.dp)
+        .clip(CircleShape)
+    )
+
+    Column(
+      Modifier
+        .padding(start = 16.dp)
+        .align(Alignment.Top)) {
+      MediumText(
+        text = title
+      )
+    }
+  }
+  Divider(
+    modifier = Modifier.padding(horizontal = 16.dp),
+    color = MaterialTheme.colorScheme.onSurface,
+    thickness = 0.5f.dp
+  )
+
 }
