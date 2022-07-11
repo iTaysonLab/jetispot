@@ -69,7 +69,7 @@ fun MediumCard(
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
-            textAlign = if (item.text?.description.isNullOrEmpty())
+            textAlign = if (item.text?.subtitle.isNullOrEmpty() && item.text?.description.isNullOrEmpty())
               TextAlign.Center
             else
               TextAlign.Start
@@ -83,17 +83,19 @@ fun MediumCard(
             fontWeight = FontWeight.Medium,
             modifier = Modifier
               .padding(top = if (drawnTitle) 4.dp else 8.dp)
-              .align(CenterHorizontally),
+              .fillMaxWidth(),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            textAlign = TextAlign.Start
           )
         } else if (!item.text?.description.isNullOrEmpty()) {
           Text(
             item.text!!.description!!,
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = if (drawnTitle) 0.dp else 8.dp),
+            modifier = Modifier.padding(top = if (drawnTitle) 2.dp else 0.dp),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
-            maxLines = 2
+            maxLines = 2,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
           )
         }
       }
