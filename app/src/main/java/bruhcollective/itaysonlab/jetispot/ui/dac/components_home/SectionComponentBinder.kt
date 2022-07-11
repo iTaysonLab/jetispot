@@ -1,85 +1,134 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import com.spotify.home.dac.component.v1.proto.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionComponentBinder(
   navController: LambdaNavigationController,
   item: SectionComponent
 ) {
   val list = item.componentsList.map { it.dynamicUnpack() }
-  LazyRow(
-    contentPadding = PaddingValues(horizontal = 16.dp),
-    horizontalArrangement = Arrangement.spacedBy(12.dp),
-    modifier = Modifier.fillMaxWidth()
+
+  Box(
+    Modifier
+      .wrapContentSize()
+      .padding(horizontal = 16.dp)
+      .clip(shape = RoundedCornerShape(34.dp))
   ) {
-    items(list) { listItem ->
-      when (listItem) {
-        is AlbumCardMediumComponent -> MediumCard(
-          navController = navController,
-          title = listItem.title,
-          subtitle = listItem.subtitle,
-          navigateUri = listItem.navigateUri,
-          imageUri = listItem.imageUri,
-          imagePlaceholder = "album"
-        )
+    Card(
+      shape = RoundedCornerShape(34.dp)
+    ){
+      LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        contentPadding = PaddingValues(16.dp)
+      ) {
+        items(list) { listItem ->
+          when (listItem) {
+            is AlbumCardMediumComponent -> MediumCard(
+              navController = navController,
+              title = listItem.title,
+              subtitle = listItem.subtitle,
+              navigateUri = listItem.navigateUri,
+              imageUri = listItem.imageUri,
+              imagePlaceholder = "album"
+            )
 
-        is PlaylistCardMediumComponent -> MediumCard(
-          navController = navController,
-          title = listItem.title,
-          subtitle = listItem.subtitle,
-          navigateUri = listItem.navigateUri,
-          imageUri = listItem.imageUri,
-          imagePlaceholder = "playlist"
-        )
+            is PlaylistCardMediumComponent -> MediumCard(
+              navController = navController,
+              title = listItem.title,
+              subtitle = listItem.subtitle,
+              navigateUri = listItem.navigateUri,
+              imageUri = listItem.imageUri,
+              imagePlaceholder = "playlist"
+            )
 
-        is ArtistCardMediumComponent -> MediumCard(
-          navController = navController,
-          title = listItem.title,
-          subtitle = listItem.subtitle,
-          navigateUri = listItem.navigateUri,
-          imageUri = listItem.imageUri,
-          imagePlaceholder = "artist"
-        )
+            is ArtistCardMediumComponent -> MediumCard(
+              navController = navController,
+              title = listItem.title,
+              subtitle = listItem.subtitle,
+              navigateUri = listItem.navigateUri,
+              imageUri = listItem.imageUri,
+              imagePlaceholder = "artist"
+            )
 
-        is EpisodeCardMediumComponent -> MediumCard(
-          navController = navController,
-          title = listItem.title,
-          subtitle = listItem.subtitle,
-          navigateUri = listItem.navigateUri,
-          imageUri = listItem.imageUri,
-          imagePlaceholder = "podcasts"
-        )
+            is EpisodeCardMediumComponent -> MediumCard(
+              navController = navController,
+              title = listItem.title,
+              subtitle = listItem.subtitle,
+              navigateUri = listItem.navigateUri,
+              imageUri = listItem.imageUri,
+              imagePlaceholder = "podcasts"
+            )
 
-        is ShowCardMediumComponent -> MediumCard(
-          navController = navController,
-          title = listItem.title,
-          subtitle = listItem.subtitle,
-          navigateUri = listItem.navigateUri,
-          imageUri = listItem.imageUri,
-          imagePlaceholder = "podcasts"
-        )
+            is ShowCardMediumComponent -> MediumCard(
+              navController = navController,
+              title = listItem.title,
+              subtitle = listItem.subtitle,
+              navigateUri = listItem.navigateUri,
+              imageUri = listItem.imageUri,
+              imagePlaceholder = "podcasts"
+            )
+          }
+        }
       }
     }
+
+    Spacer(
+      Modifier
+        .fillMaxWidth(0.04f)
+        .height(274.dp)
+        .background(
+          brush = Brush.horizontalGradient(
+            colors = listOf(
+              Color.Transparent,
+              MaterialTheme.colorScheme.surfaceVariant
+            )
+          )
+        )
+        .align(Alignment.BottomEnd)
+    )
+
+    Spacer(
+      Modifier
+        .fillMaxWidth(0.04f)
+        .height(274.dp)
+        .background(
+          brush = Brush.horizontalGradient(
+            colors = listOf(
+              MaterialTheme.colorScheme.surfaceVariant,
+              Color.Transparent
+            )
+          )
+        )
+    )
   }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun MediumCard(
   navController: LambdaNavigationController,
@@ -89,31 +138,63 @@ fun MediumCard(
   imageUri: String,
   imagePlaceholder: String
 ) {
-  val size = 160.dp
+  Surface(
+    color = MaterialTheme.colorScheme.background,
+    shape = RoundedCornerShape(20.dp)
+  ) {
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier
+        .width(172.dp)
+        .clickable { navController.navigate(navigateUri) }
+        .padding(bottom = 12.dp)
+    ) {
+      var drawnTitle = false
 
-  Column(
-    Modifier
-      .width(size)
-      .clickable {
-        navController.navigate(navigateUri)
-      }) {
-    var drawnTitle = false
-
-    PreviewableAsyncImage(
-      imageUrl = imageUri, placeholderType = imagePlaceholder, modifier = Modifier
-        .size(size)
-        .clip(
-          if (imagePlaceholder == "artist") CircleShape else RoundedCornerShape(if (imagePlaceholder == "podcasts") 12.dp else 0.dp)
+      // Had to wrap the image in another composable due to weird padding when
+      // image couldn't be retrieved
+      Surface(Modifier.padding(top = 6.dp)) {
+        PreviewableAsyncImage(
+          imageUrl = imageUri,
+          placeholderType = imagePlaceholder,
+          modifier = Modifier
+            .size(160.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp))
         )
-    )
+      }
 
-    if (title.isNotEmpty()) {
-      drawnTitle = true
-      MediumText(title, modifier = Modifier.padding(top = 8.dp).align(if (imagePlaceholder == "artist") Alignment.CenterHorizontally else Alignment.Start))
-    }
+      // Title of the card. TODO: Scrolling text
+      Column(
+        Modifier.height(64.dp).padding(horizontal = 14.dp),
+        verticalArrangement = Arrangement.Center
+      ) {
+        if (title.isNotEmpty()) {
+          drawnTitle = true
+          Text(
+            title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            textAlign = if (imagePlaceholder == "artist") TextAlign.Center else TextAlign.Start
+          )
+        }
 
-    if (subtitle.isNotEmpty()) {
-      Subtext(subtitle, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp).align(if (imagePlaceholder == "artist") Alignment.CenterHorizontally else Alignment.Start))
+        if (subtitle.isNotEmpty()) {
+          Text(
+            subtitle,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier
+              .padding(top = if (drawnTitle) 4.dp else 8.dp)
+              .fillMaxWidth(),
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            textAlign = TextAlign.Start
+          )
+        }
+      }
     }
   }
 }
