@@ -43,7 +43,7 @@ fun SectionComponentBinder(
       shape = RoundedCornerShape(34.dp)
     ){
       LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(16.dp)
       ) {
         items(list) { listItem ->
