@@ -53,7 +53,7 @@ fun Carousel(
         shape = RoundedCornerShape(34.dp)
       ){
         LazyRow(
-          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          horizontalArrangement = Arrangement.spacedBy(4.dp),
           contentPadding = PaddingValues(16.dp)
         ) {
           items(item.children ?: listOf()) { cItem ->
@@ -61,7 +61,6 @@ fun Carousel(
           }
         }
       }
-
 
       Spacer(
         Modifier
