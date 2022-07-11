@@ -76,6 +76,20 @@ fun Carousel(
           )
           .align(Alignment.BottomEnd)
       )
+
+      Spacer(
+        Modifier
+          .fillMaxWidth(0.04f)
+          .height(274.dp)
+          .background(
+            brush = Brush.horizontalGradient(
+              colors = listOf(
+                MaterialTheme.colorScheme.surfaceVariant,
+                Color.Transparent
+              )
+            )
+          )
+      )
     }
   }
 }
