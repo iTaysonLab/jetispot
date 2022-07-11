@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +10,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,15 +43,40 @@ fun Carousel(
       )
     }
 
-    Card(shape = RoundedCornerShape(32.dp), modifier = Modifier.padding(horizontal = 16.dp)) {
-      LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(22.dp)
-      ) {
-        items(item.children ?: listOf()) { cItem ->
-          HubBinder(navController, delegate, cItem)
+    Box(
+      Modifier
+        .wrapContentSize()
+        .padding(horizontal = 16.dp)
+        .clip(shape = RoundedCornerShape(34.dp))
+    ) {
+      Card(
+        shape = RoundedCornerShape(34.dp)
+      ){
+        LazyRow(
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          contentPadding = PaddingValues(16.dp)
+        ) {
+          items(item.children ?: listOf()) { cItem ->
+            HubBinder(navController, delegate, cItem)
+          }
         }
       }
+
+
+      Spacer(
+        Modifier
+          .fillMaxWidth(0.04f)
+          .height(274.dp)
+          .background(
+            brush = Brush.horizontalGradient(
+              colors = listOf(
+                Color.Transparent,
+                MaterialTheme.colorScheme.surfaceVariant
+              )
+            )
+          )
+          .align(Alignment.BottomEnd)
+      )
     }
   }
 }

@@ -7,13 +7,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
@@ -29,61 +30,68 @@ fun MediumCard(
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  val size = 160.dp
-
   Surface(
-    color = MaterialTheme.colorScheme.surface,
+    color = MaterialTheme.colorScheme.background,
     shape = RoundedCornerShape(20.dp)
   ) {
     Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
+      horizontalAlignment = CenterHorizontally,
       modifier = Modifier
-        .width(size)
+        .width(172.dp)
         .clickableHub(navController, delegate, item)
-        .padding(bottom = 10.dp)
+        .padding(bottom = 12.dp)
     ) {
       var drawnTitle = false
 
-      PreviewableAsyncImage(
-        imageUrl = item.images?.main?.uri,
-        placeholderType = item.images?.main?.placeholder,
-        modifier = Modifier
-          .padding(top = 8.dp)
-          .size(144.dp)
-          .clip(RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 16.dp))
-      )
+      // Had to wrap the image in another composable due to weird padding when
+      // image couldn't be retrieved
+      Surface(Modifier.padding(top = 6.dp)) {
+        PreviewableAsyncImage(
+          imageUrl = item.images?.main?.uri,
+          placeholderType = item.images?.main?.placeholder,
+          modifier = Modifier
+            .size(160.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp))
+        )
+      }
 
+      // Title of the card. TODO: Scrolling text
       Column(
-        Modifier.height(68.dp).padding(horizontal = 8.dp),
+        Modifier.height(64.dp).padding(horizontal = 14.dp),
         verticalArrangement = Arrangement.Center
       ) {
         if (!item.text?.title.isNullOrEmpty()) {
           drawnTitle = true
           Text(
             item.text!!.title!!,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(top = 8.dp, start = 0.dp),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            style = TextStyle(platformStyle = PlatformTextStyle(false))
+            maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            textAlign = if (item.text?.description.isNullOrEmpty())
+              TextAlign.Center
+            else
+              TextAlign.Start
           )
         }
 
         if (!item.text?.subtitle.isNullOrEmpty()) {
           Text(
             item.text!!.subtitle!!,
-            fontSize = 16.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             modifier = Modifier
               .padding(top = if (drawnTitle) 4.dp else 8.dp)
-              .padding(start = 8.dp),
-            style = TextStyle(platformStyle = PlatformTextStyle(false))
+              .align(CenterHorizontally),
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
           )
         } else if (!item.text?.description.isNullOrEmpty()) {
           Text(
             item.text!!.description!!,
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp),
+            modifier = Modifier.padding(top = if (drawnTitle) 0.dp else 8.dp),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             maxLines = 2
           )
