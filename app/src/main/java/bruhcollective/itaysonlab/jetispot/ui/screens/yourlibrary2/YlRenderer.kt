@@ -259,6 +259,15 @@ fun YLRGenericArtistItem(
       MediumText(
         text = title
       )
+      if (!subtitle.isNullOrEmpty()) {
+        Text(
+          text = subtitle,
+          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          modifier = Modifier.padding(top = 4.dp)
+        )
+      }
     }
   }
     Divider(
@@ -266,5 +275,4 @@ fun YLRGenericArtistItem(
       color = MaterialTheme.colorScheme.onSurface,
       thickness = 0.5f.dp
     )
-
 }

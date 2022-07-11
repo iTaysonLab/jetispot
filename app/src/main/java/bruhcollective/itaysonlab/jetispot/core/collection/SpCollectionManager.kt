@@ -43,6 +43,7 @@ class SpCollectionManager @Inject constructor(
     performCollectionScan()
     writer.performScan("artist")
     writer.performScan("ylpin")
+    writer.performScan("show")
   }
 
   suspend fun artists() = withContext(scopeDispatcher) {

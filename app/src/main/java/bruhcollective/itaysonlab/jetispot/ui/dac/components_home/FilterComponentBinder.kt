@@ -22,16 +22,15 @@ fun FilterComponentBinder (
   selectedFacet: String,
   selectFacet: (String) -> Unit,
 ) {
-  LazyRow(Modifier.padding(start = 16.dp, bottom = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+  LazyRow(Modifier.padding(start = 16.dp, bottom = 24.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
     items(component.facetsList) { item ->
       val selected = selectedFacet == item.value
-      FilterChip(selected = selected, onClick = {
-        selectFacet(if (selected) "default" else item.value)
-      }, label = {
-        Text(item.title)
-      }, selectedIcon = {
-        Icon(Icons.Rounded.Check, null)
-      })
+      FilterChip(
+        selected = selected,
+        onClick = { selectFacet(if (selected) "default" else item.value) },
+        label = { Text(item.title) },
+        selectedIcon = { Icon(Icons.Rounded.Check, null) }
+      )
     }
   }
 }

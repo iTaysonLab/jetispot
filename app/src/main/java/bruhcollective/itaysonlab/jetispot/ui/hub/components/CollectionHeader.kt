@@ -40,23 +40,37 @@ fun CollectionHeader(
   val scope = rememberCoroutineScope()
   var expandSortDropdown by remember { mutableStateOf(false) }
 
-  Column(modifier = Modifier
-    .fillMaxHeight()
-    .background(
-      brush = Brush.verticalGradient(
-        colors = listOf(MaterialTheme.colorScheme.primary, Color.Transparent)
-      )
+  Column(
+    modifier = Modifier
+      .fillMaxHeight()
+//      .background(
+//        brush = Brush.verticalGradient(
+//          colors = listOf(
+//            MaterialTheme.colorScheme.primary.copy(0.3f),
+//            MaterialTheme.colorScheme.background
+//          )
+//        )
+//      )
+      .padding(top = 64.dp)
+      .statusBarsPadding()
+  ) {
+
+    MediumText(
+      text = stringResource(
+        id = R.string.liked_songs),
+      fontSize = 26.sp,
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .padding(top = 8.dp)
     )
-    .padding(top = 64.dp)
-    .statusBarsPadding()) {
 
-    MediumText(text = stringResource(id = R.string.liked_songs), fontSize = 26.sp, modifier = Modifier
-      .padding(horizontal = 16.dp)
-      .padding(top = 8.dp))
-
-    Subtext(text = "${item.custom!!["count"]} songs", fontSize = 14.sp, modifier = Modifier
-      .padding(horizontal = 16.dp)
-      .padding(top = 2.dp))
+    Subtext(
+      text = "${item.custom!!["count"]} songs",
+      fontSize = 14.sp,
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .padding(top = 2.dp)
+    )
 
     Row(
       Modifier

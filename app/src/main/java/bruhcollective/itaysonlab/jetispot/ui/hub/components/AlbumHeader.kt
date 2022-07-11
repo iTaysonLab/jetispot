@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -50,16 +51,20 @@ fun AlbumHeader(
     }
   }
 
-  Column(modifier = Modifier
-    .fillMaxHeight()
-    .background(
-      brush = Brush.verticalGradient(
-        colors = listOf(dominantColorAsBg.value, Color.Transparent)
-      )
-    )
-    .padding(top = 16.dp)
-    .statusBarsPadding()) {
-
+  Column(
+    modifier = Modifier
+      .fillMaxHeight()
+//      .background(
+//        brush = Brush.verticalGradient(
+//          colors = listOf(
+//            dominantColorAsBg.value.copy(0.3f),
+//            MaterialTheme.colorScheme.background
+//          )
+//        )
+//      )
+      .padding(top = 16.dp)
+      .statusBarsPadding()
+  ) {
     PreviewableAsyncImage(item.images?.main?.uri, item.images?.main?.placeholder, modifier = Modifier
       .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
       .align(Alignment.CenterHorizontally)

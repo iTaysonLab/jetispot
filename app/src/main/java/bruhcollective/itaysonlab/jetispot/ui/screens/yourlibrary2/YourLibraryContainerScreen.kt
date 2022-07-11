@@ -29,10 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun YourLibraryContainerScreen(
   navController: LambdaNavigationController,
@@ -47,42 +44,48 @@ fun YourLibraryContainerScreen(
     }
   }
 
-  Scaffold(topBar = {
-    Column {
-      SmallTopAppBar(title = {
-        Text("Your Library")
-      }, navigationIcon = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.AccountCircle, null)
-        }
-      }, actions = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.Search, null)
-        }
-      }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(
-          LocalDensity.current
-        ).toDp()
-      }))
-      AnimatedChipRow(
-        listOf(
-          ChipItem("playlists", "Playlists"),
-          ChipItem("artists", "Artists"),
-          ChipItem("albums", "Albums")
-        ),
-        viewModel.selectedTabId
-      ) {
-        viewModel.selectedTabId = it
-        scope.launch {
-          viewModel.load()
-          if (viewModel.selectedTabId == "") {
-            delay(25L)
-            state.animateScrollToItem(0)
+  Scaffold(
+    topBar = {
+      Column {
+        SmallTopAppBar(
+          title = { Text("Your Library") },
+          navigationIcon = {
+            IconButton(onClick = { /* TODO */ }) {
+              Icon(Icons.Rounded.AccountCircle, null)
+            }
+          },
+          actions = {
+            IconButton(onClick = { /* TODO */ }) {
+              Icon(Icons.Rounded.Search, null)
+            }
+          },
+          contentPadding = PaddingValues(
+            top = with(LocalDensity.current) {
+              WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+            }
+          )
+        )
+
+        AnimatedChipRow(
+          listOf(
+            ChipItem("playlists", "Playlists"),
+            ChipItem("artists", "Artists"),
+            ChipItem("albums", "Albums")
+          ),
+          viewModel.selectedTabId
+        ) {
+          viewModel.selectedTabId = it
+          scope.launch {
+            viewModel.load()
+            if (viewModel.selectedTabId == "") {
+              delay(25L)
+              state.animateScrollToItem(0)
+            }
           }
         }
       }
     }
-  }) { padding ->
+  ) { padding ->
     if (viewModel.content.isNotEmpty()) {
       LazyColumn(
         state = state,
@@ -94,11 +97,14 @@ fun YourLibraryContainerScreen(
           viewModel.content,
           key = { it.javaClass.simpleName + "_" + it.ceId() },
           contentType = { it.javaClass.simpleName }) { item ->
-          YlRenderer(item, modifier = Modifier
+          YlRenderer(
+            item,
+            modifier = Modifier
             .clickable { navController.navigate(item.ceUri()) }
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .animateItemPlacement())
+            .animateItemPlacement()
+          )
         }
       }
     } else {
@@ -127,14 +133,15 @@ fun AnimatedChipRow(
   ) {
     items(chips.let {
       if (selectedId != "") it.filter { i -> i.id == selectedId } else it
-    }, key = { it.id }) { item ->
-      FilterChip(selected = selectedId == item.id, onClick = {
-        onClick(if (selectedId == item.id) "" else item.id)
-      }, label = {
-        Text(item.name)
-      }, selectedIcon = {
-        Icon(Icons.Rounded.Check, null)
-      }, modifier = Modifier.animateItemPlacement())
+    },
+      key = { it.id }) { item ->
+      FilterChip(
+        selected = selectedId == item.id,
+        onClick = { onClick(if (selectedId == item.id) "" else item.id) },
+        label = { Text(item.name) },
+        selectedIcon = { Icon(Icons.Rounded.Check, null) },
+        modifier = Modifier.animateItemPlacement()
+      )
     }
   }
 }
@@ -173,15 +180,20 @@ class YourLibraryContainerViewModel @Inject constructor(
       FetchType.All -> {
         (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }
       }
-    }.toMutableList().also {
-      it.addAll(0, pins)
-      it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
-        when (pF.ceUri()) {
-          "spotify:collection" -> pF.ceModifyPredef(PredefCeType.COLLECTION, dao.trackCount().toString())
-          "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+    }.toMutableList()
+      .also {
+        it.addAll(0, pins)
+        it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
+          when (pF.ceUri()) {
+            "spotify:collection" -> pF.ceModifyPredef(
+              PredefCeType.COLLECTION,
+              dao.trackCount().toString()
+            )
+            "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+          }
         }
       }
-    })
+    )
   }
 
   enum class FetchType {

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
@@ -14,7 +13,6 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
-import coil.compose.AsyncImage
 
 @Composable
 fun PlaylistTrackRow(
@@ -38,12 +36,7 @@ fun PlaylistTrackRow(
           .size(48.dp)
     )
 
-    Column(
-        Modifier
-            .padding(
-                start = 16.dp
-            )
-            .align(Alignment.CenterVertically)
+    Column(Modifier.padding(start = 16.dp).align(Alignment.CenterVertically)
     ) {
       var drawnTitle = false
 
