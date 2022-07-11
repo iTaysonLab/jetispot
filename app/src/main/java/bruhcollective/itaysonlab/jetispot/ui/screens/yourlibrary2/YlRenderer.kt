@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.Photo
-import androidx.compose.material.icons.rounded.Podcasts
-import androidx.compose.material.icons.rounded.PushPin
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -263,10 +260,10 @@ fun YLRGenericArtistItem(
       )
     }
   }
-  Divider(
-    modifier = Modifier.padding(horizontal = 16.dp),
-    color = MaterialTheme.colorScheme.onSurface,
-    thickness = 0.5f.dp
-  )
+    Divider(
+      modifier = Modifier.padding(horizontal = 16.dp),
+      color = MaterialTheme.colorScheme.onSurface,
+      thickness = 0.5f.dp
+    )
 
 }
