@@ -1,10 +1,13 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,14 +27,18 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.home.dac.component.v1.proto.*
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
 @Composable
 fun SectionComponentBinder(
   navController: LambdaNavigationController,
   item: SectionComponent
 ) {
   val list = item.componentsList.map { it.dynamicUnpack() }
+  val lazyListState = rememberLazyListState()
 
   Box(
     Modifier
@@ -44,7 +51,14 @@ fun SectionComponentBinder(
     ){
       LazyRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp),
+        state = lazyListState,
+        flingBehavior = rememberSnapperFlingBehavior(
+          lazyListState,
+          snapOffsetForItem = SnapOffsets.Start,
+          decayAnimationSpec = rememberSplineBasedDecay(),
+          springAnimationSpec = spring(dampingRatio = 0.5f, stiffness = 0.5f)
+        )
       ) {
         items(list) { listItem ->
           when (listItem) {
@@ -166,7 +180,9 @@ fun MediumCard(
 
       // Title of the card. TODO: Scrolling text
       Column(
-        Modifier.height(64.dp).padding(horizontal = 14.dp),
+        Modifier
+          .height(64.dp)
+          .padding(horizontal = 14.dp),
         verticalArrangement = Arrangement.Center
       ) {
         if (title.isNotEmpty()) {
