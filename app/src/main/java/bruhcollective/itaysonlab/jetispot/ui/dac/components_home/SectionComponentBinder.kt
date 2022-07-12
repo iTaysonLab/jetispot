@@ -57,7 +57,7 @@ fun SectionComponentBinder(
           lazyListState,
           snapOffsetForItem = SnapOffsets.Start,
           decayAnimationSpec = rememberSplineBasedDecay(),
-          springAnimationSpec = spring(dampingRatio = 0.5f, stiffness = 0.5f)
+          springAnimationSpec = spring(dampingRatio = 0.001f, stiffness = 10f)
         )
       ) {
         items(list) { listItem ->

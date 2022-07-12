@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,6 +26,7 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
@@ -37,6 +37,7 @@ fun Carousel(
   item: HubItem,
 ) {
   val lazyListState = rememberLazyListState()
+  val lazySnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
   Column(Modifier.padding(vertical = if (delegate.isSurroundedWithPadding()) 0.dp else 8.dp)) {
     if (item.text != null) {
@@ -67,8 +68,7 @@ fun Carousel(
           flingBehavior = rememberSnapperFlingBehavior(
             lazyListState,
             snapOffsetForItem = SnapOffsets.Start,
-            decayAnimationSpec = rememberSplineBasedDecay(),
-            springAnimationSpec = spring(dampingRatio = 0.5f, stiffness = 0.5f)
+            springAnimationSpec = spring(dampingRatio = 0.001f, stiffness = 10f)
           )
         ) {
           items(item.children ?: listOf()) { cItem ->
