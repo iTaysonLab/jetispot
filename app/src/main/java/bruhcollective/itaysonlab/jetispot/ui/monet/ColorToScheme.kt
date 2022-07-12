@@ -43,4 +43,4 @@ object ColorToScheme {
   }
 }
 
-private fun Int.color() = Color(this)
+fun Int.color() = Color(this)
