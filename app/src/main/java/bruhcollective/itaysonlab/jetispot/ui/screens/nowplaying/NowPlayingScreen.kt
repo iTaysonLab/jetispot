@@ -68,16 +68,16 @@ fun NowPlayingScreen(
         mainPagerState = mainPagerState,
         viewModel = viewModel
       )
-    }
 
-    NowPlayingMiniplayer(
-      viewModel,
-      Modifier
-        .alpha(1f - bsOffset())
-        .clickable { scope.launch { bottomSheetState.expand() } }
-        .fillMaxWidth()
-        .height(72.dp)
-        .align(Alignment.TopStart)
-    )
+      NowPlayingMiniplayer(
+        viewModel,
+        Modifier
+          .alpha(1f - bsOffset())
+          .clickable { scope.launch { bottomSheetState.expand() } }
+          .fillMaxWidth()
+          .height(64.dp)
+          .align(Alignment.TopStart)
+      )
+    }
   }
 }

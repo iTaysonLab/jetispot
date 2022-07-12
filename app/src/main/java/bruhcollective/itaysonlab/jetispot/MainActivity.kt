@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
         val bsVisible =
           playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
         val bsPeek by animateDpAsState(
-          if (bsVisible) 80.dp + 72.dp + navBarHeightDp else 0.dp
+          if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
         )
 
         // lambdas

@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,8 +28,12 @@ fun NowPlayingMiniplayer(
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
-  Surface(tonalElevation = 8.dp, modifier = modifier) {
-    Box(Modifier.background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp)).fillMaxSize()) {
+  Surface(color = Color.Transparent, modifier = modifier) {
+    Box(
+      Modifier
+        .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
+        .fillMaxSize()
+    ) {
       LinearProgressIndicator(
         progress = viewModel.currentPosition.value.progressRange,
         color = MaterialTheme.colorScheme.primary,
@@ -57,14 +64,15 @@ fun NowPlayingMiniplayer(
         ) {
           Text(
             viewModel.currentTrack.value.title,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium
           )
           Text(
             viewModel.currentTrack.value.artist,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 12.sp,
@@ -72,16 +80,24 @@ fun NowPlayingMiniplayer(
           )
         }
 
-        PlayPauseButton(
-          viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-          MaterialTheme.colorScheme.onSurface,
-          Modifier
-            .fillMaxHeight()
-            .width(56.dp)
-            .align(Alignment.CenterVertically).clickable {
-              viewModel.togglePlayPause()
-            }
-        )
+        Surface(
+          shape = CircleShape,
+          modifier = Modifier.padding(vertical = 8.dp),
+          color = MaterialTheme.colorScheme.secondaryContainer
+        ) {
+          PlayPauseButton(
+            viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+            MaterialTheme.colorScheme.onSurface,
+            Modifier
+              .fillMaxHeight()
+              .width(48.dp)
+              .align(Alignment.CenterVertically)
+              .clickable {
+                viewModel.togglePlayPause()
+              }
+          )
+        }
+
       }
     }
   }
