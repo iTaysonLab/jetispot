@@ -83,11 +83,11 @@ fun NowPlayingMiniplayer(
         Surface(
           shape = CircleShape,
           modifier = Modifier.padding(vertical = 8.dp),
-          color = MaterialTheme.colorScheme.secondaryContainer
+          color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.1f)
         ) {
           PlayPauseButton(
             viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-            MaterialTheme.colorScheme.onSurface,
+            MaterialTheme.colorScheme.onSecondaryContainer.copy(0.85f),
             Modifier
               .fillMaxHeight()
               .width(48.dp)
