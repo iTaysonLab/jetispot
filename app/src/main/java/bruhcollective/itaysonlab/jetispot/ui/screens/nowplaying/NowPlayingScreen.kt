@@ -4,8 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +13,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
@@ -66,18 +63,25 @@ fun NowPlayingScreen(
         navController = navController,
         bottomSheetState = bottomSheetState,
         mainPagerState = mainPagerState,
-        viewModel = viewModel
+        viewModel = viewModel,
+        bsOffset = bsOffset()
       )
 
-      NowPlayingMiniplayer(
-        viewModel,
-        Modifier
-          .alpha(1f - bsOffset())
-          .clickable { scope.launch { bottomSheetState.expand() } }
-          .fillMaxWidth()
-          .height(64.dp)
-          .align(Alignment.TopStart)
-      )
+      // Wrapped in an if statement to not interfere with buttons as the miniplayer composable fills
+      // the bottom sheet
+      if (bsOffset() <= 0.99999f) {
+        NowPlayingMiniplayer(
+          viewModel,
+          Modifier
+            .alpha(1f - (bsOffset() * 3))
+            .clickable { scope.launch { bottomSheetState.expand() } }
+            .fillMaxSize()
+            .align(Alignment.TopStart),
+          bsOffset()
+        )
+      } else {
+
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
@@ -24,7 +25,8 @@ fun NowPlayingFullscreenComposition (
   navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   mainPagerState: PagerState,
-  viewModel: NowPlayingViewModel
+  viewModel: NowPlayingViewModel,
+  bsOffset: Float
 ) {
   val scope = rememberCoroutineScope()
 
@@ -42,6 +44,7 @@ fun NowPlayingFullscreenComposition (
       // main content
       Column(
         modifier = Modifier
+          .alpha(bsOffset)
           .navigationBarsPadding()
           .fillMaxHeight()
           .padding(top = 16.dp),
