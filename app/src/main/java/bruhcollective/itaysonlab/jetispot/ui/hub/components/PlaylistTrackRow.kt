@@ -5,6 +5,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +66,8 @@ fun PlaylistTrackRow(
     IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f)) {
       Icon(
         imageVector = Icons.Default.MoreVert,
-        contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}"
+        contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+        tint = MaterialTheme.colorScheme.onBackground
       )
     }
   }
