@@ -28,7 +28,8 @@ fun ArtistTrackRow(
   Row(
     Modifier
       .clickableHub(navController, delegate, item)
-      .padding(start = 16.dp, top = 12.dp, bottom = 12.dp),
+      .padding(start = 16.dp, top = 12.dp, bottom = 12.dp)
+      .fillMaxWidth(0.88f),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
 
@@ -64,7 +65,7 @@ fun ArtistTrackRow(
       }
     }
 
-    IconButton(onClick = { /*TODO*/ }) {
+    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)) {
       Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Song options")
     }
   }
