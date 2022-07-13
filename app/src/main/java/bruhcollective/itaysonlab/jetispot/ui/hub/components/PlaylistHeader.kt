@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,9 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Lan
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Web
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,18 +25,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.ColorUtils
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
-import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -170,22 +162,25 @@ fun PlaylistHeaderAdditionalInfo(
 
   Spacer(modifier = Modifier.height(12.dp))
 
-  Row(Modifier
-    .clickable(
-      interactionSource = remember { MutableInteractionSource() },
-      indication = null
-    ) { navController.navigate(custom["owner_username"] as String) }
-    .fillMaxWidth()
-    .padding(horizontal = 16.dp)) {
+  Row(
+    Modifier
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null,
+      ) { navController.navigate(custom["owner_username"] as String) }
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
     PreviewableAsyncImage(
       imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
         .clip(CircleShape)
-        .size(32.dp)
+        .size(24.dp)
     )
     MediumText(
-      text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
+      text = custom["owner_name"] as String, fontSize = 12.sp, modifier = Modifier
         .align(Alignment.CenterVertically)
-        .padding(start = 12.dp)
+        .padding(start = 8.dp)
     )
   }
 
