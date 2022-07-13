@@ -5,6 +5,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,7 +67,11 @@ fun ArtistTrackRow(
     }
 
     IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)) {
-      Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Song options")
+      Icon(
+        imageVector = Icons.Default.MoreVert,
+        contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+        tint = MaterialTheme.colorScheme.onBackground
+      )
     }
   }
 }
