@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Photo
+import androidx.compose.material.icons.rounded.Podcasts
+import androidx.compose.material.icons.rounded.PushPin
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
@@ -52,7 +56,7 @@ fun YLRPinned(
         if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
         true,
         modifier = Modifier
-          .size(75.dp)
+          .size(64.dp)
           .clip(RoundedCornerShape(8.dp))
       )
     } else {
@@ -61,7 +65,7 @@ fun YLRPinned(
           Icons.Rounded.Photo,
           false,
           modifier = Modifier
-            .size(75.dp)
+            .size(64.dp)
             .clip(RoundedCornerShape(8.dp))
         )
       } else {
@@ -69,7 +73,7 @@ fun YLRPinned(
           model = "https://i.scdn.co/image/${item.picture}",
           contentDescription = null,
           modifier = Modifier
-            .size(75.dp)
+            .size(64.dp)
             .clip(RoundedCornerShape(8.dp))
         )
       }
@@ -119,10 +123,11 @@ fun YLRPinned(
             null -> item.subtitle
           },
           color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+          fontSize = 12.sp,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
           modifier = Modifier
-            .padding(start = 6.dp)
+            .padding(start = 4.dp)
             .align(Alignment.CenterVertically)
         )
       }
@@ -130,8 +135,7 @@ fun YLRPinned(
   }
   Divider(
     modifier = Modifier.padding(horizontal = 16.dp),
-    color = MaterialTheme.colorScheme.onSurface,
-    thickness = 0.5f.dp
+    color = MaterialTheme.colorScheme.onSurface
   )
 }
 
@@ -190,17 +194,17 @@ fun YLRGenericAlbumItem(
       imageUrl = picUrl,
       placeholderType = picPlaceholder,
       modifier = Modifier
-        .size(75.dp)
+        .size(64.dp)
         .clip(RoundedCornerShape(8.dp))
     )
 
     Column(
       Modifier
         .padding(start = 16.dp)
-        .align(Alignment.Top)) {
+        .align(Alignment.Top)
+    ) {
       Row(
-        modifier = Modifier
-          .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
       ){
@@ -227,8 +231,7 @@ fun YLRGenericAlbumItem(
   }
   Divider(
     modifier = Modifier.padding(horizontal = 16.dp),
-    color = MaterialTheme.colorScheme.onSurface,
-    thickness = 0.5f.dp
+    color = MaterialTheme.colorScheme.onSurface
   )
 }
 
@@ -247,7 +250,7 @@ fun YLRGenericArtistItem(
       imageUrl = picUrl,
       placeholderType = picPlaceholder,
       modifier = Modifier
-        .size(75.dp)
+        .size(64.dp)
         .clip(CircleShape)
     )
 
@@ -262,8 +265,7 @@ fun YLRGenericArtistItem(
   }
     Divider(
       modifier = Modifier.padding(horizontal = 16.dp),
-      color = MaterialTheme.colorScheme.onSurface,
-      thickness = 0.5f.dp
+      color = MaterialTheme.colorScheme.onSurface
     )
 
 }
