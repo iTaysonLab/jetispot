@@ -41,6 +41,7 @@ fun AlbumTrackRow(
         Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
       }
     }
+
     IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f).align(CenterVertically)) {
       Icon(
         imageVector = Icons.Default.MoreVert,

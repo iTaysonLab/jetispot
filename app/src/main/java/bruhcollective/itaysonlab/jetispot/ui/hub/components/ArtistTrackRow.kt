@@ -29,12 +29,11 @@ fun ArtistTrackRow(
   Row(
     Modifier
       .clickableHub(navController, delegate, item)
-      .padding(start = 16.dp, top = 12.dp, bottom = 12.dp)
-      .fillMaxWidth(0.88f),
+      .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth(0.88f)) {
       Text(text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
         .align(Alignment.CenterVertically)
         .padding(end = 16.dp)
