@@ -1,5 +1,8 @@
 buildscript {
     ext {
+        version_code = 10
+        version_name = "poc_v10_newui"
+
         compose_version = '1.2.0-beta02'
         compose_m3_version = '1.0.0-alpha13'
         media2_version = "1.2.1"
