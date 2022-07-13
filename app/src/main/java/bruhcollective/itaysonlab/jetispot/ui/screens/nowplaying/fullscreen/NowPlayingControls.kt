@@ -281,7 +281,7 @@ fun ControlsBottomAccessories(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState) {
+fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, animatedCorners: Dp) {
   HorizontalPager(
     count = viewModel.currentQueue.value.size,
     state = pagerState,
@@ -291,7 +291,7 @@ fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState) {
   ) { page ->
     val artworkModifier = Modifier
       .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-      .clip(RoundedCornerShape(28.dp))
+      .clip(RoundedCornerShape(animatedCorners))
 
     if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
       Image(

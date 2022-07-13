@@ -12,7 +12,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
@@ -73,7 +72,6 @@ fun NowPlayingScreen(
         NowPlayingMiniplayer(
           viewModel,
           Modifier
-            .alpha(1f - (bsOffset() * 3))
             .clickable { scope.launch { bottomSheetState.expand() } }
             .fillMaxSize()
             .align(Alignment.TopStart),
