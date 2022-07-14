@@ -47,6 +47,7 @@ enum class Dialog(
   val route: String
 ) {
   AuthDisclaimer("dialogs/disclaimers"),
+  ColorSelect("dialogs/ColorSelect"),
   Logout("dialogs/logout")
 }
 

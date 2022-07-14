@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.SideEffect
 import bruhcollective.itaysonlab.jetispot.ui.monet.color
 import bruhcollective.itaysonlab.jetispot.ui.monet.google.scheme.Scheme
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -33,10 +34,8 @@ fun ApplicationTheme(
 
 @Composable
 private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
-  // To change the default color for Android versions below 12,
-  // you need to insert the Hex color value into the value of the DefaultColor variable (:38)
-  val DefaultColor = "#EB4034"
-  val DScheme = Scheme.dark(android.graphics.Color.parseColor(DefaultColor))
+  val ColorOfScheme = AppPreferences.ColorScheme
+  val DScheme = Scheme.dark(android.graphics.Color.parseColor(ColorOfScheme))
   val DarkColorScheme : ColorScheme = ColorScheme(
     primary = DScheme.primary.color(),
     onPrimary = DScheme.onPrimary.color(),
@@ -67,7 +66,7 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     outline = DScheme.outline.color(),
   )
 
-  val LScheme = Scheme.light(android.graphics.Color.parseColor(DefaultColor))
+  val LScheme = Scheme.light(android.graphics.Color.parseColor(ColorOfScheme))
   val LightColorScheme = ColorScheme(
     primary = LScheme.primary.color(),
     onPrimary = LScheme.onPrimary.color(),
