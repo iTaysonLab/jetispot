@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,7 +40,6 @@ fun YourLibraryContainerScreen(
 ) {
   val scope = rememberCoroutineScope()
   val state = rememberLazyListState()
-
   val scrollBehavior = rememberEUCScrollBehavior()
 
   LaunchedEffect(Unit) {
@@ -49,10 +50,9 @@ fun YourLibraryContainerScreen(
 
   Scaffold(
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    topBar = { // TODO: top bar also as status bar background
+    topBar = {
       Column {
         LargeTopAppBar(
-          modifier = Modifier.statusBarsPadding(),
           title = { Text("Your Library") },
           navigationIcon = {
             IconButton(onClick = { /* TODO */ }) {
@@ -70,7 +70,12 @@ fun YourLibraryContainerScreen(
               Icon(Icons.Rounded.Search, null)
             }
           },
-          scrollBehavior = scrollBehavior
+          scrollBehavior = scrollBehavior,
+          contentPadding = PaddingValues(
+            top = with(LocalDensity.current) {
+              WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+            }
+          )
         )
 
         val animatedHeight = animateFloatAsState(44 * (1f - scrollBehavior.scrollFraction))
