@@ -55,7 +55,11 @@ fun YourLibraryContainerScreen(
           title = { Text("Your Library") },
           navigationIcon = {
             IconButton(onClick = { /* TODO */ }) {
-              Icon(Icons.Rounded.AccountCircle, null)
+              Icon(
+                Icons.Rounded.AccountCircle,
+                null,
+                modifier = Modifier.size(32.dp).padding(top = 2.dp)
+              )
             }
           },
           actions = {
@@ -65,6 +69,7 @@ fun YourLibraryContainerScreen(
           },
           scrollBehavior = scrollBehavior
         )
+
 
         AnimatedChipRow(
           listOf(
@@ -102,7 +107,7 @@ fun YourLibraryContainerScreen(
             modifier = Modifier
               .clickable { navController.navigate(item.ceUri()) }
               .fillMaxWidth()
-              .padding(horizontal = 16.dp, vertical = 8.dp)
+              .padding(horizontal = 16.dp, vertical = 12.dp)
               .animateItemPlacement()
           )
         }

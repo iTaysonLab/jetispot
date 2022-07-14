@@ -17,6 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +47,7 @@ fun YlRenderer(
   }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun YLRPinned(
   item: CollectionPinnedItem,
@@ -85,8 +90,10 @@ fun YLRPinned(
         .align(Alignment.Top)) {
       when (item.predefType){
         PredefCeType.COLLECTION -> {
-          MediumText(
-            text = stringResource(id = R.string.liked_songs)
+          Text(
+            text = stringResource(id = R.string.liked_songs),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
           )
         }
         PredefCeType.EPISODES -> {
@@ -101,8 +108,11 @@ fun YLRPinned(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
           ){
-            MediumText(
-              text = item.name
+            Text(
+              text = item.name,
+              fontSize = 18.sp,
+              fontWeight = FontWeight.Medium,
+              maxLines = 1
             )
             Spacer(modifier = Modifier.width(2.dp))
             Subtext(
@@ -112,10 +122,13 @@ fun YLRPinned(
           }
         }
       }
-      Row(Modifier.padding(top = 4.dp)) {
-        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
-          .size(16.dp)
-          .align(Alignment.CenterVertically))
+      Row(Modifier.padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+          Icons.Rounded.PushPin,
+          tint = MaterialTheme.colorScheme.primary,
+          contentDescription = null,
+          modifier = Modifier.size(15.dp)
+        )
         Text(
           text = when (item.predefType) {
             PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs_desc, item.predefDyn)
@@ -123,16 +136,17 @@ fun YLRPinned(
             null -> item.subtitle
           },
           color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-          fontSize = 12.sp,
+          fontSize = 16.sp,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
           modifier = Modifier
-            .padding(start = 4.dp)
-            .align(Alignment.CenterVertically)
+            .padding(start = 4.dp),
+          style = TextStyle(platformStyle = PlatformTextStyle(false))
         )
       }
     }
   }
+
   Divider(
     modifier = Modifier.padding(horizontal = 16.dp),
     color = MaterialTheme.colorScheme.onSurface
@@ -208,8 +222,10 @@ fun YLRGenericAlbumItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
       ){
-        MediumText(
-          text = title
+        Text(
+          text = title,
+          fontSize = 18.sp,
+          fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.width(2.dp))
         Subtext(
@@ -222,9 +238,10 @@ fun YLRGenericAlbumItem(
         Text(
           text = subtitle,
           color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+          fontSize = 16.sp,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
-          modifier = Modifier.padding(top = 4.dp)
+          modifier = Modifier.padding(top = 2.dp)
         )
       }
     }
@@ -258,14 +275,25 @@ fun YLRGenericArtistItem(
       Modifier
         .padding(start = 16.dp)
         .align(Alignment.Top)) {
-      MediumText(
-        text = title
+      Text(
+        text = title,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Medium
+      )
+
+      Text(
+        text = "Artist",
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+        fontSize = 16.sp,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(top = 2.dp)
       )
     }
   }
+
     Divider(
       modifier = Modifier.padding(horizontal = 16.dp),
       color = MaterialTheme.colorScheme.onSurface
     )
-
 }
