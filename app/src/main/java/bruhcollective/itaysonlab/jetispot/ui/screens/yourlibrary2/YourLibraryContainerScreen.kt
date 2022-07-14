@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -58,7 +59,9 @@ fun YourLibraryContainerScreen(
               Icon(
                 Icons.Rounded.AccountCircle,
                 null,
-                modifier = Modifier.size(32.dp).padding(top = 2.dp)
+                modifier = Modifier
+                  .size(32.dp)
+                  .padding(top = 2.dp)
               )
             }
           },
@@ -70,24 +73,27 @@ fun YourLibraryContainerScreen(
           scrollBehavior = scrollBehavior
         )
 
-
-        AnimatedChipRow(
-          listOf(
-            ChipItem("playlists", "Playlists"),
-            ChipItem("artists", "Artists"),
-            ChipItem("albums", "Albums")
-          ),
-          viewModel.selectedTabId
-        ) {
-          viewModel.selectedTabId = it
-          scope.launch {
-            viewModel.load()
-            if (viewModel.selectedTabId == "") {
-              delay(25L)
-              state.animateScrollToItem(0)
+        val animatedHeight = animateFloatAsState(44 * (1f - scrollBehavior.scrollFraction))
+        Box(Modifier.height(animatedHeight.value.dp)) {
+          AnimatedChipRow(
+            listOf(
+              ChipItem("playlists", "Playlists"),
+              ChipItem("artists", "Artists"),
+              ChipItem("albums", "Albums")
+            ),
+            viewModel.selectedTabId
+          ) {
+            viewModel.selectedTabId = it
+            scope.launch {
+              viewModel.load()
+              if (viewModel.selectedTabId == "") {
+                delay(25L)
+                state.animateScrollToItem(0)
+              }
             }
           }
         }
+
       }
     }
   ) { padding ->
