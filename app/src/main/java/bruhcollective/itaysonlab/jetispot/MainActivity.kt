@@ -132,12 +132,14 @@ class MainActivity : ComponentActivity() {
             bottomBar = {
               val currentDestination = navBackStackEntry?.destination
               if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
-              bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(modifier = Modifier
-                .offset {
-                  IntOffset(0, ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt())
-                }
-                .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)),
-                contentPadding = PaddingValues(bottom = navBarHeightDp)
+              BottomAppBar(
+                modifier = Modifier
+                  .offset {
+                    IntOffset(0, ((96.dp + navBarHeightDp).toPx() * bsOffset()).toInt())
+                  }
+                  .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp))
+                  .height(96.dp),
+                contentPadding = PaddingValues(bottom = navBarHeightDp),
               ) {
                 Screen.showInBottomNavigation.forEach { (screen, icon) ->
                   NavigationBarItem(
