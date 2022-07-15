@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,6 +8,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +33,9 @@ fun SmallActionCardBinder(
   imagePlaceholder: String,
   playCommand: PlayCommand
 ) {
+  // TODO: possibly background color based on dominant color from the artwork
+//  val viewModel: NowPlayingViewModel = hiltViewModel()
+
   Card(
     modifier = Modifier
       .padding(horizontal = 16.dp)
@@ -45,11 +50,15 @@ fun SmallActionCardBinder(
         placeholderType = imagePlaceholder,
         modifier = Modifier
           .fillMaxHeight()
+//          .width(800.dp)
           .padding(bottom = 16.dp)
           .clip(shape = RoundedCornerShape(16.dp))
+          .align(CenterVertically)
+          .animateContentSize()
       )
 
       Column(
+        Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween
       ) {
         Column(Modifier.padding(start = 16.dp)) {
@@ -58,7 +67,9 @@ fun SmallActionCardBinder(
         }
 
         Row(
-          modifier = Modifier.fillMaxWidth().padding(start = 4.dp, top = 6.dp),
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 4.dp, bottom = 4.dp),
           horizontalArrangement = Arrangement.SpaceBetween
         ) {
           DynamicLikeButton(objectUrl = likeUri)
