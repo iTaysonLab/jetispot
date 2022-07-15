@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -15,6 +14,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
@@ -23,7 +23,7 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun MediumCard(
   navController: LambdaNavigationController,
@@ -67,7 +67,8 @@ fun MediumCard(
             item.text!!.title!!,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            maxLines = 1,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             textAlign = if (item.text?.subtitle.isNullOrEmpty() && item.text?.description.isNullOrEmpty())
               TextAlign.Center
@@ -85,6 +86,7 @@ fun MediumCard(
               .padding(top = if (drawnTitle) 4.dp else 8.dp)
               .fillMaxWidth(),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             textAlign = TextAlign.Start
           )
@@ -94,6 +96,7 @@ fun MediumCard(
             fontSize = 12.sp,
             modifier = Modifier.padding(top = if (drawnTitle) 2.dp else 0.dp),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            overflow = TextOverflow.Ellipsis,
             maxLines = 2,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
           )
