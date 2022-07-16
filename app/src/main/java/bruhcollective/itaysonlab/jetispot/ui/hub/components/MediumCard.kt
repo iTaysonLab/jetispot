@@ -66,7 +66,7 @@ fun MediumCard(
           Text(
             item.text!!.title!!,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
+//            fontWeight = FontWeight.Medium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
@@ -83,7 +83,7 @@ fun MediumCard(
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             modifier = Modifier
-              .padding(top = if (drawnTitle) 4.dp else 8.dp)
+              .padding(top = if (drawnTitle) 4.dp else 0.dp)
               .fillMaxWidth(),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
@@ -94,7 +94,8 @@ fun MediumCard(
           Text(
             item.text!!.description!!,
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = if (drawnTitle) 2.dp else 0.dp),
+            modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 0.dp),
+            fontWeight = FontWeight.Medium,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,

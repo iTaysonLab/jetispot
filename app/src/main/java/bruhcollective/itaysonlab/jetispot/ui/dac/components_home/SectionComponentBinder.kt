@@ -21,6 +21,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
@@ -190,8 +191,8 @@ fun MediumCard(
           Text(
             title,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             textAlign = if (imagePlaceholder == "artist") TextAlign.Center else TextAlign.Start
           )
@@ -203,11 +204,11 @@ fun MediumCard(
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             modifier = Modifier
-              .padding(top = if (drawnTitle) 4.dp else 8.dp)
+              .padding(top = if (drawnTitle) 4.dp else 0.dp)
               .fillMaxWidth(),
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-            textAlign = TextAlign.Start
           )
         }
       }
