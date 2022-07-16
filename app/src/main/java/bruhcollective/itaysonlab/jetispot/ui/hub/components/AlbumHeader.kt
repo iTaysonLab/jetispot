@@ -25,7 +25,7 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeImageTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
 
 
@@ -48,7 +48,7 @@ fun AlbumHeader(
 //    }
 //  }
 
-  LargeImageTopAppBar(
+  ImageTopAppBar(
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
         Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
@@ -81,7 +81,7 @@ fun AlbumHeader(
         item.text!!.title!!,
         Modifier.fillMaxWidth(0.5f),
         overflow = TextOverflow.Ellipsis,
-        maxLines = 4
+        maxLines = 3
       )
     },
     smallTitle = {
@@ -95,7 +95,6 @@ fun AlbumHeader(
     artist = {
       Row(
         modifier = Modifier
-          .padding(start = 4.dp)
           .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
             HubEventHandler.handle(
               navController,

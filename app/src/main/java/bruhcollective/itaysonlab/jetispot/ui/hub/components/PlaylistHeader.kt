@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,7 +27,7 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeImageTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
 
 @Composable
@@ -47,13 +49,13 @@ fun PlaylistHeader(
 //    }
 //  }
 
-  LargeImageTopAppBar(
+  ImageTopAppBar(
     title = {
       Text(
         text = item.text?.title!!,
         Modifier.fillMaxWidth(0.5f),
         overflow = TextOverflow.Ellipsis,
-        maxLines = 4
+        maxLines = 3
       )
     },
     smallTitle = {
@@ -125,6 +127,7 @@ fun PlaylistHeader(
 }
 
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun LargePlaylistHeader(
   navController: LambdaNavigationController,
@@ -133,12 +136,24 @@ fun LargePlaylistHeader(
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   ImageBackgroundTopAppBar(
+    aboveTitle = {
+      Text(
+        item.text!!.subtitle!!,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+        color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+        modifier = Modifier.fillMaxWidth(),
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 8,
+//        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+      )
+    },
     title = {
       Text(
         item.text!!.title!!,
         Modifier.fillMaxWidth(),
         overflow = TextOverflow.Ellipsis,
-        maxLines = 4
+        maxLines = 3
       )
     },
     smallTitle = {
