@@ -135,10 +135,10 @@ class MainActivity : ComponentActivity() {
               BottomAppBar(
                 modifier = Modifier
                   .offset {
-                    IntOffset(0, ((96.dp + navBarHeightDp).toPx() * bsOffset()).toInt())
+                    IntOffset(0, ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt())
                   }
                   .background(MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp))
-                  .height(96.dp),
+                  .height(80.dp + navBarHeightDp),
                 contentPadding = PaddingValues(bottom = navBarHeightDp),
               ) {
                 Screen.showInBottomNavigation.forEach { (screen, icon) ->
