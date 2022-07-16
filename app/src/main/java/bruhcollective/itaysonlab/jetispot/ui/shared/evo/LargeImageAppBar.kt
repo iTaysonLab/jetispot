@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 fun LargeImageTopAppBar(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
-  artist: @Composable () -> Unit,
+  artist: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable() (RowScope.() -> Unit) = {},
@@ -40,7 +40,7 @@ fun LargeImageTopAppBar(
   scrollBehavior: TopAppBarScrollBehavior? = null,
   contentPadding: PaddingValues = PaddingValues(0.dp),
   maxHeight: Dp = 256.dp,
-  smallTitle: @Composable () -> Unit
+  smallTitle: @Composable () -> Unit = {}
 ) {
   TwoRowsTopAppBar(
     title = title,

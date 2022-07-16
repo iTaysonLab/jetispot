@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -15,8 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,9 +22,9 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeImageTopAppBar
 import coil.compose.AsyncImage
 
@@ -132,58 +129,59 @@ fun PlaylistHeader(
 fun LargePlaylistHeader(
   navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
-  item: HubItem
+  item: HubItem,
+  scrollBehavior: TopAppBarScrollBehavior
 ) {
-  Column {
-    Box(
-      Modifier
-        .fillMaxWidth()
-        .height(240.dp)
-    ) {
-      AsyncImage(
-        model = item.images?.main?.uri,
-        contentScale = ContentScale.Crop,
-        contentDescription = null,
-        modifier = Modifier
-          .fillMaxSize()
-      )
-
-      Box(
-        Modifier
-          .background(
-            brush = Brush.verticalGradient(
-              colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
-            )
-          )
-          .fillMaxSize()
-      )
-
-      MediumText(
-        text = item.text?.title!!,
-        fontSize = 48.sp,
-        lineHeight = 52.sp,
-        maxLines = 2,
-        modifier = Modifier
-          .align(Alignment.BottomStart)
-          .padding(horizontal = 16.dp)
-          .padding(bottom = 8.dp)
-      )
-    }
-
-    if (!item.text?.subtitle.isNullOrEmpty()) {
+  ImageBackgroundTopAppBar(
+    title = {
       Text(
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-        fontSize = 12.sp,
-        lineHeight = 18.sp,
-        text = item.text?.subtitle!!, modifier = Modifier
-          .padding(horizontal = 16.dp)
-          .padding(top = 16.dp)
+        item.text!!.title!!,
+        Modifier.fillMaxWidth(),
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 4
       )
-    }
+    },
+    smallTitle = {
+      Text(
+        item.text!!.title!!,
+        Modifier.fillMaxWidth(),
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1
+      )
+    },
+    picture = {
+      AsyncImage(
+        model = item.images?.main?.uri, contentDescription = null,
+        Modifier
+          .fillMaxWidth()
+          .height(164.dp + WindowInsets.statusBars.getTop(LocalDensity.current).dp),
+        contentScale = ContentScale.FillWidth
+      )
+    },
+    navigationIcon = {
+      IconButton(onClick = { navController.popBackStack() }) {
+        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+      }
+    },
+    contentPadding = PaddingValues(
+      top = with(LocalDensity.current) {
+        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+      }
+    ),
+    scrollBehavior = scrollBehavior,
+    maxHeight = 256.dp,
+    scrollHeight = -2.676f
+  )
 
-    PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
-    EntityActionStrip(navController, delegate, item)
-  }
+//  Column {
+//    Box(
+//      Modifier
+//        .fillMaxWidth()
+//        .height(240.dp)
+//    ) {
+//    PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
+//    EntityActionStrip(navController, delegate, item)
+//  }
 }
 
 

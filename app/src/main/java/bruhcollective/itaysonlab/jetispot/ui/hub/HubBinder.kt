@@ -59,7 +59,7 @@ fun HubBinder (
     HubComponent.LargerRow -> { if (everythingElse) LargerRow(navController, delegate, item) }
 
     HubComponent.PlaylistHeader -> { if (everythingElse) PlaylistHeader(navController, delegate, item, scrollBehavior) }
-    HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(navController, delegate, item) }
+    HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(navController, delegate, item, scrollBehavior) }
     HubComponent.CollectionHeader -> { if (everythingElse) CollectionHeader(navController, delegate, item, scrollBehavior) }
 
     HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }

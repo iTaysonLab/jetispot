@@ -33,7 +33,7 @@ import kotlin.math.roundToInt
 @Composable
 fun ImageBackgroundTopAppBar(
   title: @Composable () -> Unit,
-  picture: @Composable () -> Unit,
+  picture: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable() (RowScope.() -> Unit) = {},
@@ -41,7 +41,8 @@ fun ImageBackgroundTopAppBar(
   scrollBehavior: TopAppBarScrollBehavior? = null,
   contentPadding: PaddingValues = PaddingValues(0.dp),
   maxHeight: Dp = 152.dp,
-  smallTitle: @Composable () -> Unit
+  smallTitle: @Composable () -> Unit = {},
+  scrollHeight: Float = -1.515f
 ) {
   TwoRowsTopAppBar(
     title = title,
@@ -58,6 +59,7 @@ fun ImageBackgroundTopAppBar(
     pinnedHeight = 64.dp,
     scrollBehavior = scrollBehavior,
     contentPadding = contentPadding,
+    scrollHeight = scrollHeight
   )
 }
 
@@ -76,7 +78,8 @@ private fun TwoRowsTopAppBar(
   maxHeight: Dp,
   pinnedHeight: Dp,
   scrollBehavior: TopAppBarScrollBehavior?,
-  contentPadding: PaddingValues
+  contentPadding: PaddingValues,
+  scrollHeight: Float
 ) {
   if (maxHeight <= pinnedHeight) {
     throw IllegalArgumentException(
@@ -130,7 +133,7 @@ private fun TwoRowsTopAppBar(
     Box(
       modifier = Modifier
         .alpha(1f - scrollFraction)
-        .height((maxHeightPx + pinnedHeightPx * (-1.515f - scrollFraction)).dp)
+        .height((maxHeightPx + pinnedHeightPx * (scrollHeight - scrollFraction)).dp)
     ) {
       CompositionLocalProvider(content = picture)
       Box(
