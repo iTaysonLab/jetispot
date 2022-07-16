@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,10 +71,14 @@ fun NowPlayingScreen(
       // Wrapped in an if statement to not interfere with buttons as the miniplayer composable fills
       // the bottom sheet
       if (bsOffset() <= 0.99999f) {
+        val interactionSource = remember { MutableInteractionSource() }
         NowPlayingMiniplayer(
           viewModel,
           Modifier
-            .clickable { scope.launch { bottomSheetState.expand() } }
+            .clickable(
+              interactionSource = interactionSource,
+              indication = null
+            ) { scope.launch { bottomSheetState.expand() } }
             .fillMaxSize()
             .align(Alignment.TopStart),
           bsOffset()
