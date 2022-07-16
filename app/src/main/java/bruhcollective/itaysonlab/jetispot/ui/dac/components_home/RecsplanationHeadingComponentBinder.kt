@@ -27,7 +27,7 @@ fun RecsplanationHeadingComponentBinder(
   navController: LambdaNavigationController,
   item: RecsplanationHeadingComponent
 ) {
-  Card(shape = RoundedCornerShape(32.dp), modifier = Modifier.padding(start = 12.dp, top = 32.dp, bottom = 16.dp)) {
+  Card(shape = RoundedCornerShape(32.dp), modifier = Modifier.padding(start = 12.dp, top = 40.dp, bottom = 16.dp)) {
     Row(
       Modifier
         .clickable { navController.navigate(item.navigateUri) }
