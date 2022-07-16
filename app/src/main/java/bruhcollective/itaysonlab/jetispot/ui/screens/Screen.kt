@@ -2,9 +2,12 @@ package bruhcollective.itaysonlab.jetispot.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.LibraryMusic
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Immutable
 import bruhcollective.itaysonlab.jetispot.R
 
@@ -35,9 +38,18 @@ enum class Screen(
     val hideNavigationBar = setOf(CoreLoading.route, Authorization.route, Dialog.AuthDisclaimer.route)
     val deeplinkCapable = mapOf(SpotifyIdRedirect to "https://open.spotify.com/{type}/{typeId}")
     val showInBottomNavigation = mapOf(
-      Feed to Icons.Rounded.Home,
-      Search to Icons.Rounded.Search,
-      Library to Icons.Rounded.LibraryMusic
+      Feed to when (NavGraph) {
+        Feed -> Icons.Rounded.Home
+        else -> Icons.Outlined.Home
+      },
+      Search to when (NavGraph) {
+        Search -> Icons.Rounded.Search
+        else -> Icons.Outlined.Search
+      },
+      Library to when (NavGraph) {
+        Library -> Icons.Rounded.LibraryMusic
+        else -> Icons.Outlined.LibraryMusic
+      }
     )
   }
 }

@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.dac
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,8 @@ import com.spotify.planoverview.v1.*
 @Composable
 fun DacRender (
   navController: LambdaNavigationController,
-  item: Message
+  item: Message,
+  scrollBehavior: TopAppBarScrollBehavior
 ) {
   when (item) {
     // AllPlans / PlanOverview
@@ -30,7 +32,7 @@ fun DacRender (
     is SingleUserPrepaidComponent -> SingleUserComponentBinder(item)
     is SingleUserTrialComponent -> SingleUserComponentBinder(item)
     // Home
-    is ToolbarComponent -> ToolbarComponentBinder(navController, item)
+    is ToolbarComponent -> ToolbarComponentBinder(navController, item, scrollBehavior)
     is ShortcutsSectionComponent -> ShortcutsBinder(navController, item)
     is AlbumCardActionsSmallComponent -> SmallActionCardBinder(navController = navController, title = item.title, subtitle = item.subtitle, navigateUri = item.navigateUri, likeUri = item.likeUri, imageUri = item.imageUri, imagePlaceholder = "album", playCommand = item.playCommand)
     is ArtistCardActionsSmallComponent -> SmallActionCardBinder(navController = navController, title = item.title, subtitle = item.subtitle, navigateUri = item.navigateUri, likeUri = item.followUri, imageUri = item.imageUri, imagePlaceholder = "artist", playCommand = item.playCommand)

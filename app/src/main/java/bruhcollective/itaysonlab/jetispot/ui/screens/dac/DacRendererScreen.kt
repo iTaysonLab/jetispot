@@ -1,23 +1,16 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
-import android.view.Window
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -27,6 +20,7 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.FilterComponentBinder
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -52,8 +46,13 @@ fun DacRendererScreen(
   viewModel: DacViewModel = hiltViewModel()
 ) {
   val sbd = rememberSplineBasedDecay<Float>()
-  val topBarState = rememberTopAppBarScrollState()
-  val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior(topBarState) else TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) }
+  val topBarState = rememberEUCScrollBehavior()
+  val scrollBehavior = remember {
+    if (fullscreen)
+      TopAppBarDefaults.pinnedScrollBehavior(topBarState.state)
+    else
+      TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState.state)
+  }
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(Unit) {
@@ -64,30 +63,24 @@ fun DacRendererScreen(
     is DacViewModel.State.Loaded -> {
       Scaffold(
         topBar = {
-          if (fullscreen) {
-            Surface(
-              content = { Column(Modifier.statusBarsPadding()) {} },
-              modifier = Modifier
-                .fillMaxWidth(),
-              color = MaterialTheme.colorScheme.background.copy(alpha = 0.9f)
-            )
-        } else {
-          LargeTopAppBar(
-            title = { Text(title) },
-            navigationIcon = {
-              IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Rounded.ArrowBack, null)
-              }
+          if (fullscreen) { } else {
+            LargeTopAppBar(
+              title = { Text(title) },
+              navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                 Icon(Icons.Rounded.ArrowBack, null)
+               }
           },
-            contentPadding = PaddingValues(top = with(LocalDensity.current) {
-              WindowInsets.statusBars.getTop(
-                LocalDensity.current).toDp() }
+            contentPadding = PaddingValues(
+              top = with(LocalDensity.current) {
+                WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+              }
             ),
-            scrollBehavior = scrollBehavior
+            scrollBehavior = topBarState
           )
         }
       },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(topBarState.nestedScrollConnection)
       )
       { padding ->
         LazyColumn(
@@ -126,14 +119,14 @@ fun DacRendererScreen(
                   Spacer(modifier = Modifier.height(8.dp))
                 } else if (unpackedItem != null) {
                   if (unpackedItem is FilterComponent) {
-                    FilterComponentBinder(unpackedItem, viewModel.facet) { nf ->
+                    FilterComponentBinder(topBarState, unpackedItem, viewModel.facet) { nf ->
                       scope.launch {
                         viewModel.facet = nf
                         viewModel.reload(loader)
                       }
                     }
                   } else {
-                    DacRender(navController, unpackedItem)
+                    DacRender(navController, unpackedItem, topBarState)
                   }
                 }
               }

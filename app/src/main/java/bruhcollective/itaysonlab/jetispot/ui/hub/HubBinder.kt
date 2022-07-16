@@ -3,12 +3,14 @@ package bruhcollective.itaysonlab.jetispot.ui.hub
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubComponent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
 
 @Composable
@@ -17,54 +19,66 @@ fun HubBinder (
   delegate: HubScreenDelegate,
   item: HubItem,
   isRenderingInGrid: Boolean = false,
+  scrollBehavior: TopAppBarScrollBehavior = rememberEUCScrollBehavior(),
+  artistHeader: Boolean = false,
+  albumHeader: Boolean = false,
+  everythingElse: Boolean = true
 ) {
   when (item.component) {
-    HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!, delegate)
-    HubComponent.HomeLargeSectionHeader -> HomeSectionLargeHeader(navController, delegate, item)
-    HubComponent.GlueSectionHeader -> SectionHeader(item.text!!, delegate)
-    HubComponent.ShortcutsContainer -> ShortcutsContainer(navController, delegate, item.children!!)
-    HubComponent.ShortcutsCard -> ShortcutsCard(navController, delegate, item)
-    HubComponent.FindCard -> FindCard(navController, delegate, item)
+    HubComponent.HomeShortSectionHeader -> { if (everythingElse) HomeSectionHeader(item.text!!, delegate) }
+    HubComponent.HomeLargeSectionHeader -> { if (everythingElse) HomeSectionLargeHeader(navController, delegate, item) }
+    HubComponent.GlueSectionHeader -> { if (everythingElse) SectionHeader(item.text!!, delegate) }
+    HubComponent.ShortcutsContainer -> { if (everythingElse) ShortcutsContainer(navController, delegate, item.children!!) }
+    HubComponent.ShortcutsCard -> { if (everythingElse) ShortcutsCard(navController, delegate, item) }
+    HubComponent.FindCard -> { if (everythingElse) FindCard(navController, delegate, item) }
 
-    HubComponent.SingleFocusCard -> SingleFocusCard(navController, delegate, item)
+    HubComponent.SingleFocusCard -> { if (everythingElse) SingleFocusCard(navController, delegate, item) }
 
-    HubComponent.Carousel -> Carousel(navController, delegate, item)
+    HubComponent.Carousel -> { if (everythingElse) Carousel(navController, delegate, item) }
     HubComponent.MediumCard -> {
       if (isRenderingInGrid) {
-        GridMediumCard(navController, delegate, item)
+        run { if (everythingElse) GridMediumCard(navController, delegate, item) }
       } else {
-        MediumCard(navController, delegate, item)
+        run { if (everythingElse) MediumCard(navController, delegate, item) }
       }
     }
 
-    HubComponent.ArtistLikedSongs -> LikedSongsRow(navController, delegate, item)
+    HubComponent.ArtistLikedSongs -> { if (everythingElse) LikedSongsRow(navController, delegate, item) }
 
-    HubComponent.AlbumTrackRow -> AlbumTrackRow(navController, delegate, item)
-    HubComponent.ArtistTrackRow -> ArtistTrackRow(navController, delegate, item)
-    HubComponent.PlaylistTrackRow -> PlaylistTrackRow(navController, delegate, item)
+    HubComponent.AlbumTrackRow -> { if (everythingElse) AlbumTrackRow(navController, delegate, item) }
+    HubComponent.ArtistTrackRow -> { if (everythingElse) ArtistTrackRow(navController, delegate, item) }
+    HubComponent.PlaylistTrackRow -> { if (everythingElse) PlaylistTrackRow(navController, delegate, item) }
 
-    HubComponent.ArtistPinnedItem -> ArtistPinnedItem(navController, delegate, item)
-    HubComponent.AlbumHeader -> AlbumHeader(navController, delegate, item)
-    HubComponent.ArtistHeader -> ArtistHeader(item)
-    HubComponent.LargerRow -> LargerRow(navController, delegate, item)
+    HubComponent.ArtistPinnedItem -> { if (everythingElse) ArtistPinnedItem(navController, delegate, item) }
+    HubComponent.AlbumHeader -> { if (albumHeader) AlbumHeader(navController, delegate, item, scrollBehavior) }
 
-    HubComponent.PlaylistHeader -> PlaylistHeader(navController, delegate, item)
-    HubComponent.LargePlaylistHeader -> LargePlaylistHeader(navController, delegate, item)
-    HubComponent.CollectionHeader -> CollectionHeader(navController, delegate, item)
+    // this way we can probably compose screens classic compose style for all non-server based
+    // layout elements
+    HubComponent.ArtistHeader -> { if (artistHeader) ArtistHeader(item, scrollBehavior, navController) }
 
-    HubComponent.TextRow -> TextRow(item.text!!)
-    HubComponent.ImageRow -> ImageRow(navController, delegate, item)
+    HubComponent.LargerRow -> { if (everythingElse) LargerRow(navController, delegate, item) }
 
-    HubComponent.ShowHeader -> ShowHeader(navController, delegate, item)
-    HubComponent.EpisodeListItem -> EpisodeListItem(navController, delegate, item)
-    HubComponent.PodcastTopics -> PodcastTopicsStrip(navController, delegate, item)
+    HubComponent.PlaylistHeader -> { if (everythingElse) PlaylistHeader(navController, delegate, item, scrollBehavior) }
+    HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(navController, delegate, item) }
+    HubComponent.CollectionHeader -> { if (everythingElse) CollectionHeader(navController, delegate, item, scrollBehavior) }
 
-    HubComponent.OutlinedButton -> OutlineButton(navController, delegate, item)
+    HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }
+    HubComponent.ImageRow -> { if (everythingElse) ImageRow(navController, delegate, item) }
+
+    HubComponent.ShowHeader -> { if (everythingElse) ShowHeader(navController, delegate, item) }
+    HubComponent.EpisodeListItem -> { if (everythingElse) EpisodeListItem(navController, delegate, item) }
+    HubComponent.PodcastTopics -> { if (everythingElse) PodcastTopicsStrip(navController, delegate, item) }
+
+    HubComponent.OutlinedButton -> { if (everythingElse) OutlineButton(navController, delegate, item) }
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {
-      Text("Unsupported, id = ${item.id}")
-      Spacer(modifier = Modifier.height(8.dp))
+      run {
+        if (everythingElse) {
+          Text("Unsupported, id = ${item.id}")
+          Spacer(modifier = Modifier.height(8.dp))
+        }
+      }
     }
   }
 }
