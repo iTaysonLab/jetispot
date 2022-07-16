@@ -28,7 +28,7 @@ fun AlbumTrackRow(
     Column(
       Modifier
         .clickableHub(navController, delegate, item)
-        .fillMaxWidth(0.88f)
+        .fillMaxWidth(0.865f)
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
       var drawnTitle = false
 
@@ -38,11 +38,17 @@ fun AlbumTrackRow(
       }
 
       if (!item.text?.subtitle.isNullOrEmpty()) {
-        Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
+        Subtext(
+          item.text!!.subtitle!!,
+          modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+        )
       }
     }
 
-    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f).align(CenterVertically)) {
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.fillMaxWidth(1f).align(CenterVertically)
+    ) {
       Icon(
         imageVector = Icons.Default.MoreVert,
         contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",

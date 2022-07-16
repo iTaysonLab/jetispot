@@ -32,7 +32,7 @@ fun PlaylistTrackRow(
       .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
-    Row(modifier = Modifier.fillMaxWidth(0.88f)) {
+    Row(modifier = Modifier.fillMaxWidth(0.865f)) {
       PreviewableAsyncImage(
         imageUrl = item.images?.main?.uri,
         placeholderType = "track",
@@ -63,7 +63,10 @@ fun PlaylistTrackRow(
       }
     }
 
-    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f)) {
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)
+    ) {
       Icon(
         imageVector = Icons.Default.MoreVert,
         contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",

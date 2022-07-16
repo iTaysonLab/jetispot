@@ -33,7 +33,10 @@ fun ArtistTrackRow(
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
 
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth(0.88f)) {
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.fillMaxWidth(0.865f)
+    ) {
       Text(text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
         .align(Alignment.CenterVertically)
         .padding(end = 16.dp)
@@ -60,12 +63,18 @@ fun ArtistTrackRow(
         }
 
         if (!item.text?.subtitle.isNullOrEmpty()) {
-          Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
+          Subtext(
+            item.text!!.subtitle!!,
+            modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+          )
         }
       }
     }
 
-    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)) {
+    IconButton(
+      onClick = { /*TODO*/ },
+      modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)
+    ) {
       Icon(
         imageVector = Icons.Default.MoreVert,
         contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
