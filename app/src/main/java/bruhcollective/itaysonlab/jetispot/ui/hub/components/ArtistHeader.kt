@@ -62,34 +62,4 @@ fun ArtistHeader(
       }
     )
   )
-
-//    Column(
-//        modifier = Modifier
-//            .size((LocalConfiguration.current.screenWidthDp).dp, 310.dp),
-//    ) {
-//        Box {
-
-//
-//            Column(
-//                Modifier
-//                    .background(
-//                        Brush.verticalGradient(
-//                            0F to Color.Transparent,
-//                            1F to Color.Black,
-//                        ),
-//                    )
-//                    .fillMaxSize()
-//            ) {}
-//
-//            MediumText(
-//                text = item.text?.title!!,
-//                fontSize = 50.sp,
-//                color = Color.White,
-//                modifier = Modifier
-//                    .align(Alignment.BottomStart)
-//                    .padding(horizontal = 16.dp)
-//                    .padding(bottom = 8.dp)
-//            )
-//        }
-//    }
 }

@@ -48,77 +48,96 @@ fun AlbumHeader(
 //    }
 //  }
 
-  ImageTopAppBar(
-    navigationIcon = {
-      IconButton(onClick = { navController.popBackStack() }) {
-        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
-      }
-    },
-    actions = {
-      IconButton(onClick = { /*TODO*/ }) {
-        Icon(
-          imageVector = Icons.Default.MoreVert,
-          contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
-          tint = MaterialTheme.colorScheme.onBackground
-        )
-      }
-    },
-    scrollBehavior = scrollBehavior,
-    contentPadding = PaddingValues(
-      top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-      }
-    ),
-    artwork = {
-      PreviewableAsyncImage(
-        item.images?.main?.uri, item.images?.main?.placeholder,
-        modifier = Modifier
-          .fillMaxSize()
-      )
-    },
-    title = {
-      Text(
-        item.text!!.title!!,
-        Modifier.fillMaxWidth(0.5f),
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 3
-      )
-    },
-    smallTitle = {
-      Text(
-        item.text!!.title!!,
-        Modifier.fillMaxWidth(0.8f),
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1
-      )
-    },
-    artist = {
-      Row(
-        modifier = Modifier
-          .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
-            HubEventHandler.handle(
-              navController,
-              delegate,
-              HubEvent.NavigateToUri(NavigateUri(item.metadata?.album!!.artists[0].uri!!))
-           )
+  Column() {
+    ImageTopAppBar(
+      navigationIcon = {
+        IconButton(onClick = { navController.popBackStack() }) {
+          Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
         }
-        .padding(vertical = 12.dp)
-      ) {
-        AsyncImage(
-          model = item.metadata?.album!!.artists.first().images!![0].uri,
-          contentScale = ContentScale.Crop,
-          contentDescription = null,
-          modifier = Modifier.size(32.dp).clip(CircleShape)
+      },
+      actions = {
+        IconButton(onClick = { /*TODO*/ }) {
+          Icon(
+            imageVector = Icons.Default.MoreVert,
+            contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+            tint = MaterialTheme.colorScheme.onBackground
+          )
+        }
+      },
+      scrollBehavior = scrollBehavior,
+      contentPadding = PaddingValues(
+        top = with(LocalDensity.current) {
+          WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+        }
+      ),
+      artwork = {
+        PreviewableAsyncImage(
+          item.images?.main?.uri, item.images?.main?.placeholder,
+          modifier = Modifier
+            .fillMaxSize()
         )
-
+      },
+      title = {
         Text(
-          text = item.metadata.album.artists.first().name!!,
-          fontSize = 14.sp,
-          modifier = Modifier.align(Alignment.CenterVertically).padding(start = 12.dp)
+          item.text!!.title!!,
+          Modifier.fillMaxWidth(0.5f),
+          overflow = TextOverflow.Ellipsis,
+          maxLines = 3
         )
+      },
+      smallTitle = {
+        Text(
+          item.text!!.title!!,
+          Modifier.fillMaxWidth(0.8f),
+          overflow = TextOverflow.Ellipsis,
+          maxLines = 1
+        )
+      },
+      artist = {
+        Column() {
+//          Subtext(
+//            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}",
+//            modifier = Modifier.padding(horizontal = 16.dp)
+//          )
+          Row(
+            modifier = Modifier
+              .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+              ) {
+                HubEventHandler.handle(
+                  navController,
+                  delegate,
+                  HubEvent.NavigateToUri(NavigateUri(item.metadata?.album!!.artists[0].uri!!))
+                )
+              }
+              .padding(vertical = 12.dp)
+          ) {
+            AsyncImage(
+              model = item.metadata?.album!!.artists.first().images!![0].uri,
+              contentScale = ContentScale.Crop,
+              contentDescription = null,
+              modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+            )
+
+            Text(
+              text = item.metadata.album.artists.first().name!!,
+              fontSize = 14.sp,
+              modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 12.dp)
+            )
+          }
+        }
       }
-    }
-  )
+    )
+
+//    EntityActionStrip(navController, delegate, item)
+//    PlayFAB(navController, delegate, item, scrollBehavior)
+  }
+
 //  LargeTopAppBar(
 //    title = {
 //      Row(
@@ -226,9 +245,7 @@ fun AlbumHeader(
 //          }
 //        }
 //
-//        Subtext(text = "${item.metadata.album!!.type} • ${item.metadata.album.year}", modifier = Modifier.padding(horizontal = 16.dp))
-//
-//        EntityActionStrip(navController, delegate, item)
+
 //      }
 //    },
 //    navigationIcon = {

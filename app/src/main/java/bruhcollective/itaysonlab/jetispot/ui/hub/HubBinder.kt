@@ -12,6 +12,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.PlayFAB
 
 @Composable
 fun HubBinder (
@@ -22,7 +23,8 @@ fun HubBinder (
   scrollBehavior: TopAppBarScrollBehavior = rememberEUCScrollBehavior(),
   artistHeader: Boolean = false,
   albumHeader: Boolean = false,
-  everythingElse: Boolean = true
+  everythingElse: Boolean = true,
+  showFAB: Boolean = false
 ) {
   when (item.component) {
     HubComponent.HomeShortSectionHeader -> { if (everythingElse) HomeSectionHeader(item.text!!, delegate) }
@@ -50,7 +52,10 @@ fun HubBinder (
     HubComponent.PlaylistTrackRow -> { if (everythingElse) PlaylistTrackRow(navController, delegate, item) }
 
     HubComponent.ArtistPinnedItem -> { if (everythingElse) ArtistPinnedItem(navController, delegate, item) }
-    HubComponent.AlbumHeader -> { if (albumHeader) AlbumHeader(navController, delegate, item, scrollBehavior) }
+    HubComponent.AlbumHeader -> {
+      if (albumHeader && !everythingElse) AlbumHeader(navController, delegate, item, scrollBehavior)
+      if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
+    }
 
     // this way we can probably compose screens classic compose style for all non-server based
     // layout elements
@@ -58,10 +63,15 @@ fun HubBinder (
 
     HubComponent.LargerRow -> { if (everythingElse) LargerRow(navController, delegate, item) }
 
-    HubComponent.PlaylistHeader -> { if (everythingElse) PlaylistHeader(navController, delegate, item, scrollBehavior) }
+    HubComponent.PlaylistHeader -> {
+      if (everythingElse) PlaylistHeader(navController, delegate, item, scrollBehavior)
+      if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
+    }
     HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(navController, delegate, item, scrollBehavior) }
-    HubComponent.CollectionHeader -> { if (everythingElse) CollectionHeader(navController, delegate, item, scrollBehavior) }
-
+    HubComponent.CollectionHeader -> {
+      if (everythingElse) CollectionHeader(navController, delegate, item, scrollBehavior)
+      if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
+    }
     HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }
     HubComponent.ImageRow -> { if (everythingElse) ImageRow(navController, delegate, item) }
 

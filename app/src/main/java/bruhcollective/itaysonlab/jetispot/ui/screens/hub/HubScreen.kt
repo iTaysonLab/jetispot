@@ -28,7 +28,6 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,12 +71,6 @@ fun HubScreen(
             }
           }
         }
-
-        LargeTopAppBar(
-          title = {},
-          scrollBehavior = scrollBehavior,
-          modifier = Modifier.height(0.dp)
-        )
 
         LazyVerticalGrid(
           contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
