@@ -90,16 +90,54 @@ fun HubScaffold(
               .align(Alignment.BottomEnd)
               .padding(bottom = fabPadding, end = fabPadding)
           ) {
-              state.data.apply {
-                  HubBinder(
-                    navController,
-                    viewModel,
-                    body[0],
-                    scrollBehavior = topBarState,
-                    showFAB = true,
-                    everythingElse = false
-                  )
+            state.data.apply {
+              HubBinder(
+                navController,
+                viewModel,
+                body[0],
+                scrollBehavior = topBarState,
+                showFAB = true,
+                everythingElse = false
+              )
+            }
+          }
+
+          Box(
+            modifier = Modifier
+              .align(Alignment.BottomEnd)
+              .padding(bottom = fabPadding, end = fabPadding)
+          ) {
+            state.data.apply {
+              state.data.header?.let {
+                HubBinder(
+                  navController,
+                  viewModel,
+                  it,
+                  scrollBehavior = topBarState,
+                  showFAB = true,
+                  everythingElse = false
+                )
               }
+            }
+          }
+
+          Box(
+            modifier = Modifier
+              .align(Alignment.BottomEnd)
+              .padding(bottom = fabPadding, end = fabPadding)
+          ) {
+            state.data.apply {
+              state.data.header?.let {
+                HubBinder(
+                  navController,
+                  viewModel,
+                  it.children?.get(0) ?: it,
+                  scrollBehavior = topBarState,
+                  showFAB = true,
+                  everythingElse = false
+                )
+              }
+            }
           }
         }
       }
