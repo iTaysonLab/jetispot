@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 fun ImageTopAppBar(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
-  artist: @Composable () -> Unit = {},
+  author: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable() (RowScope.() -> Unit) = {},
@@ -45,7 +45,7 @@ fun ImageTopAppBar(
   TwoRowsTopAppBar(
     title = title,
     artwork = artwork,
-    artist = artist,
+    author = author,
     titleTextStyle = MaterialTheme.typography.headlineMedium,
     smallTitleTextStyle = MaterialTheme.typography.titleLarge.plus(TextStyle(lineHeight = 20.sp)),
     titleBottomPadding = LargeTitleBottomPadding,
@@ -66,7 +66,7 @@ private fun TwoRowsTopAppBar(
   modifier: Modifier = Modifier,
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
-  artist: @Composable () -> Unit,
+  author: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   titleBottomPadding: Dp,
   smallTitle: @Composable () -> Unit,
@@ -140,7 +140,7 @@ private fun TwoRowsTopAppBar(
         title = smallTitle,
         artwork = artwork,
         artworkSize = 48.dp,
-        artist = { },
+        author = { },
         titleTextStyle = smallTitleTextStyle,
         scrollPercentage = 1f - titleAlpha,
         titleVerticalArrangement = Arrangement.Center,
@@ -161,7 +161,7 @@ private fun TwoRowsTopAppBar(
         title = title,
         artwork = artwork,
         artworkSize = 164.dp,
-        artist = artist,
+        author = author,
         titleTextStyle = titleTextStyle,
         scrollPercentage = titleAlpha,
         titleVerticalArrangement = Arrangement.Bottom,
@@ -187,7 +187,7 @@ private fun TopAppBarLayout(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
   artworkSize: Dp,
-  artist: @Composable () -> Unit,
+  author: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   scrollPercentage: Float,
   titleVerticalArrangement: Arrangement.Vertical,
@@ -214,13 +214,13 @@ private fun TopAppBarLayout(
       }
       Box(
         Modifier
-          .layoutId("artist")
+          .layoutId("author")
           .padding(end = TopAppBarHorizontalPadding, start = 4.dp)
           .alpha(scrollPercentage)
       ) {
         CompositionLocalProvider(
           LocalContentColor provides actionIconContentColor,
-          content = artist
+          content = author
         )
       }
       Box(
@@ -281,8 +281,8 @@ private fun TopAppBarLayout(
       measurables.first { it.layoutId == "artwork" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
-    val artistPlaceable =
-      measurables.first { it.layoutId == "artist" }
+    val authorPlaceable =
+      measurables.first { it.layoutId == "author" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
     // Locate the title's baseline.
@@ -300,12 +300,12 @@ private fun TopAppBarLayout(
         0
       }
 
-//    val artistBaseline =
-//      if (artistPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
-//        artistPlaceable[LastBaseline]
-//      } else {
-//        0
-//      }
+    val authorBaseline =
+      if (authorPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
+        authorPlaceable[LastBaseline]
+      } else {
+        0
+      }
 
     val layoutHeight = heightPx.roundToInt()
 
@@ -364,9 +364,9 @@ private fun TopAppBarLayout(
         }
       )
 
-      artistPlaceable.placeRelative(
+      authorPlaceable.placeRelative(
         x = when (titleHorizontalArrangement) {
-          Arrangement.Center -> (constraints.maxWidth - artistPlaceable.width) / 2
+          Arrangement.Center -> (constraints.maxWidth - authorPlaceable.width) / 2
           Arrangement.End ->
             constraints.maxWidth - titlePlaceable.width - actionIconsPlaceable.width
           // Arrangement.Start.
