@@ -32,7 +32,6 @@ fun NowPlayingMiniplayer(
       Modifier
         .alpha(1f - bsOffset)
         .fillMaxSize()
-        .offset(y = (1f - bsOffset).dp)
     ) {
       LinearProgressIndicator(
         progress = viewModel.currentPosition.value.progressRange,
