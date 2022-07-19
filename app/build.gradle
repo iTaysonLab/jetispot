@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode version_code
         versionName version_name
-        resConfigs "en"
+        resConfigs 'en'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -50,7 +50,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion "1.2.0-beta02"
     }
 
     kapt {
@@ -74,6 +74,7 @@ android {
             excludes += '**.proto'
         }
     }
+    namespace 'bruhcollective.itaysonlab.jetispot'
 }
 
 moshi {
@@ -106,15 +107,15 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
     // Images
-    implementation "io.coil-kt:coil-compose:2.0.0-rc03"
+    implementation 'io.coil-kt:coil-compose:2.1.0'
 
     // DI
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation "com.google.dagger:hilt-android:2.41"
-    kapt "com.google.dagger:hilt-compiler:2.41"
+    implementation 'com.google.dagger:hilt-android:2.42'
+    kapt 'com.google.dagger:hilt-compiler:2.42'
 
     // Playback
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"

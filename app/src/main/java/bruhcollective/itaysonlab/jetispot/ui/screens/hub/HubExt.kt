@@ -112,7 +112,7 @@ fun HubScaffold(
                 HubBinder(
                   navController,
                   viewModel,
-                  it,
+                  it.children?.get(0) ?: it,
                   scrollBehavior = topBarState,
                   showFAB = true,
                   everythingElse = false
@@ -131,7 +131,7 @@ fun HubScaffold(
                 HubBinder(
                   navController,
                   viewModel,
-                  it.children?.get(0) ?: it,
+                  it,
                   scrollBehavior = topBarState,
                   showFAB = true,
                   everythingElse = false

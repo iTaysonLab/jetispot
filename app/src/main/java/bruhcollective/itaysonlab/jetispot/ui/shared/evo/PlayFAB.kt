@@ -35,12 +35,7 @@ fun PlayFAB(
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   val fabSize = animateDpAsState(
-//    if (scrollBehavior.scrollFraction <= 0.02f) 56.dp else 0.dp,
-    when (scrollBehavior.scrollFraction) {
-      scrollBehavior.scrollFraction + 0.1f -> 56.dp
-      scrollBehavior.scrollFraction - 0.01f -> 0.dp
-      else -> 0.dp
-    },
+    if (scrollBehavior.scrollFraction <= 0.02f) 56.dp else 0.dp,
     animationSpec = tween(durationMillis = 500)
   ).value
   Box {
