@@ -39,24 +39,28 @@ fun PlayFAB(
     animationSpec = tween(durationMillis = 500)
   ).value
   Box {
-    Box(
-      Modifier
-        .clip(RoundedCornerShape(16.dp))
-        .size(fabSize)
-        .background(MaterialTheme.colorScheme.primaryContainer)
-        .clickableHub(navController, delegate, item.children!![0])
+    item.children?.get(0)?.let {
+        Modifier
+          .clip(RoundedCornerShape(16.dp))
+          .size(fabSize)
+          .background(MaterialTheme.colorScheme.primaryContainer)
+          .clickableHub(navController, delegate, it)
+    }?.let {
+      Box(
+        it
     ) {
-      Icon(
-        imageVector = Icons.Rounded.PlayArrow,
-        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-        contentDescription = null,
-        modifier = Modifier
-          .size(32.dp)
-          .align(Alignment.Center)
-      )
+        Icon(
+          imageVector = Icons.Rounded.PlayArrow,
+          tint = MaterialTheme.colorScheme.onPrimaryContainer,
+          contentDescription = null,
+          modifier = Modifier
+            .size(32.dp)
+            .align(Alignment.Center)
+        )
+    }
     }
 
-    if ((item.children[0].events?.click as? HubEvent.PlayFromContext)?.data?.player?.options?.player_options_override?.shuffling_context != false) {
+    if ((item.children?.get(0)?.events?.click as? HubEvent.PlayFromContext)?.data?.player?.options?.player_options_override?.shuffling_context != false) {
       Box(
         Modifier
           .align(Alignment.BottomEnd)
