@@ -73,7 +73,7 @@ fun HubBinder (
       if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
     }
     HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }
-    HubComponent.ImageRow -> { if (everythingElse) ImageRow(navController, delegate, item) }
+    HubComponent.ImageRow -> { /* if (everythingElse) ImageRow(navController, delegate, item) */ }
 
     HubComponent.ShowHeader -> { if (everythingElse) ShowHeader(navController, delegate, item) }
     HubComponent.EpisodeListItem -> { if (everythingElse) EpisodeListItem(navController, delegate, item) }
