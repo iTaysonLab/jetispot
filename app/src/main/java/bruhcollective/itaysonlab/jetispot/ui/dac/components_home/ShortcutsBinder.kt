@@ -7,9 +7,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme.colorScheme as monet
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +20,7 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.home.dac.component.v1.proto.*
+import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,17 +91,20 @@ private fun ShortcutComponentBinder(
 ) {
   Card(
     colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
-    shape = RoundedCornerShape(4.dp),
+    shape = RoundedCornerShape(8.dp),
     modifier = Modifier
       .height(56.dp)
       .fillMaxWidth()
       .clickable { navController.navigate(navigateUri) }
   ) {
-    Row {
+    Row(Modifier.fillMaxSize().padding(horizontal = 8.dp)) {
       PreviewableAsyncImage(
         imageUrl = imageUrl,
         placeholderType = imagePlaceholder,
-        modifier = Modifier.size(56.dp).clip(RoundedCornerShape(4.dp))
+        modifier = Modifier
+          .size(42.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .align(CenterVertically)
       )
 
       Text(
@@ -112,8 +115,8 @@ private fun ShortcutComponentBinder(
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
-          .align(Alignment.CenterVertically)
-          .padding(horizontal = 8.dp)
+          .padding(start = 8.dp)
+          .align(CenterVertically)
       )
     }
   }
