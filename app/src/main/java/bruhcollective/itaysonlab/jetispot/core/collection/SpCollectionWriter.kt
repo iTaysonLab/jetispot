@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.collection
 
 import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpCollectionApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
@@ -10,20 +9,21 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionRepo
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.util.Revision
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdate
 import bruhcollective.itaysonlab.swedentricks.protos.CollectionUpdateEntry
 import com.google.protobuf.ByteString
 import com.spotify.collection2.v2.proto.Collection2V2
-import com.spotify.extendedmetadata.ExtendedMetadata
 import com.spotify.extendedmetadata.ExtensionKindOuterClass
 import com.spotify.metadata.Metadata
 import com.spotify.playlist4.Playlist4ApiProto
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.*
-import java.nio.charset.StandardCharsets
 
 class SpCollectionWriter(
   private val spSessionManager: SpSessionManager,
@@ -346,6 +346,7 @@ class SpCollectionWriter(
           CollectionUpdateEntry.Type.ARTIST -> dao.deleteArtists(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.SHOW -> dao.deleteShows(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.EPISODE -> dao.deleteEpisodes(*del.value.toTypedArray())
+          else -> {}
         }
       }
     }
