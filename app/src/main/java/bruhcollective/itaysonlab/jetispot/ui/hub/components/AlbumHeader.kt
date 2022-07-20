@@ -80,7 +80,7 @@ fun AlbumHeader(
       title = {
         Text(
           item.text!!.title!!,
-          Modifier.fillMaxWidth(0.5f),
+          Modifier.fillMaxWidth(0.53f),
           overflow = TextOverflow.Ellipsis,
           maxLines = 3
         )
@@ -93,49 +93,47 @@ fun AlbumHeader(
           maxLines = 1
         )
       },
-      artist = {
-        Column() {
+      author = {
+        Row(
+          modifier = Modifier
+            .clickable(
+              interactionSource = remember { MutableInteractionSource() },
+              indication = null
+            ) {
+              HubEventHandler.handle(
+                navController,
+                delegate,
+                HubEvent.NavigateToUri(NavigateUri(item.metadata?.album!!.artists[0].uri!!))
+              )
+            }
+        ) {
+          AsyncImage(
+            model = item.metadata?.album!!.artists.first().images!![0].uri,
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+            modifier = Modifier
+              .size(32.dp)
+              .clip(CircleShape)
+          )
+
+          Text(
+            text = item.metadata.album.artists.first().name!!,
+            fontSize = 14.sp,
+            modifier = Modifier
+              .align(Alignment.CenterVertically)
+              .padding(start = 12.dp)
+          )
+        }
+//        Column() {
 //          Subtext(
 //            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}",
 //            modifier = Modifier.padding(horizontal = 16.dp)
 //          )
-          Row(
-            modifier = Modifier
-              .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-              ) {
-                HubEventHandler.handle(
-                  navController,
-                  delegate,
-                  HubEvent.NavigateToUri(NavigateUri(item.metadata?.album!!.artists[0].uri!!))
-                )
-              }
-              .padding(vertical = 12.dp)
-          ) {
-            AsyncImage(
-              model = item.metadata?.album!!.artists.first().images!![0].uri,
-              contentScale = ContentScale.Crop,
-              contentDescription = null,
-              modifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-            )
-
-            Text(
-              text = item.metadata.album.artists.first().name!!,
-              fontSize = 14.sp,
-              modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = 12.dp)
-            )
-          }
-        }
+//        }
       }
     )
 
 //    EntityActionStrip(navController, delegate, item)
-//    PlayFAB(navController, delegate, item, scrollBehavior)
   }
 
 //  LargeTopAppBar(

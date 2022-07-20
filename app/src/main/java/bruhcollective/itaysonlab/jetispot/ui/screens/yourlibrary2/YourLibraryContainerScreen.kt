@@ -78,8 +78,12 @@ fun YourLibraryContainerScreen(
           )
         )
 
-        val animatedHeight = animateFloatAsState(44 * (1f - scrollBehavior.scrollFraction))
-        Box(Modifier.height(animatedHeight.value.dp)) {
+        val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction))
+        Box(
+          Modifier
+            .height(animatedHeight.value.dp)
+            .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
+        ) {
           AnimatedChipRow(
             listOf(
               ChipItem("playlists", "Playlists"),

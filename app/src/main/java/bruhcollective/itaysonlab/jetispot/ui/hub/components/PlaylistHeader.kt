@@ -17,6 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,12 +26,12 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun PlaylistHeader(
   navController: LambdaNavigationController,
@@ -53,7 +55,7 @@ fun PlaylistHeader(
     title = {
       Text(
         text = item.text?.title!!,
-        Modifier.fillMaxWidth(0.5f),
+        Modifier.fillMaxWidth(0.53f),
         overflow = TextOverflow.Ellipsis,
         maxLines = 3
       )
@@ -74,7 +76,43 @@ fun PlaylistHeader(
           .fillMaxSize()
       )
     },
-    artist = {},
+    description = {
+      item.text?.subtitle?.let {
+        Text(
+          text = it,
+          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+          fontSize = 12.sp,
+          overflow = TextOverflow.Ellipsis,
+          maxLines = 3,
+          style = TextStyle(platformStyle = PlatformTextStyle(false))
+        )
+      }
+    },
+    author = {
+      Row(
+        Modifier
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) { navController.navigate(item.custom?.get("owner_username") as String) }
+      ) {
+        PreviewableAsyncImage(
+          imageUrl = item.custom?.get("owner_pic") as String,
+          placeholderType = "user",
+          modifier = Modifier
+            .size(32.dp)
+            .clip(CircleShape)
+        )
+
+        Text(
+          text = item.custom["owner_name"] as String,
+          fontSize = 14.sp,
+          modifier = Modifier
+            .align(Alignment.CenterVertically)
+            .padding(start = 12.dp)
+        )
+      }
+    },
     actions = {
       IconButton(onClick = { /*TODO*/ }) {
         Icon(
@@ -145,7 +183,6 @@ fun LargePlaylistHeader(
         modifier = Modifier.fillMaxWidth(),
         overflow = TextOverflow.Ellipsis,
         maxLines = 8,
-//        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
       )
     },
     title = {
@@ -207,30 +244,6 @@ fun PlaylistHeaderAdditionalInfo(
   custom: Map<String, Any>?
 ) {
   custom ?: return
-
-  Spacer(modifier = Modifier.height(12.dp))
-
-  Row(Modifier
-    .clickable(
-      interactionSource = remember { MutableInteractionSource() },
-      indication = null
-    ) { navController.navigate(custom["owner_username"] as String) }
-    .fillMaxWidth()
-    .padding(horizontal = 16.dp)) {
-    PreviewableAsyncImage(
-      imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
-        .clip(CircleShape)
-        .size(32.dp)
-    )
-    MediumText(
-      text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
-        .align(Alignment.CenterVertically)
-        .padding(start = 12.dp)
-    )
-  }
-
-  Spacer(modifier = Modifier.height(12.dp))
-
   Row(
     Modifier
       .fillMaxWidth()

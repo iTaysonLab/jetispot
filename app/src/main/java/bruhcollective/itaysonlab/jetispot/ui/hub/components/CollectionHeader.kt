@@ -146,9 +146,11 @@ fun CollectionHeader(
     val tags = item.custom?.get("cfr") as List<CollectionContentFilter>
     val currentTag = item.custom["cfr_cur"] as String
 
-    val animatedHeight = animateFloatAsState(44 * (1f - scrollBehavior.scrollFraction)).value.dp
+    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction)).value
     LazyRow(
-      modifier = Modifier.height(animatedHeight),
+      modifier = Modifier
+        .height(animHeight.dp)
+        .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp)),
       contentPadding = PaddingValues(horizontal = 16.dp),
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -457,7 +459,7 @@ private fun TopAppBarLayout(
           Arrangement.Bottom ->
             if (titleBottomPadding == 0) layoutHeight - titlePlaceable.height
             else layoutHeight - titlePlaceable.height - max(
-              128,
+              164,
               titleBottomPadding - titlePlaceable.height + titleBaseline
             )
           // Arrangement.Top

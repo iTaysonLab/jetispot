@@ -33,6 +33,7 @@ fun ImageTopAppBar(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
   author: @Composable () -> Unit = {},
+  description: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable() (RowScope.() -> Unit) = {},
@@ -46,6 +47,7 @@ fun ImageTopAppBar(
     title = title,
     artwork = artwork,
     author = author,
+    description = description,
     titleTextStyle = MaterialTheme.typography.headlineMedium,
     smallTitleTextStyle = MaterialTheme.typography.titleLarge.plus(TextStyle(lineHeight = 20.sp)),
     titleBottomPadding = LargeTitleBottomPadding,
@@ -67,6 +69,7 @@ private fun TwoRowsTopAppBar(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
   author: @Composable () -> Unit,
+  description: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   titleBottomPadding: Dp,
   smallTitle: @Composable () -> Unit,
@@ -140,7 +143,8 @@ private fun TwoRowsTopAppBar(
         title = smallTitle,
         artwork = artwork,
         artworkSize = 48.dp,
-        author = { },
+        author = {},
+        description = {},
         titleTextStyle = smallTitleTextStyle,
         scrollPercentage = 1f - titleAlpha,
         titleVerticalArrangement = Arrangement.Center,
@@ -162,6 +166,7 @@ private fun TwoRowsTopAppBar(
         artwork = artwork,
         artworkSize = 164.dp,
         author = author,
+        description = description,
         titleTextStyle = titleTextStyle,
         scrollPercentage = titleAlpha,
         titleVerticalArrangement = Arrangement.Bottom,
@@ -188,6 +193,7 @@ private fun TopAppBarLayout(
   artwork: @Composable () -> Unit,
   artworkSize: Dp,
   author: @Composable () -> Unit,
+  description: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   scrollPercentage: Float,
   titleVerticalArrangement: Arrangement.Vertical,
@@ -214,12 +220,23 @@ private fun TopAppBarLayout(
       }
       Box(
         Modifier
+          .layoutId("description")
+          .padding(end = TopAppBarHorizontalPadding, start = 4.dp, top = 12.dp)
+          .fillMaxWidth(0.53f)
+          .alpha(scrollPercentage)
+      ) {
+        CompositionLocalProvider(
+          LocalContentColor provides actionIconContentColor,
+          content = description
+        )
+      }
+      Box(
+        Modifier
           .layoutId("author")
           .padding(end = TopAppBarHorizontalPadding, start = 4.dp)
           .alpha(scrollPercentage)
       ) {
         CompositionLocalProvider(
-          LocalContentColor provides actionIconContentColor,
           content = author
         )
       }
@@ -285,6 +302,10 @@ private fun TopAppBarLayout(
       measurables.first { it.layoutId == "author" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
+    val descriptionPlaceable =
+      measurables.first { it.layoutId == "description" }
+        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
+
     // Locate the title's baseline.
     val titleBaseline =
       if (titlePlaceable[LastBaseline] != AlignmentLine.Unspecified) {
@@ -307,6 +328,12 @@ private fun TopAppBarLayout(
         0
       }
 
+    val descriptionBaseline =
+      if (descriptionPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
+        descriptionPlaceable[LastBaseline]
+      } else {
+        0
+      }
     val layoutHeight = heightPx.roundToInt()
 
     layout(constraints.maxWidth, layoutHeight) {
@@ -356,7 +383,7 @@ private fun TopAppBarLayout(
           Arrangement.Bottom ->
             if (titleBottomPadding == 0) layoutHeight - artworkPlaceable.height
             else layoutHeight - artworkPlaceable.height - max(
-              94,
+              97,
               titleBottomPadding - artworkPlaceable.height + artworkBaseline
             )
           // Arrangement.Top
@@ -366,9 +393,9 @@ private fun TopAppBarLayout(
 
       authorPlaceable.placeRelative(
         x = when (titleHorizontalArrangement) {
-          Arrangement.Center -> (constraints.maxWidth - authorPlaceable.width) / 2
+          Arrangement.Center -> (constraints.maxWidth - descriptionPlaceable.width) / 2
           Arrangement.End ->
-            constraints.maxWidth - titlePlaceable.width - actionIconsPlaceable.width
+            constraints.maxWidth - descriptionPlaceable.width - actionIconsPlaceable.width
           // Arrangement.Start.
           // An TopAppBarTitleInset will make sure the title is offset in case the
           // navigation icon is missing.
@@ -378,18 +405,52 @@ private fun TopAppBarLayout(
           )
         },
         y = when (titleVerticalArrangement) {
-          Arrangement.Center -> (layoutHeight - titlePlaceable.height) / 2
+          Arrangement.Center -> (layoutHeight + descriptionPlaceable.height) / 2
           // Apply bottom padding from the title's baseline only when the Arrangement is
           // "Bottom".
           Arrangement.Bottom ->
-            if (titleBottomPadding == 0) layoutHeight - titlePlaceable.height
-            else layoutHeight - titlePlaceable.height - max(
-              248,
-              titleBottomPadding - titlePlaceable.height + titleBaseline
-            )
+            if (descriptionPlaceable.height == 0) {
+              layoutHeight - authorPlaceable.height - titlePlaceable.height - max(
+                0,
+                titleBottomPadding - authorPlaceable.height - titlePlaceable.height + authorBaseline
+              )
+            }
+            else {
+              layoutHeight - authorPlaceable.height - descriptionPlaceable.height - titlePlaceable.height - max(
+                72,
+                titleBottomPadding - descriptionPlaceable.height - titlePlaceable.height - authorPlaceable.height + descriptionBaseline
+              )
+            }
           // Arrangement.Top
           else -> 0
         }
+      )
+
+      descriptionPlaceable.placeRelative(
+        x = when (titleHorizontalArrangement) {
+          Arrangement.Center -> (constraints.maxWidth - titlePlaceable.width) / 2
+          Arrangement.End ->
+            constraints.maxWidth - titlePlaceable.width - actionIconsPlaceable.width
+          // Arrangement.Start.
+          // An TopAppBarTitleInset will make sure the title is offset in case the
+          // navigation icon is missing.
+          else -> max(
+            TopAppBarTitleInset.roundToPx(),
+            navigationIconPlaceable.width
+          ) },
+      y = when (titleVerticalArrangement) {
+        Arrangement.Center -> (layoutHeight - titlePlaceable.height) / 2
+        // Apply bottom padding from the title's baseline only when the Arrangement is
+        // "Bottom".
+        Arrangement.Bottom ->
+          if (titleBottomPadding == 0) layoutHeight - titlePlaceable.height
+          else layoutHeight - descriptionPlaceable.height - titlePlaceable.height + 8 - max(
+            0,
+            titleBottomPadding - descriptionPlaceable.height + descriptionBaseline
+          )
+        // Arrangement.Top
+        else -> 0
+      }
       )
 
       // Action icons
