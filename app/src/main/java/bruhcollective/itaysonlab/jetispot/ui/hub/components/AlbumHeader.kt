@@ -25,6 +25,7 @@ import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
+import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
 
@@ -93,6 +94,11 @@ fun AlbumHeader(
           maxLines = 1
         )
       },
+      description = {
+        Subtext(
+            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}"
+          )
+      },
       author = {
         Row(
           modifier = Modifier
@@ -124,12 +130,6 @@ fun AlbumHeader(
               .padding(start = 12.dp)
           )
         }
-//        Column() {
-//          Subtext(
-//            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}",
-//            modifier = Modifier.padding(horizontal = 16.dp)
-//          )
-//        }
       }
     )
 
