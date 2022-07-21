@@ -21,15 +21,15 @@ fun SectionHeader(
   Box(
     Modifier
       .padding(
-        vertical = 8.dp,
-        horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp
-      )
+        top = 22.dp,
+        bottom = 4.dp)
+      .padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)
   ) {
     Text(
       text = text.title!!,
       color = MaterialTheme.colorScheme.onSurface,
       fontWeight = FontWeight.Bold,
-      fontSize = 16.sp,
+      fontSize = 24.sp,
       modifier = Modifier.align(Alignment.CenterStart)
     )
   }
