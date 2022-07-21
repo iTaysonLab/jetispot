@@ -103,7 +103,7 @@ private fun ShortcutComponentBinder(
         placeholderType = imagePlaceholder,
         modifier = Modifier
           .size(42.dp)
-          .clip(RoundedCornerShape(4.dp))
+          .clip(RoundedCornerShape(3.dp))
           .align(CenterVertically)
       )
 
