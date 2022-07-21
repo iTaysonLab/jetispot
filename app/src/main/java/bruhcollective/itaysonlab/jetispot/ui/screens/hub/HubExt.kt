@@ -85,6 +85,7 @@ fun HubScaffold(
             animationSpec = tween(durationMillis = 500)
           ).value
 
+          // album FAB
           Box(
             modifier = Modifier
               .align(Alignment.BottomEnd)
@@ -102,6 +103,7 @@ fun HubScaffold(
             }
           }
 
+          // playlist FAB
           Box(
             modifier = Modifier
               .align(Alignment.BottomEnd)
@@ -121,6 +123,7 @@ fun HubScaffold(
             }
           }
 
+          // TODO liked songs FAB
           Box(
             modifier = Modifier
               .align(Alignment.BottomEnd)
