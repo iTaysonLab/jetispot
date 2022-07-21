@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +25,13 @@ fun RecsplanationHeadingComponentBinder(
   navController: LambdaNavigationController,
   item: RecsplanationHeadingComponent
 ) {
-  Card(shape = RoundedCornerShape(32.dp), modifier = Modifier.padding(start = 12.dp, top = 40.dp, bottom = 16.dp)) {
+  Card(
+    shape = RoundedCornerShape(32.dp),
+    modifier = Modifier.padding(start = 12.dp, top = 40.dp, bottom = 16.dp),
+    colors = CardDefaults.cardColors(
+      containerColor = MaterialTheme.colorScheme.tertiaryContainer
+    )
+  ) {
     Row(
       Modifier
         .clickable { navController.navigate(item.navigateUri) }
@@ -36,7 +40,9 @@ fun RecsplanationHeadingComponentBinder(
       PreviewableAsyncImage(
         imageUrl = item.imageUri,
         placeholderType = "none",
-        modifier = Modifier.size(48.dp).clip(CircleShape)
+        modifier = Modifier
+          .size(48.dp)
+          .clip(CircleShape)
       )
 
       Column(
