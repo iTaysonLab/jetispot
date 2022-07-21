@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme.colorScheme as monet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -18,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 @Composable
 fun PreviewableAsyncImage (
@@ -93,14 +93,14 @@ fun ImagePreview (
 ) {
   Surface(
     tonalElevation = if (colorful) 0.dp else 8.dp,
-    color = if (colorful) monet.primary else monet.surface,
+    color = if (colorful) monet.tertiaryContainer else monet.surface,
     modifier = modifier
   ) {
     if (of != null) {
       Box(Modifier.fillMaxSize()) {
         Icon(
           imageVector = of,
-          tint = if (colorful) monet.onPrimary else monet.onSurface,
+          tint = if (colorful) monet.onTertiaryContainer else monet.onSurface,
           contentDescription = null,
           modifier = Modifier.fillMaxSize().padding(8.dp))
       }
