@@ -32,7 +32,6 @@ import kotlin.math.roundToInt
 fun ImageTopAppBar(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
-  author: @Composable () -> Unit = {},
   description: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
   navigationIcon: @Composable () -> Unit = {},
@@ -46,7 +45,6 @@ fun ImageTopAppBar(
   TwoRowsTopAppBar(
     title = title,
     artwork = artwork,
-    author = author,
     description = description,
     titleTextStyle = MaterialTheme.typography.headlineMedium,
     smallTitleTextStyle = MaterialTheme.typography.titleLarge.plus(TextStyle(lineHeight = 20.sp)),
@@ -68,7 +66,6 @@ private fun TwoRowsTopAppBar(
   modifier: Modifier = Modifier,
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
-  author: @Composable () -> Unit,
   description: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   titleBottomPadding: Dp,
@@ -143,7 +140,6 @@ private fun TwoRowsTopAppBar(
         title = smallTitle,
         artwork = artwork,
         artworkSize = 48.dp,
-        author = {},
         description = {},
         titleTextStyle = smallTitleTextStyle,
         scrollPercentage = 1f - titleAlpha,
@@ -165,7 +161,6 @@ private fun TwoRowsTopAppBar(
         title = title,
         artwork = artwork,
         artworkSize = 164.dp,
-        author = author,
         description = description,
         titleTextStyle = titleTextStyle,
         scrollPercentage = titleAlpha,
@@ -192,7 +187,6 @@ private fun TopAppBarLayout(
   title: @Composable () -> Unit,
   artwork: @Composable () -> Unit,
   artworkSize: Dp,
-  author: @Composable () -> Unit,
   description: @Composable () -> Unit,
   titleTextStyle: TextStyle,
   scrollPercentage: Float,
@@ -228,16 +222,6 @@ private fun TopAppBarLayout(
         CompositionLocalProvider(
           LocalContentColor provides actionIconContentColor,
           content = description
-        )
-      }
-      Box(
-        Modifier
-          .layoutId("author")
-          .padding(end = TopAppBarHorizontalPadding, start = 4.dp)
-          .alpha(scrollPercentage)
-      ) {
-        CompositionLocalProvider(
-          content = author
         )
       }
       Box(
@@ -298,10 +282,6 @@ private fun TopAppBarLayout(
       measurables.first { it.layoutId == "artwork" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
-    val authorPlaceable =
-      measurables.first { it.layoutId == "author" }
-        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
-
     val descriptionPlaceable =
       measurables.first { it.layoutId == "description" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
@@ -317,13 +297,6 @@ private fun TopAppBarLayout(
     val artworkBaseline =
       if (artworkPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
         artworkPlaceable[LastBaseline]
-      } else {
-        0
-      }
-
-    val authorBaseline =
-      if (authorPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
-        authorPlaceable[LastBaseline]
       } else {
         0
       }
@@ -386,41 +359,6 @@ private fun TopAppBarLayout(
               97,
               titleBottomPadding - artworkPlaceable.height + artworkBaseline
             )
-          // Arrangement.Top
-          else -> 0
-        }
-      )
-
-      authorPlaceable.placeRelative(
-        x = when (titleHorizontalArrangement) {
-          Arrangement.Center -> (constraints.maxWidth - descriptionPlaceable.width) / 2
-          Arrangement.End ->
-            constraints.maxWidth - descriptionPlaceable.width - actionIconsPlaceable.width
-          // Arrangement.Start.
-          // An TopAppBarTitleInset will make sure the title is offset in case the
-          // navigation icon is missing.
-          else -> max(
-            TopAppBarTitleInset.roundToPx(),
-            navigationIconPlaceable.width
-          )
-        },
-        y = when (titleVerticalArrangement) {
-          Arrangement.Center -> (layoutHeight + descriptionPlaceable.height) / 2
-          // Apply bottom padding from the title's baseline only when the Arrangement is
-          // "Bottom".
-          Arrangement.Bottom ->
-            if (descriptionPlaceable.height == 0) {
-              layoutHeight - authorPlaceable.height - titlePlaceable.height - max(
-                0,
-                titleBottomPadding - authorPlaceable.height - titlePlaceable.height + authorBaseline
-              )
-            }
-            else {
-              layoutHeight - authorPlaceable.height - descriptionPlaceable.height - titlePlaceable.height - max(
-                72,
-                titleBottomPadding - descriptionPlaceable.height - titlePlaceable.height - authorPlaceable.height + descriptionBaseline
-              )
-            }
           // Arrangement.Top
           else -> 0
         }
