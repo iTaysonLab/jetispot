@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
@@ -43,14 +42,15 @@ fun ArtistHeader(
     },
     picture = {
       AsyncImage(
-        model = item.images?.main?.uri, contentDescription = null,
+        model = item.images?.main?.uri,
+        contentDescription = null,
         Modifier
-          .fillMaxWidth()
-          .height(61.dp + WindowInsets.statusBars.getTop(LocalDensity.current).dp),
+          .fillMaxSize(),
         contentScale = ContentScale.FillWidth
       )
     },
     scrollBehavior = scrollBehavior,
+    isLarge = false,
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
         Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")

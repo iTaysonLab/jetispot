@@ -43,7 +43,7 @@ fun ImageBackgroundTopAppBar(
   contentPadding: PaddingValues = PaddingValues(0.dp),
   maxHeight: Dp = 152.dp,
   smallTitle: @Composable () -> Unit = {},
-  scrollHeight: Float = -1.515f
+  isLarge: Boolean
 ) {
   TwoRowsTopAppBar(
     aboveTitle = aboveTitle,
@@ -61,7 +61,7 @@ fun ImageBackgroundTopAppBar(
     pinnedHeight = 64.dp,
     scrollBehavior = scrollBehavior,
     contentPadding = contentPadding,
-    scrollHeight = scrollHeight
+    isLarge = isLarge
   )
 }
 
@@ -82,7 +82,7 @@ private fun TwoRowsTopAppBar(
   pinnedHeight: Dp,
   scrollBehavior: TopAppBarScrollBehavior?,
   contentPadding: PaddingValues,
-  scrollHeight: Float
+  isLarge: Boolean
 ) {
   if (maxHeight <= pinnedHeight) {
     throw IllegalArgumentException(
@@ -136,7 +136,7 @@ private fun TwoRowsTopAppBar(
     Box(
       modifier = Modifier
         .alpha(1f - scrollFraction)
-        .height((maxHeightPx + pinnedHeightPx * (scrollHeight - scrollFraction)).dp)
+        .height((maxHeight + 32.dp) * (1f - scrollFraction))
     ) {
       CompositionLocalProvider(content = picture)
       Box(
@@ -171,7 +171,6 @@ private fun TwoRowsTopAppBar(
         aboveTitle = {},
         title = smallTitle,
         picture = { },
-        pictureSize = 48.dp,
         titleTextStyle = smallTitleTextStyle,
         scrollPercentage = 1f - titleAlpha,
         titleVerticalArrangement = Arrangement.Center,
@@ -193,7 +192,6 @@ private fun TwoRowsTopAppBar(
         aboveTitle = aboveTitle,
         title = title,
         picture = picture,
-        pictureSize = 164.dp,
         titleTextStyle = titleTextStyle,
         scrollPercentage = titleAlpha,
         titleVerticalArrangement = Arrangement.Bottom,
@@ -220,7 +218,6 @@ private fun TopAppBarLayout(
   title: @Composable () -> Unit,
   aboveTitle: @Composable () -> Unit,
   picture: @Composable () -> Unit,
-  pictureSize: Dp,
   titleTextStyle: TextStyle,
   scrollPercentage: Float,
   titleVerticalArrangement: Arrangement.Vertical,
@@ -284,11 +281,12 @@ private fun TopAppBarLayout(
         )
       }
 
-      // this is needed for the image to load. don't remove it
+      // the picture composable that is actually rendered is in TwoRowsTopAppBar. dont remove code
+      // below otherwise it will crash
       Box(
         Modifier
           .layoutId("picture")
-          .size(0.dp)
+          .height(0.dp)
       ) {
         CompositionLocalProvider(
           content = picture

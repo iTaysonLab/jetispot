@@ -203,10 +203,10 @@ fun LargePlaylistHeader(
     },
     picture = {
       AsyncImage(
-        model = item.images?.main?.uri, contentDescription = null,
+        model = item.images?.main?.uri,
+        contentDescription = null,
         Modifier
-          .fillMaxWidth()
-          .height(164.dp + WindowInsets.statusBars.getTop(LocalDensity.current).dp),
+          .fillMaxSize(),
         contentScale = ContentScale.FillWidth
       )
     },
@@ -222,7 +222,7 @@ fun LargePlaylistHeader(
     ),
     scrollBehavior = scrollBehavior,
     maxHeight = 256.dp,
-    scrollHeight = -2.676f
+    isLarge = true
   )
 
 //  Column {
