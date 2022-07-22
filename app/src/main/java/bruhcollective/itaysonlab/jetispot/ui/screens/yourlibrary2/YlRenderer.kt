@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.PushPin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +51,8 @@ fun YLRPinned(
   Box(
     Modifier
       .padding(horizontal = 12.dp, vertical = 6.dp)
-      .clip(RoundedCornerShape(20.dp))
-      .background(MaterialTheme.colorScheme.surfaceVariant)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
 
     Row(modifier) {
@@ -62,8 +63,8 @@ fun YLRPinned(
           if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
           true,
           modifier = Modifier
-            .size(75.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .size(72.dp)
+            .clip(RoundedCornerShape(16.dp))
         )
       } else {
         if (item.picture.isEmpty()) {
@@ -71,16 +72,16 @@ fun YLRPinned(
             Icons.Rounded.Photo,
             false,
             modifier = Modifier
-              .size(75.dp)
-              .clip(RoundedCornerShape(8.dp))
+              .size(72.dp)
+              .clip(RoundedCornerShape(16.dp))
           )
         } else {
           AsyncImage(
             model = "https://i.scdn.co/image/${item.picture}",
             contentDescription = null,
             modifier = Modifier
-              .size(75.dp)
-              .clip(RoundedCornerShape(8.dp))
+              .size(72.dp)
+              .clip(RoundedCornerShape(16.dp))
           )
         }
       }
@@ -205,16 +206,16 @@ fun YLRGenericAlbumItem(
   Box(
     Modifier
       .padding(horizontal = 12.dp, vertical = 6.dp)
-      .clip(RoundedCornerShape(20.dp))
-      .background(MaterialTheme.colorScheme.surfaceVariant)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
     Row(modifier) {
       PreviewableAsyncImage(
         imageUrl = picUrl,
         placeholderType = picPlaceholder,
         modifier = Modifier
-          .size(75.dp)
-          .clip(RoundedCornerShape(8.dp))
+          .size(72.dp)
+          .clip(RoundedCornerShape(16.dp))
       )
 
       Column(
@@ -264,15 +265,15 @@ fun YLRGenericArtistItem(
   Box(
     Modifier
       .padding(horizontal = 12.dp, vertical = 6.dp)
-      .clip(RoundedCornerShape(20.dp))
-      .background(MaterialTheme.colorScheme.surfaceVariant)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
     Row(modifier) {
       PreviewableAsyncImage(
         imageUrl = picUrl,
         placeholderType = picPlaceholder,
         modifier = Modifier
-          .size(75.dp)
+          .size(72.dp)
           .clip(CircleShape)
       )
 
