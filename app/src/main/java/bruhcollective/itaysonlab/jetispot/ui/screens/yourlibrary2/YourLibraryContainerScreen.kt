@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,9 +28,10 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.UseGrid
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,6 +46,11 @@ fun YourLibraryContainerScreen(
   val scope = rememberCoroutineScope()
   val columnState = rememberLazyListState()
   val gridState = rememberLazyGridState()
+  val scrollBehavior = rememberEUCScrollBehavior()
+  val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction))
+  val Grid = remember { mutableStateOf(false) }
+  Grid.value = UseGrid!!
+
   LaunchedEffect(Unit) {
     launch {
       viewModel.load()
@@ -50,14 +58,19 @@ fun YourLibraryContainerScreen(
   }
 
   Scaffold(
+    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       Column {
-        SmallTopAppBar(
+        LargeTopAppBar(
           title = { Text("Your Library") },
+          scrollBehavior = scrollBehavior,
           navigationIcon = {
-            IconButton(onClick = { /* TODO */ }) {
-              Icon(Icons.Rounded.AccountCircle, null)
-            }
+            Icon(
+              Icons.Rounded.AccountCircle,
+              null,
+              modifier = Modifier
+                .padding(top = 2.dp)
+            )
           },
           actions = {
             IconButton(onClick = { /* TODO */ }) {
@@ -71,39 +84,56 @@ fun YourLibraryContainerScreen(
           )
         )
 
-        AnimatedChipRow(
-          listOf(
-            ChipItem("playlists", "Playlists"),
-            ChipItem("artists", "Artists"),
-            ChipItem("albums", "Albums")
-          ),
-          viewModel.selectedTabId
+        Box(
+          Modifier
+            .height(animatedHeight.value.dp)
+            .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
         ) {
-          viewModel.selectedTabId = it
-          scope.launch {
-            viewModel.load()
-            if (viewModel.selectedTabId == "") {
-              delay(25L)
-              if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
-            }
-          }
-        }
-        val Grid = remember { mutableStateOf(false) }
-        Grid.value = UseGrid!!
-        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), horizontalArrangement = Arrangement.End){
-          IconToggleButton(
-              checked = Grid.value,
-            onCheckedChange = {
-              Grid.value = it
-              UseGrid = it
-              scope.launch {
-                  viewModel.content = emptyList()
+          Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Box(Modifier.width(295.dp)){
+              AnimatedChipRow(
+                listOf(
+                  ChipItem("playlists", "Playlists"),
+                  ChipItem("artists", "Artists"),
+                  ChipItem("albums", "Albums")
+                ),
+                viewModel.selectedTabId
+              ) {
+                viewModel.selectedTabId = it
+                scope.launch {
                   viewModel.load()
-                  if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
+                  if (viewModel.selectedTabId == "") {
+                    delay(25L)
+                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
+                  }
+                }
               }
             }
-          ) {
-            Icon(if (Grid.value) Icons.Rounded.ViewList else Icons.Rounded.Apps, null, tint = LocalContentColor.current.copy(alpha = LocalContentAlpha.current))
+
+
+            Row(
+              Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp), horizontalArrangement = Arrangement.End){
+              IconToggleButton(
+                checked = Grid.value,
+                colors = IconButtonDefaults.iconToggleButtonColors (
+                  disabledContentColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+                  checkedContentColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                ),
+                onCheckedChange = {
+                  Grid.value = it
+                  UseGrid = it
+                  scope.launch {
+                    viewModel.content = emptyList()
+                    viewModel.load()
+                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
+                  }
+                }
+              ) {
+                Icon(if (Grid.value) Icons.Rounded.ViewList else Icons.Rounded.Apps, null)
+              }
+            }
           }
         }
       }
@@ -154,7 +184,6 @@ fun YourLibraryContainerScreen(
                 .fillMaxWidth()
                 .animateItemPlacement()
                 .padding(10.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
             )
           }
         }
