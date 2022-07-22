@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,9 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -294,7 +290,7 @@ fun YLArtistCard(
                 )
 
                 Subtext(
-                    "Artist",
+                    stringResource(R.string.artist),
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .fillMaxWidth(),

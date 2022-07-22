@@ -148,4 +148,6 @@
 
     <string name="reload_message">The app will restart to change the theme</string>
     <string name="color_theme">Select color scheme</string>
+
+    <string name="artist">Artist</string>
 </resources>

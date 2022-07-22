@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,6 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences
 import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.UseGrid
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
