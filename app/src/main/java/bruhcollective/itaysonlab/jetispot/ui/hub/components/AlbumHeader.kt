@@ -1,8 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,8 +32,12 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
 
+@OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun AlbumHeader(
   navController: LambdaNavigationController,
@@ -49,6 +57,7 @@ fun AlbumHeader(
 //    }
 //  }
 
+  val artistScrollState = rememberLazyListState()
   Column() {
     ImageTopAppBar(
       navigationIcon = {
@@ -95,42 +104,59 @@ fun AlbumHeader(
         )
       },
       description = {
-        Subtext(
-            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}"
-          )
-      },
-      author = {
-        Row(
-          modifier = Modifier
-            .clickable(
-              interactionSource = remember { MutableInteractionSource() },
-              indication = null
-            ) {
-              HubEventHandler.handle(
-                navController,
-                delegate,
-                HubEvent.NavigateToUri(NavigateUri(item.metadata?.album!!.artists[0].uri!!))
-              )
-            }
-        ) {
-          AsyncImage(
-            model = item.metadata?.album!!.artists.first().images!![0].uri,
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-            modifier = Modifier
-              .size(32.dp)
-              .clip(CircleShape)
-          )
+        Column() {
+          LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(64.dp),
+            state = artistScrollState,
+            flingBehavior = rememberSnapperFlingBehavior(
+              artistScrollState,
+              snapOffsetForItem = SnapOffsets.Start,
+              springAnimationSpec = spring(dampingRatio = 0.001f, stiffness = 10f)
+            )
+          ) {
+            items(item.metadata?.album!!.artists) {
+              Row(
+                modifier = Modifier
+                  .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                  ) {
+                    HubEventHandler.handle(
+                      navController,
+                      delegate,
+                      HubEvent.NavigateToUri(NavigateUri(it.uri!!))
+                    )
+                  }
+              ) {
 
-          Text(
-            text = item.metadata.album.artists.first().name!!,
-            fontSize = 14.sp,
-            modifier = Modifier
-              .align(Alignment.CenterVertically)
-              .padding(start = 12.dp)
+                AsyncImage(
+                  model = it.images!![0].uri,
+                  contentScale = ContentScale.Crop,
+                  contentDescription = null,
+                  modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                )
+
+                Text(
+                  text = it.name!!,
+                  fontSize = 14.sp,
+                  modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 12.dp, end = 64.dp)
+                )
+              }
+            }
+          }
+
+          Subtext(
+            text = "${item.metadata?.album!!.type} • ${item.metadata.album.year}",
+            modifier = Modifier.padding(top = 8.dp)
           )
         }
-      }
+
+      },
     )
 
 //    EntityActionStrip(navController, delegate, item)
@@ -242,21 +268,7 @@ fun AlbumHeader(
 //            }
 //          }
 //        }
-//
-
 //      }
 //    },
-//    navigationIcon = {
-//      IconButton(onClick = { navController.popBackStack() }) {
-//        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
-//      }
-//    },
-//    scrollBehavior = scrollBehavior,
-//    maxHeight = 300.dp,
-//    contentPadding = PaddingValues(
-//      top = with(LocalDensity.current) {
-//        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-//      }
-//    )
 //  )
 }
