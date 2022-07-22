@@ -16,9 +16,13 @@ object AppPreferences {
         get() = Key.ColorScheme.getString(defValue = "#1DB954", elseValue = "#1DB954")
         set(value) = Key.ColorScheme.setString(value)
 
+    var UseGrid: Boolean?
+        get() = Key.UseGrid.getBoolean(defValue = false, elseValue = false)
+        set(value) = Key.UseGrid.setBoolean(value)
+
 
     private enum class Key {
-        ColorScheme;
+        ColorScheme, UseGrid;
 
         fun getBoolean(defValue: Boolean = false, elseValue: Boolean? = null): Boolean? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getBoolean(name, defValue) else elseValue
         fun getFloat(defValue: Float = 0f, elseValue: Float? = null): Float? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getFloat(name, defValue) else elseValue
