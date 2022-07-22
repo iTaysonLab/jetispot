@@ -78,39 +78,40 @@ fun PlaylistHeader(
     },
     description = {
       item.text?.subtitle?.let {
-        Text(
-          text = it,
-          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-          fontSize = 12.sp,
-          overflow = TextOverflow.Ellipsis,
-          maxLines = 3,
-          style = TextStyle(platformStyle = PlatformTextStyle(false))
-        )
-      }
-    },
-    author = {
-      Row(
-        Modifier
-          .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-          ) { navController.navigate(item.custom?.get("owner_username") as String) }
-      ) {
-        PreviewableAsyncImage(
-          imageUrl = item.custom?.get("owner_pic") as String,
-          placeholderType = "user",
-          modifier = Modifier
-            .size(32.dp)
-            .clip(CircleShape)
-        )
+        Column(Modifier.height(96.dp), verticalArrangement = Arrangement.Bottom) {
+          Row(
+            Modifier
+              .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+              ) { navController.navigate(item.custom?.get("owner_username") as String) }
+          ) {
+            PreviewableAsyncImage(
+              imageUrl = item.custom?.get("owner_pic") as String,
+              placeholderType = "user",
+              modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+            )
 
-        Text(
-          text = item.custom["owner_name"] as String,
-          fontSize = 14.sp,
-          modifier = Modifier
-            .align(Alignment.CenterVertically)
-            .padding(start = 12.dp)
-        )
+            Text(
+              text = item.custom["owner_name"] as String,
+              fontSize = 14.sp,
+              modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 12.dp)
+            )
+          }
+          Text(
+            text = it,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 12.sp,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            modifier = Modifier.padding(top = if (it != "") 8.dp else 0.dp)
+          )
+        }
+
       }
     },
     actions = {
