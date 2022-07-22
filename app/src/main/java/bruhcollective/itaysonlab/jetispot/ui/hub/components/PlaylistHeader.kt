@@ -174,7 +174,7 @@ fun LargePlaylistHeader(
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   ImageBackgroundTopAppBar(
-    aboveTitle = {
+    description = {
       Text(
         item.text!!.subtitle!!,
         fontSize = 14.sp,
@@ -183,6 +183,7 @@ fun LargePlaylistHeader(
         modifier = Modifier.fillMaxWidth(),
         overflow = TextOverflow.Ellipsis,
         maxLines = 8,
+        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
       )
     },
     title = {

@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ImageBackgroundTopAppBar(
-  aboveTitle: @Composable () -> Unit = {},
+  description: @Composable () -> Unit = {},
   title: @Composable () -> Unit,
   picture: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
@@ -46,7 +46,7 @@ fun ImageBackgroundTopAppBar(
   isLarge: Boolean
 ) {
   TwoRowsTopAppBar(
-    aboveTitle = aboveTitle,
+    aboveTitle = description,
     title = title,
     picture = picture,
     titleTextStyle = MaterialTheme.typography.headlineMedium,
@@ -308,7 +308,7 @@ private fun TopAppBarLayout(
       (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width)
         .coerceAtLeast(0)
     }
-    val aboveTitlePlaceable =
+    val descriptionPlaceable =
       measurables.first { it.layoutId == "aboveTitle" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
@@ -336,9 +336,9 @@ private fun TopAppBarLayout(
         0
       }
 
-    val aboveTitleBaseline =
-      if (aboveTitlePlaceable[LastBaseline] != AlignmentLine.Unspecified) {
-        aboveTitlePlaceable[LastBaseline]
+    val descriptionBaseline =
+      if (descriptionPlaceable[LastBaseline] != AlignmentLine.Unspecified) {
+        descriptionPlaceable[LastBaseline]
       } else {
         0
       }
@@ -400,11 +400,11 @@ private fun TopAppBarLayout(
         }
       )
 
-      aboveTitlePlaceable.placeRelative(
+      descriptionPlaceable.placeRelative(
         x = when (titleHorizontalArrangement) {
-          Arrangement.Center -> (constraints.maxWidth - aboveTitlePlaceable.width) / 2
+          Arrangement.Center -> (constraints.maxWidth - descriptionPlaceable.width) / 2
           Arrangement.End ->
-            constraints.maxWidth - titlePlaceable.width - aboveTitlePlaceable.width
+            constraints.maxWidth - titlePlaceable.width - descriptionPlaceable.width
           // Arrangement.Start.
           // An TopAppBarTitleInset will make sure the title is offset in case the
           // navigation icon is missing.
@@ -419,8 +419,8 @@ private fun TopAppBarLayout(
           // "Bottom".
           Arrangement.Bottom ->
             if (titleBottomPadding == 0) layoutHeight - titlePlaceable.height
-            else layoutHeight - titlePlaceable.height - max(
-              248,
+            else layoutHeight - descriptionPlaceable.height - titlePlaceable.height + 8 - max(
+              0,
               titleBottomPadding - titlePlaceable.height + titleBaseline
             )
           // Arrangement.Top
