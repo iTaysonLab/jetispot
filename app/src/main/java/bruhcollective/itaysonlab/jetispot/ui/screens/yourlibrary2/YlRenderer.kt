@@ -1,14 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,95 +42,110 @@ fun YLRPinned(
   item: CollectionPinnedItem,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    val isPredef = item.predefType != null
+  Box(
+    Modifier
+      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .clip(RoundedCornerShape(20.dp))
+      .background(MaterialTheme.colorScheme.surfaceVariant)
+  ) {
 
-    if (isPredef) {
-      ImagePreview(
-        if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
-        true,
-        modifier = Modifier
-          .size(75.dp)
-          .clip(RoundedCornerShape(8.dp))
-      )
-    } else {
-      if (item.picture.isEmpty()) {
+    Row(modifier) {
+      val isPredef = item.predefType != null
+
+      if (isPredef) {
         ImagePreview(
-          Icons.Rounded.Photo,
-          false,
+          if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
+          true,
           modifier = Modifier
             .size(75.dp)
             .clip(RoundedCornerShape(8.dp))
         )
       } else {
-        AsyncImage(
-          model = "https://i.scdn.co/image/${item.picture}",
-          contentDescription = null,
-          modifier = Modifier
-            .size(75.dp)
-            .clip(RoundedCornerShape(8.dp))
-        )
-      }
-    }
-
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.Top)) {
-      when (item.predefType){
-        PredefCeType.COLLECTION -> {
-          MediumText(
-            text = stringResource(id = R.string.liked_songs)
-          )
-        }
-        PredefCeType.EPISODES -> {
-          MediumText(
-            text = stringResource(id = R.string.new_episodes)
-          )
-        }
-        null -> {
-          Row(
+        if (item.picture.isEmpty()) {
+          ImagePreview(
+            Icons.Rounded.Photo,
+            false,
             modifier = Modifier
-              .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-          ){
+              .size(75.dp)
+              .clip(RoundedCornerShape(8.dp))
+          )
+        } else {
+          AsyncImage(
+            model = "https://i.scdn.co/image/${item.picture}",
+            contentDescription = null,
+            modifier = Modifier
+              .size(75.dp)
+              .clip(RoundedCornerShape(8.dp))
+          )
+        }
+      }
+
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
+        when (item.predefType) {
+          PredefCeType.COLLECTION -> {
             MediumText(
-              text = item.name
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-            Subtext(
-              text = "Time",
-              maxLines = 1
+              text = stringResource(id = R.string.liked_songs)
             )
           }
+          PredefCeType.EPISODES -> {
+            MediumText(
+              text = stringResource(id = R.string.new_episodes)
+            )
+          }
+          null -> {
+            Row(
+              modifier = Modifier
+                .fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              MediumText(
+                text = item.name
+              )
+              Spacer(modifier = Modifier.width(2.dp))
+              Subtext(
+                text = "Time",
+                maxLines = 1
+              )
+            }
+          }
         }
-      }
-      Row(Modifier.padding(top = 4.dp)) {
-        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
-          .size(16.dp)
-          .align(Alignment.CenterVertically))
-        Text(
-          text = when (item.predefType) {
-            PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs_desc, item.predefDyn)
-            PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes_desc, item.predefDyn)
-            null -> item.subtitle
-          },
-          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-          modifier = Modifier
-            .padding(start = 6.dp)
-            .align(Alignment.CenterVertically)
-        )
+        Row(Modifier.padding(top = 4.dp)) {
+          Icon(
+            Icons.Rounded.PushPin,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = null,
+            modifier = Modifier
+              .size(16.dp)
+              .align(Alignment.CenterVertically)
+          )
+          Text(
+            text = when (item.predefType) {
+              PredefCeType.COLLECTION -> stringResource(
+                id = R.string.liked_songs_desc,
+                item.predefDyn
+              )
+              PredefCeType.EPISODES -> stringResource(
+                id = R.string.new_episodes_desc,
+                item.predefDyn
+              )
+              null -> item.subtitle
+            },
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+              .padding(start = 6.dp)
+              .align(Alignment.CenterVertically)
+          )
+        }
       }
     }
   }
-  Divider(
-    modifier = Modifier.padding(horizontal = 16.dp),
-    color = MaterialTheme.colorScheme.onSurface,
-    thickness = 0.5f.dp
-  )
 }
 
 @Composable
@@ -172,7 +185,6 @@ fun YLRArtist(
     picUrl = "https://i.scdn.co/image/${item.picture}",
     picPlaceholder = "artist",
     title = item.name,
-    subtitle = null,
     modifier = modifier
   )
 }
@@ -185,51 +197,54 @@ fun YLRGenericAlbumItem(
   subtitle: String?,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    PreviewableAsyncImage(
-      imageUrl = picUrl,
-      placeholderType = picPlaceholder,
-      modifier = Modifier
-        .size(75.dp)
-        .clip(RoundedCornerShape(8.dp))
-    )
-
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.Top)) {
-      Row(
+  Box(
+    Modifier
+      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .clip(RoundedCornerShape(20.dp))
+      .background(MaterialTheme.colorScheme.surfaceVariant)
+  ) {
+    Row(modifier) {
+      PreviewableAsyncImage(
+        imageUrl = picUrl,
+        placeholderType = picPlaceholder,
         modifier = Modifier
-          .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-      ){
-        MediumText(
-          text = title
-        )
-        Spacer(modifier = Modifier.width(2.dp))
-        Subtext(
-          text = "Time",
-          maxLines = 1
-        )
-      }
+          .size(75.dp)
+          .clip(RoundedCornerShape(8.dp))
+      )
 
-      if (!subtitle.isNullOrEmpty()) {
-        Text(
-          text = subtitle,
-          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-          modifier = Modifier.padding(top = 4.dp)
-        )
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
+        Row(
+          modifier = Modifier
+            .fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          MediumText(
+            text = title
+          )
+          Spacer(modifier = Modifier.width(2.dp))
+          Subtext(
+            text = "Time",
+            maxLines = 1
+          )
+        }
+
+        if (!subtitle.isNullOrEmpty()) {
+          Text(
+            text = subtitle,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 4.dp)
+          )
+        }
       }
     }
   }
-  Divider(
-    modifier = Modifier.padding(horizontal = 16.dp),
-    color = MaterialTheme.colorScheme.onSurface,
-    thickness = 0.5f.dp
-  )
 }
 
 
@@ -239,31 +254,37 @@ fun YLRGenericArtistItem(
   picUrl: String,
   picPlaceholder: String,
   title: String,
-  subtitle: String?,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    PreviewableAsyncImage(
-      imageUrl = picUrl,
-      placeholderType = picPlaceholder,
-      modifier = Modifier
-        .size(75.dp)
-        .clip(CircleShape)
-    )
-
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.Top)) {
-      MediumText(
-        text = title
+  Box(
+    Modifier
+      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .clip(RoundedCornerShape(20.dp))
+      .background(MaterialTheme.colorScheme.surfaceVariant)
+  ) {
+    Row(modifier) {
+      PreviewableAsyncImage(
+        imageUrl = picUrl,
+        placeholderType = picPlaceholder,
+        modifier = Modifier
+          .size(75.dp)
+          .clip(CircleShape)
       )
+
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
+        MediumText(
+          text = title
+        )
+        Subtext(
+          "Artist",
+          modifier = Modifier
+            .padding(top = 4.dp)
+        )
+      }
     }
   }
-    Divider(
-      modifier = Modifier.padding(horizontal = 16.dp),
-      color = MaterialTheme.colorScheme.onSurface,
-      thickness = 0.5f.dp
-    )
-
 }
