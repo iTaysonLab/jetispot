@@ -68,12 +68,13 @@ fun YourLibraryContainerScreen(
           title = { Text("Your Library") },
           scrollBehavior = scrollBehavior,
           navigationIcon = {
-            Icon(
-              Icons.Rounded.AccountCircle,
-              null,
-              modifier = Modifier
-                .padding(top = 2.dp)
-            )
+            IconButton(onClick = { /*TODO*/ }) {
+              Icon(
+                Icons.Rounded.AccountCircle,
+                null,
+                modifier = Modifier.size(32.dp).padding(start = 0.dp, top = 0.dp)
+              )
+            }
           },
           actions = {
             IconButton(onClick = { /* TODO */ }) {
