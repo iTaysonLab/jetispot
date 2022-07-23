@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.End
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,12 +14,14 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -89,7 +92,7 @@ fun YourLibraryContainerScreen(
             .height(animatedHeight.value.dp)
             .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
         ) {
-          Row(horizontalArrangement = Arrangement.SpaceBetween) {
+          Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Box(Modifier.width(295.dp)){
               AnimatedChipRow(
                 listOf(
@@ -112,15 +115,23 @@ fun YourLibraryContainerScreen(
 
 
             Row(
-              Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp), horizontalArrangement = Arrangement.End){
+              Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 6.dp),
+              horizontalArrangement = End
+            ){
               IconToggleButton(
                 checked = Grid.value,
                 colors = IconButtonDefaults.iconToggleButtonColors (
-                  disabledContentColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-                  checkedContentColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                  disabledContentColor = LocalContentColor.current.copy(
+                    alpha = LocalContentAlpha.current
+                  ),
+                  checkedContentColor = LocalContentColor.current.copy(
+                    alpha = LocalContentAlpha.current
+                  )
                 ),
+                modifier = Modifier
+                  .clip(CircleShape)
+                  .background(MaterialTheme.colorScheme.surfaceVariant)
+                  .size(36.dp),
                 onCheckedChange = {
                   Grid.value = it
                   UseGrid = it
