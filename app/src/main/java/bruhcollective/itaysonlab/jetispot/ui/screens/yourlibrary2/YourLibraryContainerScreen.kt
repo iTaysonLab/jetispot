@@ -118,7 +118,7 @@ fun YourLibraryContainerScreen(
               Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .padding(top = ((6 * (1f - scrollBehavior.scrollFraction)).dp)),
+                .padding(top = ((8 * (1f - scrollBehavior.scrollFraction)).dp)),
               horizontalArrangement = End
             ){
               IconToggleButton(
