@@ -72,7 +72,7 @@ fun YourLibraryContainerScreen(
               Icon(
                 Icons.Rounded.AccountCircle,
                 null,
-                modifier = Modifier.size(32.dp).padding(start = 0.dp, top = 0.dp)
+                modifier = Modifier.size(32.dp).padding(top = 2.dp)
               )
             }
           },
