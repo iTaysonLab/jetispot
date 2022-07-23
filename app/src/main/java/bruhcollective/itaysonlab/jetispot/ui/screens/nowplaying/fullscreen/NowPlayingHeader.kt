@@ -43,7 +43,7 @@ fun NowPlayingHeader(
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
         textAlign = TextAlign.Center,
-        color = monet.onSurface.copy(alpha = 0.7f),
+        color = monet.onSecondaryContainer.copy(0.7f),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         letterSpacing = 2.sp,
@@ -55,7 +55,7 @@ fun NowPlayingHeader(
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
-        color = monet.onSurface,
+        color = monet.onSecondaryContainer.copy(0.85f),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         textAlign = TextAlign.Center,

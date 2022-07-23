@@ -15,11 +15,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
@@ -31,10 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun YourLibraryContainerScreen(
   navController: LambdaNavigationController,
@@ -49,43 +44,48 @@ fun YourLibraryContainerScreen(
     }
   }
 
-  Scaffold(topBar = {
-    Column {
-      SmallTopAppBar(title = {
-        Text("Your Library")
-      }, navigationIcon = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.AccountCircle, null)
-        }
-      }, actions = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.Search, null)
-        }
-      }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(
-          LocalDensity.current
-        ).toDp()
-      }))
-      AnimatedChipRow(
-        listOf(
-          ChipItem("playlists", stringResource(id = R.string.filter_playlist)),
-          ChipItem("artists", stringResource(id = R.string.filter_artist)),
-          ChipItem("albums", stringResource(id = R.string.filter_album)),
-          ChipItem("shows", stringResource(id = R.string.filter_show))
-        ),
-        viewModel.selectedTabId
-      ) {
-        viewModel.selectedTabId = it
-        scope.launch {
-          viewModel.load()
-          if (viewModel.selectedTabId == "") {
-            delay(25L)
-            state.animateScrollToItem(0)
+  Scaffold(
+    topBar = {
+      Column {
+        SmallTopAppBar(
+          title = { Text("Your Library") },
+          navigationIcon = {
+            IconButton(onClick = { /* TODO */ }) {
+              Icon(Icons.Rounded.AccountCircle, null)
+            }
+          },
+          actions = {
+            IconButton(onClick = { /* TODO */ }) {
+              Icon(Icons.Rounded.Search, null)
+            }
+          },
+          contentPadding = PaddingValues(
+            top = with(LocalDensity.current) {
+              WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+            }
+          )
+        )
+
+        AnimatedChipRow(
+          listOf(
+            ChipItem("playlists", "Playlists"),
+            ChipItem("artists", "Artists"),
+            ChipItem("albums", "Albums")
+          ),
+          viewModel.selectedTabId
+        ) {
+          viewModel.selectedTabId = it
+          scope.launch {
+            viewModel.load()
+            if (viewModel.selectedTabId == "") {
+              delay(25L)
+              state.animateScrollToItem(0)
+            }
           }
         }
       }
     }
-  }) { padding ->
+  ) { padding ->
     if (viewModel.content.isNotEmpty()) {
       LazyColumn(
         state = state,
@@ -97,11 +97,14 @@ fun YourLibraryContainerScreen(
           viewModel.content,
           key = { it.javaClass.simpleName + "_" + it.ceId() },
           contentType = { it.javaClass.simpleName }) { item ->
-          YlRenderer(item, modifier = Modifier
+          YlRenderer(
+            item,
+            modifier = Modifier
             .clickable { navController.navigate(item.ceUri()) }
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .animateItemPlacement())
+            .animateItemPlacement()
+          )
         }
       }
     } else {
@@ -130,14 +133,15 @@ fun AnimatedChipRow(
   ) {
     items(chips.let {
       if (selectedId != "") it.filter { i -> i.id == selectedId } else it
-    }, key = { it.id }) { item ->
-      FilterChip(selected = selectedId == item.id, onClick = {
-        onClick(if (selectedId == item.id) "" else item.id)
-      }, label = {
-        Text(item.name)
-      }, selectedIcon = {
-        Icon(Icons.Rounded.Check, null)
-      }, modifier = Modifier.animateItemPlacement())
+    },
+      key = { it.id }) { item ->
+      FilterChip(
+        selected = selectedId == item.id,
+        onClick = { onClick(if (selectedId == item.id) "" else item.id) },
+        label = { Text(item.name) },
+        selectedIcon = { Icon(Icons.Rounded.Check, null) },
+        modifier = Modifier.animateItemPlacement()
+      )
     }
   }
 }
@@ -154,21 +158,17 @@ class YourLibraryContainerViewModel @Inject constructor(
       "playlists" -> FetchType.Playlists
       "albums" -> FetchType.Albums
       "artists" -> FetchType.Artists
-      "shows" -> FetchType.Shows
       else -> FetchType.All
     }
 
     val albums = dao.getAlbums()
     val artists = dao.getArtists()
     val playlists = dao.getRootlist()
-    val shows = dao.getShows()
-
     val pins = dao.getPins().filter { p ->
       when (type) {
         FetchType.Playlists -> p.uri.contains("playlist")
         FetchType.Artists -> p.uri.contains("artist")
         FetchType.Albums -> p.uri.contains("album")
-        FetchType.Shows -> p.uri.contains("show")
         FetchType.All -> true
       }
     }
@@ -177,26 +177,29 @@ class YourLibraryContainerViewModel @Inject constructor(
       FetchType.Playlists -> playlists
       FetchType.Artists -> artists
       FetchType.Albums -> albums
-      FetchType.Shows -> shows
       FetchType.All -> {
-        (albums + artists + playlists + shows).sortedByDescending { it.ceTimestamp() }
+        (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }
       }
-    }.toMutableList().also {
-      it.addAll(0, pins)
-      it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
-        when (pF.ceUri()) {
-          "spotify:collection" -> pF.ceModifyPredef(PredefCeType.COLLECTION, dao.trackCount().toString())
-          "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+    }.toMutableList()
+      .also {
+        it.addAll(0, pins)
+        it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
+          when (pF.ceUri()) {
+            "spotify:collection" -> pF.ceModifyPredef(
+              PredefCeType.COLLECTION,
+              dao.trackCount().toString()
+            )
+            "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+          }
         }
       }
-    })
+    )
   }
 
   enum class FetchType {
     All,
     Playlists,
     Artists,
-    Albums,
-    Shows
+    Albums
   }
 }
