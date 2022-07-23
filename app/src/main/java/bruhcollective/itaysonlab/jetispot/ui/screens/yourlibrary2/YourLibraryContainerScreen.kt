@@ -14,7 +14,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
@@ -115,7 +115,10 @@ fun YourLibraryContainerScreen(
 
 
             Row(
-              Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 6.dp),
+              Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .padding(top = ((6 * (1f - scrollBehavior.scrollFraction)).dp)),
               horizontalArrangement = End
             ){
               IconToggleButton(
@@ -129,9 +132,9 @@ fun YourLibraryContainerScreen(
                   )
                 ),
                 modifier = Modifier
-                  .clip(CircleShape)
-                  .background(MaterialTheme.colorScheme.surfaceVariant)
-                  .size(36.dp),
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+                  .size(32.dp),
                 onCheckedChange = {
                   Grid.value = it
                   UseGrid = it
