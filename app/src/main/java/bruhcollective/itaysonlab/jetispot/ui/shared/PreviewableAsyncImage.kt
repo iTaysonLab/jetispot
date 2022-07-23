@@ -92,7 +92,7 @@ fun ImagePreview (
   modifier: Modifier
 ) {
   Surface(
-    tonalElevation = if (colorful) 0.dp else 8.dp,
+    tonalElevation = 0.dp,
     color = if (colorful) monet.tertiaryContainer else monet.surface,
     modifier = modifier
   ) {
