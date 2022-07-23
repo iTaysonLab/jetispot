@@ -56,8 +56,8 @@ fun YLRPinned(
 ) {
   Box(
     Modifier
-      .height(96.dp)
-      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .height(86.dp)
+      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
@@ -226,8 +226,8 @@ fun YLRGenericAlbumItem(
 ) {
   Box(
     Modifier
-      .height(96.dp)
-      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .height(86.dp)
+      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
@@ -295,8 +295,8 @@ fun YLRGenericArtistItem(
 ) {
   Box(
     Modifier
-      .height(96.dp)
-      .padding(horizontal = 12.dp, vertical = 6.dp)
+      .height(88.dp)
+      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {

@@ -184,6 +184,7 @@ fun YourLibraryContainerScreen(
       } else {
         LazyColumn(
           state = columnState,
+          verticalArrangement = Arrangement.spacedBy(12.dp),
           modifier = Modifier
             .padding(padding)
             .padding(horizontal = 4.dp)
