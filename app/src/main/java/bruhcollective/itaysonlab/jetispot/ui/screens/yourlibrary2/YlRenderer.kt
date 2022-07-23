@@ -17,16 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import coil.compose.AsyncImage
 
 @Composable
@@ -43,6 +48,7 @@ fun YlRenderer(
   }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun YLRPinned(
   item: CollectionPinnedItem,
@@ -96,8 +102,12 @@ fun YLRPinned(
       ) {
         when (item.predefType) {
           PredefCeType.COLLECTION -> {
-            MediumText(
-              text = stringResource(id = R.string.liked_songs)
+            Text(
+              text = stringResource(id = R.string.liked_songs),
+              fontSize = 16.sp,
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis,
+              style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
           }
           PredefCeType.EPISODES -> {
@@ -111,8 +121,12 @@ fun YLRPinned(
               horizontalArrangement = Arrangement.SpaceBetween,
               verticalAlignment = Alignment.CenterVertically
             ) {
-              MediumText(
-                text = item.name
+              Text(
+                text = item.name,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
               )
 
 //              Subtext(
@@ -130,8 +144,10 @@ fun YLRPinned(
             contentDescription = null,
             modifier = Modifier
               .size(16.dp)
+              .rotate(45f)
               .align(Alignment.CenterVertically)
           )
+
           Text(
             text = when (item.predefType) {
               PredefCeType.COLLECTION -> stringResource(
@@ -144,12 +160,13 @@ fun YLRPinned(
               )
               null -> item.subtitle
             },
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-              .padding(start = 6.dp)
-              .align(Alignment.CenterVertically)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            modifier = Modifier.padding(start = 4.dp)
           )
         }
       }
@@ -198,6 +215,7 @@ fun YLRArtist(
   )
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun YLRGenericAlbumItem(
   picUrl: String,
@@ -234,22 +252,29 @@ fun YLRGenericAlbumItem(
           horizontalArrangement = Arrangement.SpaceBetween,
           verticalAlignment = Alignment.CenterVertically
         ) {
-          MediumText(
-            text = title
+          Text(
+            text = title,
+            fontSize = 16.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
           )
           Spacer(modifier = Modifier.width(2.dp))
-          Subtext(
-            text = "Time",
-            maxLines = 1
-          )
+//          Subtext(
+//            text = "Time",
+//            maxLines = 1
+//          )
         }
 
         if (!subtitle.isNullOrEmpty()) {
           Text(
             text = subtitle,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             modifier = Modifier.padding(top = 4.dp)
           )
         }
@@ -260,6 +285,7 @@ fun YLRGenericAlbumItem(
 
 
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun YLRGenericArtistItem(
   picUrl: String,
@@ -289,13 +315,23 @@ fun YLRGenericArtistItem(
           .padding(start = 16.dp)
           .align(Alignment.Top)
       ) {
-        MediumText(
-          text = title
+        Text(
+          text = title,
+          fontSize = 16.sp,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
-        Subtext(
+
+        Text(
           stringResource(R.string.artist),
-          modifier = Modifier
-            .padding(top = 4.dp)
+          fontSize = 14.sp,
+          fontWeight = FontWeight.Medium,
+          maxLines = 1,
+          style = TextStyle(platformStyle = PlatformTextStyle(false)),
+          overflow = TextOverflow.Ellipsis,
+          color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+          modifier = Modifier.padding(top = 4.dp)
         )
       }
     }
