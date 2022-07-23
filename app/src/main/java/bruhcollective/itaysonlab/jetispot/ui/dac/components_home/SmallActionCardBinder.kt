@@ -4,11 +4,9 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +39,7 @@ fun SmallActionCardBinder(
 //  val viewModel: NowPlayingViewModel = hiltViewModel()
 
   Card(
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     modifier = Modifier
       .padding(horizontal = 16.dp)
       .height(128.dp)
@@ -69,7 +68,7 @@ fun SmallActionCardBinder(
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
             maxLines = 2,
             style = TextStyle(platformStyle = PlatformTextStyle(false))
           )
@@ -77,7 +76,7 @@ fun SmallActionCardBinder(
             text = subtitle,
             fontSize = 12.sp,
             overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.7f),
+            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(0.7f),
             maxLines = 2,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             modifier = Modifier.padding(top = 4.dp)
@@ -87,11 +86,12 @@ fun SmallActionCardBinder(
         Row(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 4.dp, top = 4.dp),
-          horizontalArrangement = Arrangement.SpaceBetween
+            .padding(start = 16.dp, top = 4.dp),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.Bottom
         ) {
-          DynamicLikeButton(objectUrl = likeUri)
-          DynamicPlayButton(command = playCommand)
+          DynamicLikeButton(objectUrl = likeUri, modifier = Modifier.size(24.dp))
+          DynamicPlayButton(command = playCommand, modifier = Modifier.size(24.dp))
         }
       }
     }
