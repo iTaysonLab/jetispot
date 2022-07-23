@@ -50,7 +50,11 @@ fun HubScreen(
     viewModel.load(onAppBarTitleChange, loader)
   }
 
-  Column(Modifier.nestedScroll(scrollBehavior.nestedScrollConnection).fillMaxSize()) {
+  Column(
+    Modifier
+      .nestedScroll(scrollBehavior.nestedScrollConnection)
+      .fillMaxSize()
+  ) {
     when (viewModel.state) {
       is HubScreenViewModel.State.Loaded -> {
         LazyColumn() {
@@ -93,9 +97,7 @@ fun HubScreen(
             if (header != null) {
               item(
                 key = header.id,
-                span = {
-                  GridItemSpan(2)
-                },
+                span = { GridItemSpan(2) },
                 contentType = header.component.javaClass.simpleName,
               ) {
                 HubBinder(navController, viewModel, header, scrollBehavior = scrollBehavior)
@@ -104,17 +106,19 @@ fun HubScreen(
 
             body.forEach { item ->
               if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
-                items(item.children, key = { dItem -> dItem.id }, contentType = {
-                  item.component.javaClass.simpleName
-                }) { cItem ->
+                items(
+                  item.children,
+                  key = { dItem -> dItem.id },
+                  contentType = { item.component.javaClass.simpleName }
+                ) { cItem ->
                   HubBinder(navController, viewModel, cItem)
                 }
               } else {
-                item(span = {
-                  GridItemSpan(if (item.component.isGrid()) 1 else 2)
-                }, key = item.id, contentType = {
-                  item.component.javaClass.simpleName
-                }) {
+                item(
+                  span = { GridItemSpan(if (item.component.isGrid()) 1 else 2) },
+                  key = item.id,
+                  contentType = { item.component.javaClass.simpleName }
+                ) {
                   // also artist content
                   HubBinder(
                     navController,
