@@ -28,6 +28,7 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,6 +56,7 @@ fun HubScreen(
       .nestedScroll(scrollBehavior.nestedScrollConnection)
       .fillMaxSize()
   ) {
+    LargeTopAppBar({}, Modifier.height(0.dp), scrollBehavior = scrollBehavior, maxHeight = 64.01.dp)
     when (viewModel.state) {
       is HubScreenViewModel.State.Loaded -> {
         LazyColumn() {

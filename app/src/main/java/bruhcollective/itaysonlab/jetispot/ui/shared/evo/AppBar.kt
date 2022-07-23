@@ -236,6 +236,7 @@ fun LargeTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    maxHeight: Dp = 152.dp
 ) {
     TwoRowsTopAppBar(
         title = title,
@@ -247,7 +248,7 @@ fun LargeTopAppBar(
         navigationIcon = navigationIcon,
         actions = actions,
         colors = colors,
-        maxHeight = 152.dp,
+        maxHeight = maxHeight,
         pinnedHeight = 64.dp,
         scrollBehavior = scrollBehavior,
         contentPadding = contentPadding,
