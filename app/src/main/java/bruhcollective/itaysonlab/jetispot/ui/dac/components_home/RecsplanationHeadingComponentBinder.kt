@@ -29,7 +29,7 @@ fun RecsplanationHeadingComponentBinder(
     shape = RoundedCornerShape(32.dp),
     modifier = Modifier.padding(start = 12.dp, top = 40.dp, bottom = 16.dp),
     colors = CardDefaults.cardColors(
-      containerColor = MaterialTheme.colorScheme.tertiaryContainer
+      containerColor = MaterialTheme.colorScheme.secondaryContainer
     )
   ) {
     Row(
