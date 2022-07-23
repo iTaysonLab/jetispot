@@ -146,6 +146,7 @@ fun YourLibraryContainerScreen(
           state = gridState,
           modifier = Modifier
             .padding(padding)
+            .padding(horizontal = 4.dp)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
           verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -159,9 +160,9 @@ fun YourLibraryContainerScreen(
             YLCardRender(
               item,
               modifier = Modifier
-                .width(172.dp)
+                .width(164.dp)
                 .clickable { navController.navigate(item.ceUri()) }
-                .padding(bottom = 12.dp)
+                .animateItemPlacement()
             )
           }
         }
@@ -170,6 +171,7 @@ fun YourLibraryContainerScreen(
           state = columnState,
           modifier = Modifier
             .padding(padding)
+            .padding(horizontal = 4.dp)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
         ) {
@@ -183,7 +185,6 @@ fun YourLibraryContainerScreen(
                 .clickable { navController.navigate(item.ceUri()) }
                 .fillMaxWidth()
                 .animateItemPlacement()
-                .padding(10.dp)
             )
           }
         }

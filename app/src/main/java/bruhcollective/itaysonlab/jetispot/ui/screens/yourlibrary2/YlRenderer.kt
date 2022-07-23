@@ -50,12 +50,12 @@ fun YLRPinned(
 ) {
   Box(
     Modifier
+      .height(96.dp)
       .padding(horizontal = 12.dp, vertical = 6.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
-
-    Row(modifier) {
+    Row(modifier.padding(14.dp)) {
       val isPredef = item.predefType != null
 
       if (isPredef) {
@@ -63,8 +63,9 @@ fun YLRPinned(
           if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
           true,
           modifier = Modifier
-            .size(72.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .size(58.dp)
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(14.dp))
         )
       } else {
         if (item.picture.isEmpty()) {
@@ -72,16 +73,18 @@ fun YLRPinned(
             Icons.Rounded.Photo,
             false,
             modifier = Modifier
-              .size(72.dp)
-              .clip(RoundedCornerShape(16.dp))
+              .size(58.dp)
+              .aspectRatio(1f)
+              .clip(RoundedCornerShape(14.dp))
           )
         } else {
           AsyncImage(
             model = "https://i.scdn.co/image/${item.picture}",
             contentDescription = null,
             modifier = Modifier
-              .size(72.dp)
-              .clip(RoundedCornerShape(16.dp))
+              .size(58.dp)
+              .aspectRatio(1f)
+              .clip(RoundedCornerShape(14.dp))
           )
         }
       }
@@ -104,22 +107,22 @@ fun YLRPinned(
           }
           null -> {
             Row(
-              modifier = Modifier
-                .fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween,
               verticalAlignment = Alignment.CenterVertically
             ) {
               MediumText(
                 text = item.name
               )
-              Spacer(modifier = Modifier.width(2.dp))
-              Subtext(
-                text = "Time",
-                maxLines = 1
-              )
+
+//              Subtext(
+//                text = "Time",
+//                maxLines = 1
+//              )
             }
           }
         }
+
         Row(Modifier.padding(top = 4.dp)) {
           Icon(
             Icons.Rounded.PushPin,
@@ -205,17 +208,19 @@ fun YLRGenericAlbumItem(
 ) {
   Box(
     Modifier
+      .height(96.dp)
       .padding(horizontal = 12.dp, vertical = 6.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
-    Row(modifier) {
+    Row(modifier.padding(14.dp)) {
       PreviewableAsyncImage(
         imageUrl = picUrl,
         placeholderType = picPlaceholder,
         modifier = Modifier
-          .size(72.dp)
-          .clip(RoundedCornerShape(16.dp))
+          .size(58.dp)
+          .aspectRatio(1f)
+          .clip(RoundedCornerShape(14.dp))
       )
 
       Column(
@@ -264,16 +269,18 @@ fun YLRGenericArtistItem(
 ) {
   Box(
     Modifier
+      .height(96.dp)
       .padding(horizontal = 12.dp, vertical = 6.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
-    Row(modifier) {
+    Row(modifier.padding(14.dp)) {
       PreviewableAsyncImage(
         imageUrl = picUrl,
         placeholderType = picPlaceholder,
         modifier = Modifier
-          .size(72.dp)
+          .size(58.dp)
+          .aspectRatio(1f)
           .clip(CircleShape)
       )
 
