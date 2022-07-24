@@ -239,7 +239,6 @@ private fun TopAppBarLayout(
         Modifier
           .layoutId("description")
           .padding(end = TopAppBarHorizontalPadding, start = 4.dp, top = 12.dp)
-          .fillMaxWidth(0.53f)
           .alpha(scrollPercentage)
       ) {
         CompositionLocalProvider(
@@ -285,27 +284,29 @@ private fun TopAppBarLayout(
     val navigationIconPlaceable =
       measurables.first { it.layoutId == "navigationIcon" }
         .measure(constraints.copy(minWidth = 0))
+
     val actionIconsPlaceable =
       measurables.first { it.layoutId == "actionIcons" }
         .measure(constraints.copy(minWidth = 0))
 
+    val artworkPlaceable =
+      measurables.first { it.layoutId == "artwork" }
+        .measure(constraints.copy(minWidth = 0, maxWidth = constraints.maxWidth))
+
     val maxTitleWidth = if (constraints.maxWidth == Constraints.Infinity) {
       constraints.maxWidth
     } else {
-      (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width)
+      (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width - artworkPlaceable.width - 16)
         .coerceAtLeast(0)
     }
+
     val titlePlaceable =
       measurables.first { it.layoutId == "title" }
         .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
-    val artworkPlaceable =
-      measurables.first { it.layoutId == "artwork" }
-        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
-
     val descriptionPlaceable =
       measurables.first { it.layoutId == "description" }
-        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
+        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth - 48))
 
     // Locate the title's baseline.
     val titleBaseline =
@@ -367,7 +368,7 @@ private fun TopAppBarLayout(
 
       artworkPlaceable.placeRelative(
         x = if (artworkSmall)
-          (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) + 48
+          (constraints.maxWidth - actionIconsPlaceable.width - artworkPlaceable.width)
         else
           (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) - 42,
         y = when (artworkVerticalArrangement) {
