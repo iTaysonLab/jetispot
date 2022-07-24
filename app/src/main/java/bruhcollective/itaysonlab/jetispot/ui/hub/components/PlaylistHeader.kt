@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -55,7 +55,6 @@ fun PlaylistHeader(
     title = {
       Text(
         text = item.text?.title!!,
-        Modifier.fillMaxWidth(0.53f),
         overflow = TextOverflow.Ellipsis,
         maxLines = 3
       )
@@ -63,7 +62,6 @@ fun PlaylistHeader(
     smallTitle = {
       Text(
         text = item.text?.title!!,
-        modifier = Modifier.fillMaxWidth(0.8f),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1
       )
@@ -101,6 +99,12 @@ fun PlaylistHeader(
                 .padding(start = 12.dp)
             )
           }
+//          Text(
+//            text = "${item.custom?.get("likes_count") as Long} likes • ${item.custom["total_duration"] as String}",
+//            fontSize = 12.sp,
+//            maxLines = 1
+//          )
+
           Text(
             text = it,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
@@ -110,10 +114,10 @@ fun PlaylistHeader(
             modifier = Modifier.padding(top = if (it != "") 8.dp else 0.dp)
           )
         }
-
       }
     },
     actions = {
+      Icon(Icons.Rounded.Favorite, contentDescription = null)
       IconButton(onClick = { /*TODO*/ }) {
         Icon(
           imageVector = Icons.Default.MoreVert,
@@ -191,6 +195,16 @@ fun LargePlaylistHeader(
         Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
       }
     },
+    actions = {
+      Icon(Icons.Rounded.Favorite, contentDescription = null)
+      IconButton(onClick = { /*TODO*/ }) {
+        Icon(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+          tint = MaterialTheme.colorScheme.onBackground
+        )
+      }
+    },
     contentPadding = PaddingValues(
       top = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
@@ -225,15 +239,8 @@ fun PlaylistHeaderAdditionalInfo(
       .fillMaxWidth()
       .padding(horizontal = 16.dp)
   ) {
-    Icon(Icons.Rounded.Language, contentDescription = null, modifier = Modifier.size(26.dp))
-    Text(
-      text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}",
-      fontSize = 12.sp,
-      maxLines = 1,
-      modifier = Modifier
-        .align(Alignment.CenterVertically)
-        .padding(start = 8.dp)
-    )
+
+
   }
 
   Spacer(modifier = Modifier.height(6.dp))

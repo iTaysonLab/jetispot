@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -66,6 +67,7 @@ fun AlbumHeader(
         }
       },
       actions = {
+        Icon(Icons.Rounded.Favorite, contentDescription = null)
         IconButton(onClick = { /*TODO*/ }) {
           Icon(
             imageVector = Icons.Default.MoreVert,
@@ -89,7 +91,6 @@ fun AlbumHeader(
       title = {
         Text(
           item.text!!.title!!,
-          Modifier.fillMaxWidth(0.53f),
           overflow = TextOverflow.Ellipsis,
           maxLines = 3
         )
@@ -97,7 +98,6 @@ fun AlbumHeader(
       smallTitle = {
         Text(
           item.text!!.title!!,
-          Modifier.fillMaxWidth(0.8f),
           overflow = TextOverflow.Ellipsis,
           maxLines = 1
         )
