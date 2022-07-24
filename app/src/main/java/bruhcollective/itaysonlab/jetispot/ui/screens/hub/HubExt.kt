@@ -103,27 +103,27 @@ fun HubScaffold(
             }
           }
 
-          // playlist FAB
-          Box(
-            modifier = Modifier
-              .align(Alignment.BottomEnd)
-              .padding(bottom = fabPadding, end = fabPadding)
-          ) {
-            state.data.apply {
-              state.data.header?.let {
-                HubBinder(
-                  navController,
-                  viewModel,
-                  it.children?.get(0) ?: it,
-                  scrollBehavior = topBarState,
-                  showFAB = true,
-                  everythingElse = false
-                )
-              }
-            }
-          }
-
           // TODO liked songs FAB
+//          Box(
+//            modifier = Modifier
+//              .align(Alignment.BottomEnd)
+//              .padding(bottom = fabPadding, end = fabPadding)
+//          ) {
+//            state.data.apply {
+//              state.data.header?.let {
+//                HubBinder(
+//                  navController,
+//                  viewModel,
+//                  it.children?.get(0) ?: it,
+//                  scrollBehavior = topBarState,
+//                  showFAB = true,
+//                  everythingElse = false
+//                )
+//              }
+//            }
+//          }
+
+          // playlist FAB
           Box(
             modifier = Modifier
               .align(Alignment.BottomEnd)
