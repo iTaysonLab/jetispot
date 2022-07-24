@@ -83,8 +83,7 @@ fun AlbumHeader(
       artwork = {
         PreviewableAsyncImage(
           item.images?.main?.uri, item.images?.main?.placeholder,
-          modifier = Modifier
-            .fillMaxSize()
+          modifier = Modifier.fillMaxSize()
         )
       },
       title = {

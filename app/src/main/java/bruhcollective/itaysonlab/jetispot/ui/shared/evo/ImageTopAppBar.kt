@@ -138,8 +138,16 @@ private fun TwoRowsTopAppBar(
         titleContentColor = colors.titleContentColor(scrollFraction).value,
         actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
         title = smallTitle,
-        artwork = artwork,
-        artworkSize = 48.dp,
+        artwork = {
+          Column(Modifier.size(pinnedHeight), Arrangement.Center) {
+            Box(modifier = Modifier
+              .size(48.dp)
+              .clip(RoundedCornerShape(4.dp))) {
+              CompositionLocalProvider(content = artwork)
+            }
+          }
+        },
+        artworkSize = pinnedHeight,
         description = {},
         titleTextStyle = smallTitleTextStyle,
         scrollPercentage = 1f - titleAlpha,
@@ -159,8 +167,23 @@ private fun TwoRowsTopAppBar(
         titleContentColor = colors.titleContentColor(scrollFraction).value,
         actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
         title = title,
-        artwork = artwork,
-        artworkSize = 164.dp,
+        artwork = {
+          Column(
+            Modifier
+              .size(8.dp + maxHeight - pinnedHeight - WindowInsets.statusBars.asPaddingValues(LocalDensity.current).calculateTopPadding()),
+          ) {
+            Box(
+              modifier = Modifier
+                .fillMaxSize()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(8.dp))
+            ) {
+              CompositionLocalProvider(content = artwork)
+            }
+          }
+        },
+        artworkSize =
+        maxHeight - pinnedHeight - WindowInsets.statusBars.asPaddingValues(LocalDensity.current).calculateTopPadding(),
         description = description,
         titleTextStyle = titleTextStyle,
         scrollPercentage = titleAlpha,
@@ -249,9 +272,7 @@ private fun TopAppBarLayout(
       Box(
         Modifier
           .layoutId("artwork")
-          .size(artworkSize)
           .alpha(scrollPercentage)
-          .clip(RoundedCornerShape(if (artworkSmall) 4.dp else 8.dp))
       ) {
         CompositionLocalProvider(
           LocalContentColor provides actionIconContentColor,
@@ -346,17 +367,17 @@ private fun TopAppBarLayout(
 
       artworkPlaceable.placeRelative(
         x = if (artworkSmall)
-          (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) - 4
+          (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) + 48
         else
           (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) - 42,
         y = when (artworkVerticalArrangement) {
-          Arrangement.Center -> 28
+          Arrangement.Center -> 0
           // Apply bottom padding from the title's baseline only when the Arrangement is
           // "Bottom".
           Arrangement.Bottom ->
             if (titleBottomPadding == 0) layoutHeight - artworkPlaceable.height
             else layoutHeight - artworkPlaceable.height - max(
-              97,
+              titleBottomPadding - 2,
               titleBottomPadding - artworkPlaceable.height + artworkBaseline
             )
           // Arrangement.Top

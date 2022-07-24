@@ -72,8 +72,7 @@ fun PlaylistHeader(
       PreviewableAsyncImage(
         item.images?.main?.uri,
         "playlist",
-        modifier = Modifier
-          .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
       )
     },
     description = {
@@ -135,31 +134,6 @@ fun PlaylistHeader(
       }
     )
   )
-//  Column(
-//    Modifier
-//      .fillMaxWidth()
-//      .padding(top = 16.dp)
-//      .statusBarsPadding()
-//  ) {
-
-//
-//    MediumText(
-//      text = item.text?.title!!, fontSize = 21.sp, modifier = Modifier
-//        .padding(horizontal = 16.dp)
-//        .padding(top = 8.dp)
-//    )
-//
-//    if (!item.text.subtitle.isNullOrEmpty()) {
-//      Text(
-//        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-//        fontSize = 12.sp,
-//        lineHeight = 18.sp,
-//        text = item.text.subtitle, modifier = Modifier
-//          .padding(horizontal = 16.dp)
-//          .padding(top = 8.dp)
-//      )
-//    }
-//
 //    PlaylistHeaderAdditionalInfo(navController, delegate, item.custom)
 //    EntityActionStrip(navController, delegate, item)
 //  }
