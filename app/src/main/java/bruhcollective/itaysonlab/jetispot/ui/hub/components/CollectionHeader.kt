@@ -459,7 +459,7 @@ private fun TopAppBarLayout(
           Arrangement.Bottom ->
             if (titleBottomPadding == 0) layoutHeight - titlePlaceable.height
             else layoutHeight - titlePlaceable.height - max(
-              164,
+              titlePlaceable.height,
               titleBottomPadding - titlePlaceable.height + titleBaseline
             )
           // Arrangement.Top
