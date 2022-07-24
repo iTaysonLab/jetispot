@@ -296,7 +296,7 @@ private fun TopAppBarLayout(
     val maxTitleWidth = if (constraints.maxWidth == Constraints.Infinity) {
       constraints.maxWidth
     } else {
-      (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width - artworkPlaceable.width - 16)
+      (constraints.maxWidth - navigationIconPlaceable.width - actionIconsPlaceable.width - artworkPlaceable.width - 32)
         .coerceAtLeast(0)
     }
 
@@ -306,7 +306,7 @@ private fun TopAppBarLayout(
 
     val descriptionPlaceable =
       measurables.first { it.layoutId == "description" }
-        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth - 48))
+        .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth - 32))
 
     // Locate the title's baseline.
     val titleBaseline =
@@ -370,7 +370,7 @@ private fun TopAppBarLayout(
         x = if (artworkSmall)
           (constraints.maxWidth - actionIconsPlaceable.width - artworkPlaceable.width)
         else
-          (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) - 42,
+          (constraints.maxWidth - artworkPlaceable.width - actionIconsPlaceable.width) - 24,
         y = when (artworkVerticalArrangement) {
           Arrangement.Center -> 0
           // Apply bottom padding from the title's baseline only when the Arrangement is
