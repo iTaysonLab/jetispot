@@ -49,7 +49,6 @@ fun BrowseScreen(
     Box(Modifier.padding(padding)) {
       HubScreen(
         navController,
-        needContentPadding = false,
         loader = { getBrowseView(id) },
         onAppBarTitleChange = { appBarTitle = it }
       )
