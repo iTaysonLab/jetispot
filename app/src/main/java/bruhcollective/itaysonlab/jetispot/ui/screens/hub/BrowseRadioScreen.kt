@@ -34,7 +34,7 @@ fun BrowseRadioScreen(
     Box(Modifier.padding(padding)) {
       HubScreen(
         navController,
-        needContentPadding = false,
+        needContentPadding = true,
         loader = { getRadioHub() },
         onAppBarTitleChange = { appBarTitle = it }
       )

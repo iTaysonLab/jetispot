@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,19 +30,18 @@ fun GridMediumCard(
   item: HubItem
 ) {
   Surface(
-    color = MaterialTheme.colorScheme.surfaceVariant,
-    shape = RoundedCornerShape(20.dp),
+    color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
+    shape = RoundedCornerShape(24.dp),
     modifier = Modifier
       .height(264.dp)
       .width(164.dp)
-      .padding(6.dp)
   ) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.width(172.dp).clickableHub(navController, delegate, item).padding(14.dp)
+      modifier = Modifier.clickableHub(navController, delegate, item).padding(14.dp)
     ) {
       var drawnTitle = false
-      Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
+      Surface(color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)) {
         PreviewableAsyncImage(
           imageUrl = item.images?.main?.uri,
           placeholderType = item.images?.main?.placeholder,
@@ -57,7 +57,7 @@ fun GridMediumCard(
         androidx.compose.material3.Text(
           text = item.text!!.title!!,
           fontSize = 16.sp,
-          maxLines = 1,
+          maxLines = 2,
           overflow = TextOverflow.Ellipsis,
           style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
@@ -67,24 +67,22 @@ fun GridMediumCard(
             item.text!!.subtitle!!,
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             modifier = Modifier.fillMaxWidth()
-              .padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 12.dp)
+              .padding(top = if (drawnTitle) 4.dp else 0.dp)
           )
         } else if (!item.text?.description.isNullOrEmpty()) {
           androidx.compose.material.Text(
             item.text!!.description!!,
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
-            maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             modifier = Modifier.fillMaxWidth()
-              .padding(top = if (drawnTitle) 4.dp else 8.dp, bottom = 12.dp)
+              .padding(top = if (drawnTitle) 4.dp else 0.dp)
           )
         }
       }
