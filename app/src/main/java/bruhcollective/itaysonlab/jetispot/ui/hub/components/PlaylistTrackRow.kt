@@ -72,7 +72,7 @@ fun PlaylistTrackRow(
     ) {
       Icon(
         imageVector = Icons.Default.MoreVert,
-        contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+        contentDescription = "Options for ${item.text?.title} by ${item.text?.subtitle}",
         tint = MaterialTheme.colorScheme.onBackground
       )
     }
