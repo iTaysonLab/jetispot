@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.jetispot.core.di
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import androidx.core.content.getSystemService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +19,6 @@ object ApplicationModule {
 
     @Provides
     fun providePackageManager(@ApplicationContext context: Context): PackageManager {
-        return context.getSystemService()!!
+        return context.packageManager
     }
 }

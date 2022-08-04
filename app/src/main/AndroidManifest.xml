@@ -7,6 +7,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <queries>
+        <package android:name="com.google.android.projection.gearhead" />
+        <package android:name="com.google.android.wearable.app" />
+        <package android:name="com.google.android.autosimulator" />
+        <package android:name="com.google.android.googlequicksearchbox" />
+        <package android:name="com.google.android.carassistant" />
+    </queries>
+
     <application
         android:manageSpaceActivity=".ManageStorageActivity"
         android:networkSecurityConfig="@xml/nsc"

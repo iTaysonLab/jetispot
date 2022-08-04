@@ -2,11 +2,13 @@ package bruhcollective.itaysonlab.jetispot.playback.service.library
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import androidx.annotation.RequiresApi
+import androidx.media.MediaBrowserServiceCompat
 import androidx.media2.session.MediaSession
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import java.security.MessageDigest
@@ -18,11 +20,30 @@ class SessionControllerVerifier @Inject constructor(
     // public api
 
     fun verifyController(info: MediaSession.ControllerInfo): Boolean {
+        Log.d("SessionControllerVerifier", ">> checking $info")
+
+        if (info.uid == Process.myUid() || info.uid == Process.SYSTEM_UID) {
+            return true
+        }
+
+        if (info.packageName == Intent.ACTION_MEDIA_BUTTON) {
+            // not yet
+            return false
+        } else if (info.packageName == MediaBrowserServiceCompat.SERVICE_INTERFACE) {
+            // not yet 2
+            return false
+        }
+
         checkedCache[info.packageName]?.let { entry ->
             if (entry.uid == info.uid) return entry.verified
         }
 
-        val pkgInfo = packageSignature(info.packageName)
+        val pkgInfo = try {
+            packageSignature(info.packageName)
+        } catch (e: PackageManager.NameNotFoundException) {
+            checkedCache[info.packageName] = AlreadyCheckedEntry(info.uid to false)
+            return false
+        }
 
         if (pkgInfo.sha256Signature == null) {
             checkedCache[info.packageName] = AlreadyCheckedEntry(info.uid to false)
@@ -30,8 +51,6 @@ class SessionControllerVerifier @Inject constructor(
         }
 
         val isCallerKnown = when {
-            info.uid == Process.myUid() -> true
-            info.uid == Process.SYSTEM_UID -> true
             pkgInfo.sha256Signature == platformSignature -> true
             pkgInfo.activePermissions.contains(Manifest.permission.MEDIA_CONTENT_CONTROL) -> true
             pkgInfo.activePermissions.contains(Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE) -> true
@@ -39,9 +58,9 @@ class SessionControllerVerifier @Inject constructor(
         }
 
         if (!isCallerKnown) {
-            Log.w("SessionControllerVerifier", "Controller $info is not allowed")
+            Log.w("SessionControllerVerifier", "> $info not allowed")
         } else {
-            Log.d("SessionControllerVerifier", "Controller $info is allowed")
+            Log.d("SessionControllerVerifier", "> $info allowed")
         }
 
         checkedCache[info.packageName] = AlreadyCheckedEntry(info.uid to isCallerKnown)
@@ -130,7 +149,7 @@ class SessionControllerVerifier @Inject constructor(
     private fun pmNewSignaturesSupported() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
     @SuppressLint("PackageManagerGetSignatures")
-    private fun pmFlags() = if (pmNewSignaturesSupported()) PackageManager.GET_SIGNING_CERTIFICATES else PackageManager.GET_SIGNING_CERTIFICATES
+    private fun pmFlags() = if (pmNewSignaturesSupported()) PackageManager.GET_SIGNING_CERTIFICATES else PackageManager.GET_SIGNATURES
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun PackageInfo.sha256SignaturesModern() = this.signingInfo.signingCertificateHistory?.firstOrNull()?.toByteArray()
