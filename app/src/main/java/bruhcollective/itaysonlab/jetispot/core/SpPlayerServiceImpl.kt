@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.ComponentName
 import android.content.Context
+import android.text.format.DateUtils
 import androidx.core.content.ContextCompat
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
@@ -86,6 +87,8 @@ class SpPlayerServiceImpl(
   override fun onCurrentMediaItemChanged(controller: MediaController, item: MediaItem?) {
     manager.currentTrack.value = MediaItemWrapper(item)
     manager.currentQueuePosition.value = controller.currentMediaItemIndex
+    manager.currentTrackDurationFmt.value =
+      DateUtils.formatElapsedTime(manager.currentTrack.value.duration / 1000L)
     manager.runExtra { it.onTrackIndexChanged(manager.currentQueuePosition.value) }
   }
 

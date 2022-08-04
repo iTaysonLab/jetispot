@@ -1,47 +1,58 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.End
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
-import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.UseGrid
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(
-  ExperimentalMaterial3Api::class,
-  ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun YourLibraryContainerScreen(
+  navController: LambdaNavigationController,
   viewModel: YourLibraryContainerViewModel = hiltViewModel()
 ) {
-  val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
-  val state = rememberLazyListState()
+  val columnState = rememberLazyListState()
+  val gridState = rememberLazyGridState()
+  val scrollBehavior = rememberEUCScrollBehavior()
+  val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction))
+  val Grid = remember { mutableStateOf(false) }
+  Grid.value = UseGrid!!
 
   LaunchedEffect(Unit) {
     launch {
@@ -49,61 +60,151 @@ fun YourLibraryContainerScreen(
     }
   }
 
-  Scaffold(topBar = {
-    Column {
-      SmallTopAppBar(title = {
-        Text("Your Library")
-      }, navigationIcon = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.AccountCircle, null)
-        }
-      }, actions = {
-        IconButton(onClick = { /* TODO */ }) {
-          Icon(Icons.Rounded.Search, null)
-        }
-      }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(
-          LocalDensity.current
-        ).toDp()
-      }))
-      AnimatedChipRow(
-        listOf(
-          ChipItem("playlists", stringResource(id = R.string.filter_playlist)),
-          ChipItem("artists", stringResource(id = R.string.filter_artist)),
-          ChipItem("albums", stringResource(id = R.string.filter_album)),
-          ChipItem("shows", stringResource(id = R.string.filter_show))
-        ),
-        viewModel.selectedTabId
-      ) {
-        viewModel.selectedTabId = it
-        scope.launch {
-          viewModel.load()
-          if (viewModel.selectedTabId == "") {
-            delay(25L)
-            state.animateScrollToItem(0)
+  Scaffold(
+    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    topBar = {
+      Column {
+        LargeTopAppBar(
+          title = { Text("Your Library") },
+          scrollBehavior = scrollBehavior,
+          navigationIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+              Icon(
+                Icons.Rounded.AccountCircle,
+                null,
+                modifier = Modifier.size(32.dp).padding(top = 2.dp)
+              )
+            }
+          },
+          actions = {
+            IconButton(onClick = { /* TODO */ }) {
+              Icon(Icons.Rounded.Search, null)
+            }
+          },
+          contentPadding = PaddingValues(
+            top = with(LocalDensity.current) {
+              WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+            }
+          )
+        )
+
+        Box(
+          Modifier
+            .height(animatedHeight.value.dp)
+            .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
+        ) {
+          Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Box(Modifier.width(295.dp)){
+              AnimatedChipRow(
+                listOf(
+                  ChipItem("playlists", "Playlists"),
+                  ChipItem("artists", "Artists"),
+                  ChipItem("albums", "Albums")
+                ),
+                viewModel.selectedTabId
+              ) {
+                viewModel.selectedTabId = it
+                scope.launch {
+                  viewModel.load()
+                  if (viewModel.selectedTabId == "") {
+                    delay(25L)
+                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
+                  }
+                }
+              }
+            }
+
+
+            Row(
+              Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .padding(top = ((8 * (1f - scrollBehavior.scrollFraction)).dp)),
+              horizontalArrangement = End
+            ){
+              IconToggleButton(
+                checked = Grid.value,
+                colors = IconButtonDefaults.iconToggleButtonColors (
+                  disabledContentColor = LocalContentColor.current.copy(
+                    alpha = LocalContentAlpha.current
+                  ),
+                  checkedContentColor = LocalContentColor.current.copy(
+                    alpha = LocalContentAlpha.current
+                  )
+                ),
+                modifier = Modifier
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+                  .size(32.dp),
+                onCheckedChange = {
+                  Grid.value = it
+                  UseGrid = it
+                  scope.launch {
+                    viewModel.content = emptyList()
+                    viewModel.load()
+                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
+                  }
+                }
+              ) {
+                Icon(if (Grid.value) Icons.Rounded.ViewList else Icons.Rounded.Apps, null)
+              }
+            }
           }
         }
       }
     }
-  }) { padding ->
+  ) { padding ->
     if (viewModel.content.isNotEmpty()) {
-      LazyColumn(
-        state = state,
-        modifier = Modifier
-          .padding(padding)
-          .fillMaxSize()
-      ) {
-        items(
-          viewModel.content,
-          key = { it.javaClass.simpleName + "_" + it.ceId() },
-          contentType = { it.javaClass.simpleName }) { item ->
-          YlRenderer(item, modifier = Modifier
-            .clickable { navController.navigate(item.ceUri()) }
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .animateItemPlacement())
+      if (UseGrid!!) {
+        LazyVerticalGrid(
+          columns = GridCells.Fixed(2),
+          state = gridState,
+          modifier = Modifier
+            .padding(padding)
+            .padding(horizontal = 4.dp)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+          verticalArrangement = Arrangement.spacedBy(12.dp),
+          horizontalArrangement = Arrangement.spacedBy(12.dp),
+          contentPadding = PaddingValues(12.dp)
+        ) {
+          items(
+            viewModel.content,
+            key = { it.javaClass.simpleName + "_" + it.ceId() },
+            contentType = { it.javaClass.simpleName }) { item ->
+            YLCardRender(
+              item,
+              modifier = Modifier
+                .width(164.dp)
+                .clickable { navController.navigate(item.ceUri()) }
+                .animateItemPlacement()
+            )
+          }
         }
-      }
+      } else {
+        LazyColumn(
+          state = columnState,
+          verticalArrangement = Arrangement.spacedBy(12.dp),
+          modifier = Modifier
+            .padding(padding)
+            .padding(horizontal = 4.dp)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+        ) {
+          items(
+            viewModel.content,
+            key = { it.javaClass.simpleName + "_" + it.ceId() },
+            contentType = { it.javaClass.simpleName }) { item ->
+            YlRenderer(
+              item,
+              modifier = Modifier
+                .clickable { navController.navigate(item.ceUri()) }
+                .fillMaxWidth()
+                .animateItemPlacement()
+            )
+          }
+        }
+       }
     } else {
       PagingLoadingPage(
         modifier = Modifier
@@ -130,15 +231,15 @@ fun AnimatedChipRow(
   ) {
     items(chips.let {
       if (selectedId != "") it.filter { i -> i.id == selectedId } else it
-    }, key = { it.id }) { item ->
-      val selected = selectedId == item.id
-      FilterChip(selected = selected, onClick = {
-        onClick(if (selected) "" else item.id)
-      }, label = {
-        Text(item.name)
-      }, leadingIcon = {
-        if (selected) Icon(Icons.Rounded.Check, null)
-      }, modifier = Modifier.animateItemPlacement())
+    },
+      key = { it.id }) { item ->
+      FilterChip(
+        selected = selectedId == item.id,
+        onClick = { onClick(if (selectedId == item.id) "" else item.id) },
+        label = { Text(item.name) },
+        selectedIcon = { Icon(Icons.Rounded.Check, null) },
+        modifier = Modifier.animateItemPlacement()
+      )
     }
   }
 }
@@ -155,21 +256,17 @@ class YourLibraryContainerViewModel @Inject constructor(
       "playlists" -> FetchType.Playlists
       "albums" -> FetchType.Albums
       "artists" -> FetchType.Artists
-      "shows" -> FetchType.Shows
       else -> FetchType.All
     }
 
     val albums = dao.getAlbums()
     val artists = dao.getArtists()
     val playlists = dao.getRootlist()
-    val shows = dao.getShows()
-
     val pins = dao.getPins().filter { p ->
       when (type) {
         FetchType.Playlists -> p.uri.contains("playlist")
         FetchType.Artists -> p.uri.contains("artist")
         FetchType.Albums -> p.uri.contains("album")
-        FetchType.Shows -> p.uri.contains("show")
         FetchType.All -> true
       }
     }
@@ -178,26 +275,29 @@ class YourLibraryContainerViewModel @Inject constructor(
       FetchType.Playlists -> playlists
       FetchType.Artists -> artists
       FetchType.Albums -> albums
-      FetchType.Shows -> shows
       FetchType.All -> {
-        (albums + artists + playlists + shows).sortedByDescending { it.ceTimestamp() }
+        (albums + artists + playlists).sortedByDescending { it.ceTimestamp() }
       }
-    }.toMutableList().also {
-      it.addAll(0, pins)
-      it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
-        when (pF.ceUri()) {
-          "spotify:collection" -> pF.ceModifyPredef(PredefCeType.COLLECTION, dao.trackCount().toString())
-          "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+    }.toMutableList()
+      .also {
+        it.addAll(0, pins)
+        it.filter { p -> p.ceUri().startsWith("spotify:collection") }.forEach { pF ->
+          when (pF.ceUri()) {
+            "spotify:collection" -> pF.ceModifyPredef(
+              PredefCeType.COLLECTION,
+              dao.trackCount().toString()
+            )
+            "spotify:collection:podcasts:episodes" -> pF.ceModifyPredef(PredefCeType.EPISODES, "")
+          }
         }
       }
-    })
+    )
   }
 
   enum class FetchType {
     All,
     Playlists,
     Artists,
-    Albums,
-    Shows
+    Albums
   }
 }

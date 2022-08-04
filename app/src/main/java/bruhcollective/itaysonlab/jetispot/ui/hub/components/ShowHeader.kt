@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import coil.compose.AsyncImage
@@ -22,6 +24,7 @@ import com.spotify.metadata.Metadata
 
 @Composable
 fun ShowHeader(
+  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {

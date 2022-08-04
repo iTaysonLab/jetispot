@@ -2,9 +2,9 @@ package bruhcollective.itaysonlab.jetispot.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Immutable
 import bruhcollective.itaysonlab.jetispot.R
 
@@ -47,6 +47,7 @@ enum class Dialog(
   val route: String
 ) {
   AuthDisclaimer("dialogs/disclaimers"),
+  ColorSelect("dialogs/ColorSelect"),
   Logout("dialogs/logout")
 }
 

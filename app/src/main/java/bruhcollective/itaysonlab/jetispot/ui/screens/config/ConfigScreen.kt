@@ -84,6 +84,10 @@ class ConfigScreenViewModel @Inject constructor(
       it.navigate(Screen.StorageConfig)
     }))
 
+    add(ConfigItem.Preference(R.string.color_theme, { ctx, cfg -> "" }, {
+      it.navigate(Dialog.ColorSelect)
+    }))
+
     add(ConfigItem.Category(R.string.config_account))
 
     add(ConfigItem.Preference(R.string.config_logout, { ctx, cfg ->

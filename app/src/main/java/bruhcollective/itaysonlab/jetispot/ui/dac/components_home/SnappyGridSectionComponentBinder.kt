@@ -8,16 +8,22 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
+import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import com.spotify.home.dac.component.v1.proto.SnappyGridSectionComponent
 
 @Composable
 fun SnappyGridSectionComponentBinder(
+  navController: LambdaNavigationController,
   item: SnappyGridSectionComponent
 ) {
-  LazyHorizontalGrid(rows = GridCells.Fixed(item.componentsCount), Modifier.fillMaxWidth().height(56.dp * item.componentsCount)) {
+  LazyHorizontalGrid(rows = GridCells.Fixed(item.componentsCount),
+    Modifier
+      .fillMaxWidth()
+      .height(56.dp * item.componentsCount)) {
     items(item.componentsList) { cItem ->
-      DacRender(item = item)
+      DacRender(navController = navController, item = item, rememberEUCScrollBehavior())
     }
   }
 }

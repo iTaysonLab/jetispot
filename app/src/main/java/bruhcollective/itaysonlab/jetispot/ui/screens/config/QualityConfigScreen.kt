@@ -24,29 +24,44 @@ class QualityConfigScreenViewModel @Inject constructor(
   private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel(), ConfigViewModel {
   private val configList = buildList {
-    add(ConfigItem.Radio(R.string.quality_low, R.string.quality_low_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.LOW
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.LOW).build()
-    }))
+    add(
+      ConfigItem.Radio(R.string.quality_low,
+        R.string.quality_low_desc,
+        { it.playerConfig.preferredQuality == AudioQuality.LOW },
+        { true },
+        { playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.LOW).build() }
+      )
+    )
 
-    add(ConfigItem.Radio(R.string.quality_normal, R.string.quality_normal_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.NORMAL
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.NORMAL).build()
-    }))
+    add(
+      ConfigItem.Radio(
+        R.string.quality_normal,
+        R.string.quality_normal_desc,
+        { it.playerConfig.preferredQuality == AudioQuality.NORMAL },
+        { true },
+        { playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.NORMAL).build() }
+      )
+    )
 
-    add(ConfigItem.Radio(R.string.quality_high, R.string.quality_high_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.HIGH
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.HIGH).build()
-    }))
+    add(
+      ConfigItem.Radio(
+        R.string.quality_high,
+        R.string.quality_high_desc,
+        { it.playerConfig.preferredQuality == AudioQuality.HIGH },
+        { true },
+        { playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.HIGH).build() }
+      )
+    )
 
-    add(ConfigItem.Radio(R.string.quality_very_high, R.string.quality_very_high_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
-    }))
+    add(
+      ConfigItem.Radio(
+        R.string.quality_very_high,
+        R.string.quality_very_high_desc,
+        { it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH },
+        { true },
+        { playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build() }
+      )
+    )
 
     add(ConfigItem.Info(R.string.warn_quality))
   }

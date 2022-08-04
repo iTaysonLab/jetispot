@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.Context
 import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.annotation.FloatRange
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ class SpPlayerServiceManager @Inject constructor(
   private var extraListeners = mutableListOf<ServiceExtraListener>()
 
   // states
+  // TODO: merge this all to some kind of uni-state
   val currentTrack = mutableStateOf(MediaItemWrapper())
   val playbackState = mutableStateOf(PlaybackState.Idle)
   val playbackProgress = mutableStateOf(PlaybackProgress(Pair(0F, 0L)))
@@ -39,16 +41,14 @@ class SpPlayerServiceManager @Inject constructor(
   val currentContextUri = mutableStateOf("")
   val currentQueue = mutableStateOf<List<Metadata.Track>>(emptyList())
   val currentQueuePosition = mutableStateOf(0)
+  val currentTrackDurationFmt = mutableStateOf("00:00")
 
-  @JvmInline
-  value class PlaybackProgress(
-    private val pairData: Pair<Float, Long>
+  class PlaybackProgress(
+    pairData: Pair<Float, Long>
   ) {
-    val progressRange: Float
-    @FloatRange(from = 0.0, to = 1.0) get() = pairData.first.coerceIn(0f..1f)
-
-    val progressMilliseconds: Long
-    get() = pairData.second
+    @FloatRange(from = 0.0, to = 1.0) val progressRange: Float = pairData.first.coerceIn(0f..1f)
+    val progressMilliseconds: Long = pairData.second
+    val progressFmt = DateUtils.formatElapsedTime(progressMilliseconds / 1000L)
   }
 
   fun reset() {

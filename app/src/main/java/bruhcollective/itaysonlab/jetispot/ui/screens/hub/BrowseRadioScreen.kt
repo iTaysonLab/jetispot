@@ -9,14 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
-import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BrowseRadioScreen() {
-  val navController = LocalNavigationController.current
+fun BrowseRadioScreen(
+  navController: LambdaNavigationController
+) {
   val scrollBehavior = rememberEUCScrollBehavior()
   var appBarTitle by remember { mutableStateOf("") }
 
@@ -32,7 +33,8 @@ fun BrowseRadioScreen() {
   }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
     Box(Modifier.padding(padding)) {
       HubScreen(
-        needContentPadding = false,
+        navController,
+        needContentPadding = true,
         loader = { getRadioHub() },
         onAppBarTitleChange = { appBarTitle = it }
       )

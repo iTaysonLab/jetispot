@@ -1,27 +1,36 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Photo
+import androidx.compose.material.icons.rounded.Podcasts
+import androidx.compose.material.icons.rounded.PushPin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
+import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import coil.compose.AsyncImage
 
@@ -35,73 +44,131 @@ fun YlRenderer(
     is CollectionRootlistItem -> YLRRootlist(item, modifier)
     is CollectionAlbum -> YLRAlbum(item, modifier)
     is CollectionArtist -> YLRArtist(item, modifier)
-    is CollectionShow -> YLRShow(item, modifier)
     else -> Text(item.toString())
   }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun YLRPinned(
   item: CollectionPinnedItem,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    val isPredef = item.predefType != null
+  Box(
+    Modifier
+      .height(86.dp)
+      .padding(horizontal = 12.dp)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+  ) {
+    Row(modifier.padding(14.dp)) {
+      val isPredef = item.predefType != null
 
-    if (isPredef) {
-      ImagePreview(
-        if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
-        true,
-        modifier = Modifier
-          .size(64.dp)
-          .clip(RoundedCornerShape(8.dp))
-      )
-    } else {
-      if (item.picture.isEmpty()) {
+      if (isPredef) {
         ImagePreview(
-          Icons.Rounded.Photo,
-          false,
+          if (item.predefType == PredefCeType.COLLECTION) Icons.Rounded.Favorite else Icons.Rounded.Podcasts,
+          true,
           modifier = Modifier
-            .size(64.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .size(58.dp)
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(14.dp))
         )
       } else {
-        AsyncImage(
-          model = "https://i.scdn.co/image/${item.picture}",
-          contentDescription = null,
-          modifier = Modifier
-            .size(64.dp)
-            .clip(RoundedCornerShape(8.dp))
-        )
+        if (item.picture.isEmpty()) {
+          ImagePreview(
+            Icons.Rounded.Photo,
+            false,
+            modifier = Modifier
+              .size(58.dp)
+              .aspectRatio(1f)
+              .clip(RoundedCornerShape(14.dp))
+          )
+        } else {
+          AsyncImage(
+            model = "https://i.scdn.co/image/${item.picture}",
+            contentDescription = null,
+            modifier = Modifier
+              .size(58.dp)
+              .aspectRatio(1f)
+              .clip(RoundedCornerShape(14.dp))
+          )
+        }
       }
-    }
 
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.CenterVertically)) {
-      Text(text = when (item.predefType) {
-        PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs)
-        PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes)
-        null -> item.name
-      }, maxLines = 1, overflow = TextOverflow.Ellipsis)
-      Row(Modifier.padding(top = 4.dp)) {
-        Icon(Icons.Rounded.PushPin, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
-          .size(16.dp)
-          .align(Alignment.CenterVertically))
-        Text(
-          text = when (item.predefType) {
-            PredefCeType.COLLECTION -> stringResource(id = R.string.liked_songs_desc, item.predefDyn)
-            PredefCeType.EPISODES -> stringResource(id = R.string.new_episodes_desc, item.predefDyn)
-            null -> item.subtitle
-          },
-          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-          modifier = Modifier
-            .padding(start = 6.dp)
-            .align(Alignment.CenterVertically)
-        )
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
+        when (item.predefType) {
+          PredefCeType.COLLECTION -> {
+            Text(
+              text = stringResource(id = R.string.liked_songs),
+              fontSize = 16.sp,
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis,
+              style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            )
+          }
+          PredefCeType.EPISODES -> {
+            MediumText(
+              text = stringResource(id = R.string.new_episodes)
+            )
+          }
+          null -> {
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Text(
+                text = item.name,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+              )
+
+//              Subtext(
+//                text = "Time",
+//                maxLines = 1
+//              )
+            }
+          }
+        }
+
+        Row(Modifier.padding(top = 4.dp)) {
+          Icon(
+            Icons.Rounded.PushPin,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = null,
+            modifier = Modifier
+              .size(16.dp)
+              .rotate(45f)
+              .align(Alignment.CenterVertically)
+          )
+
+          Text(
+            text = when (item.predefType) {
+              PredefCeType.COLLECTION -> stringResource(
+                id = R.string.liked_songs_desc,
+                item.predefDyn
+              )
+              PredefCeType.EPISODES -> stringResource(
+                id = R.string.new_episodes_desc,
+                item.predefDyn
+              )
+              null -> item.subtitle
+            },
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            modifier = Modifier.padding(start = 4.dp)
+          )
+        }
       }
     }
   }
@@ -112,9 +179,8 @@ fun YLRRootlist(
   item: CollectionRootlistItem,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericAlbumItem(
     picUrl = item.picture,
-    picCircle = false,
     picPlaceholder = "playlist",
     title = item.name,
     subtitle = item.ownerUsername,
@@ -127,9 +193,8 @@ fun YLRAlbum(
   item: CollectionAlbum,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericAlbumItem(
     picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = false,
     picPlaceholder = "album",
     title = item.name,
     subtitle = item.rawArtistsData.split("|").joinToString { it.split("=")[1] },
@@ -142,60 +207,130 @@ fun YLRArtist(
   item: CollectionArtist,
   modifier: Modifier
 ) {
-  YLRGenericItem(
+  YLRGenericArtistItem(
     picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = true,
     picPlaceholder = "artist",
     title = item.name,
-    subtitle = null,
     modifier = modifier
   )
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
-fun YLRShow(
-  item: CollectionShow,
-  modifier: Modifier
-) {
-  YLRGenericItem(
-    picUrl = "https://i.scdn.co/image/${item.picture}",
-    picCircle = false,
-    picPlaceholder = "podcast",
-    title = item.name,
-    subtitle = item.publisher,
-    modifier = modifier
-  )
-}
-
-@Composable
-fun YLRGenericItem(
+fun YLRGenericAlbumItem(
   picUrl: String,
-  picCircle: Boolean,
   picPlaceholder: String,
   title: String,
   subtitle: String?,
   modifier: Modifier
 ) {
-  Row(modifier) {
-    PreviewableAsyncImage(
-      imageUrl = picUrl,
-      placeholderType = picPlaceholder,
-      modifier = Modifier
-        .size(64.dp)
-        .clip(if (picCircle) CircleShape else RoundedCornerShape(8.dp))
-    )
+  Box(
+    Modifier
+      .height(86.dp)
+      .padding(horizontal = 12.dp)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+  ) {
+    Row(modifier.padding(14.dp)) {
+      PreviewableAsyncImage(
+        imageUrl = picUrl,
+        placeholderType = picPlaceholder,
+        modifier = Modifier
+          .size(58.dp)
+          .aspectRatio(1f)
+          .clip(RoundedCornerShape(14.dp))
+      )
 
-    Column(
-      Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.CenterVertically)) {
-      Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-      if (!subtitle.isNullOrEmpty()) {
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
+        Row(
+          modifier = Modifier
+            .fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Text(
+            text = title,
+            fontSize = 16.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+          )
+          Spacer(modifier = Modifier.width(2.dp))
+//          Subtext(
+//            text = "Time",
+//            maxLines = 1
+//          )
+        }
+
+        if (!subtitle.isNullOrEmpty()) {
+          Text(
+            text = subtitle,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            style = TextStyle(platformStyle = PlatformTextStyle(false)),
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            modifier = Modifier.padding(top = 4.dp)
+          )
+        }
+      }
+    }
+  }
+}
+
+
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
+fun YLRGenericArtistItem(
+  picUrl: String,
+  picPlaceholder: String,
+  title: String,
+  modifier: Modifier
+) {
+  Box(
+    Modifier
+      .height(88.dp)
+      .padding(horizontal = 12.dp)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+  ) {
+    Row(modifier.padding(14.dp)) {
+      PreviewableAsyncImage(
+        imageUrl = picUrl,
+        placeholderType = picPlaceholder,
+        modifier = Modifier
+          .size(58.dp)
+          .aspectRatio(1f)
+          .clip(CircleShape)
+      )
+
+      Column(
+        Modifier
+          .padding(start = 16.dp)
+          .align(Alignment.Top)
+      ) {
         Text(
-          text = subtitle,
-          color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+          text = title,
+          fontSize = 16.sp,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
+          style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+        )
+
+        Text(
+          stringResource(R.string.artist),
+          fontSize = 14.sp,
+          fontWeight = FontWeight.Medium,
+          maxLines = 1,
+          style = TextStyle(platformStyle = PlatformTextStyle(false)),
+          overflow = TextOverflow.Ellipsis,
+          color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
           modifier = Modifier.padding(top = 4.dp)
         )
       }

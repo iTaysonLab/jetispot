@@ -23,9 +23,9 @@ class PlayPauseButtonState (isPlaying: Boolean) {
 }
 
 class PlayPauseButtonDimens(
-  val distance: Dp = 4.dp,
-  val width: Dp = 5.dp,
-  val height: Dp = 14.dp
+  val distance: Dp = 3.dp,
+  val width: Dp = 6.dp,
+  val height: Dp = 16.dp
 )
 
 @Composable
@@ -37,9 +37,10 @@ fun PlayPauseButton (
   val state = remember { PlayPauseButtonState(isPlaying) }
   val dimens = remember { PlayPauseButtonDimens() }
 
-  val progressAnimator = animateFloatAsState(targetValue = if (!isPlaying) 1f else 0f, finishedListener = {
-    state.isFinallyPlay.value = it == 1f
-  })
+  val progressAnimator = animateFloatAsState(
+    targetValue = if (!isPlaying) 1f else 0f,
+    finishedListener = { state.isFinallyPlay.value = it == 1f }
+  )
 
   Canvas(modifier) {
     val progress = progressAnimator.value

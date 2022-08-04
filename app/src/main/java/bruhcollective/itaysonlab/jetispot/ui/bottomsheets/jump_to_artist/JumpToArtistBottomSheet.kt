@@ -13,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
@@ -55,8 +57,18 @@ fun JumpToArtistBottomSheet(
       .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
       .fillMaxWidth()
       .clip(RoundedCornerShape(8.dp))
-      .navigationBarsPadding()) {
-    MediumText(text = "Choose an artist", fontSize = 21.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp, bottom = 8.dp))
+      .navigationBarsPadding()
+  ) {
+    Text(
+      text = "Choose an artist",
+      fontSize = 22.sp,
+      fontWeight = FontWeight.Medium,
+      color = MaterialTheme.colorScheme.onSurface,
+      textAlign = TextAlign.Center,
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 16.dp)
+    )
 
     LazyColumn {
       items(content) { artist ->
@@ -67,10 +79,15 @@ fun JumpToArtistBottomSheet(
               navController.navigate(artist.first)
             }
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxWidth()) {
+            .fillMaxWidth()
+        ) {
           MediumText(text = artist.second, color = MaterialTheme.colorScheme.onSurface)
           Spacer(modifier = Modifier.height(2.dp))
-          Text(text = stringResource(id = artist.third), maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
+          Text(
+            text = stringResource(id = artist.third),
+            maxLines = 1,
+            color = MaterialTheme.colorScheme.onSurface
+          )
         }
       }
     }

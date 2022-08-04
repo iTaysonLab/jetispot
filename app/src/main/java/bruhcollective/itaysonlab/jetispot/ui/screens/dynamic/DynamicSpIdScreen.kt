@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.blend.BlendCreateInvitationScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.ConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.history.ListeningHistoryScreen
@@ -14,6 +15,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.*
 
 @Composable
 fun DynamicSpIdScreen(
+  navController: LambdaNavigationController,
   uri: String,
   fullUri: String,
 ) {
@@ -23,9 +25,10 @@ fun DynamicSpIdScreen(
   val argument = uriSeparated.getOrElse(2) { "" }
 
   when (uriSeparated[0]) {
-    "genre" -> BrowseScreen(id)
+    "genre" -> BrowseScreen(navController, id)
 
     "artist" -> HubScreen(
+      navController = navController,
       needContentPadding = false,
       loader = {
         if (argument == "releases") {
@@ -36,27 +39,28 @@ fun DynamicSpIdScreen(
       }
     )
 
-    "show" -> PodcastShowScreen(id)
-    "album" -> AlbumScreen(id)
-    "playlist" -> PlaylistScreen(id)
-    "config" -> ConfigScreen()
-    "radio" -> BrowseRadioScreen()
+    "show" -> PodcastShowScreen(navController, id)
+    "album" -> AlbumScreen(navController, id)
+    "playlist" -> PlaylistScreen(navController, id)
+    "config" -> ConfigScreen(navController)
+    "radio" -> BrowseRadioScreen(navController)
 
     "collection" -> when (id) {
       "artist" -> LikedSongsScreen(
+        navController = navController,
         id = argument,
         fullUri = fullUri
       )
-      "" -> CollectionScreen()
+      "" -> CollectionScreen(navController)
       /* else -> {  TODO  } */
     }
 
     "internal" -> when (id) {
-      "listeninghistory" -> ListeningHistoryScreen()
+      "listeninghistory" -> ListeningHistoryScreen(navController)
     }
 
     "blend" -> when (id) {
-      "invitation" -> BlendCreateInvitationScreen()
+      "invitation" -> BlendCreateInvitationScreen(navController)
     }
 
     else -> {

@@ -1,10 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
-import android.text.format.DateUtils
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -16,127 +18,211 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
-import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.CoroutineScope
+import androidx.compose.material3.MaterialTheme.colorScheme as monet
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NowPlayingControls(
+fun ControlsHeader(
   scope: CoroutineScope,
+  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
-  viewModel: NowPlayingViewModel,
-  modifier: Modifier
+  viewModel: NowPlayingViewModel
 ) {
-  Column(modifier, verticalArrangement = Arrangement.Bottom) {
-    ControlsHeader(scope, bottomSheetState, viewModel)
-    Spacer(Modifier.height(8.dp))
-    ControlsSeekbar(viewModel)
-    Spacer(Modifier.height(16.dp))
-    ControlsMainButtons(viewModel)
-    Spacer(Modifier.height(16.dp))
-    ControlsBottomAccessories(viewModel)
+  Row(horizontalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.weight(0.9f)) {
+      Text(
+        text = viewModel.currentTrack.value.title,
+        modifier = Modifier
+          .padding(horizontal = 14.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {
+            viewModel.navigateToSource(scope, bottomSheetState, navController)
+          },
+        fontSize = 24.sp,
+        color = monet.onSecondaryContainer.copy(0.85f),
+        fontWeight = FontWeight.ExtraBold,
+        maxLines = 1
+      )
+
+      Spacer(Modifier.height(2.dp))
+
+      Text(
+        text = viewModel.currentTrack.value.artist,
+        modifier = Modifier
+          .padding(horizontal = 14.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {
+            viewModel.navigateToArtist(scope, bottomSheetState, navController)
+          },
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        fontSize = 18.sp,
+        color = monet.onSecondaryContainer.copy(alpha = 0.7f)
+      )
+    }
+
+    Icon(
+      imageVector = Icons.Rounded.Favorite,
+      contentDescription = "",
+      tint = monet.onSecondaryContainer.copy(0.85f),
+      modifier = Modifier
+        .align(Alignment.CenterVertically)
+        .padding(end = 12.dp)
+        .size(26.dp)
+    )
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ControlsHeader(
-  scope: CoroutineScope,
-  bottomSheetState: BottomSheetState,
-  viewModel: NowPlayingViewModel,
-) {
-  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp).navClickable(
-    enableRipple = false
-  ) { navController ->
-    viewModel.navigateToSource(scope, bottomSheetState, navController)
-  }, fontSize = 24.sp, color = Color.White,)
-  Spacer(Modifier.height(2.dp))
-  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp).navClickable(
-    enableRipple = false
-  ) { navController ->
-    viewModel.navigateToArtist(scope, bottomSheetState, navController)
-  }, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
-}
+fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
+  Box {
+    Slider(
+      value = viewModel.currentPosition.value.progressRange,
+      colors = SliderDefaults.colors(
+        thumbColor = monet.onSecondaryContainer,
+        activeTrackColor = monet.onSecondaryContainer.copy(0.85f),
+        inactiveTrackColor = monet.onSecondaryContainer.copy(alpha = 0.2f)
+      ),
+      onValueChange = {},
+      modifier = Modifier.padding(horizontal = 6.dp)
+    )
 
-@Composable
-private fun ControlsSeekbar(
-  viewModel: NowPlayingViewModel,
-) {
-  Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
-    thumbColor = Color.White,
-    activeTrackColor = Color.White,
-    inactiveTrackColor = Color.White.copy(alpha = 0.5f)
-  ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
+    Column(
+      modifier = Modifier
+        .padding(horizontal = 13.dp)
+        .fillMaxWidth(),
+      horizontalAlignment = Alignment.End,
+      verticalArrangement = Arrangement.Bottom
+    ) {
+      Row(Modifier.height(52.dp), verticalAlignment = Alignment.Bottom) {
+        Text(
+          text = viewModel.currentPosition.value.progressFmt,
+          color = monet.onSecondaryContainer.copy(0.85f),
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Bold
+        )
 
-  Row(Modifier.padding(horizontal = 14.dp).offset(y = (-6).dp)) {
-    Text(text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
-    Spacer(modifier = Modifier.weight(1f))
-    Text(text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L), color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
+        Text(text = " / ", color = monet.onSecondaryContainer.copy(0.85f), fontSize = 12.sp)
+
+        Text(
+          text = viewModel.currentTrackDurationFmt.value,
+          color = monet.onSecondaryContainer.copy(0.85f),
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Bold
+        )
+      }
+    }
   }
 }
 
 @Composable
-private fun ControlsMainButtons(
-  viewModel: NowPlayingViewModel,
-) {
-  Row {
+fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
+  Row(
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp)
+  ) {
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier.size(32.dp),
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.Shuffle, contentDescription = null)
     }
 
-    Spacer(modifier = Modifier.weight(1f))
-
-    IconButton(
-      onClick = { viewModel.skipPrevious() },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceEvenly,
+      modifier = Modifier.fillMaxWidth(0.85f)
     ) {
-      Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
+      IconButton(
+        onClick = { viewModel.skipPrevious() },
+        modifier = Modifier
+          .size(56.dp)
+          .clip(RoundedCornerShape(28.dp))
+          .background(monet.onPrimaryContainer.copy(0.1f)),
+        colors = IconButtonDefaults.iconButtonColors(
+          contentColor = monet.onSecondaryContainer.copy(0.85f)
+        )
+      ) {
+        Icon(
+          imageVector = Icons.Rounded.SkipPrevious,
+          contentDescription = null,
+          modifier = Modifier.size(42.dp)
+        )
+      }
+
+      Surface(
+        color = monet.primaryContainer.blendWith(monet.primary, 0.3f).copy(0.5f),
+        modifier = Modifier
+          .clip(RoundedCornerShape(28.dp))
+          .height(72.dp)
+          .width(106.dp)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(color = monet.primary)
+          ) { viewModel.togglePlayPause() }
+      ) {
+        PlayPauseButton(
+          isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
+          color = monet.onSecondaryContainer.copy(0.85f) /* if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black*/,
+          modifier = Modifier
+            .size(64.dp)
+            .align(Alignment.CenterVertically)
+        )
+      }
+
+      IconButton(
+        onClick = { viewModel.skipNext() },
+        modifier = Modifier
+          .size(56.dp)
+          .clip(RoundedCornerShape(28.dp))
+          .background(monet.onPrimaryContainer.copy(0.1f)),
+        colors = IconButtonDefaults.iconButtonColors(
+          contentColor = monet.onSecondaryContainer.copy(0.85f)
+        )
+      ) {
+        Icon(
+          imageVector = Icons.Rounded.SkipNext,
+          contentDescription = null,
+          modifier = Modifier.size(42.dp)
+        )
+      }
     }
-
-    Spacer(modifier = Modifier.width(24.dp))
-
-    Surface(color = Color.White, modifier = Modifier.clip(CircleShape).clickable(
-      interactionSource = remember { MutableInteractionSource() },
-      indication = rememberRipple(color = Color.Black)
-    ) {
-      viewModel.togglePlayPause()
-    }) {
-      PlayPauseButton(
-        isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-        color = if (viewModel.currentBgColor.value != Color.Transparent) viewModel.currentBgColor.value else Color.Black,
-        modifier = Modifier.size(56.dp).align(Alignment.CenterVertically)
-      )
-    }
-
-    Spacer(modifier = Modifier.width(24.dp))
-
-    IconButton(
-      onClick = { viewModel.skipNext() },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-    ) {
-      Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
-    }
-
-    Spacer(modifier = Modifier.weight(1f))
 
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .size(32.dp)
+        .clip(CircleShape),
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
       Icon(imageVector = Icons.Rounded.Repeat, contentDescription = null)
     }
@@ -144,26 +230,81 @@ private fun ControlsMainButtons(
 }
 
 @Composable
-private fun ControlsBottomAccessories(
+fun ControlsBottomAccessories(
   viewModel: NowPlayingViewModel,
 ) {
-  Row {
+  Row(
+    modifier = Modifier
+      .padding(horizontal = 8.dp)
+      .padding(bottom = 16.dp)
+      .fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween
+  ) {
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      modifier = Modifier
+        .size(56.dp),
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(0.85f)
+      )
     ) {
-      Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
+      Icon(
+        imageVector = Icons.Rounded.VolumeDown,
+        contentDescription = null,
+        modifier = Modifier
+          .size(32.dp)
+          .clip(CircleShape)
+          .background(
+            monet.primaryContainer
+              .blendWith(monet.primary, 0.3f)
+              .copy(0.5f)
+          )
+          .padding(6.dp)
+      )
     }
 
-    Spacer(modifier = Modifier.weight(1f))
-
     IconButton(
       onClick = { /*TODO*/ },
       modifier = Modifier.size(56.dp),
-      colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+      colors = IconButtonDefaults.iconButtonColors(
+        contentColor = monet.onSecondaryContainer.copy(0.85f)
+      )
     ) {
-      Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
+      Icon(
+        imageVector = Icons.Rounded.QueueMusic,
+        contentDescription = null,
+        modifier = Modifier.size(26.dp)
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, animatedCorners: Dp) {
+  HorizontalPager(
+    count = viewModel.currentQueue.value.size,
+    state = pagerState,
+    modifier = Modifier
+      .fillMaxWidth()
+      .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+  ) { page ->
+    val artworkModifier = Modifier
+      .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+      .clip(RoundedCornerShape(animatedCorners))
+
+    if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
+      Image(
+        viewModel.currentTrack.value.artworkCompose!!,
+        contentDescription = null,
+        modifier = artworkModifier,
+        contentScale = ContentScale.Crop
+      )
+    } else {
+      NowPlayingBackgroundItem(
+        track = viewModel.currentQueue.value[page],
+        modifier = artworkModifier
+      )
     }
   }
 }
