@@ -28,18 +28,4 @@ object CollectionModule {
   fun provideDao (
     db: LocalCollectionDatabase
   ): LocalCollectionDao = db.dao()
-
-  fun provideRepository (
-    db: LocalCollectionDatabase,
-    dao: LocalCollectionDao
-  ): LocalCollectionRepository = LocalCollectionRepository(db, dao)
-
-  fun provideManager (
-    spSessionManager: SpSessionManager,
-    internalApi: SpInternalApi,
-    collectionApi: SpCollectionApi,
-    repository: LocalCollectionRepository,
-    dao: LocalCollectionDao,
-    metadataRequester: SpMetadataRequester
-  ): SpCollectionManager = SpCollectionManager(spSessionManager, internalApi, collectionApi, repository, dao, metadataRequester)
 }

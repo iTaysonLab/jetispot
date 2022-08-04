@@ -14,7 +14,9 @@ import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.dealer.DealerClient
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SpCollectionManager @Inject constructor(
   private val spSessionManager: SpSessionManager,
   private val internalApi: SpInternalApi,

@@ -6,11 +6,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.media2.session.LibraryResult
 import androidx.media2.session.MediaLibraryService
 import androidx.media2.session.MediaSession
 import androidx.media2.session.SessionResult
 import bruhcollective.itaysonlab.jetispot.MainActivity
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerManager
+import bruhcollective.itaysonlab.jetispot.playback.service.library.MediaLibraryConnector
+import bruhcollective.itaysonlab.jetispot.playback.service.library.SessionControllerVerifier
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +25,20 @@ import javax.inject.Inject
 class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScope(Dispatchers.Main + SupervisorJob()) {
   @Inject lateinit var spPlayerManager: SpPlayerManager
   @Inject lateinit var audioFocusManager: AudioFocusManager
+  @Inject lateinit var sessionControllerVerifier: SessionControllerVerifier
 
   private lateinit var mediaLibrarySession: MediaLibrarySession
   private lateinit var playerWrapper: SpPlayerWrapper
 
   private val librarySessionCallback = SessionCallback()
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaLibrarySession
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
+    return if (sessionControllerVerifier.verifyController(controllerInfo)) {
+      mediaLibrarySession
+    } else {
+      null
+    }
+  }
 
   override fun onCreate() {
     super.onCreate()

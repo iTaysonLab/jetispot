@@ -4,7 +4,9 @@ import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import com.spotify.clienttoken.http.v0.ClientToken
 import xyz.gianlu.librespot.dealer.ApiClient
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ClientTokenHandler @Inject constructor(
   private val spSessionManager: SpSessionManager
 ) {
