@@ -1,9 +1,9 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'dev.zacsweers.moshix' version '0.17.2'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "dev.zacsweers.moshix" version "0.18.3"
+    id "dagger.hilt.android.plugin"
+    id "kotlin-kapt"
     id "com.google.protobuf" version "0.8.18"
 }
 
@@ -24,14 +24,14 @@ android {
     }
 
     sourceSets.main {
-        jniLibs.srcDir 'src/main/libs'
+        jniLibs.srcDir "src/main/libs"
     }
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
@@ -41,7 +41,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
@@ -50,7 +50,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler_version
     }
 
     kapt {
@@ -69,9 +69,9 @@ android {
             excludes += "**/*.properties"
             excludes += "DebugProbesKt.bin"
             excludes += "kotlin-tooling-metadata.json"
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-            excludes += 'log4j2.xml'
-            excludes += '**.proto'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "log4j2.xml"
+            excludes += "**.proto"
         }
     }
 }
@@ -85,20 +85,20 @@ dependencies {
     // AndroidX
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
     // Compose
-    implementation "androidx.navigation:navigation-compose:2.5.0"
-    implementation 'androidx.activity:activity-compose:1.5.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.navigation:navigation-compose:2.5.1"
+    implementation "androidx.activity:activity-compose:1.5.1"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material3:material3:$compose_m3_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.customview:customview:1.2.0-alpha01"
-    debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0-rc01"
+    debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0"
 
     // Compose - Additions
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
@@ -106,29 +106,30 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
     // Images
-    implementation "io.coil-kt:coil-compose:2.0.0-rc03"
+    implementation "io.coil-kt:coil-compose:2.1.0"
 
     // DI
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    implementation "com.google.dagger:hilt-android:2.41"
-    kapt "com.google.dagger:hilt-compiler:2.41"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Playback
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1"
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"
-    implementation ("com.github.iTaysonLab.librespot-java:librespot-player:e95c4f0529:thin") {
-        exclude group: 'xyz.gianlu.librespot', module: 'librespot-sink'
-        exclude group: 'com.lmax', module: 'disruptor'
-        exclude group: 'org.apache.logging.log4j'
+
+    // Librespot
+    implementation ("com.github.iTaysonLab.librespot-java:librespot-player:$librespot_commit:thin") {
+        exclude group: "xyz.gianlu.librespot", module: "librespot-sink"
+        exclude group: "com.lmax", module: "disruptor"
+        exclude group: "org.apache.logging.log4j"
     }
 
     // Data - Network
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.squareup.retrofit2:converter-protobuf:2.9.0"
-    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
 
     // Data - SQL
     implementation "androidx.room:room-runtime:$room_version"
@@ -151,7 +152,7 @@ protobuf {
         all().each { task ->
             task.builtins {
                 java {
-                    //option 'lite'
+                    //option "lite"
                 }
             }
         }

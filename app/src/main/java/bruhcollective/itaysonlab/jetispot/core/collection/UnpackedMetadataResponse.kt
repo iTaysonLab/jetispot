@@ -52,6 +52,7 @@ class UnpackedMetadataResponse(
         ExtensionKindOuterClass.ExtensionKind.EPISODE_V4 -> episodes += arr.extensionDataList dataPair { Metadata.Episode.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.PODCAST_TOPICS -> podcastTopics += arr.extensionDataList dataPair { PodcastTopics.parseFrom(it) }
         ExtensionKindOuterClass.ExtensionKind.PODCAST_RATING -> podcastRatings += arr.extensionDataList dataPair { PodcastRating.parseFrom(it) }
+        else -> { /* ignore */ }
       }
     }
   }

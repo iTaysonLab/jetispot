@@ -9,7 +9,6 @@
 
     <application
         android:manageSpaceActivity=".ManageStorageActivity"
-        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/nsc"
         android:name=".SpApp"
         android:allowBackup="true"

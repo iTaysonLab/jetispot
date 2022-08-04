@@ -9,6 +9,6 @@ import androidx.compose.runtime.remember
 @Composable
 fun rememberEUCScrollBehavior(): TopAppBarScrollBehavior {
   val sbd = rememberSplineBasedDecay<Float>()
-  val state = rememberTopAppBarScrollState()
+  val state = rememberTopAppBarState()
   return remember { TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, state) }
 }

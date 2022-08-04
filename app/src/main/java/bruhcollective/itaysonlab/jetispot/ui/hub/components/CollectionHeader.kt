@@ -204,8 +204,8 @@ fun CollectionHeader(
           delegate.sendCustomCommand(scope, if (selected) CollectionViewModel.Command.ClearTag else CollectionViewModel.Command.SetTag(item.query))
         }, label = {
           Text(item.name)
-        }, selectedIcon = {
-          Icon(Icons.Rounded.Check, null)
+        }, leadingIcon = {
+          if (selected) Icon(Icons.Rounded.Check, null)
         })
       }
     }

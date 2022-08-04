@@ -40,7 +40,7 @@ fun HubScaffold(
 ) {
   val scope = rememberCoroutineScope()
   val sbd = rememberSplineBasedDecay<Float>()
-  val topBarState = rememberTopAppBarScrollState()
+  val topBarState = rememberTopAppBarState()
   val scrollBehavior = remember { if (toolbarOptions.alwaysVisible) TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) else TopAppBarDefaults.pinnedScrollBehavior(topBarState) }
 
   when (state) {
@@ -57,7 +57,7 @@ fun HubScaffold(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         } else {
           SmallTopAppBar(title = {
-            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.scrollFraction))
+            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.state.collapsedFraction))
           }, navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
               Icon(Icons.Rounded.ArrowBack, null)

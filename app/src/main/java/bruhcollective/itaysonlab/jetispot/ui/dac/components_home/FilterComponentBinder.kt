@@ -29,8 +29,8 @@ fun FilterComponentBinder (
         selectFacet(if (selected) "default" else item.value)
       }, label = {
         Text(item.title)
-      }, selectedIcon = {
-        Icon(Icons.Rounded.Check, null)
+      }, leadingIcon = {
+        if (selected) Icon(Icons.Rounded.Check, null)
       })
     }
   }

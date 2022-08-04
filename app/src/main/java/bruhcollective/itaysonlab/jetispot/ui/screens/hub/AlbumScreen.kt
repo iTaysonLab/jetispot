@@ -1,9 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -17,7 +14,11 @@ import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.ext.collectAsStateLifecycleAware
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import xyz.gianlu.librespot.metadata.AlbumId
 import javax.inject.Inject
 
@@ -29,13 +30,6 @@ fun AlbumScreen(
 ) {
   LaunchedEffect(Unit) {
     viewModel.load(id)
-  }
-
-  val addedState by viewModel.createAddedFlow(id).collectAsStateLifecycleAware(initial = emptyList())
-
-  Log.d("AlbumScreen", "state = ${LocalLifecycleOwner.current.lifecycle.currentState}, state = ${addedState}")
-  if (LocalLifecycleOwner.current.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-    viewModel.mainAddedState.value = addedState.isNotEmpty()
   }
 
   HubScaffold(
@@ -54,16 +48,27 @@ class AlbumViewModel @Inject constructor(
   private val spPartnersApi: SpPartnersApi,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spDao: LocalCollectionDao
-) : AbsHubViewModel() {
+) : AbsHubViewModel(), CoroutineScope by MainScope() {
   val title = mutableStateOf("")
-  var addedFlow: Flow<List<CollectionAlbum>>? = null
 
-  fun createAddedFlow(id: String): Flow<List<CollectionAlbum>> {
-    if (addedFlow == null) { addedFlow = spDao.subscribeOnAlbum(AlbumId.fromBase62(id).hexId()) }
-    return addedFlow!!
+  private fun subscribeOnAlbum(id: String) {
+    launch {
+      spDao.subscribeOnAlbum(AlbumId.fromBase62(id).hexId()).stateIn(this).collect {
+        Log.d("AlbumViewModel", "state = $it")
+        mainAddedState.value = it.isNotEmpty()
+      }
+    }
   }
 
-  suspend fun load(id: String) = load { createAddedFlow(id); loadInternal(id) }
+  override fun onCleared() {
+    cancel()
+  }
+
+  suspend fun load(id: String) = load {
+    subscribeOnAlbum(id)
+    loadInternal(id)
+  }
+
   suspend fun reload(id: String) = reload { loadInternal(id) }
   private suspend fun loadInternal(id: String) = spInternalApi.getAlbumView(id).also { title.value = it.title ?: "" }
 

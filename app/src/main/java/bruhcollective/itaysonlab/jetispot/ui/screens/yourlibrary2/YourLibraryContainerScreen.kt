@@ -131,12 +131,13 @@ fun AnimatedChipRow(
     items(chips.let {
       if (selectedId != "") it.filter { i -> i.id == selectedId } else it
     }, key = { it.id }) { item ->
-      FilterChip(selected = selectedId == item.id, onClick = {
-        onClick(if (selectedId == item.id) "" else item.id)
+      val selected = selectedId == item.id
+      FilterChip(selected = selected, onClick = {
+        onClick(if (selected) "" else item.id)
       }, label = {
         Text(item.name)
-      }, selectedIcon = {
-        Icon(Icons.Rounded.Check, null)
+      }, leadingIcon = {
+        if (selected) Icon(Icons.Rounded.Check, null)
       }, modifier = Modifier.animateItemPlacement())
     }
   }

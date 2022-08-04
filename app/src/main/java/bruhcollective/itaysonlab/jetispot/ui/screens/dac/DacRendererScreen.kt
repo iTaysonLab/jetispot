@@ -46,7 +46,7 @@ fun DacRendererScreen(
   viewModel: DacViewModel = hiltViewModel()
 ) {
   val sbd = rememberSplineBasedDecay<Float>()
-  val topBarState = rememberTopAppBarScrollState()
+  val topBarState = rememberTopAppBarState()
   val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior(topBarState) else TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) }
   val scope = rememberCoroutineScope()
 

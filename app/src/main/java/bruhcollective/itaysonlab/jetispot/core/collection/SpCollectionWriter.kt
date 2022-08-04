@@ -346,6 +346,7 @@ class SpCollectionWriter(
           CollectionUpdateEntry.Type.ARTIST -> dao.deleteArtists(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.SHOW -> dao.deleteShows(*del.value.toTypedArray())
           CollectionUpdateEntry.Type.EPISODE -> dao.deleteEpisodes(*del.value.toTypedArray())
+          else -> { /* ignore */ }
         }
       }
     }
