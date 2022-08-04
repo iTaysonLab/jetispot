@@ -22,16 +22,8 @@ class SessionControllerVerifier @Inject constructor(
     fun verifyController(info: MediaSession.ControllerInfo): Boolean {
         Log.d("SessionControllerVerifier", ">> checking $info")
 
-        if (info.uid == Process.myUid() || info.uid == Process.SYSTEM_UID) {
-            return true
-        }
-
-        if (info.packageName == Intent.ACTION_MEDIA_BUTTON) {
-            // not yet
-            return false
-        } else if (info.packageName == MediaBrowserServiceCompat.SERVICE_INTERFACE) {
-            // not yet 2
-            return false
+        fastCheck(info)?.let {
+            return it
         }
 
         checkedCache[info.packageName]?.let { entry ->
@@ -69,6 +61,14 @@ class SessionControllerVerifier @Inject constructor(
     }
 
     // implementation
+
+    private fun fastCheck(info: MediaSession.ControllerInfo): Boolean? = when {
+        info.uid == Process.myUid() || info.uid == Process.SYSTEM_UID -> true
+        info.packageName == "android.media.session.MediaController" -> true
+        info.packageName == Intent.ACTION_MEDIA_BUTTON -> false
+        info.packageName == MediaBrowserServiceCompat.SERVICE_INTERFACE -> false
+        else -> null
+    }
 
     private val checkedCache = mutableMapOf<String, AlreadyCheckedEntry>()
 
