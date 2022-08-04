@@ -1,12 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
 import android.content.Context
-import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,12 +24,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
-import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
-import kotlinx.coroutines.flow.first
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import kotlinx.coroutines.launch
 
 interface ConfigViewModel {
@@ -47,7 +42,6 @@ interface ConfigViewModel {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseConfigScreen(
-  navController: LambdaNavigationController,
   viewModel: ConfigViewModel
 ) {
   val scrollBehavior = rememberEUCScrollBehavior()
@@ -55,6 +49,7 @@ fun BaseConfigScreen(
   val scope = rememberCoroutineScope()
   val dsConfigState = viewModel.provideDataStore().data.collectAsState(initial = SpConfigurationManager.DEFAULT)
   val dsConfig = dsConfigState.value
+  val navController = LocalNavigationController.current
 
   Scaffold(topBar = {
     bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar(title = {
@@ -328,7 +323,7 @@ sealed class ConfigItem {
   class Preference(
     @StringRes val title: Int,
     val subtitle: (Context, AppConfig) -> String,
-    val onClick: (LambdaNavigationController) -> Unit
+    val onClick: (NavigationController) -> Unit
   ) : ConfigItem()
 
   class Switch(

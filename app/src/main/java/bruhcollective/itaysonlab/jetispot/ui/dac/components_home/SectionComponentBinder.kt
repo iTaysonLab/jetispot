@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -11,16 +10,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.spotify.home.dac.component.v1.proto.*
 
 @Composable
 fun SectionComponentBinder(
-  navController: LambdaNavigationController,
   item: SectionComponent
 ) {
   val list = item.componentsList.map { it.dynamicUnpack() }
@@ -28,7 +26,6 @@ fun SectionComponentBinder(
     items(list) { listItem ->
       when (listItem) {
         is AlbumCardMediumComponent -> MediumCard(
-          navController = navController,
           title = listItem.title,
           subtitle = listItem.subtitle,
           navigateUri = listItem.navigateUri,
@@ -37,7 +34,6 @@ fun SectionComponentBinder(
         )
 
         is PlaylistCardMediumComponent -> MediumCard(
-          navController = navController,
           title = listItem.title,
           subtitle = listItem.subtitle,
           navigateUri = listItem.navigateUri,
@@ -46,7 +42,6 @@ fun SectionComponentBinder(
         )
 
         is ArtistCardMediumComponent -> MediumCard(
-          navController = navController,
           title = listItem.title,
           subtitle = listItem.subtitle,
           navigateUri = listItem.navigateUri,
@@ -55,7 +50,6 @@ fun SectionComponentBinder(
         )
 
         is EpisodeCardMediumComponent -> MediumCard(
-          navController = navController,
           title = listItem.title,
           subtitle = listItem.subtitle,
           navigateUri = listItem.navigateUri,
@@ -64,7 +58,6 @@ fun SectionComponentBinder(
         )
 
         is ShowCardMediumComponent -> MediumCard(
-          navController = navController,
           title = listItem.title,
           subtitle = listItem.subtitle,
           navigateUri = listItem.navigateUri,
@@ -78,7 +71,6 @@ fun SectionComponentBinder(
 
 @Composable
 fun MediumCard(
-  navController: LambdaNavigationController,
   title: String,
   subtitle: String,
   navigateUri: String,
@@ -90,7 +82,7 @@ fun MediumCard(
   Column(
     Modifier
       .width(size)
-      .clickable {
+      .navClickable { navController ->
         navController.navigate(navigateUri)
       }) {
     var drawnTitle = false

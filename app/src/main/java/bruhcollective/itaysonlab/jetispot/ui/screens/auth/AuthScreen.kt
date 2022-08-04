@@ -47,17 +47,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
-  navController: LambdaNavigationController,
   viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
+  val navController = LocalNavigationController.current
+
   val snackbarHostState = remember { SnackbarHostState() }
   val (snackbarContent, setSnackbarContent) = remember { mutableStateOf("", neverEqualPolicy()) }
 

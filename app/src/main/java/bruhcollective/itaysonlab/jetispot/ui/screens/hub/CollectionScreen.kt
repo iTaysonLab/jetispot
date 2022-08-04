@@ -1,19 +1,15 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
-import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
-import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
 import bruhcollective.itaysonlab.jetispot.ui.hub.virt.CollectionEntityView
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,10 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionScreen(
-  navController: LambdaNavigationController,
   viewModel: CollectionViewModel = hiltViewModel()
 ) {
   LaunchedEffect(Unit) {
@@ -33,7 +27,6 @@ fun CollectionScreen(
   }
 
   HubScaffold(
-    navController = navController,
     appBarTitle = stringResource(id = R.string.liked_songs),
     state = viewModel.state,
     viewModel = viewModel

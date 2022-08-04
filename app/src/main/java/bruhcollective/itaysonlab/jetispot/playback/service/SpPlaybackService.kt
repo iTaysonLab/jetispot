@@ -11,7 +11,6 @@ import androidx.media2.session.MediaSession
 import androidx.media2.session.SessionResult
 import bruhcollective.itaysonlab.jetispot.MainActivity
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerManager
-import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

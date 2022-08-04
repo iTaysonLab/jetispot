@@ -1,11 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.navigation.compose.hiltViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.SpMetadataRequester
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -18,7 +16,6 @@ import javax.inject.Inject
 
 @Composable
 fun PlaylistScreen(
-  navController: LambdaNavigationController,
   id: String,
   viewModel: PlaylistViewModel = hiltViewModel()
 ) {
@@ -28,7 +25,6 @@ fun PlaylistScreen(
   }
 
   HubScaffold(
-    navController = navController,
     appBarTitle = viewModel.title.value,
     state = viewModel.state,
     viewModel = viewModel

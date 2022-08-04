@@ -1,14 +1,14 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub
 
-import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 
 object HubEventHandler {
-  fun handle (navController: LambdaNavigationController, delegate: HubScreenDelegate, event: HubEvent) {
+  fun handle (navController: NavigationController, delegate: HubScreenDelegate, event: HubEvent) {
     when (event) {
       is HubEvent.NavigateToUri -> {
         if (event.data.uri.startsWith("http")) {
@@ -24,6 +24,6 @@ object HubEventHandler {
 }
 
 @Stable
-fun Modifier.clickableHub(navController: LambdaNavigationController, delegate: HubScreenDelegate, item: HubItem) = this.clickable(enabled = item.events?.click != null) {
+fun Modifier.clickableHub(delegate: HubScreenDelegate, item: HubItem) = navClickable(enabled = item.events?.click != null) { navController ->
   HubEventHandler.handle(navController, delegate, item.events!!.click!!)
 }

@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
@@ -23,6 +22,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -34,9 +34,9 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListeningHistoryScreen(
-  navController: LambdaNavigationController,
   viewModel: HistoryViewModel = hiltViewModel()
 ) {
+  val navController = LocalNavigationController.current
   val scrollBehavior = rememberEUCScrollBehavior()
   val scope = rememberCoroutineScope()
   val loadFunc: suspend CoroutineScope.() -> Unit = remember {{
@@ -71,12 +71,12 @@ fun ListeningHistoryScreen(
                 key = header.id,
                 contentType = header.component.javaClass.simpleName,
               ) {
-                HubBinder(navController, viewModel, header)
+                HubBinder(viewModel, header)
               }
             }
 
             items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
-              HubBinder(navController, viewModel, it)
+              HubBinder(viewModel, it)
             }
           }
         }

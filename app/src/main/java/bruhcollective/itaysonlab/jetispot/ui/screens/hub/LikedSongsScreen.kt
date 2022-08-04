@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @Composable
 fun LikedSongsScreen(
-  navController: LambdaNavigationController,
   id: String,
   fullUri: String,
   viewModel: LikedSongsViewModel = hiltViewModel()
@@ -27,7 +25,6 @@ fun LikedSongsScreen(
   }
 
   HubScaffold(
-    navController = navController,
     appBarTitle = stringResource(R.string.liked_songs),
     state = viewModel.state,
     toolbarOptions = ToolbarOptions(big = true, alwaysVisible = true),

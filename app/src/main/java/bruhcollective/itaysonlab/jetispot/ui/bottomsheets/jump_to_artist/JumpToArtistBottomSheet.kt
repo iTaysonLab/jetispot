@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,10 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import com.spotify.metadata.Metadata
 import xyz.gianlu.librespot.common.Utils
@@ -27,9 +25,10 @@ import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
 fun JumpToArtistBottomSheet(
-  navController: LambdaNavigationController,
   data: String
 ) {
+  val navController = LocalNavigationController.current
+
   val content = remember {
     data.split("|").map {
       Metadata.ArtistWithRole.parseFrom(Utils.hexToBytes(it))

@@ -17,27 +17,27 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubScaffold(
-  navController: LambdaNavigationController,
   appBarTitle: String,
   state: HubState,
   viewModel: HubScreenDelegate,
   toolbarOptions: ToolbarOptions = ToolbarOptions(),
   reloadFunc: suspend () -> Unit
 ) {
+  val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
   val sbd = rememberSplineBasedDecay<Float>()
   val topBarState = rememberTopAppBarState()
@@ -80,12 +80,12 @@ fun HubScaffold(
                 key = header.id,
                 contentType = header.component.javaClass.simpleName,
               ) {
-                HubBinder(navController, viewModel, header)
+                HubBinder(viewModel, header)
               }
             }
 
             items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
-              HubBinder(navController, viewModel, it)
+              HubBinder(viewModel, it)
             }
           }
         }

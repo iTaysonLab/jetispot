@@ -4,25 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingFullscreenComposition (
-  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   mainPagerState: PagerState,
   viewModel: NowPlayingViewModel
@@ -51,7 +45,7 @@ fun NowPlayingFullscreenComposition (
     )
 
     NowPlayingControls(
-      scope = scope, viewModel = viewModel, navController = navController, bottomSheetState = bottomSheetState, modifier = Modifier
+      scope = scope, viewModel = viewModel, bottomSheetState = bottomSheetState, modifier = Modifier
         .align(Alignment.BottomCenter)
         .padding(horizontal = 8.dp)
         .padding(bottom = 24.dp)

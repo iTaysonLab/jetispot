@@ -2,8 +2,6 @@ package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
@@ -30,12 +27,12 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityAct
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 @Composable
 fun AlbumHeader(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -72,7 +69,7 @@ fun AlbumHeader(
     if (item.metadata!!.album!!.artists.size == 1) {
       // large
       Row(modifier = Modifier
-        .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
+        .navClickable(enableRipple = false) { navController ->
           HubEventHandler.handle(
             navController,
             delegate,
@@ -91,7 +88,7 @@ fun AlbumHeader(
     } else {
       Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         item.metadata.album!!.artists.forEachIndexed { idx, artist ->
-          MediumText(text = artist.name!!, fontSize = 13.sp, modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
+          MediumText(text = artist.name!!, fontSize = 13.sp, modifier = Modifier.navClickable(enableRipple = false) { navController ->
             HubEventHandler.handle(
               navController,
               delegate,
@@ -108,6 +105,6 @@ fun AlbumHeader(
 
     Subtext(text = "${item.metadata.album!!.type} • ${item.metadata.album.year}", modifier = Modifier.padding(horizontal = 16.dp))
 
-    EntityActionStrip(navController, delegate, item)
+    EntityActionStrip(delegate, item)
   }
 }

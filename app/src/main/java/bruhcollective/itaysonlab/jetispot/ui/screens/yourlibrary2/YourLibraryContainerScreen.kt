@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,9 +37,9 @@ import javax.inject.Inject
 )
 @Composable
 fun YourLibraryContainerScreen(
-  navController: LambdaNavigationController,
   viewModel: YourLibraryContainerViewModel = hiltViewModel()
 ) {
+  val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
   val state = rememberLazyListState()
 

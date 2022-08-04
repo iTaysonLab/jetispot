@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
@@ -22,7 +21,6 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
 @Composable
 fun EntityActionStrip (
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -41,7 +39,7 @@ fun EntityActionStrip (
 
     Box(Modifier.size(48.dp)) {
       Box(
-        Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(navController, delegate, item.children!![0])
+        Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(delegate, item.children!![0])
       ) {
         Icon(
           imageVector = Icons.Rounded.PlayArrow,

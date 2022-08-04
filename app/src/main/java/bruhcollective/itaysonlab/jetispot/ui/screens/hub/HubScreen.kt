@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
@@ -31,7 +30,6 @@ import javax.inject.Inject
 
 @Composable
 fun HubScreen(
-  navController: LambdaNavigationController,
   needContentPadding: Boolean = true,
   loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
@@ -70,7 +68,7 @@ fun HubScreen(
               },
               contentType = header.component.javaClass.simpleName,
             ) {
-              HubBinder(navController, viewModel, header)
+              HubBinder(viewModel, header)
             }
           }
 
@@ -79,7 +77,7 @@ fun HubScreen(
               items(item.children, key = { dItem -> dItem.id }, contentType = {
                 item.component.javaClass.simpleName
               }) { cItem ->
-                HubBinder(navController, viewModel, cItem)
+                HubBinder(viewModel, cItem)
               }
             } else {
               item(span = {
@@ -87,7 +85,7 @@ fun HubScreen(
               }, key = item.id, contentType = {
                 item.component.javaClass.simpleName
               }) {
-                HubBinder(navController, viewModel, item, isRenderingInGrid = item.component.isGrid())
+                HubBinder(viewModel, item, isRenderingInGrid = item.component.isGrid())
               }
             }
           }

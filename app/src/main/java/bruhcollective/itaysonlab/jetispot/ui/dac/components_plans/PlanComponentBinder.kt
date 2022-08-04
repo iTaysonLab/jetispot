@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -13,17 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.spotify.allplans.v1.PlanComponent
 
 @Composable
 fun PlanComponentBinder(
-  navController: LambdaNavigationController,
   item: PlanComponent
 ) {
-  Row(Modifier.clickable {
+  Row(Modifier.navClickable { navController ->
     navController.openInBrowser(item.uri)
   }.fillMaxWidth().padding(horizontal = 16.dp)) {
     Surface(

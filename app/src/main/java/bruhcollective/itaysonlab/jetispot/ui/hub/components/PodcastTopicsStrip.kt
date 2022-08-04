@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -13,11 +12,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import com.spotify.podcastcreatorinteractivity.v1.PodcastRating
 import com.spotify.podcastextensions.proto.PodcastTopic
 import com.spotify.podcastextensions.proto.PodcastTopics
@@ -25,10 +23,10 @@ import com.spotify.podcastextensions.proto.PodcastTopics
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PodcastTopicsStrip (
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val navController = LocalNavigationController.current
   val topics = remember { item.custom!!["topics"] as PodcastTopics }
   val rating = remember { item.custom!!["ratings"] as PodcastRating }
 

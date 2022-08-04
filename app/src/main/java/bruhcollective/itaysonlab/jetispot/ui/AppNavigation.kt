@@ -1,8 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui
 
 import android.content.Intent
-import android.net.Uri
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -40,7 +38,6 @@ import com.google.accompanist.navigation.material.bottomSheet
 @Composable
 fun AppNavigation(
   navController: NavHostController,
-  provideLambdaController: LambdaNavigationController,
   sessionManager: SpSessionManager,
   authManager: SpAuthManager,
   modifier: Modifier
@@ -68,11 +65,11 @@ fun AppNavigation(
     }
 
     composable(Screen.Authorization.route) {
-      AuthScreen(provideLambdaController)
+      AuthScreen()
     }
 
     composable(Screen.Feed.route) {
-      DacRendererScreen(provideLambdaController, "", true, {
+      DacRendererScreen("", true, {
         getDacHome(SpInternalApi.buildDacRequestForHome(it))
       })
     }
@@ -85,27 +82,27 @@ fun AppNavigation(
       val dpLinkType = it.arguments?.getString("type")
       val dpLinkTypeId = it.arguments?.getString("typeId")
       val uri = fullUrl ?: "$dpLinkType:$dpLinkTypeId"
-      DynamicSpIdScreen(provideLambdaController, uri, "spotify:$uri")
+      DynamicSpIdScreen(uri, "spotify:$uri")
     }
 
     composable(Screen.DacViewCurrentPlan.route) {
-      DacRendererScreen(provideLambdaController, stringResource(id = Screen.DacViewCurrentPlan.title), false, {
+      DacRendererScreen(stringResource(id = Screen.DacViewCurrentPlan.title), false, {
         getPlanOverview()
       })
     }
 
     composable(Screen.DacViewAllPlans.route) {
-      DacRendererScreen(provideLambdaController, stringResource(id = Screen.DacViewAllPlans.title), false, {
+      DacRendererScreen(stringResource(id = Screen.DacViewAllPlans.title), false, {
         getAllPlans()
       })
     }
 
-    composable(Screen.Config.route) { ConfigScreen(provideLambdaController) }
+    composable(Screen.Config.route) { ConfigScreen() }
     composable(Screen.StorageConfig.route) { StorageScreen() }
-    composable(Screen.QualityConfig.route) { QualityConfigScreen(provideLambdaController) }
-    composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen(provideLambdaController) }
-    composable(Screen.Search.route) { BrowseRootScreen(provideLambdaController) }
-    composable(Screen.Library.route) { YourLibraryContainerScreen(provideLambdaController) }
+    composable(Screen.QualityConfig.route) { QualityConfigScreen() }
+    composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen() }
+    composable(Screen.Search.route) { BrowseRootScreen() }
+    composable(Screen.Library.route) { YourLibraryContainerScreen() }
 
     dialog(Dialog.AuthDisclaimer.route) {
       AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
@@ -145,38 +142,7 @@ fun AppNavigation(
 
     bottomSheet(BottomSheet.JumpToArtist.route) { entry ->
       val data = remember { entry.arguments!!.getString("artistIdsAndRoles")!! }
-      JumpToArtistBottomSheet(navController = provideLambdaController, data = data)
+      JumpToArtistBottomSheet(data = data)
     }
   }
-}
-
-@JvmInline
-@Immutable
-value class LambdaNavigationController(
-  val controller: () -> NavHostController
-) {
-  @Suppress("DeprecatedCallableAddReplaceWith")
-  @Deprecated(message = "Migrate to navigate(Screen) or navigate(Dialog) if not using arguments")
-  fun navigate(route: String) = controller().navigate(route)
-
-  fun navigate(screen: Screen) = controller().navigate(screen.route)
-  fun navigate(dialog: Dialog) = controller().navigate(dialog.route)
-
-  fun navigate(sheet: BottomSheet, args: Map<String, String>) {
-    var url = sheet.route
-
-    args.forEach { entry ->
-      url = url.replace("{${entry.key}}", entry.value)
-    }
-
-    controller().navigate(url)
-  }
-
-  fun navigateAndClearStack(screen: Screen) = controller().navigate(screen.route) { popUpTo(Screen.NavGraph.route) }
-
-  fun popBackStack() = controller().popBackStack()
-
-  fun context() = controller().context
-  fun string(@StringRes id: Int) = context().getString(id)
-  fun openInBrowser(uri: String) = context().startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(uri)))
 }

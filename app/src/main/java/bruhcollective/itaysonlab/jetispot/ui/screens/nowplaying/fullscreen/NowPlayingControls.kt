@@ -21,23 +21,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NowPlayingControls(
   scope: CoroutineScope,
-  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
   Column(modifier, verticalArrangement = Arrangement.Bottom) {
-    ControlsHeader(scope, navController, bottomSheetState, viewModel)
+    ControlsHeader(scope, bottomSheetState, viewModel)
     Spacer(Modifier.height(8.dp))
     ControlsSeekbar(viewModel)
     Spacer(Modifier.height(16.dp))
@@ -51,21 +50,18 @@ fun NowPlayingControls(
 @Composable
 private fun ControlsHeader(
   scope: CoroutineScope,
-  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel,
 ) {
-  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp).clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null
-  ) {
+  MediumText(text = viewModel.currentTrack.value.title, modifier = Modifier.padding(horizontal = 14.dp).navClickable(
+    enableRipple = false
+  ) { navController ->
     viewModel.navigateToSource(scope, bottomSheetState, navController)
   }, fontSize = 24.sp, color = Color.White,)
   Spacer(Modifier.height(2.dp))
-  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp).clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null
-  ) {
+  Text(text = viewModel.currentTrack.value.artist, modifier = Modifier.padding(horizontal = 14.dp).navClickable(
+    enableRipple = false
+  ) { navController ->
     viewModel.navigateToArtist(scope, bottomSheetState, navController)
   }, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 16.sp, color = Color.White.copy(alpha = 0.7f))
 }

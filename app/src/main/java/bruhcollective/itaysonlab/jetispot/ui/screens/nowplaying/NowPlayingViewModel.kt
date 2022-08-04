@@ -10,8 +10,8 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
+import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import com.spotify.metadata.Metadata
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,13 +49,13 @@ class NowPlayingViewModel @Inject constructor(
   fun skipNext() = spPlayerServiceManager.skipNext()
 
   @OptIn(ExperimentalMaterialApi::class)
-  fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
+  fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: NavigationController) {
     scope.launch { sheetState.collapse() }
     navigationController.navigate(currentContextUri.value)
   }
 
   @OptIn(ExperimentalMaterialApi::class)
-  fun navigateToArtist(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: LambdaNavigationController) {
+  fun navigateToArtist(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: NavigationController) {
     scope.launch { sheetState.collapse() }
     navigationController.navigate(
       BottomSheet.JumpToArtist, mapOf(

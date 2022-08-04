@@ -19,13 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
@@ -36,7 +34,6 @@ import java.util.*
 
 @Composable
 fun EpisodeListItem (
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -104,7 +101,7 @@ fun EpisodeListItem (
 
       Box(
         Modifier
-          .clickableHub(navController, delegate, item)
+          .clickableHub(delegate, item)
           .size(28.dp)
           .clip(CircleShape)
           .background(MaterialTheme.colorScheme.primary)

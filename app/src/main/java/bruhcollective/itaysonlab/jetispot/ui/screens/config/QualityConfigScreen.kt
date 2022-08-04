@@ -1,24 +1,21 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
-import bruhcollective.itaysonlab.jetispot.proto.AppConfig
-import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
+import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @Composable
 fun QualityConfigScreen(
-  navController: LambdaNavigationController,
   viewModel: QualityConfigScreenViewModel = hiltViewModel()
 ) {
-  BaseConfigScreen(navController, viewModel)
+  BaseConfigScreen(viewModel)
 }
 
 @HiltViewModel

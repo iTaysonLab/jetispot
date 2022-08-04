@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.blend
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpBlendApi
@@ -18,10 +17,9 @@ import javax.inject.Inject
 
 @Composable
 fun BlendCreateInvitationScreen (
-  navController: LambdaNavigationController,
   viewModel: BlendCreateInvitationViewModel = hiltViewModel()
 ) {
-  BaseConfigScreen(navController, viewModel)
+  BaseConfigScreen(viewModel)
 }
 
 @HiltViewModel

@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_plans
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -12,16 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.spotify.planoverview.v1.BenefitListComponent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BenefitListComponentBinder(
-  navController: LambdaNavigationController,
   item: BenefitListComponent
 ) {
   Card(
@@ -74,7 +71,7 @@ fun BenefitListComponentBinder(
 
         Row(
           Modifier
-            .clickable {
+            .navClickable { navController ->
               navController.navigate("dac/viewAllPlans")
             }
             .fillMaxWidth()
