@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,10 +27,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
+import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -41,7 +42,6 @@ import androidx.compose.material3.MaterialTheme.colorScheme as monet
 @Composable
 fun ControlsHeader(
   scope: CoroutineScope,
-  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   viewModel: NowPlayingViewModel
 ) {
@@ -51,12 +51,7 @@ fun ControlsHeader(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
           .padding(horizontal = 14.dp)
-          .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-          ) {
-            viewModel.navigateToSource(scope, bottomSheetState, navController)
-          },
+          .navClickable{ viewModel.navigateToSource(scope, bottomSheetState, it) },
         fontSize = 24.sp,
         color = monet.onSecondaryContainer.copy(0.85f),
         fontWeight = FontWeight.ExtraBold,
@@ -69,12 +64,7 @@ fun ControlsHeader(
         text = viewModel.currentTrack.value.artist,
         modifier = Modifier
           .padding(horizontal = 14.dp)
-          .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-          ) {
-            viewModel.navigateToArtist(scope, bottomSheetState, navController)
-          },
+          .navClickable { viewModel.navigateToArtist(scope, bottomSheetState, it) },
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 18.sp,
@@ -126,7 +116,7 @@ fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
         Text(text = " / ", color = monet.onSecondaryContainer.copy(0.85f), fontSize = 12.sp)
 
         Text(
-          text = viewModel.currentTrackDurationFmt.value,
+          text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L),
           color = monet.onSecondaryContainer.copy(0.85f),
           fontSize = 12.sp,
           fontWeight = FontWeight.Bold

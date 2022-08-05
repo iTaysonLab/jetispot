@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
@@ -28,7 +27,6 @@ import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
 fun LikedSongsRow(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -44,7 +42,7 @@ fun LikedSongsRow(
   if (likedSongsInfo.value.isNotEmpty()) {
     Row(
       Modifier
-        .clickableHub(navController, delegate, item)
+        .clickableHub(delegate, item)
         .padding(start = 16.dp, top = 16.dp)
     ) {
 

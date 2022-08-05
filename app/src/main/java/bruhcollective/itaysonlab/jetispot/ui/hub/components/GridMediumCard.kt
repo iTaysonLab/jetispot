@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -25,7 +24,6 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun GridMediumCard(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
@@ -38,7 +36,7 @@ fun GridMediumCard(
   ) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.clickableHub(navController, delegate, item).padding(14.dp)
+      modifier = Modifier.clickableHub(delegate, item).padding(14.dp)
     ) {
       var drawnTitle = false
       Surface(color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)) {

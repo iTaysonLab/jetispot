@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Shuffle
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -22,20 +23,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayFAB(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   val fabSize = animateDpAsState(
-    if (scrollBehavior.scrollFraction <= 0.02f) 56.dp else 0.dp,
+    if (scrollBehavior.state.collapsedFraction <= 0.02f) 56.dp else 0.dp,
     animationSpec = tween(durationMillis = 500)
   ).value
   Box {
@@ -44,7 +44,7 @@ fun PlayFAB(
           .clip(RoundedCornerShape(16.dp))
           .size(fabSize)
           .background(MaterialTheme.colorScheme.primaryContainer)
-          .clickableHub(navController, delegate, it)
+          .clickableHub(delegate, it)
     }?.let {
       Box(
         it

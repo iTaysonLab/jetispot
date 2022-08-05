@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
@@ -25,7 +24,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubScaffold(
-  navController: LambdaNavigationController,
   appBarTitle: String,
   state: HubState,
   viewModel: HubScreenDelegate,
@@ -51,13 +49,12 @@ fun HubScaffold(
           ) {
             state.data.apply {
               if (header != null) {
-                HubBinder(navController, viewModel, header, scrollBehavior = topBarState)
+                HubBinder(viewModel, header, scrollBehavior = topBarState)
               }
             }
 
             state.data.apply {
                 HubBinder(
-                  navController,
                   viewModel, body[0],
                   scrollBehavior = topBarState,
                   albumHeader = true,
@@ -74,14 +71,14 @@ fun HubScaffold(
               state.data.apply {
                 items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
                   // Playlist track list
-                  HubBinder(navController, viewModel, it, scrollBehavior = topBarState)
+                  HubBinder(viewModel, it, scrollBehavior = topBarState)
                 }
               }
             }
           }
 
           val fabPadding = animateDpAsState(
-            if (topBarState.scrollFraction <= 0.02f) 16.dp else 0.dp,
+            if (topBarState.state.collapsedFraction <= 0.02f) 16.dp else 0.dp,
             animationSpec = tween(durationMillis = 500)
           ).value
 
@@ -93,7 +90,6 @@ fun HubScaffold(
           ) {
             state.data.apply {
               HubBinder(
-                navController,
                 viewModel,
                 body[0],
                 scrollBehavior = topBarState,
@@ -132,7 +128,6 @@ fun HubScaffold(
             state.data.apply {
               state.data.header?.let {
                 HubBinder(
-                  navController,
                   viewModel,
                   it,
                   scrollBehavior = topBarState,

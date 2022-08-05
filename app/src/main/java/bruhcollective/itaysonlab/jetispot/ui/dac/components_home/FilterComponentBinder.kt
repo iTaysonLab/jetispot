@@ -22,10 +22,10 @@ fun FilterComponentBinder (
   selectedFacet: String,
   selectFacet: (String) -> Unit
 ) {
-  val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction)).value.dp
+  val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction)).value.dp
   LazyRow(
     Modifier
-      .padding(start = 16.dp, bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
+      .padding(start = 16.dp, bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp))
       .height(animHeight),
     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
     items(component.facetsList) { item ->
@@ -34,8 +34,7 @@ fun FilterComponentBinder (
         selected = selected,
         onClick = { selectFacet(if (selected) "default" else item.value) },
         label = { Text(item.title) },
-        selectedIcon = { Icon(Icons.Rounded.Check, null) }
-      )
+        leadingIcon = { if (selected) Icon(Icons.Rounded.Check, null) } )
     }
   }
 }

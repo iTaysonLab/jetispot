@@ -3,6 +3,8 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 import androidx.collection.LruCache
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -17,7 +19,6 @@ import com.spotify.metadata.Metadata
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import xyz.gianlu.librespot.common.Utils
-import xyz.gianlu.librespot.metadata.ArtistId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +35,9 @@ class NowPlayingViewModel @Inject constructor(
   val currentQueue get() = spPlayerServiceManager.currentQueue
   val currentQueuePosition get() = spPlayerServiceManager.currentQueuePosition
   val currentBgColor = mutableStateOf(Color.Transparent)
+
+  // TODO animate
+  val currentColorScheme = mutableStateOf(lightColorScheme() to darkColorScheme())
 
   // ui bridges
   var uiOnTrackIndexChanged: (Int) -> Unit = {}

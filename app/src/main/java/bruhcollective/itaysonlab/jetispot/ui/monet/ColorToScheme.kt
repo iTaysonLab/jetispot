@@ -39,6 +39,8 @@ object ColorToScheme {
       errorContainer = scheme.errorContainer.color(),
       onErrorContainer = scheme.onErrorContainer.color(),
       outline = scheme.outline.color(),
+      outlineVariant = scheme.outline.color(), //TODO: Implement actual color roles
+      scrim = scheme.onTertiary.color()
     )
   }
 }

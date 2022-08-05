@@ -3,12 +3,15 @@ package bruhcollective.itaysonlab.jetispot.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.SideEffect
 import bruhcollective.itaysonlab.jetispot.ui.monet.color
 import bruhcollective.itaysonlab.jetispot.ui.monet.google.scheme.Scheme
 import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences
@@ -64,6 +67,8 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     errorContainer = DScheme.errorContainer.color(),
     onErrorContainer = DScheme.onErrorContainer.color(),
     outline = DScheme.outline.color(),
+    outlineVariant = DScheme.outline.color(), //TODO: Implement actual color roles
+    scrim = DScheme.tertiary.color()
   )
 
   val LScheme = Scheme.light(android.graphics.Color.parseColor(ColorOfScheme))
@@ -95,6 +100,8 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     errorContainer = LScheme.errorContainer.color(),
     onErrorContainer = LScheme.onErrorContainer.color(),
     outline = LScheme.outline.color(),
+    outlineVariant = LScheme.outline.color(), //TODO: Implement actual color roles
+    scrim = LScheme.tertiary.color()
   )
   return when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> if (darkTheme) {

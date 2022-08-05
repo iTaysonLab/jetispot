@@ -16,11 +16,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.FilterComponentBinder
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -39,12 +39,13 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DacRendererScreen(
-  navController: LambdaNavigationController,
   title: String,
   fullscreen: Boolean = false,
   loader: suspend SpInternalApi.(String) -> DacResponse,
   viewModel: DacViewModel = hiltViewModel()
 ) {
+  val navController = LocalNavigationController.current
+
   val sbd = rememberSplineBasedDecay<Float>()
   val topBarState = rememberEUCScrollBehavior()
   val scrollBehavior = remember {
@@ -126,7 +127,7 @@ fun DacRendererScreen(
                       }
                     }
                   } else {
-                    DacRender(navController, unpackedItem, topBarState)
+                    DacRender(unpackedItem, topBarState)
                   }
                 }
               }

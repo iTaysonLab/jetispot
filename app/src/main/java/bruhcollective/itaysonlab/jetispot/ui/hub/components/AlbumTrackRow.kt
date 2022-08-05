@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
@@ -20,14 +19,13 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun AlbumTrackRow(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem
 ) {
   Row(horizontalArrangement = Arrangement.SpaceBetween) {
     Column(
       Modifier
-        .clickableHub(navController, delegate, item)
+        .clickableHub(delegate, item)
         .fillMaxWidth(0.865f)
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
       var drawnTitle = false

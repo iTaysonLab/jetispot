@@ -24,8 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.home.dac.component.v1.proto.*
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -35,9 +35,10 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
 @Composable
 fun SectionComponentBinder(
-  navController: LambdaNavigationController,
   item: SectionComponent
 ) {
+  val navController = LocalNavigationController.current
+
   val list = item.componentsList.map { it.dynamicUnpack() }
   val lazyListState = rememberLazyListState()
 
@@ -64,7 +65,6 @@ fun SectionComponentBinder(
         items(list) { listItem ->
           when (listItem) {
             is AlbumCardMediumComponent -> MediumCard(
-              navController = navController,
               title = listItem.title,
               subtitle = listItem.subtitle,
               navigateUri = listItem.navigateUri,
@@ -73,7 +73,6 @@ fun SectionComponentBinder(
             )
 
             is PlaylistCardMediumComponent -> MediumCard(
-              navController = navController,
               title = listItem.title,
               subtitle = listItem.subtitle,
               navigateUri = listItem.navigateUri,
@@ -82,7 +81,6 @@ fun SectionComponentBinder(
             )
 
             is ArtistCardMediumComponent -> MediumCard(
-              navController = navController,
               title = listItem.title,
               subtitle = listItem.subtitle,
               navigateUri = listItem.navigateUri,
@@ -91,7 +89,6 @@ fun SectionComponentBinder(
             )
 
             is EpisodeCardMediumComponent -> MediumCard(
-              navController = navController,
               title = listItem.title,
               subtitle = listItem.subtitle,
               navigateUri = listItem.navigateUri,
@@ -100,7 +97,6 @@ fun SectionComponentBinder(
             )
 
             is ShowCardMediumComponent -> MediumCard(
-              navController = navController,
               title = listItem.title,
               subtitle = listItem.subtitle,
               navigateUri = listItem.navigateUri,
@@ -146,13 +142,13 @@ fun SectionComponentBinder(
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun MediumCard(
-  navController: LambdaNavigationController,
   title: String,
   subtitle: String,
   navigateUri: String,
   imageUri: String,
   imagePlaceholder: String
 ) {
+  val navController = LocalNavigationController.current
   Surface(
     color = MaterialTheme.colorScheme.background,
     shape = RoundedCornerShape(20.dp)

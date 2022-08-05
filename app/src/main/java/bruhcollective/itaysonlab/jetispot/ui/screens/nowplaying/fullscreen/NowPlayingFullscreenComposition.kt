@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,7 +28,6 @@ import androidx.compose.material3.MaterialTheme.colorScheme as monet
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingFullscreenComposition (
-  navController: LambdaNavigationController,
   bottomSheetState: BottomSheetState,
   mainPagerState: PagerState,
   viewModel: NowPlayingViewModel,
@@ -100,7 +98,7 @@ fun NowPlayingFullscreenComposition (
         Column(Modifier.size((LocalConfiguration.current.screenWidthDp * 0.9).dp)) { }
 
         Column(Modifier.padding(horizontal = 8.dp)) {
-          ControlsHeader(scope, navController, bottomSheetState, viewModel)
+          ControlsHeader(scope, bottomSheetState, viewModel)
           ControlsSeekbar(viewModel)
         }
 

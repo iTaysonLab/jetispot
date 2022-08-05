@@ -24,21 +24,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import coil.compose.AsyncImage
 
-@OptIn(ExperimentalTextApi::class)
+@OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PlaylistHeader(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehaviour: TopAppBarScrollBehavior
 ) {
+  val navController = LocalNavigationController.current
 //  val darkTheme = isSystemInDarkTheme()
 //  val dominantColor = remember { mutableStateOf(Color.Transparent) }
 //  val dominantColorAsBg = animateColorAsState(dominantColor.value)
@@ -144,14 +144,15 @@ fun PlaylistHeader(
 }
 
 
-@OptIn(ExperimentalTextApi::class)
+@OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LargePlaylistHeader(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
+  val navController = LocalNavigationController.current
+
   ImageBackgroundTopAppBar(
     description = {
       Text(
@@ -229,7 +230,6 @@ fun LargePlaylistHeader(
 
 @Composable
 fun PlaylistHeaderAdditionalInfo(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   custom: Map<String, Any>?
 ) {

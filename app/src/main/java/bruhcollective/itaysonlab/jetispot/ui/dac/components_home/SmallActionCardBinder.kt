@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.dynamic_blocks.DynamicLikeButton
 import bruhcollective.itaysonlab.jetispot.ui.shared.dynamic_blocks.DynamicPlayButton
@@ -26,7 +26,6 @@ import com.spotify.dac.player.v1.proto.PlayCommand
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)
 @Composable
 fun SmallActionCardBinder(
-  navController: LambdaNavigationController,
   title: String,
   subtitle: String,
   navigateUri: String,
@@ -37,6 +36,7 @@ fun SmallActionCardBinder(
 ) {
   // TODO: possibly background color based on dominant color from the artwork
 //  val viewModel: NowPlayingViewModel = hiltViewModel()
+  val navController = LocalNavigationController.current
 
   Card(
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),

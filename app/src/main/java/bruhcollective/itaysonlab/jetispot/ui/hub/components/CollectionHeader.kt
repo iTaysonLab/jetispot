@@ -28,8 +28,8 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionContentFilter
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.CollectionViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import kotlin.math.max
@@ -38,11 +38,11 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionHeader(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
+  val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
   var expandSortDropdown by remember { mutableStateOf(false) }
 
@@ -146,11 +146,11 @@ fun CollectionHeader(
     val tags = item.custom?.get("cfr") as List<CollectionContentFilter>
     val currentTag = item.custom["cfr_cur"] as String
 
-    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction)).value
+    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.heightOffset)).value
     LazyRow(
       modifier = Modifier
         .height(animHeight.dp)
-        .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp)),
+        .padding(bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp)),
       contentPadding = PaddingValues(horizontal = 16.dp),
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -160,14 +160,15 @@ fun CollectionHeader(
           delegate.sendCustomCommand(scope, if (selected) CollectionViewModel.Command.ClearTag else CollectionViewModel.Command.SetTag(item.query))
         }, label = {
           Text(item.name)
-        }, selectedIcon = {
-          Icon(Icons.Rounded.Check, null)
+        }, leadingIcon = {
+          if (selected) Icon(Icons.Rounded.Check, null)
         })
       }
     }
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LikedSongsTopAppBar(
   title: @Composable () -> Unit,
@@ -197,6 +198,7 @@ private fun LikedSongsTopAppBar(
   )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TwoRowsTopAppBar(
   modifier: Modifier = Modifier,
@@ -231,22 +233,22 @@ private fun TwoRowsTopAppBar(
   // Set a scroll offset limit that will hide just the title area and will keep the small title
   // area visible.
   SideEffect {
-    if (scrollBehavior?.state?.offsetLimit != pinnedHeightPx - maxHeightPx) {
-      scrollBehavior?.state?.offsetLimit = pinnedHeightPx - maxHeightPx
+    if (scrollBehavior?.state?.heightOffsetLimit != pinnedHeightPx - maxHeightPx) {
+      scrollBehavior?.state?.heightOffsetLimit = pinnedHeightPx - maxHeightPx
     }
   }
 
   val scrollPercentage =
-    if (scrollBehavior == null || scrollBehavior.state.offsetLimit == 0f) {
+    if (scrollBehavior == null || scrollBehavior.state.heightOffsetLimit == 0f) {
       0f
     } else {
-      scrollBehavior.state.offset / scrollBehavior.state.offsetLimit
+      scrollBehavior.state.heightOffset / scrollBehavior.state.heightOffsetLimit
     }
 
   // Obtain the container Color from the TopAppBarColors.
   // This will potentially animate or interpolate a transition between the container color and the
   // container's scrolled color according to the app bar's scroll state.
-  val scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+  val scrollFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
   val appBarContainerColor by colors.containerColor(scrollFraction)
 
   // Wrap the given actions in a Row.
@@ -286,7 +288,7 @@ private fun TwoRowsTopAppBar(
       )
       TopAppBarLayout(
         modifier = Modifier.clipToBounds(),
-        heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.offset ?: 0f),
+        heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.heightOffset ?: 0f),
         navigationIconContentColor =
         colors.navigationIconContentColor(scrollFraction).value,
         titleContentColor = colors.titleContentColor(scrollFraction).value,

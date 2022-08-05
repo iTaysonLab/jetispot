@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
@@ -38,14 +38,14 @@ import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
 
-@OptIn(ExperimentalSnapperApi::class)
+@OptIn(ExperimentalSnapperApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumHeader(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
+  val navController = LocalNavigationController.current
   // TODO: discard dominant color calculation for album header?
 //  val darkTheme = isSystemInDarkTheme()
 //  val dominantColor = remember { mutableStateOf(Color.Transparent) }

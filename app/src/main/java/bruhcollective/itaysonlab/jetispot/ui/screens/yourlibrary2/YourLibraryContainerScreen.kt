@@ -30,8 +30,8 @@ import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.UseGrid
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -43,14 +43,15 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun YourLibraryContainerScreen(
-  navController: LambdaNavigationController,
   viewModel: YourLibraryContainerViewModel = hiltViewModel()
 ) {
+  val navController = LocalNavigationController.current
+
   val scope = rememberCoroutineScope()
   val columnState = rememberLazyListState()
   val gridState = rememberLazyGridState()
   val scrollBehavior = rememberEUCScrollBehavior()
-  val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.scrollFraction))
+  val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction))
   val Grid = remember { mutableStateOf(false) }
   Grid.value = UseGrid!!
 
@@ -91,7 +92,7 @@ fun YourLibraryContainerScreen(
         Box(
           Modifier
             .height(animatedHeight.value.dp)
-            .padding(bottom = ((16 * (scrollBehavior.scrollFraction)).dp))
+            .padding(bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp))
         ) {
           Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Box(Modifier.width(295.dp)){
@@ -119,7 +120,7 @@ fun YourLibraryContainerScreen(
               Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .padding(top = ((8 * (1f - scrollBehavior.scrollFraction)).dp)),
+                .padding(top = ((8 * (1f - scrollBehavior.state.collapsedFraction)).dp)),
               horizontalArrangement = End
             ){
               IconToggleButton(
@@ -237,8 +238,7 @@ fun AnimatedChipRow(
         selected = selectedId == item.id,
         onClick = { onClick(if (selectedId == item.id) "" else item.id) },
         label = { Text(item.name) },
-        selectedIcon = { Icon(Icons.Rounded.Check, null) },
-        modifier = Modifier.animateItemPlacement()
+        leadingIcon = { if (selectedId == item.id) Icon(Icons.Rounded.Check, null) }
       )
     }
   }

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.home.dac.component.v1.proto.RecsplanationHeadingComponent
@@ -22,9 +22,10 @@ import com.spotify.home.dac.component.v1.proto.RecsplanationHeadingComponent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecsplanationHeadingComponentBinder(
-  navController: LambdaNavigationController,
   item: RecsplanationHeadingComponent
 ) {
+  val navController = LocalNavigationController.current
+
   Card(
     shape = RoundedCornerShape(32.dp),
     modifier = Modifier.padding(start = 12.dp, top = 40.dp, bottom = 16.dp),

@@ -24,11 +24,11 @@ object AppPreferences {
     private enum class Key {
         ColorScheme, UseGrid;
 
-        fun getBoolean(defValue: Boolean = false, elseValue: Boolean? = null): Boolean? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getBoolean(name, defValue) else elseValue
-        fun getFloat(defValue: Float = 0f, elseValue: Float? = null): Float? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getFloat(name, defValue) else elseValue
-        fun getInt(defValue: Int = 0, elseValue: Int? = null): Int? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getInt(name, defValue) else elseValue
-        fun getLong(defValue: Long = 0, elseValue: Long? = null): Long? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getLong(name, defValue) else elseValue
-        fun getString(defValue: String = "", elseValue: String? = null): String? = if (sharedPreferences!!.contains(name)) sharedPreferences!!.getString(name, defValue) else elseValue
+        fun getBoolean(defValue: Boolean = false, elseValue: Boolean? = null): Boolean? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getBoolean(name, defValue) else elseValue
+        fun getFloat(defValue: Float = 0f, elseValue: Float? = null): Float? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getFloat(name, defValue) else elseValue
+        fun getInt(defValue: Int = 0, elseValue: Int? = null): Int? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getInt(name, defValue) else elseValue
+        fun getLong(defValue: Long = 0, elseValue: Long? = null): Long? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getLong(name, defValue) else elseValue
+        fun getString(defValue: String = "", elseValue: String? = null): String? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getString(name, defValue) else elseValue
 
         fun setBoolean(value: Boolean?) = value?.let { sharedPreferences!!.edit { putBoolean(name, value) } } ?: remove()
         fun setFloat(value: Float?) = value?.let { sharedPreferences!!.edit { putFloat(name, value) } } ?: remove()

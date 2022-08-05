@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +23,10 @@ import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -33,15 +34,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubScreen(
-  navController: LambdaNavigationController,
   needContentPadding: Boolean = true,
   loader: suspend SpInternalApi.() -> HubResponse,
   viewModel: HubScreenViewModel = hiltViewModel(),
   statusBarPadding: Boolean = false,
   onAppBarTitleChange: (String) -> Unit = {},
 ) {
+  val navController = LocalNavigationController.current
+
   val scope = rememberCoroutineScope()
   val scrollBehavior = rememberEUCScrollBehavior()
 
@@ -68,8 +71,8 @@ fun HubScreen(
               ) {
                 // artist header
                 HubBinder(
-                  navController,
-                  viewModel, header,
+                  viewModel,
+                  header,
                   scrollBehavior = scrollBehavior,
                   artistHeader = true
                 )
@@ -102,7 +105,7 @@ fun HubScreen(
                 span = { GridItemSpan(2) },
                 contentType = header.component.javaClass.simpleName,
               ) {
-                HubBinder(navController, viewModel, header, scrollBehavior = scrollBehavior)
+                HubBinder(viewModel, header, scrollBehavior = scrollBehavior)
               }
             }
 
@@ -113,7 +116,7 @@ fun HubScreen(
                   key = { dItem -> dItem.id },
                   contentType = { item.component.javaClass.simpleName }
                 ) { cItem ->
-                  HubBinder(navController, viewModel, cItem)
+                  HubBinder(viewModel, cItem)
                 }
               } else {
                 item(
@@ -123,7 +126,6 @@ fun HubScreen(
                 ) {
                   // also artist content
                   HubBinder(
-                    navController,
                     viewModel,
                     item,
                     isRenderingInGrid = item.component.isGrid(),

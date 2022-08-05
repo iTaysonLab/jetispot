@@ -49,6 +49,8 @@ public class Scheme {
   private int inverseSurface;
   private int inverseOnSurface;
   private int inversePrimary;
+  private int outlineVariant;
+  private int scrim;
 
   public Scheme() {}
 
@@ -79,7 +81,9 @@ public class Scheme {
       int shadow,
       int inverseSurface,
       int inverseOnSurface,
-      int inversePrimary) {
+      int inversePrimary,
+      int outlineVariant,
+      int scrim) {
     super();
     this.primary = primary;
     this.onPrimary = onPrimary;
@@ -108,6 +112,8 @@ public class Scheme {
     this.inverseSurface = inverseSurface;
     this.inverseOnSurface = inverseOnSurface;
     this.inversePrimary = inversePrimary;
+    this.outlineVariant = outlineVariant;
+    this.scrim = scrim;
   }
 
   public static Scheme light(int argb) {

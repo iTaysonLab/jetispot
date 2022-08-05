@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.LambdaNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -32,7 +31,6 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
 @Composable
 fun Carousel(
-  navController: LambdaNavigationController,
   delegate: HubScreenDelegate,
   item: HubItem,
 ) {
@@ -72,7 +70,7 @@ fun Carousel(
           )
         ) {
           items(item.children ?: listOf()) { cItem ->
-            HubBinder(navController, delegate, cItem)
+            HubBinder(delegate, cItem)
           }
         }
       }
