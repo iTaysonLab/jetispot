@@ -14,18 +14,16 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NowPlayingFullscreenComposition (
   bottomSheetState: BottomSheetState,
-  mainPagerState: PagerState,
   viewModel: NowPlayingViewModel
 ) {
   val scope = rememberCoroutineScope()
 
   Box(modifier = Modifier.fillMaxSize()) {
     NowPlayingBackground(
-      state = mainPagerState,
       viewModel = viewModel,
       modifier = Modifier.fillMaxSize(),
     )
@@ -46,7 +44,7 @@ fun NowPlayingFullscreenComposition (
 
     NowPlayingControls(
       scope = scope, viewModel = viewModel, bottomSheetState = bottomSheetState, modifier = Modifier
-        .align(Alignment.BottomCenter)
+        .align(Alignment.BottomStart)
         .padding(horizontal = 8.dp)
         .padding(bottom = 24.dp)
         .navigationBarsPadding()

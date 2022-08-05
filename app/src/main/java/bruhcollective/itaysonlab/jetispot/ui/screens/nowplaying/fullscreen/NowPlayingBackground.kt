@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,12 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
@@ -27,35 +33,23 @@ import com.spotify.metadata.Metadata
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingBackground(
-  state: PagerState,
   viewModel: NowPlayingViewModel,
   modifier: Modifier
 ) {
   val currentColor = viewModel.currentBgColor.value
-  val dominantColorAsBg = animateColorAsState(
-    if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor
-  )
+  val dominantColorAsBg = animateColorAsState(if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor)
 
-  Box(modifier = modifier.background(dominantColorAsBg.value)) {
-    HorizontalPager(
-      count = viewModel.currentQueue.value.size,
-      state = state,
-      modifier = modifier
-    ) { page ->
-      val artworkModifier = Modifier
-        .align(Alignment.Center)
-        .padding(bottom = (LocalConfiguration.current.screenHeightDp * 0.25).dp)
-        .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-
-      if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
-        Image(viewModel.currentTrack.value.artworkCompose!!, contentDescription = null, modifier = artworkModifier, contentScale = ContentScale.Crop)
-      } else {
-        NowPlayingBackgroundItem(
-          track = viewModel.currentQueue.value[page],
-          modifier = artworkModifier
-        )
-      }
-    }
+  Canvas(modifier) {
+    drawRect(
+      brush = Brush.radialGradient(
+        colors = listOf(dominantColorAsBg.value, Color.Black),
+        center = Offset(
+          x = size.width * 0.1f,
+          y = size.height * 0.75f
+        ),
+        radius = size.width * 1.5f
+      )
+    )
   }
 }
 

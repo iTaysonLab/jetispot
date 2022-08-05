@@ -37,8 +37,8 @@ fun PreviewableAsyncImage (
       Image(painter = painter, contentDescription = null, contentScale = ContentScale.Crop, modifier = modifier)
     } else {
       Box(modifier) {
-        ImagePreview(placeholderType, modifier)
-        Image(painter = painter, contentDescription = null, contentScale = ContentScale.Crop, modifier = modifier)
+        ImagePreview(placeholderType, Modifier.fillMaxSize())
+        Image(painter = painter, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
       }
     }
   }

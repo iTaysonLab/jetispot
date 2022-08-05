@@ -34,16 +34,7 @@ fun NowPlayingScreen(
   // TODO migrate to using state & SideEffect
   DisposableEffect(Unit) {
     // one-time VM-UI connection
-    viewModel.uiOnTrackIndexChanged = { new ->
-      scope.launch {
-        try {
-          mainPagerState.animateScrollToPage(new)
-        } catch (e: IllegalArgumentException) {
-          delay(100L)
-          mainPagerState.scrollToPage(new)
-        }
-      }
-    }
+    viewModel.uiOnTrackIndexChanged = {}
 
     onDispose {
       viewModel.uiOnTrackIndexChanged = {}
@@ -53,18 +44,17 @@ fun NowPlayingScreen(
   Box(Modifier.fillMaxSize()) {
     NowPlayingFullscreenComposition(
       bottomSheetState = bottomSheetState,
-      mainPagerState = mainPagerState,
       viewModel = viewModel
     )
 
     NowPlayingMiniplayer(
       viewModel,
       Modifier
+        .alpha(1f - bsOffset())
         .clickable { scope.launch { bottomSheetState.expand() } }
         .fillMaxWidth()
         .height(72.dp)
         .align(Alignment.TopStart)
-        .alpha(1f - bsOffset())
     )
   }
 }
