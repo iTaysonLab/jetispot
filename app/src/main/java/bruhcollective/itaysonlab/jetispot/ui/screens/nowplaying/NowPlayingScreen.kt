@@ -26,7 +26,9 @@ import kotlinx.coroutines.launch
 fun NowPlayingScreen(
   bottomSheetState: BottomSheetState,
   bsOffset: () -> Float,
-  viewModel: NowPlayingViewModel = hiltViewModel()
+  viewModel: NowPlayingViewModel = hiltViewModel(),
+  queueOpened: Boolean,
+  setQueueOpened: (Boolean) -> Unit,
 ) {
   val scope = rememberCoroutineScope()
   val mainPagerState = rememberPagerState()
@@ -59,6 +61,8 @@ fun NowPlayingScreen(
       }
     ) {
       NowPlayingFullscreenComposition(
+        queueOpened = queueOpened,
+        setQueueOpened = setQueueOpened,
         bottomSheetState = bottomSheetState,
         mainPagerState = mainPagerState,
         viewModel = viewModel,

@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -28,6 +27,8 @@ import androidx.compose.material3.MaterialTheme.colorScheme as monet
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
 fun NowPlayingFullscreenComposition (
+  queueOpened: Boolean,
+  setQueueOpened: (Boolean) -> Unit,
   bottomSheetState: BottomSheetState,
   mainPagerState: PagerState,
   viewModel: NowPlayingViewModel,
@@ -49,6 +50,9 @@ fun NowPlayingFullscreenComposition (
   val artworkPaddingStart = animateDpAsState((16f * (1f - bsOffset)).dp).value
   val artworkPaddingTop = animateDpAsState((8f - bsOffset).dp).value
   val animatedCorners = animateDpAsState((8 + (24f * bsOffset)).dp).value
+
+  val queueProgress = animateFloatAsState(targetValue = if (queueOpened) 1f else 0f, animationSpec = tween(500, easing = FastOutSlowInEasing))
+  val queueProgressValue = queueProgress.value
 
   Box(
     modifier = Modifier
@@ -87,7 +91,13 @@ fun NowPlayingFullscreenComposition (
       ) {
         NowPlayingHeader(
           stateTitle = stringResource(id = viewModel.getHeaderTitle()),
-          onCloseClick = { scope.launch { bottomSheetState.collapse() } },
+          onCloseClick = {
+            if (queueOpened)
+              setQueueOpened(false)
+            else
+              scope.launch { bottomSheetState.collapse() }
+          },
+          queueStateProgress = queueProgressValue,
           state = viewModel.getHeaderText(),
           modifier = Modifier
             .statusBarsPadding()
@@ -102,10 +112,16 @@ fun NowPlayingFullscreenComposition (
           ControlsSeekbar(viewModel)
         }
 
-        ControlsMainButtons(viewModel)
+        ControlsMainButtons(viewModel, queueOpened, setQueueOpened)
 
-        ControlsBottomAccessories(viewModel)
+        ControlsBottomAccessories(viewModel, queueOpened, setQueueOpened)
       }
     }
+    
+    NowPlayingQueue(
+      viewModel = viewModel,
+      modifier = Modifier.fillMaxSize(),
+      rvStateProgress = queueProgress.value
+    )
   }
 }

@@ -4,10 +4,14 @@ import androidx.collection.LruCache
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.getValue
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.runtime.setValue
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
@@ -35,6 +39,7 @@ class NowPlayingViewModel @Inject constructor(
   val currentQueue get() = spPlayerServiceManager.currentQueue
   val currentQueuePosition get() = spPlayerServiceManager.currentQueuePosition
   val currentBgColor = mutableStateOf(Color.Transparent)
+  var queueButtonParams by mutableStateOf(Offset.Zero)
 
   // TODO animate
   val currentColorScheme = mutableStateOf(lightColorScheme() to darkColorScheme())

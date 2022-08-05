@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme as monet
 fun NowPlayingHeader(
   stateTitle: String,
   state: String,
+  queueStateProgress: Float,
   onCloseClick: () -> Unit,
   modifier: Modifier
 ) {
@@ -75,13 +76,13 @@ fun NowPlayingHeader(
   }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000)
-@Composable
-fun NowPlayingHeader_Preview() {
-  NowPlayingHeader(
-    stateTitle = "playing from album",
-    state = "Example Title",
-    onCloseClick = {},
-    modifier = Modifier.fillMaxWidth()
-  )
-}
+//@Preview(showBackground = true, backgroundColor = 0xFF000000)
+//@Composable
+//fun NowPlayingHeader_Preview() {
+//  NowPlayingHeader(
+//    stateTitle = "playing from album",
+//    state = "Example Title",
+//    onCloseClick = {},
+//    modifier = Modifier.fillMaxWidth()
+//  )
+//}

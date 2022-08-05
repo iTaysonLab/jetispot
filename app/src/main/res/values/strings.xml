@@ -136,6 +136,7 @@
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
 
+    <string name="artist">Artist</string>
     <string name="artist_role_main">main artist</string>
     <string name="artist_role_feat">featured artist</string>
     <string name="artist_role_remixer">remixer</string>
@@ -149,4 +150,5 @@
     <string name="auto_tabs_recent">Recent</string>
     <string name="auto_tabs_browse">Browse</string>
     <string name="auto_tabs_library">Library</string>
+    <string name="color_theme">Select color scheme</string>
 </resources>

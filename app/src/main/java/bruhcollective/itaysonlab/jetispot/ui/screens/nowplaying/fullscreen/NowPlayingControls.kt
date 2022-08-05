@@ -127,7 +127,11 @@ fun ControlsSeekbar(viewModel: NowPlayingViewModel) {
 }
 
 @Composable
-fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
+fun ControlsMainButtons(
+  viewModel: NowPlayingViewModel,
+  queueOpened: Boolean,
+  setQueueOpened: (Boolean) -> Unit
+) {
   Row(
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically,
@@ -222,6 +226,8 @@ fun ControlsMainButtons(viewModel: NowPlayingViewModel) {
 @Composable
 fun ControlsBottomAccessories(
   viewModel: NowPlayingViewModel,
+  queueOpened: Boolean,
+  setQueueOpened: (Boolean) -> Unit,
 ) {
   Row(
     modifier = Modifier
@@ -254,7 +260,7 @@ fun ControlsBottomAccessories(
     }
 
     IconButton(
-      onClick = { /*TODO*/ },
+      onClick = { setQueueOpened(!queueOpened) },
       modifier = Modifier.size(56.dp),
       colors = IconButtonDefaults.iconButtonColors(
         contentColor = monet.onSecondaryContainer.copy(0.85f)
