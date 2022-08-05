@@ -3,8 +3,12 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 import androidx.collection.LruCache
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
@@ -25,6 +29,9 @@ class NowPlayingViewModel @Inject constructor(
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spPartnersApi: SpPartnersApi
 ) : ViewModel(), SpPlayerServiceManager.ServiceExtraListener, CoroutineScope by MainScope() {
+  // ui states
+  var queueButtonParams by mutableStateOf(Offset.Zero)
+
   // states
   val currentTrack get() = spPlayerServiceManager.currentTrack
   val currentPosition get() = spPlayerServiceManager.playbackProgress

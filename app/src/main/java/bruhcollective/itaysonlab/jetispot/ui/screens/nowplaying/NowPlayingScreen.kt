@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,33 +15,23 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 fun NowPlayingScreen(
   bottomSheetState: BottomSheetState,
   bsOffset: () -> Float,
+  queueOpened: Boolean,
+  setQueueOpened: (Boolean) -> Unit,
   viewModel: NowPlayingViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
-  val mainPagerState = rememberPagerState()
-
-  // TODO migrate to using state & SideEffect
-  DisposableEffect(Unit) {
-    // one-time VM-UI connection
-    viewModel.uiOnTrackIndexChanged = {}
-
-    onDispose {
-      viewModel.uiOnTrackIndexChanged = {}
-    }
-  }
 
   Box(Modifier.fillMaxSize()) {
     NowPlayingFullscreenComposition(
+      queueOpened = queueOpened,
+      setQueueOpened = setQueueOpened,
       bottomSheetState = bottomSheetState,
       viewModel = viewModel
     )

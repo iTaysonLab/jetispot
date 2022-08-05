@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
@@ -10,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,12 +25,14 @@ import androidx.compose.ui.unit.sp
 fun NowPlayingHeader(
   stateTitle: String,
   state: String,
+  queueStateProgress: Float,
   onCloseClick: () -> Unit,
   modifier: Modifier
 ) {
   Row(modifier, verticalAlignment = Alignment.CenterVertically) {
     IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = Color.White, contentDescription = null, modifier = Modifier.scale(1f - queueStateProgress).alpha(1f - queueStateProgress))
+      Icon(imageVector = Icons.Rounded.Close, tint = Color.White, contentDescription = null, modifier = Modifier.scale(queueStateProgress).alpha(queueStateProgress))
     }
 
     Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
@@ -62,15 +67,4 @@ fun NowPlayingHeader(
       Icon(imageVector = Icons.Rounded.MoreVert, tint = Color.White, contentDescription = null)
     }
   }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF000000)
-@Composable
-fun NowPlayingHeader_Preview() {
-  NowPlayingHeader(
-    stateTitle = "playing from album",
-    state = "Example Title",
-    onCloseClick = {},
-    modifier = Modifier.fillMaxWidth()
-  )
 }

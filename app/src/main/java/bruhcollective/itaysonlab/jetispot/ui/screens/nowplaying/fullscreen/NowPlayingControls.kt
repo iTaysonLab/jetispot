@@ -17,7 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,6 +38,8 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun NowPlayingControls(
     scope: CoroutineScope,
+    queueOpened: Boolean,
+    setQueueOpened: (Boolean) -> Unit,
     bottomSheetState: BottomSheetState,
     viewModel: NowPlayingViewModel,
     modifier: Modifier
@@ -44,7 +49,7 @@ fun NowPlayingControls(
         Spacer(Modifier.height(16.dp))
         ControlsHeader(scope, bottomSheetState, viewModel)
         Spacer(Modifier.height(16.dp))
-        ControlsMainButtons(viewModel)
+        ControlsMainButtons(viewModel, queueOpened, setQueueOpened)
         Spacer(Modifier.height(12.dp))
         ControlsSeekbar(viewModel)
     }
@@ -135,6 +140,8 @@ private fun ControlsSeekbar(
 @Composable
 private fun ControlsMainButtons(
     viewModel: NowPlayingViewModel,
+    queueOpened: Boolean,
+    setQueueOpened: (Boolean) -> Unit,
 ) {
     Row(Modifier.padding(horizontal = 14.dp)) {
         Surface(color = Color.White, modifier = Modifier
@@ -187,9 +194,11 @@ private fun ControlsMainButtons(
         Spacer(modifier = Modifier.width(16.dp))
 
         IconButton(
-            onClick = { },
-            modifier = Modifier.clip(CircleShape).size(42.dp),
-            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
+            onClick = { setQueueOpened(!queueOpened) },
+            modifier = Modifier.clip(CircleShape).size(42.dp).onGloballyPositioned { coords ->
+                viewModel.queueButtonParams = coords.positionInRoot()
+            },
+            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = Color.White)
         ) {
             Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
         }
