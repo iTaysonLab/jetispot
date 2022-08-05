@@ -16,11 +16,8 @@ android {
         targetSdk 32
         versionCode version_code
         versionName version_name
-        resConfigs "en"
+        resConfigs 'en'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
     }
 
     sourceSets.main {
@@ -36,6 +33,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -74,6 +72,7 @@ android {
             excludes += "**.proto"
         }
     }
+    namespace 'bruhcollective.itaysonlab.jetispot'
 }
 
 moshi {
@@ -82,7 +81,11 @@ moshi {
 }
 
 dependencies {
+    // Kotlin
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
+
     // AndroidX
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"

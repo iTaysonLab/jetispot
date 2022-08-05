@@ -144,4 +144,9 @@
     <string name="artist_role_conductor">conductor</string>
     <string name="artist_role_orchestra">orchestra</string>
     <string name="artist_role_unknown">unknown role</string>
+
+    <string name="auto_tabs_home">Home</string>
+    <string name="auto_tabs_recent">Recent</string>
+    <string name="auto_tabs_browse">Browse</string>
+    <string name="auto_tabs_library">Library</string>
 </resources>

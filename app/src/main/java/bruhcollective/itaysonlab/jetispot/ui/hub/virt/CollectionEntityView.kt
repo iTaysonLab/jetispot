@@ -55,6 +55,7 @@ object CollectionEntityView {
     return HubResponse(
       header = HubItem(
         HubComponent.CollectionHeader,
+        id = "synth_collectionHeader",
         custom = mapOf(
           "count" to tracks.size,
           "cfr" to tags,

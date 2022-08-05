@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,7 +30,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.CollectionViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CollectionHeader(
   delegate: HubScreenDelegate,
@@ -204,7 +205,7 @@ fun CollectionHeader(
           Text(item.name)
         }, leadingIcon = {
           if (selected) Icon(Icons.Rounded.Check, null)
-        })
+        }, modifier = Modifier.animateItemPlacement())
       }
     }
   }

@@ -77,4 +77,8 @@ object ApiModule {
   @Provides
   @Singleton
   fun provideBlendApi(retrofit: Retrofit): SpBlendApi = retrofit.create("https://spclient.wg.spotify.com")
+
+  @Provides
+  @Singleton
+  fun provideExternalIntegrationApi(retrofit: Retrofit): SpExternalIntegrationApi = retrofit.create("https://spclient.wg.spotify.com/external-integration-recs/")
 }

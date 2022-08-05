@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +29,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HubScaffold(
   appBarTitle: String,
@@ -57,7 +58,7 @@ fun HubScaffold(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         } else {
           SmallTopAppBar(title = {
-            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.state.collapsedFraction))
+            Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.state.overlappedFraction))
           }, navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
               Icon(Icons.Rounded.ArrowBack, null)
@@ -68,7 +69,9 @@ fun HubScaffold(
           ), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
             LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
         }
-      }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier
+        .fillMaxSize()
+        .nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
@@ -85,7 +88,9 @@ fun HubScaffold(
             }
 
             items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
-              HubBinder(viewModel, it)
+              Box(modifier = Modifier.animateItemPlacement()) {
+                HubBinder(viewModel, it)
+              }
             }
           }
         }

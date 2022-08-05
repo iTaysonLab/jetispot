@@ -1,21 +1,17 @@
 package bruhcollective.itaysonlab.jetispot.playback.service
 
-import android.annotation.SuppressLint
-import bruhcollective.itaysonlab.jetispot.core.util.Log
+import android.graphics.BitmapFactory
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer
-import bruhcollective.itaysonlab.jetispot.playback.helpers.toMediaMetadata
+import bruhcollective.itaysonlab.jetispot.core.util.Log
+import bruhcollective.itaysonlab.jetispot.playback.helpers.*
 import com.spotify.context.ContextTrackOuterClass
 import xyz.gianlu.librespot.audio.MetadataWrapper
 import xyz.gianlu.librespot.common.Utils
-import xyz.gianlu.librespot.json.ResolvedContextWrapper
 import xyz.gianlu.librespot.metadata.PlayableId
-import xyz.gianlu.librespot.player.PagesLoader
 import xyz.gianlu.librespot.player.Player
-import java.lang.Exception
 
-@SuppressLint("UnsafeOptInUsageError")
 class SpServiceEventsListener(
   val player: SpPlayerWrapper
 ) : Player.EventsListener {
@@ -69,11 +65,15 @@ class SpServiceEventsListener(
 
     player.state.currentTrack = p1
 
-    player.state.currentMediaItem = MediaItem.Builder().apply {
-      setStartPosition(0L)
-      setEndPosition(p1.duration().toLong())
-      setMetadata(p1.toMediaMetadata(p0))
-    }.build()
+    player.state.currentMediaItem = mediaItem(startTime = 0L, endTime = p1.duration().toLong()) {
+      id = p1.id.toSpotifyUri()
+      title = p1.name
+      artist = p1.artist
+      album = p1.albumName
+      duration = p1.duration().toLong()
+      artBitmap = p0.currentCoverImage()?.let { bmpRaw -> BitmapFactory.decodeByteArray(bmpRaw, 0, bmpRaw.size) }
+      playable()
+    }
 
     player.runOnListeners { it.onCurrentMediaItemChanged(player, player.state.currentMediaItem) }
   }
