@@ -23,15 +23,23 @@
 -repackageclasses
 -allowaccessmodification
 
+# from: https://www.guardsquare.com/blog/eliminating-data-leaks-caused-by-kotlin-assertions
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
-    public static void checkExpressionValueIsNotNull(...);
-    public static void checkNotNullExpressionValue(...);
-    public static void checkReturnedValueIsNotNull(...);
-    public static void checkFieldIsNotNull(...);
-    public static void checkParameterIsNotNull(...);
+	public static void checkNotNull(...);
+	public static void checkExpressionValueIsNotNull(...);
+	public static void checkNotNullExpressionValue(...);
+	public static void checkParameterIsNotNull(...);
+	public static void checkNotNullParameter(...);
+	public static void checkReturnedValueIsNotNull(...);
+	public static void checkFieldIsNotNull(...);
+	public static void throwUninitializedPropertyAccessException(...);
+	public static void throwNpe(...);
+	public static void throwJavaNpe(...);
+	public static void throwAssert(...);
+	public static void throwIllegalArgument(...);
+	public static void throwIllegalState(...);
 }
 
--dontusemixedcaseclassnames
 -dontwarn kotlin.**
 
 # moshix issues with serialized sealed classes
@@ -46,7 +54,8 @@
 -keep class bruhcollective.itaysonlab.swedentricks.** {*;}
 -keep class * extends com.google.protobuf.AbstractMessage {*;}
 
-# librespot decoding stuff
+# librespot
+-keep class xyz.gianlu.librespot.** { *; }
 -keep class xyz.gianlu.librespot.audio.decoders.** {*;}
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput { *; }
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder { *; }

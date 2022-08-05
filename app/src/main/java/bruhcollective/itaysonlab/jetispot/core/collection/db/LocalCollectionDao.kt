@@ -144,6 +144,6 @@ interface LocalCollectionDao {
     ByTime("addedAt"),
     ByName("name"),
     ByAlbum("albumName"),
-    ByArtist("artistName")
+    ByArtist("mainArtistName")
   }
 }

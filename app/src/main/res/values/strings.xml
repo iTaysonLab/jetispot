@@ -77,7 +77,6 @@
     <string name="warn_normalization">Adjust the volume for your environment.\n\nLoud may diminish audio quality. No effect on audio quality in Normal or Quiet.</string>
 
     <string name="enable">Enable</string>
-    <string name="dismiss">Dismiss</string>
 
     <string name="logout_title">Sign out?</string>
     <string name="logout_message">This will remove all data linked to your account from this device. Settings won\'t be reset to default.</string>
@@ -146,8 +145,8 @@
     <string name="artist_role_orchestra">orchestra</string>
     <string name="artist_role_unknown">unknown role</string>
 
-    <string name="reload_message">The app will restart to change the theme</string>
-    <string name="color_theme">Select color scheme</string>
-
-    <string name="artist">Artist</string>
+    <string name="auto_tabs_home">Home</string>
+    <string name="auto_tabs_recent">Recent</string>
+    <string name="auto_tabs_browse">Browse</string>
+    <string name="auto_tabs_library">Library</string>
 </resources>

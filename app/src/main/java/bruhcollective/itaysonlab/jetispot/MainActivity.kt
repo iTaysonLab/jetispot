@@ -14,10 +14,7 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -94,6 +91,8 @@ class MainActivity : ComponentActivity() {
                     if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
                 )
 
+                var bsQueueOpened by remember { mutableStateOf(false) }
+
                 // lambdas
                 val bsOffset = {
                     val bsProgress = bsState.bottomSheetState.progress
@@ -110,14 +109,19 @@ class MainActivity : ComponentActivity() {
                 DisposableEffect(
                     backPressedDispatcherOwner,
                     scope,
-                    bsState.bottomSheetState.isExpanded
+                    bsState.bottomSheetState.isExpanded,
+                    bsQueueOpened
                 ) {
                     val callback = backPressedDispatcherOwner?.onBackPressedDispatcher?.addCallback(
                         owner = backPressedDispatcherOwner,
-                        enabled = bsState.bottomSheetState.isExpanded,
+                        enabled = bsQueueOpened || bsState.bottomSheetState.isExpanded,
                     ) {
-                        scope.launch {
-                            bsState.bottomSheetState.collapse()
+                        if (bsQueueOpened) {
+                            bsQueueOpened = false
+                        } else {
+                            scope.launch {
+                                bsState.bottomSheetState.collapse()
+                            }
                         }
                     }
 
@@ -142,17 +146,17 @@ class MainActivity : ComponentActivity() {
                                 if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
                                 bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(
                                     modifier = Modifier
-                                      .offset {
-                                        IntOffset(
-                                          0,
-                                          ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
-                                        )
-                                      }
-                                      .background(
-                                        MaterialTheme.colorScheme.compositeSurfaceElevation(
-                                          3.dp
-                                        )
-                                      ),
+                                        .offset {
+                                            IntOffset(
+                                                0,
+                                                ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
+                                            )
+                                        }
+                                        .background(
+                                            MaterialTheme.colorScheme.compositeSurfaceElevation(
+                                                3.dp
+                                            )
+                                        ),
                                     contentPadding = PaddingValues(bottom = navBarHeightDp)
                                 ) {
                                     Screen.showInBottomNavigation.forEach { (screen, icon) ->
@@ -188,20 +192,23 @@ class MainActivity : ComponentActivity() {
                                 sheetContent = {
                                     NowPlayingScreen(
                                         bottomSheetState = bsState.bottomSheetState,
-                                        bsOffset = bsOffset
+                                        bsOffset = bsOffset,
+                                        queueOpened = bsQueueOpened,
+                                        setQueueOpened = { bsQueueOpened = it }
                                     )
                                 },
                                 scaffoldState = bsState,
                                 sheetPeekHeight = bsPeek,
-                                backgroundColor = MaterialTheme.colorScheme.surface
+                                backgroundColor = MaterialTheme.colorScheme.surface,
+                                sheetGesturesEnabled = !bsQueueOpened
                             ) { innerScaffoldPadding ->
                                 AppNavigation(
                                     navController = navController,
                                     sessionManager = sessionManager,
                                     authManager = authManager,
                                     modifier = Modifier
-                                      .padding(innerScaffoldPadding)
-                                      .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
+                                        .padding(innerScaffoldPadding)
+                                        .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
                                 )
                             }
                         }

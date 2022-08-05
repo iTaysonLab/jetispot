@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -17,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import androidx.compose.material3.MaterialTheme.colorScheme as monet
 
 @Composable
 fun PreviewableAsyncImage (
@@ -26,28 +26,19 @@ fun PreviewableAsyncImage (
   modifier: Modifier
 ) {
   if (imageUrl.isNullOrEmpty() || imageUrl == "https://i.scdn.co/image/") {
-    Box(modifier) { ImagePreview(placeholderType, modifier) }
+    Box(modifier) {
+      ImagePreview(placeholderType, modifier)
+    }
   } else {
     val painter = rememberAsyncImagePainter(model = imageUrl, contentScale = ContentScale.Crop)
     val isLoaded = painter.state is AsyncImagePainter.State.Success
 
     if (isLoaded) {
-      Image(
-        painter = painter,
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = modifier
-      )
+      Image(painter = painter, contentDescription = null, contentScale = ContentScale.Crop, modifier = modifier)
     } else {
       Box(modifier) {
-        ImagePreview(placeholderType, modifier)
-
-        Image(
-          painter = painter,
-          contentDescription = null,
-          contentScale = ContentScale.Crop,
-          modifier = modifier
-        )
+        ImagePreview(placeholderType, Modifier.fillMaxSize())
+        Image(painter = painter, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
       }
     }
   }
@@ -60,12 +51,7 @@ fun PreviewableSyncImage (
   modifier: Modifier
 ) {
   if (imageBitmap != null) {
-    Image(
-      bitmap = imageBitmap,
-      contentScale = ContentScale.Crop,
-      contentDescription = null,
-      modifier = modifier
-    )
+    Image(bitmap = imageBitmap, contentScale = ContentScale.Crop, contentDescription = null, modifier = modifier)
   } else {
     ImagePreview(placeholderType, modifier)
   }
@@ -91,18 +77,10 @@ fun ImagePreview (
   colorful: Boolean,
   modifier: Modifier
 ) {
-  Surface(
-    tonalElevation = 0.dp,
-    color = if (colorful) monet.tertiaryContainer else monet.surface,
-    modifier = modifier
-  ) {
+  Surface(tonalElevation = if (colorful) 0.dp else 8.dp, color = if (colorful) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface, modifier = modifier) {
     if (of != null) {
       Box(Modifier.fillMaxSize()) {
-        Icon(
-          imageVector = of,
-          tint = if (colorful) monet.onTertiaryContainer else monet.onSurface,
-          contentDescription = null,
-          modifier = Modifier.fillMaxSize().padding(8.dp))
+        Icon(imageVector = of, tint = if (colorful) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface, contentDescription = null, modifier = Modifier.fillMaxSize().padding(8.dp))
       }
     }
   }
