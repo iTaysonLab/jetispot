@@ -54,7 +54,8 @@
 -keep class bruhcollective.itaysonlab.swedentricks.** {*;}
 -keep class * extends com.google.protobuf.AbstractMessage {*;}
 
-# librespot decoding stuff
+# librespot
+-keep class xyz.gianlu.librespot.** { *; }
 -keep class xyz.gianlu.librespot.audio.decoders.** {*;}
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidSinkOutput { *; }
 -keep class bruhcollective.itaysonlab.jetispot.playback.sp.AndroidNativeDecoder { *; }
