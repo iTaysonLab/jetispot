@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen.NowPlayingFullscreenComposition
+import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
@@ -73,17 +74,20 @@ fun NowPlayingScreen(
       // the bottom sheet
       if (bsOffset() <= 0.99999f) {
         val interactionSource = remember { MutableInteractionSource() }
-        NowPlayingMiniplayer(
-          viewModel,
-          Modifier
-            .clickable(
-              interactionSource = interactionSource,
-              indication = null
-            ) { scope.launch { bottomSheetState.expand() } }
-            .fillMaxSize()
-            .align(Alignment.TopStart),
-          bsOffset()
-        )
+        ApplicationTheme() {
+          NowPlayingMiniplayer(
+            viewModel,
+            Modifier
+              .clickable(
+                interactionSource = interactionSource,
+                indication = null
+              ) { scope.launch { bottomSheetState.expand() } }
+              .fillMaxSize()
+              .align(Alignment.TopStart),
+            bsOffset()
+          )
+        }
+
       } else {
 
       }
