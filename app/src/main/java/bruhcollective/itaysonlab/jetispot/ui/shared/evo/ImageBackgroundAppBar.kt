@@ -138,7 +138,7 @@ private fun TwoRowsTopAppBar(
     Box(
       modifier = Modifier
         .alpha(1f - scrollFraction)
-        .height((maxHeight + 32.dp) * (1f - scrollFraction))
+        .height((maxHeight + 42.dp) * (1f - scrollFraction))
     ) {
       CompositionLocalProvider(content = picture)
       Box(
