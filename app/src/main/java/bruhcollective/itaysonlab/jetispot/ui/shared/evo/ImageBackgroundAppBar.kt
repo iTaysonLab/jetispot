@@ -109,7 +109,7 @@ private fun TwoRowsTopAppBar(
   }
 
   val scrollPercentage =
-    if (scrollBehavior == null || scrollBehavior.state.heightOffsetLimit == 0f) {
+    if (scrollBehavior == null || scrollBehavior.state.collapsedFraction == 0f) {
       0f
     } else {
       scrollBehavior.state.heightOffset / scrollBehavior.state.heightOffset
@@ -129,7 +129,7 @@ private fun TwoRowsTopAppBar(
       content = actions
     )
   }
-  val titleAlpha = 1f - scrollPercentage
+  val titleAlpha = 1f - scrollFraction
   // Hide the top row title semantics when its alpha value goes below 0.5 threshold.
   // Hide the bottom row title semantics when the top title semantics are active.
   val hideTopRowSemantics = scrollPercentage < 0.5f
