@@ -37,7 +37,7 @@ fun EntityActionStrip (
     Modifier
       .fillMaxWidth()
       .padding(horizontal = 16.dp)
-      .padding(top = 8.dp, bottom = 4.dp)
+      .padding(top = (16 * (1f - scrollBehavior.state.collapsedFraction)).dp)
       .height(scrollHeight),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
