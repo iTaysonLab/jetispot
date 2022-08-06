@@ -48,7 +48,7 @@ fun ArtistHeader(
       )
     },
     scrollBehavior = scrollBehavior,
-    isLarge = false,
+    gradient = true,
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
         Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")

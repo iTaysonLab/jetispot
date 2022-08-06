@@ -44,7 +44,7 @@ fun ImageBackgroundTopAppBar(
   contentPadding: PaddingValues = PaddingValues(0.dp),
   maxHeight: Dp = 152.dp,
   smallTitle: @Composable () -> Unit = {},
-  isLarge: Boolean
+  gradient: Boolean
 ) {
   TwoRowsTopAppBar(
     aboveTitle = description,
@@ -62,7 +62,7 @@ fun ImageBackgroundTopAppBar(
     pinnedHeight = 64.dp,
     scrollBehavior = scrollBehavior,
     contentPadding = contentPadding,
-    isLarge = isLarge
+    isLarge = gradient
   )
 }
 
@@ -144,7 +144,7 @@ private fun TwoRowsTopAppBar(
       Box(
         Modifier
           .background(
-            brush = Brush.verticalGradient(
+            brush =  if (isLarge) Brush.verticalGradient(
               listOf(
                 MaterialTheme.colorScheme.background.copy(0.4f),
                 MaterialTheme.colorScheme.background.copy(0.4f),
@@ -155,7 +155,7 @@ private fun TwoRowsTopAppBar(
                 MaterialTheme.colorScheme.background.copy(0.7f),
                 MaterialTheme.colorScheme.background.copy(0.8f)
               )
-            )
+            ) else Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent))
           )
           .fillMaxSize()
       ) {}

@@ -83,22 +83,22 @@ fun HubScaffold(
             animationSpec = tween(durationMillis = 500)
           ).value
 
-          // album FAB
-          Box(
-            modifier = Modifier
-              .align(Alignment.BottomEnd)
-              .padding(bottom = fabPadding, end = fabPadding)
-          ) {
-            state.data.apply {
-              HubBinder(
-                viewModel,
-                body[0],
-                scrollBehavior = topBarState,
-                showFAB = true,
-                everythingElse = false
-              )
-            }
-          }
+//          // album FAB
+//          Box(
+//            modifier = Modifier
+//              .align(Alignment.BottomEnd)
+//              .padding(bottom = fabPadding, end = fabPadding)
+//          ) {
+//            state.data.apply {
+//              HubBinder(
+//                viewModel,
+//                body[0],
+//                scrollBehavior = topBarState,
+//                showFAB = true,
+//                everythingElse = false
+//              )
+//            }
+//          }
 
           // TODO liked songs FAB
 //          Box(

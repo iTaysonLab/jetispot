@@ -213,7 +213,7 @@ fun LargePlaylistHeader(
     ),
     scrollBehavior = scrollBehavior,
     maxHeight = 256.dp,
-    isLarge = true
+    gradient = true
   )
 
 //  Column {
