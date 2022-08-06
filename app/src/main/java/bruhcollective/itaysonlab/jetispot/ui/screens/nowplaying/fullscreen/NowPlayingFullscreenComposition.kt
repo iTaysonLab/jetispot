@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,7 +19,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
+import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
+import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
@@ -54,16 +57,24 @@ fun NowPlayingFullscreenComposition (
   val queueProgress = animateFloatAsState(targetValue = if (queueOpened) 1f else 0f, animationSpec = tween(500, easing = FastOutSlowInEasing))
   val queueProgressValue = queueProgress.value
 
-  Box(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(
-        if (isSystemInDarkTheme())
-          monet.surface.blendWith(monet.primary, ratio = 0.05f)
-        else
-          monet.primary.copy(0.1f)
-      )
-  ) {
+  val backgroundColor = if (isSystemInDarkTheme())
+    animateColorAsState(
+      monet.surface.blendWith(monet.primary, ratio = 0.05f),
+      tween(durationMillis = 500)
+    ).value
+  else
+    animateColorAsState(
+      monet.surface.blendWith(monet.primary, ratio = 0.1f),
+      tween(durationMillis = 500)
+    ).value
+
+  Box(modifier = Modifier
+    .fillMaxSize()
+    .background(backgroundColor)) {
+    ApplicationTheme() {
+      Box(modifier = Modifier.alpha(1f - bsOffset).fillMaxSize().background(monet.compositeSurfaceElevation(3.dp)))
+    }
+
     Row(Modifier.padding(start = artworkPaddingStart, top = artworkPaddingTop)) {
       Surface(
         color = Color.Transparent,
