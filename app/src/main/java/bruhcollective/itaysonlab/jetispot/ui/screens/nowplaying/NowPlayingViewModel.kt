@@ -3,20 +3,20 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 import androidx.collection.LruCache
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.runtime.getValue
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.runtime.setValue
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
-import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
+import bruhcollective.itaysonlab.jetispot.ui.monet.ColorToScheme
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import com.spotify.metadata.Metadata
@@ -48,7 +48,7 @@ class NowPlayingViewModel @Inject constructor(
   var uiOnTrackIndexChanged: (Int) -> Unit = {}
 
   // caches
-  private val imageCache = LruCache<String, Color>(10)
+  private val imageCache = LruCache<String, Pair<ColorScheme, ColorScheme>>(10)
   private var imageColorTask: Job? = null
 
   private fun getCurrentTrackAsMetadata() = currentQueue.value[currentQueuePosition.value]
@@ -87,12 +87,11 @@ class NowPlayingViewModel @Inject constructor(
 
     imageColorTask?.cancel()
     imageColorTask = launch(Dispatchers.IO) {
-      currentBgColor.value = calculateDominantColor(
+      currentColorScheme.value = calculateDominantColor(
         spPartnersApi,
         SpUtils.getImageUrl(currentQueue.value[new].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
-          ?: return@launch,
-        false
-      ).blendWith(Color.Black, 0.1f)
+          ?: return@launch
+      )
     }
   }
 
@@ -118,23 +117,21 @@ class NowPlayingViewModel @Inject constructor(
 
   suspend fun calculateDominantColor(
     partnersApi: SpPartnersApi,
-    url: String,
-    dark: Boolean
-  ): Color {
+    url: String
+  ): Pair<ColorScheme, ColorScheme> {
     return try {
       if (imageCache[url] != null) {
         return imageCache[url]!!
       }
 
-      val apiResult =
-        partnersApi.fetchExtractedColors(variables = "{\"uris\":[\"$url\"]}").data.extractedColors[0].let {
-          if (dark) it.colorRaw else it.colorDark
-        }.hex
+      val apiResult = partnersApi.fetchExtractedColors(variables = "{\"uris\":[\"$url\"]}").data.extractedColors[0]
 
-      Color(android.graphics.Color.parseColor(apiResult)).also { imageCache.put(url, it) }
+      val light = ColorToScheme.convert(android.graphics.Color.parseColor(apiResult.colorDark.hex), false)
+      val dark = ColorToScheme.convert(android.graphics.Color.parseColor(apiResult.colorDark.hex), true)
+
+      (light to dark).also { imageCache.put(url, it) }
     } catch (e: Exception) {
-      // e.printStackTrace()
-      Color.Transparent
+      lightColorScheme() to darkColorScheme()
     }
   }
 }
