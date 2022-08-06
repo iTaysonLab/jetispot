@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -147,7 +148,6 @@ fun PlaylistHeader(
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LargePlaylistHeader(
-  delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
@@ -197,8 +197,25 @@ fun LargePlaylistHeader(
       }
     },
     actions = {
-      Icon(Icons.Rounded.Favorite, contentDescription = null)
-      IconButton(onClick = { /*TODO*/ }) {
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+          .clip(CircleShape)
+          .size(38.dp)
+          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+      ) {
+        Icon(Icons.Rounded.Favorite, contentDescription = null)
+      }
+
+      Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+
+      IconButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+          .clip(CircleShape)
+          .size(38.dp)
+          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+      ) {
         Icon(
           imageVector = Icons.Default.MoreVert,
           contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
@@ -213,7 +230,8 @@ fun LargePlaylistHeader(
     ),
     scrollBehavior = scrollBehavior,
     maxHeight = 256.dp,
-    gradient = true
+    gradient = true,
+    navigationIconPresent = true
   )
 
 //  Column {

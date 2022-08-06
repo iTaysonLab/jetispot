@@ -47,8 +47,6 @@ fun ArtistHeader(
         contentScale = ContentScale.FillWidth
       )
     },
-    scrollBehavior = scrollBehavior,
-    gradient = true,
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
         Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
@@ -58,6 +56,9 @@ fun ArtistHeader(
       top = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
       }
-    )
+    ),
+    scrollBehavior = scrollBehavior,
+    gradient = true,
+    navigationIconPresent = true
   )
 }

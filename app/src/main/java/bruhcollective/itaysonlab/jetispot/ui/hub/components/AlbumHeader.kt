@@ -1,7 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -45,33 +47,7 @@ fun AlbumHeader(
   val artistScrollState = rememberLazyListState()
   Column() {
     ImageBackgroundTopAppBar(
-      navigationIcon = {
-        IconButton(onClick = { navController.popBackStack() }) {
-          Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
-        }
-      },
-      actions = {
-//        Icon(Icons.Rounded.Favorite, contentDescription = null)
-        IconButton(onClick = { /*TODO*/ }) {
-          Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
-            tint = MaterialTheme.colorScheme.onBackground
-          )
-        }
-      },
-      scrollBehavior = scrollBehavior,
-      contentPadding = PaddingValues(
-        top = with(LocalDensity.current) {
-          WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-        }
-      ),
-      picture = {
-        PreviewableAsyncImage(
-          item.images?.main?.uri, item.images?.main?.placeholder,
-          modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(16.dp))
-        )
-      },
+      maxHeight = 224.dp,
       title = {
 //        Text(
 //          item.text!!.title!!,
@@ -84,7 +60,14 @@ fun AlbumHeader(
           item.text!!.title!!,
           overflow = TextOverflow.Ellipsis,
           maxLines = 1,
-          color = MaterialTheme.colorScheme.onSurface.copy(scrollBehavior.state.collapsedFraction)
+        )
+      },
+      picture = {
+        PreviewableAsyncImage(
+          item.images?.main?.uri, item.images?.main?.placeholder,
+          modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(16.dp))
         )
       },
       description = {
@@ -139,10 +122,47 @@ fun AlbumHeader(
 //            modifier = Modifier.padding(top = 8.dp)
 //          )
 //        }
-
       },
+      navigationIcon = {
+        IconButton(onClick = { navController.popBackStack() }) {
+          Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+        }
+      },
+      actions = {
+//        IconButton(
+//          onClick = { /*TODO*/ },
+//          modifier = Modifier
+//            .clip(CircleShape)
+//            .size(38.dp)
+//            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+//        ) {
+//          Icon(Icons.Rounded.Favorite, contentDescription = null)
+//        }
+//
+//        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+
+        IconButton(
+          onClick = { /*TODO*/ },
+          modifier = Modifier
+            .clip(CircleShape)
+            .size(38.dp)
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+        ) {
+          Icon(
+            imageVector = Icons.Default.MoreVert,
+            contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
+            tint = MaterialTheme.colorScheme.onBackground
+          )
+        }
+      },
+      contentPadding = PaddingValues(
+        top = with(LocalDensity.current) {
+          WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+        }
+      ),
+      scrollBehavior = scrollBehavior,
       gradient = false,
-      maxHeight = 224.dp
+      navigationIconPresent = true,
     )
 
     EntityActionStrip(delegate, item, scrollBehavior)

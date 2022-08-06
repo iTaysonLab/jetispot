@@ -70,7 +70,7 @@ fun HubBinder (
       if (everythingElse) PlaylistHeader(delegate, item, scrollBehavior)
       if (showFAB) PlayFAB(delegate, item, scrollBehavior)
     }
-    HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(delegate, item, scrollBehavior) }
+    HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(item, scrollBehavior) }
     HubComponent.CollectionHeader -> {
       if (everythingElse) CollectionHeader(delegate, item, scrollBehavior)
 //      if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
