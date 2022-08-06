@@ -23,7 +23,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionContentFilter
@@ -46,15 +49,16 @@ fun CollectionHeader(
   val scope = rememberCoroutineScope()
   var expandSortDropdown by remember { mutableStateOf(false) }
 
-  LikedSongsTopAppBar(
+  LargeTopAppBar(
+    modifier = Modifier.statusBarsPadding(),
     title = { Text("Liked Songs") },
-    description = {
-      Text(
-        "${item.custom!!["count"]} songs",
-        fontSize = 12.sp,
-        color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-      )
-    },
+//    description = {
+//      Text(
+//        "${item.custom!!["count"]} songs",
+//        fontSize = 12.sp,
+//        color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+//      )
+//    },
     scrollBehavior = scrollBehavior,
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
@@ -74,11 +78,11 @@ fun CollectionHeader(
         Icon(Icons.Rounded.Search, null)
       }
     },
-    contentPadding = PaddingValues(
-      top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-      }
-    )
+//    contentPadding = PaddingValues(
+//      top = with(LocalDensity.current) {
+//        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+//      }
+//    )
   )
 
   Column() {
@@ -146,7 +150,7 @@ fun CollectionHeader(
     val tags = item.custom?.get("cfr") as List<CollectionContentFilter>
     val currentTag = item.custom["cfr_cur"] as String
 
-    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.heightOffset)).value
+    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction)).value
     LazyRow(
       modifier = Modifier
         .height(animHeight.dp)

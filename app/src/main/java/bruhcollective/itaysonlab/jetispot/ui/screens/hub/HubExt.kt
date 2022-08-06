@@ -39,8 +39,8 @@ fun HubScaffold(
     is HubState.Loaded -> {
       Scaffold(
         modifier = Modifier
-          .fillMaxSize()
           .nestedScroll(topBarState.nestedScrollConnection)
+          .fillMaxSize()
       ) { padding ->
         Box {
           Column(
@@ -55,7 +55,8 @@ fun HubScaffold(
 
             state.data.apply {
                 HubBinder(
-                  viewModel, body[0],
+                  viewModel,
+                  body[0],
                   scrollBehavior = topBarState,
                   albumHeader = true,
                   everythingElse = false
@@ -66,7 +67,7 @@ fun HubScaffold(
             LazyColumn(
               modifier = Modifier
                 .fillMaxHeight()
-                .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
+//                .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
             ) {
               state.data.apply {
                 items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
