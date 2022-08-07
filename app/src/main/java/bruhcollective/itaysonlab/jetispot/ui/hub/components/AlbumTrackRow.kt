@@ -74,6 +74,6 @@ fun AlbumTrackRow(
       }
     }
 
-    Divider(modifier = Modifier.padding(horizontal = 16.dp))
+    Divider(modifier = Modifier.padding(horizontal = 16.dp).alpha(0.3f))
   }
 }
