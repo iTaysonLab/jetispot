@@ -20,8 +20,8 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 fun ShortcutsCard(
   item: HubItem
 ) {
-  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth().clickableHub(item)) {
-    Row {
+  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth()) {
+    Row(Modifier.clickableHub(item)) {
       PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(56.dp))
       Text(item.text!!.title!!, fontSize = 13.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 8.dp))
     }

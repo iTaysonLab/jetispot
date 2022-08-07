@@ -42,10 +42,10 @@ private fun ShortcutComponentBinder(
   imagePlaceholder: String,
   title: String
 ) {
-  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth().navClickable { navController ->
-    navController.navigate(navigateUri)
-  }) {
-    Row {
+  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier.height(56.dp).fillMaxWidth()) {
+    Row(Modifier.navClickable { navController ->
+      navController.navigate(navigateUri)
+    }) {
       PreviewableAsyncImage(imageUrl = imageUrl, placeholderType = imagePlaceholder, modifier = Modifier.size(56.dp))
       Text(title, fontSize = 13.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(
         Alignment.CenterVertically).padding(horizontal = 8.dp))
