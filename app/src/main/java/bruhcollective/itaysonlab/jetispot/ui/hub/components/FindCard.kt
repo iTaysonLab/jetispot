@@ -12,16 +12,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
 @Composable
 fun FindCard(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  Card(modifier = Modifier.height(100.dp).fillMaxWidth().clickableHub(delegate, item)) {
+  Card(modifier = Modifier.height(100.dp).fillMaxWidth().clickableHub(item)) {
     Box {
       PreviewableAsyncImage(imageUrl = item.images?.background?.uri, placeholderType = item.images?.background?.placeholder, modifier = Modifier.fillMaxSize())
       Text(item.text!!.title!!, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.TopStart).padding(12.dp))

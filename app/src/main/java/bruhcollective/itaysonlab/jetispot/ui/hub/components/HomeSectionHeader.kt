@@ -12,13 +12,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubText
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 
 @Composable
 fun HomeSectionHeader (
   text: HubText,
-  delegate: HubScreenDelegate,
 ) {
-  Box(Modifier.padding(vertical = 8.dp).padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)) {
+  Box(Modifier.padding(vertical = 8.dp).padding(horizontal = if (LocalHubScreenDelegate.current.isSurroundedWithPadding()) 0.dp else 16.dp)) {
     Text(text = text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 21.sp, modifier = Modifier.align(Alignment.CenterStart))
   }
 }

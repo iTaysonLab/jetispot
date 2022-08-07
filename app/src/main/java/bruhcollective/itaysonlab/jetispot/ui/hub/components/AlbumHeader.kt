@@ -22,7 +22,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -33,12 +33,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AlbumHeader(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val darkTheme = isSystemInDarkTheme()
   val dominantColor = remember { mutableStateOf(Color.Transparent) }
   val dominantColorAsBg = animateColorAsState(dominantColor.value)
+  val delegate = LocalHubScreenDelegate.current
 
   LaunchedEffect(Unit) {
     launch {

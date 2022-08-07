@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
@@ -43,20 +44,16 @@ class AlbumViewModel @Inject constructor(
   private val spPartnersApi: SpPartnersApi,
   private val spPlayerServiceManager: SpPlayerServiceManager,
   private val spDao: LocalCollectionDao
-) : AbsHubViewModel(), CoroutineScope by MainScope() {
+) : AbsHubViewModel() {
   val title = mutableStateOf("")
 
   private fun subscribeOnAlbum(id: String) {
-    launch {
+    viewModelScope.launch {
       spDao.subscribeOnAlbum(AlbumId.fromBase62(id).hexId()).stateIn(this).collect {
         Log.d("AlbumViewModel", "state = $it")
         mainAddedState.value = it.isNotEmpty()
       }
     }
-  }
-
-  override fun onCleared() {
-    cancel()
   }
 
   suspend fun load(id: String) = load {

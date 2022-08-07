@@ -12,7 +12,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -20,12 +19,11 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun GridMediumCard(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val size = 160.dp
   
-  Column(Modifier.fillMaxWidth().clickableHub(delegate, item)) {
+  Column(Modifier.fillMaxWidth().clickableHub(item)) {
     var drawnTitle = false
 
     PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(size).clip(

@@ -39,7 +39,7 @@ fun EntityActionStrip (
 
     Box(Modifier.size(48.dp)) {
       Box(
-        Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(delegate, item.children!![0])
+        Modifier.clip(CircleShape).size(48.dp).background(MaterialTheme.colorScheme.primary).clickableHub(item.children!![0])
       ) {
         Icon(
           imageVector = Icons.Rounded.PlayArrow,

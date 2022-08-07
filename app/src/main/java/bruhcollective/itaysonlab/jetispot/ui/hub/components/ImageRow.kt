@@ -10,17 +10,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
 @Composable
 fun ImageRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
-  Row(Modifier.clickableHub(delegate, item).fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+  Row(Modifier.clickableHub(item).fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
     PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
       .size(42.dp)
       .clip(CircleShape))

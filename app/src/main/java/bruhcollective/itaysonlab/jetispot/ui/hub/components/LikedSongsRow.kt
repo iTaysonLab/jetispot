@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -28,9 +28,9 @@ import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
 fun LikedSongsRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val delegate = LocalHubScreenDelegate.current
   val likedSongsInfo = remember { mutableStateOf("") }
 
   LaunchedEffect(Unit) {
@@ -43,7 +43,7 @@ fun LikedSongsRow(
   if (likedSongsInfo.value.isNotEmpty()) {
     Row(
       Modifier
-        .clickableHub(delegate, item)
+        .clickableHub(item)
         .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
 

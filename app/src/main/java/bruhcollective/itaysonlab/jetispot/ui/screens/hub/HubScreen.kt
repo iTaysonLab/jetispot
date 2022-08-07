@@ -5,10 +5,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -22,6 +19,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,46 +44,50 @@ fun HubScreen(
 
   when (viewModel.state) {
     is HubScreenViewModel.State.Loaded -> {
-      LazyVerticalGrid(
-        contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
-        verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
-        horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
-        columns = GridCells.Fixed(2),
-        modifier = if (statusBarPadding) Modifier.fillMaxSize().statusBarsPadding() else Modifier.fillMaxSize()
-      ) {
-        if (viewModel.needContentPadding) {
-          item(span = { GridItemSpan(2) }) {
-            Spacer(modifier = Modifier.statusBarsPadding())
-          }
-        }
-
-        (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
-          if (header != null) {
-            item(
-              key = header.id,
-              span = {
-                GridItemSpan(2)
-              },
-              contentType = header.component.javaClass.simpleName,
-            ) {
-              HubBinder(viewModel, header)
+      CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
+        LazyVerticalGrid(
+          contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
+          verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
+          horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
+          columns = GridCells.Fixed(2),
+          modifier = if (statusBarPadding) Modifier
+            .fillMaxSize()
+            .statusBarsPadding() else Modifier.fillMaxSize()
+        ) {
+          if (viewModel.needContentPadding) {
+            item(span = { GridItemSpan(2) }) {
+              Spacer(modifier = Modifier.statusBarsPadding())
             }
           }
 
-          body.forEach { item ->
-            if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
-              items(item.children, key = { dItem -> dItem.id }, contentType = {
-                item.component.javaClass.simpleName
-              }) { cItem ->
-                HubBinder(viewModel, cItem)
+          (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
+            if (header != null) {
+              item(
+                key = header.id,
+                span = {
+                  GridItemSpan(2)
+                },
+                contentType = header.component.javaClass.simpleName,
+              ) {
+                HubBinder(header)
               }
-            } else {
-              item(span = {
-                GridItemSpan(if (item.component.isGrid()) 1 else 2)
-              }, key = item.id, contentType = {
-                item.component.javaClass.simpleName
-              }) {
-                HubBinder(viewModel, item, isRenderingInGrid = item.component.isGrid())
+            }
+
+            body.forEach { item ->
+              if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
+                items(item.children, key = { dItem -> dItem.id }, contentType = {
+                  item.component.javaClass.simpleName
+                }) { cItem ->
+                  HubBinder(cItem)
+                }
+              } else {
+                item(span = {
+                  GridItemSpan(if (item.component.isGrid()) 1 else 2)
+                }, key = item.id, contentType = {
+                  item.component.javaClass.simpleName
+                }) {
+                  HubBinder(item, isRenderingInGrid = item.component.isGrid())
+                }
               }
             }
           }

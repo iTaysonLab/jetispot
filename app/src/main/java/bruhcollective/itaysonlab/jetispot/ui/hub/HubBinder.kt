@@ -12,52 +12,52 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
 
 @Composable
 fun HubBinder (
-  delegate: HubScreenDelegate,
   item: HubItem,
   isRenderingInGrid: Boolean = false,
 ) {
   when (item.component) {
-    HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!, delegate)
-    HubComponent.HomeLargeSectionHeader -> HomeSectionLargeHeader(delegate, item)
-    HubComponent.GlueSectionHeader -> SectionHeader(item.text!!, delegate)
-    HubComponent.ShortcutsContainer -> ShortcutsContainer(delegate, item.children!!)
-    HubComponent.ShortcutsCard -> ShortcutsCard(delegate, item)
-    HubComponent.FindCard -> FindCard(delegate, item)
+    HubComponent.HomeShortSectionHeader -> HomeSectionHeader(item.text!!)
+    HubComponent.HomeLargeSectionHeader -> HomeSectionLargeHeader(item)
+    HubComponent.GlueSectionHeader -> SectionHeader(item.text!!)
+    HubComponent.ShortcutsContainer -> ShortcutsContainer(item.children!!)
+    HubComponent.ShortcutsCard -> ShortcutsCard(item)
+    HubComponent.FindCard -> FindCard(item)
 
-    HubComponent.SingleFocusCard -> SingleFocusCard(delegate, item)
+    HubComponent.SingleFocusCard -> SingleFocusCard(item)
 
-    HubComponent.Carousel -> Carousel(delegate, item)
+    HubComponent.Carousel -> Carousel(item)
+
     HubComponent.MediumCard -> {
       if (isRenderingInGrid) {
-        GridMediumCard(delegate, item)
+        GridMediumCard(item)
       } else {
-        MediumCard(delegate, item)
+        MediumCard(item)
       }
     }
 
-    HubComponent.ArtistLikedSongs -> LikedSongsRow(delegate, item)
+    HubComponent.ArtistLikedSongs -> LikedSongsRow(item)
 
-    HubComponent.AlbumTrackRow -> AlbumTrackRow(delegate, item)
-    HubComponent.ArtistTrackRow -> ArtistTrackRow(delegate, item)
-    HubComponent.PlaylistTrackRow -> PlaylistTrackRow(delegate, item)
+    HubComponent.AlbumTrackRow -> AlbumTrackRow(item)
+    HubComponent.ArtistTrackRow -> ArtistTrackRow(item)
+    HubComponent.PlaylistTrackRow -> PlaylistTrackRow(item)
 
-    HubComponent.ArtistPinnedItem -> ArtistPinnedItem(delegate, item)
-    HubComponent.AlbumHeader -> AlbumHeader(delegate, item)
+    HubComponent.ArtistPinnedItem -> ArtistPinnedItem(item)
+    HubComponent.AlbumHeader -> AlbumHeader(item)
     HubComponent.ArtistHeader -> ArtistHeader(item)
-    HubComponent.LargerRow -> LargerRow(delegate, item)
+    HubComponent.LargerRow -> LargerRow(item)
 
-    HubComponent.PlaylistHeader -> PlaylistHeader(delegate, item)
-    HubComponent.LargePlaylistHeader -> LargePlaylistHeader(delegate, item)
-    HubComponent.CollectionHeader -> CollectionHeader(delegate, item)
+    HubComponent.PlaylistHeader -> PlaylistHeader(item)
+    HubComponent.LargePlaylistHeader -> LargePlaylistHeader(item)
+    HubComponent.CollectionHeader -> CollectionHeader(item)
 
     HubComponent.TextRow -> TextRow(item.text!!)
-    HubComponent.ImageRow -> ImageRow(delegate, item)
+    HubComponent.ImageRow -> ImageRow(item)
 
-    HubComponent.ShowHeader -> ShowHeader(delegate, item)
-    HubComponent.EpisodeListItem -> EpisodeListItem(delegate, item)
-    HubComponent.PodcastTopics -> PodcastTopicsStrip(delegate, item)
+    HubComponent.ShowHeader -> ShowHeader(item)
+    HubComponent.EpisodeListItem -> EpisodeListItem(item)
+    HubComponent.PodcastTopics -> PodcastTopicsStrip(item)
 
-    HubComponent.OutlinedButton -> OutlineButton(delegate, item)
+    HubComponent.OutlinedButton -> OutlineButton(item)
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {

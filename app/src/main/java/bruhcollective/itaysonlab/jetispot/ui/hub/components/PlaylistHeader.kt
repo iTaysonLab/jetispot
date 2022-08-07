@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -34,12 +35,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PlaylistHeader(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val darkTheme = isSystemInDarkTheme()
   val dominantColor = remember { mutableStateOf(Color.Transparent) }
   val dominantColorAsBg = animateColorAsState(dominantColor.value)
+  val delegate = LocalHubScreenDelegate.current
 
   LaunchedEffect(Unit) {
     launch {
@@ -83,16 +84,17 @@ fun PlaylistHeader(
       )
     }
 
-    PlaylistHeaderAdditionalInfo(delegate, item.custom)
+    PlaylistHeaderAdditionalInfo(item.custom)
     EntityActionStrip(delegate, item)
   }
 }
 
 @Composable
 fun LargePlaylistHeader(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val delegate = LocalHubScreenDelegate.current
+
   Column {
     Box(
       Modifier
@@ -140,14 +142,13 @@ fun LargePlaylistHeader(
       )
     }
 
-    PlaylistHeaderAdditionalInfo(delegate, item.custom)
+    PlaylistHeaderAdditionalInfo(item.custom)
     EntityActionStrip(delegate, item)
   }
 }
 
 @Composable
 fun PlaylistHeaderAdditionalInfo(
-  delegate: HubScreenDelegate,
   custom: Map<String, Any>?
 ) {
   custom ?: return

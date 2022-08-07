@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -19,12 +18,11 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistTrackRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   Row(
     Modifier
-      .clickableHub(delegate, item)
+      .clickableHub(item)
       .padding(horizontal = 16.dp, vertical = 12.dp)) {
     Text(text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
       .align(Alignment.CenterVertically)

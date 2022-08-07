@@ -26,6 +26,7 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionCo
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.CollectionViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
@@ -33,11 +34,11 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CollectionHeader(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val scope = rememberCoroutineScope()
   var expandSortDropdown by remember { mutableStateOf(false) }
+  val delegate = LocalHubScreenDelegate.current
 
   Column(modifier = Modifier
     .fillMaxHeight()

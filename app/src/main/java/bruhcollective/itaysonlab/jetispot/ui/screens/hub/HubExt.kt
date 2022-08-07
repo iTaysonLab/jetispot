@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
@@ -72,24 +74,26 @@ fun HubScaffold(
       }, modifier = Modifier
         .fillMaxSize()
         .nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
-        LazyColumn(
-          modifier = Modifier
-            .fillMaxHeight()
-            .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
-        ) {
-          state.data.apply {
-            if (header != null) {
-              item(
-                key = header.id,
-                contentType = header.component.javaClass.simpleName,
-              ) {
-                HubBinder(viewModel, header)
+        CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
+          LazyColumn(
+            modifier = Modifier
+              .fillMaxHeight()
+              .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
+          ) {
+            state.data.apply {
+              if (header != null) {
+                item(
+                  key = header.id,
+                  contentType = header.component.javaClass.simpleName,
+                ) {
+                  HubBinder(header)
+                }
               }
-            }
 
-            items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
-              Box(modifier = Modifier.animateItemPlacement()) {
-                HubBinder(viewModel, it)
+              items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
+                Box(modifier = Modifier.animateItemPlacement()) {
+                  HubBinder(it)
+                }
               }
             }
           }

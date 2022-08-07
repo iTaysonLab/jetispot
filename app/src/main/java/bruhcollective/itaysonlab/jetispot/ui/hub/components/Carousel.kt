@@ -14,22 +14,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 
 @Composable
 fun Carousel(
-  delegate: HubScreenDelegate,
   item: HubItem,
 ) {
-  Column(Modifier.padding(vertical = if (delegate.isSurroundedWithPadding()) 0.dp else 8.dp)) {
+  val isSurroundedWithPadding = LocalHubScreenDelegate.current.isSurroundedWithPadding()
+  
+  Column(Modifier.padding(vertical = if (isSurroundedWithPadding) 0.dp else 8.dp)) {
     if (item.text != null) {
       Text(text = item.text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 16.sp,
-        modifier = Modifier.padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp).padding(bottom = 12.dp))
+        modifier = Modifier.padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp).padding(bottom = 12.dp))
     }
 
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)) {
       items(item.children ?: listOf()) { cItem ->
-        HubBinder(delegate, cItem)
+        HubBinder(cItem)
       }
     }
   }

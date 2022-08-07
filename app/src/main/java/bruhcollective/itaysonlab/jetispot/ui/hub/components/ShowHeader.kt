@@ -15,14 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import coil.compose.AsyncImage
 import com.spotify.metadata.Metadata
 
 @Composable
 fun ShowHeader(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val show = remember { item.custom!!["show"] as Metadata.Show }

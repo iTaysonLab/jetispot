@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import com.spotify.podcastcreatorinteractivity.v1.PodcastRating
 import com.spotify.podcastextensions.proto.PodcastTopic
@@ -23,7 +22,6 @@ import com.spotify.podcastextensions.proto.PodcastTopics
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PodcastTopicsStrip (
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val navController = LocalNavigationController.current
