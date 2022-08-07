@@ -32,6 +32,7 @@ import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationControlle
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingScreen
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
@@ -43,178 +44,179 @@ import javax.inject.Inject
 @AndroidEntryPoint
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var sessionManager: SpSessionManager
+  @Inject
+  lateinit var sessionManager: SpSessionManager
 
-    @Inject
-    lateinit var authManager: SpAuthManager
+  @Inject
+  lateinit var authManager: SpAuthManager
 
-    @Inject
-    lateinit var playerServiceManager: SpPlayerServiceManager
+  @Inject
+  lateinit var playerServiceManager: SpPlayerServiceManager
 
-    private var provider: (() -> NavController)? = null
+  private var provider: (() -> NavController)? = null
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        provider?.invoke()?.handleDeepLink(intent)
-    }
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    provider?.invoke()?.handleDeepLink(intent)
+  }
 
-    override fun onDestroy() {
-        provider = null
-        super.onDestroy()
-    }
+  override fun onDestroy() {
+    provider = null
+    super.onDestroy()
+  }
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    AppPreferences.setup(applicationContext)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent {
-            ApplicationTheme {
-                val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
-                // remembers
-                val scope = rememberCoroutineScope()
-                val bsState = rememberBottomSheetScaffoldState()
+    setContent {
+      ApplicationTheme {
+        val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+        // remembers
+        val scope = rememberCoroutineScope()
+        val bsState = rememberBottomSheetScaffoldState()
 
-                val bottomSheetNavigator = rememberBottomSheetNavigator()
-                val navController = rememberNavController(bottomSheetNavigator)
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val lambdaNavController = NavigationController { navController }
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val navController = rememberNavController(bottomSheetNavigator)
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val lambdaNavController = NavigationController { navController }
 
-                val navBarHeightDp =
-                    WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+        val navBarHeightDp =
+          WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
-                val bsVisible =
-                    playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
-                val bsPeek by animateDpAsState(
-                    if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
-                )
+        val bsVisible =
+          playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
+        val bsPeek by animateDpAsState(
+          if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
+        )
 
-                var bsQueueOpened by remember { mutableStateOf(false) }
+        var bsQueueOpened by remember { mutableStateOf(false) }
 
-                // lambdas
-                val bsOffset = {
-                    val bsProgress = bsState.bottomSheetState.progress
+        // lambdas
+        val bsOffset = {
+          val bsProgress = bsState.bottomSheetState.progress
 
-                    when {
-                        bsProgress.from == BottomSheetValue.Collapsed && bsProgress.to == BottomSheetValue.Collapsed -> 0f
-                        bsProgress.from == BottomSheetValue.Expanded && bsProgress.to == BottomSheetValue.Expanded -> 1f
-                        bsProgress.to == BottomSheetValue.Expanded -> bsProgress.fraction
-                        bsProgress.to == BottomSheetValue.Collapsed -> 1f - bsProgress.fraction
-                        else -> bsProgress.fraction
-                    }.coerceIn(0f..1f)
-                }
-
-                DisposableEffect(
-                    backPressedDispatcherOwner,
-                    scope,
-                    bsState.bottomSheetState.isExpanded,
-                    bsQueueOpened
-                ) {
-                    val callback = backPressedDispatcherOwner?.onBackPressedDispatcher?.addCallback(
-                        owner = backPressedDispatcherOwner,
-                        enabled = bsQueueOpened || bsState.bottomSheetState.isExpanded,
-                    ) {
-                        if (bsQueueOpened) {
-                            bsQueueOpened = false
-                        } else {
-                            scope.launch {
-                                bsState.bottomSheetState.collapse()
-                            }
-                        }
-                    }
-
-                    onDispose {
-                        callback?.remove()
-                    }
-                }
-
-                DisposableEffect(navController) {
-                    provider = { navController }
-
-                    onDispose {
-                        provider = null
-                    }
-                }
-
-                CompositionLocalProvider(LocalNavigationController provides lambdaNavController) {
-                    ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
-                        Scaffold(
-                            bottomBar = {
-                                val currentDestination = navBackStackEntry?.destination
-                                if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
-                                bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(
-                                    modifier = Modifier
-                                        .offset {
-                                            IntOffset(
-                                                0,
-                                                ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
-                                            )
-                                        }
-                                        .background(
-                                            MaterialTheme.colorScheme.compositeSurfaceElevation(
-                                                3.dp
-                                            )
-                                        ),
-                                    contentPadding = PaddingValues(bottom = navBarHeightDp)
-                                ) {
-                                    Screen.showInBottomNavigation.forEach { (screen, icon) ->
-                                        NavigationBarItem(
-                                            icon = {
-                                                Icon(
-                                                    icon,
-                                                    contentDescription = stringResource(screen.title)
-                                                )
-                                            },
-                                            label = { Text(stringResource(screen.title)) },
-                                            selected = lambdaNavController.controller().backQueue.any {
-                                                it.destination.route?.startsWith(
-                                                    screen.route
-                                                ) == true
-                                            },
-                                            onClick = {
-                                                navController.navigate(screen.route) {
-                                                    popUpTo(Screen.NavGraph.route) {
-                                                        saveState = true
-                                                    }
-
-                                                    launchSingleTop = true
-                                                    restoreState = true
-                                                }
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                        ) { innerPadding ->
-                            BottomSheetScaffold(
-                                sheetContent = {
-                                    NowPlayingScreen(
-                                        bottomSheetState = bsState.bottomSheetState,
-                                        bsOffset = bsOffset,
-                                        queueOpened = bsQueueOpened,
-                                        setQueueOpened = { bsQueueOpened = it }
-                                    )
-                                },
-                                scaffoldState = bsState,
-                                sheetPeekHeight = bsPeek,
-                                backgroundColor = MaterialTheme.colorScheme.surface,
-                                sheetGesturesEnabled = !bsQueueOpened
-                            ) { innerScaffoldPadding ->
-                                AppNavigation(
-                                    navController = navController,
-                                    sessionManager = sessionManager,
-                                    authManager = authManager,
-                                    modifier = Modifier
-                                        .padding(innerScaffoldPadding)
-                                        .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+          when {
+            bsProgress.from == BottomSheetValue.Collapsed && bsProgress.to == BottomSheetValue.Collapsed -> 0f
+            bsProgress.from == BottomSheetValue.Expanded && bsProgress.to == BottomSheetValue.Expanded -> 1f
+            bsProgress.to == BottomSheetValue.Expanded -> bsProgress.fraction
+            bsProgress.to == BottomSheetValue.Collapsed -> 1f - bsProgress.fraction
+            else -> bsProgress.fraction
+          }.coerceIn(0f..1f)
         }
+
+        DisposableEffect(
+          backPressedDispatcherOwner,
+          scope,
+          bsState.bottomSheetState.isExpanded,
+          bsQueueOpened
+        ) {
+          val callback = backPressedDispatcherOwner?.onBackPressedDispatcher?.addCallback(
+            owner = backPressedDispatcherOwner,
+            enabled = bsQueueOpened || bsState.bottomSheetState.isExpanded,
+          ) {
+            if (bsQueueOpened) {
+              bsQueueOpened = false
+            } else {
+              scope.launch {
+                bsState.bottomSheetState.collapse()
+              }
+            }
+          }
+
+          onDispose {
+            callback?.remove()
+          }
+        }
+
+        DisposableEffect(navController) {
+          provider = { navController }
+
+          onDispose {
+            provider = null
+          }
+        }
+
+        CompositionLocalProvider(LocalNavigationController provides lambdaNavController) {
+          ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+            Scaffold(
+              bottomBar = {
+                val currentDestination = navBackStackEntry?.destination
+                if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
+                bruhcollective.itaysonlab.jetispot.ui.shared.evo.NavigationBar(
+                  modifier = Modifier
+                    .offset {
+                      IntOffset(
+                        0,
+                        ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
+                      )
+                    }
+                    .background(
+                      MaterialTheme.colorScheme.compositeSurfaceElevation(
+                        3.dp
+                      )
+                    ),
+                  contentPadding = PaddingValues(bottom = navBarHeightDp)
+                ) {
+                  Screen.showInBottomNavigation.forEach { (screen, icon) ->
+                    NavigationBarItem(
+                      icon = {
+                        Icon(
+                          icon,
+                          contentDescription = stringResource(screen.title)
+                        )
+                      },
+                      label = { Text(stringResource(screen.title)) },
+                      selected = lambdaNavController.controller().backQueue.any {
+                        it.destination.route?.startsWith(
+                          screen.route
+                        ) == true
+                      },
+                      onClick = {
+                        navController.navigate(screen.route) {
+                          popUpTo(Screen.NavGraph.route) {
+                            saveState = true
+                          }
+
+                          launchSingleTop = true
+                          restoreState = true
+                        }
+                      }
+                    )
+                  }
+                }
+              }
+            ) { innerPadding ->
+              BottomSheetScaffold(
+                sheetContent = {
+                  NowPlayingScreen(
+                    bottomSheetState = bsState.bottomSheetState,
+                    bsOffset = bsOffset,
+                    queueOpened = bsQueueOpened,
+                    setQueueOpened = { bsQueueOpened = it }
+                  )
+                },
+                scaffoldState = bsState,
+                sheetPeekHeight = bsPeek,
+                backgroundColor = MaterialTheme.colorScheme.surface,
+                sheetGesturesEnabled = !bsQueueOpened
+              ) { innerScaffoldPadding ->
+                AppNavigation(
+                  navController = navController,
+                  sessionManager = sessionManager,
+                  authManager = authManager,
+                  modifier = Modifier
+                    .padding(innerScaffoldPadding)
+                    .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
+                )
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
