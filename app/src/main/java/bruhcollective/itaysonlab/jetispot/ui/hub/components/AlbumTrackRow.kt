@@ -65,6 +65,7 @@ fun AlbumTrackRow(
         modifier = Modifier
           .fillMaxWidth(1f)
           .align(CenterVertically)
+          .padding(start = 6.dp)
       ) {
         Icon(
           imageVector = Icons.Default.MoreVert,

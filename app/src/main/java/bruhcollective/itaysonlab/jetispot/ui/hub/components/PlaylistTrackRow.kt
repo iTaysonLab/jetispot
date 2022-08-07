@@ -36,7 +36,7 @@ fun PlaylistTrackRow(
       Modifier
         .clickableHub(delegate, item)
         .fillMaxWidth()
-        .padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        .padding(start = 16.dp, end = 2.dp, top = 16.dp, bottom = 16.dp),
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
       Row(modifier = Modifier.fillMaxWidth(0.865f)) {
