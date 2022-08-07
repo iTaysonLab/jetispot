@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode version_code
         versionName version_name
         resConfigs 'en'
@@ -117,7 +117,7 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Playback
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"
