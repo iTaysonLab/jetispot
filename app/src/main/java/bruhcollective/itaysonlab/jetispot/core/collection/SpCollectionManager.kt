@@ -72,6 +72,20 @@ class SpCollectionManager @Inject constructor(
     writer.performScan("collection")
   }
 
+  // add/remove
+
+  suspend fun toggle(id: String) {
+    writer.toggle(id)
+  }
+
+  suspend fun add(id: String, set: String = "collection") {
+    writer.performAdd(id, set)
+  }
+
+  suspend fun remove(id: String, set: String = "collection") {
+    writer.performRemove(id, set)
+  }
+
   override fun onMessage(p0: String, p1: MutableMap<String, String>, p2: ByteArray) {
     if (p0.startsWith("hm://playlist/v2/user/")) {
       writer.pubsubUpdateRootlist(Playlist4ApiProto.PlaylistModificationInfo.parseFrom(p2))

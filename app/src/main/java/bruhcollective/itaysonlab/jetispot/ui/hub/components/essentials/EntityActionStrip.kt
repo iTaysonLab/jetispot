@@ -25,7 +25,7 @@ fun EntityActionStrip (
   item: HubItem
 ) {
   Row(Modifier.padding(horizontal = 16.dp).padding(bottom = 4.dp)) {
-    IconButton(onClick = { /*TODO*/ }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
+    IconButton(onClick = { delegate.toggleMainObjectAddedState() }, Modifier.offset(y = 2.dp).align(Alignment.CenterVertically).size(28.dp)) {
       Icon(if (delegate.getMainObjectAddedState().value) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder, null)
     }
 

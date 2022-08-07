@@ -17,6 +17,7 @@ interface HubScreenDelegate {
   suspend fun getLikedSongsCount(artistId: String): Int = 0
   // states
   fun getMainObjectAddedState(): State<Boolean> = mutableStateOf(false)
+  fun toggleMainObjectAddedState() {}
   fun sendCustomCommand(scope: CoroutineScope, cmd: Any): Any = Unit
 }
 

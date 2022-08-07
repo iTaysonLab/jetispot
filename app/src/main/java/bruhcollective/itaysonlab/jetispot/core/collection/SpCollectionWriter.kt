@@ -81,6 +81,16 @@ class SpCollectionWriter(
     }.build())
   }
 
+  suspend fun performAdd(of: String, set: String) {
+    pendingWriteOperations.add(CollectionWriteOp.Add(of, set))
+    processPendingWrites()
+  }
+
+  suspend fun performRemove(of: String, set: String) {
+    pendingWriteOperations.add(CollectionWriteOp.Remove(of, set))
+    processPendingWrites()
+  }
+
   private suspend fun performPinScan(existingSyncToken: String? = null) {
     val syncToken: String
 
@@ -437,6 +447,20 @@ class SpCollectionWriter(
       // perform rootlist update
       Log.d("SpColManager", "PubSub rootlist update to rev. ${Revision.byteStringToRevision(decoded.newRevision)}")
       performRootlistScan(updateToRevision = Revision.byteStringToRevision(decoded.newRevision))
+    }
+  }
+
+  suspend fun toggle(id: String) {
+    val contains = when (spotifyIdToKind(id)) {
+      ExtensionKindOuterClass.ExtensionKind.ALBUM_V4 -> dao.getAlbum(id).isNotEmpty() to "collection"
+      ExtensionKindOuterClass.ExtensionKind.TRACK_V4 -> dao.getTrack(id).isNotEmpty() to "collection"
+      else -> error("Not supported")
+    }
+
+    if (contains.first) {
+      performRemove(id, contains.second)
+    } else {
+      performAdd(id, contains.second)
     }
   }
 
