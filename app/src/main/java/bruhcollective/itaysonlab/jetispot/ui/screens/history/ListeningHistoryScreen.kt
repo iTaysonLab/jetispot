@@ -12,6 +12,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.AbsHubViewModel
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScaffold
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.ToolbarOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,7 +31,9 @@ fun ListeningHistoryScreen(
         appBarTitle = stringResource(id = R.string.listening_history),
         state = viewModel.state,
         viewModel = viewModel,
-        reloadFunc = { scope.launch { viewModel.reload() } })
+        reloadFunc = { scope.launch { viewModel.reload() } },
+        toolbarOptions = ToolbarOptions(big = true, alwaysVisible = true)
+    )
 }
 
 @HiltViewModel

@@ -153,6 +153,11 @@ fun PlaylistHeaderAdditionalInfo(
 ) {
   custom ?: return
 
+  val ownerPic = remember(custom) { custom["owner_pic"] as String }
+  val ownerName = remember(custom) { custom["owner_name"] as String }
+  val likesCount = remember(custom) { custom["likes_count"] as Long }
+  val totalDuration = remember(custom) { custom["total_duration"] as String }
+
   Spacer(modifier = Modifier.height(12.dp))
 
   Row(Modifier
@@ -162,12 +167,12 @@ fun PlaylistHeaderAdditionalInfo(
     .fillMaxWidth()
     .padding(horizontal = 16.dp)) {
     PreviewableAsyncImage(
-      imageUrl = custom["owner_pic"] as String, placeholderType = "user", modifier = Modifier
+      imageUrl = ownerPic, placeholderType = "user", modifier = Modifier
         .clip(CircleShape)
         .size(32.dp)
     )
     MediumText(
-      text = custom["owner_name"] as String, fontSize = 13.sp, modifier = Modifier
+      text = ownerName, fontSize = 13.sp, modifier = Modifier
         .align(Alignment.CenterVertically)
         .padding(start = 12.dp)
     )
@@ -182,7 +187,7 @@ fun PlaylistHeaderAdditionalInfo(
   ) {
     Icon(Icons.Rounded.Language, contentDescription = null, modifier = Modifier.size(26.dp))
     Text(
-      text = "${custom["likes_count"] as Long} likes • ${custom["total_duration"] as String}",
+      text = "$likesCount likes • $totalDuration",
       fontSize = 12.sp,
       maxLines = 1,
       modifier = Modifier
