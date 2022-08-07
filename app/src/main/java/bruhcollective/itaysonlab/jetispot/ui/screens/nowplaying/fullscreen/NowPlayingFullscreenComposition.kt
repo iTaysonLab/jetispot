@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.disableTouch
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
@@ -66,9 +67,13 @@ fun NowPlayingFullscreenComposition (
           .disableTouch(disabled = queueOpened)
           .alpha(1f - queueProgress.value)
           .align(Alignment.BottomStart)
+          .fillMaxHeight()
           .padding(horizontal = 8.dp)
           .padding(bottom = 24.dp)
           .navigationBarsPadding()
+          .offset {
+            IntOffset(x = 0, y = (-(48).dp.toPx() * (queueProgressValue)).toInt())
+          }
       )
     }
 

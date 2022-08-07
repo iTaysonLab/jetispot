@@ -84,7 +84,7 @@ private fun QueueItem(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 22.dp, vertical = 8.dp)
     ) {
         PreviewableAsyncImage(
             imageUrl = remember(item) { item.imageUrl },
