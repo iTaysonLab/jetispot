@@ -168,13 +168,13 @@ private fun TwoRowsTopAppBar(
   val appBarDragModifier = Modifier.draggable(
     orientation = Orientation.Vertical,
     state = rememberDraggableState { delta ->
-      if (scrollBehavior != null && !scrollBehavior.isPinned) {
+      if (!scrollBehavior.isPinned) {
         scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
       }
     }
   )
 
-  Box(modifier = modifier.background(color = appBarContainerColor)) {
+  Box(modifier = modifier.background(color = appBarContainerColor).then(appBarDragModifier)) {
     Box(
       modifier = Modifier
         .alpha(titleAlpha)
@@ -224,7 +224,7 @@ private fun TwoRowsTopAppBar(
       )
       TopAppBarLayout(
         modifier = Modifier.clipToBounds(),
-        heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.heightOffset ?: 0f),
+        heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior.state.heightOffset ?: 0f),
         navigationIconContentColor =
         colors.navigationIconContentColor(colorTransitionFraction).value,
         titleContentColor = colors.titleContentColor(colorTransitionFraction).value,
