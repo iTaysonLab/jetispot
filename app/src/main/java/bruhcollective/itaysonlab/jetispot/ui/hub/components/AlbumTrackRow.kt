@@ -20,13 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
-fun AlbumTrackRow(
-  item: HubItem
-) {
+fun AlbumTrackRow(item: HubItem) {
   val delegate = LocalHubScreenDelegate.current
 
   Column {

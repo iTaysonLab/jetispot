@@ -7,10 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -26,6 +23,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
@@ -43,8 +41,6 @@ fun HubScreen(
   statusBarPadding: Boolean = false,
   onAppBarTitleChange: (String) -> Unit = {},
 ) {
-  val navController = LocalNavigationController.current
-
   val scope = rememberCoroutineScope()
   val scrollBehavior = rememberEUCScrollBehavior()
 
@@ -54,82 +50,76 @@ fun HubScreen(
     viewModel.load(onAppBarTitleChange, loader)
   }
 
-  Column(
-    Modifier
-      .nestedScroll(scrollBehavior.nestedScrollConnection)
-      .fillMaxSize()
-  ) {
-    LargeTopAppBar({}, Modifier.height(0.dp), scrollBehavior = scrollBehavior, maxHeight = 64.01.dp)
-    when (viewModel.state) {
-      is HubScreenViewModel.State.Loaded -> {
-        LazyColumn() {
+  when (viewModel.state) {
+    is HubScreenViewModel.State.Loaded -> {
+      LargeTopAppBar({}, Modifier.height(0.dp), scrollBehavior = scrollBehavior, maxHeight = 64.01.dp)
+      CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
+        Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
           (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
             if (header != null) {
-              item(
-                key = header.id,
-                contentType = header.component.javaClass.simpleName,
-              ) {
-                // artist header
-                HubBinder(
-                  viewModel,
-                  header,
-                  scrollBehavior = scrollBehavior,
-                  artistHeader = true
-                )
-              }
-            }
-          }
-        }
-
-        LazyVerticalGrid(
-          contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
-          verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
-          horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
-          columns = GridCells.Fixed(2),
-          modifier = if (statusBarPadding) Modifier
-            .fillMaxSize()
-            .statusBarsPadding() else Modifier.fillMaxSize()
-        ) {
-          if (viewModel.needContentPadding) {
-            item(span = { GridItemSpan(2) }) {
-              Spacer(modifier = Modifier.statusBarsPadding())
+              // artist header
+              HubBinder(
+                header,
+                scrollBehavior = scrollBehavior,
+                artistHeader = true
+              )
             }
           }
 
-          (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
-            if (header != null) {
-              item(
-                key = header.id,
-                span = {
-                  GridItemSpan(2)
-                },
-                contentType = header.component.javaClass.simpleName,
-              ) {
-                HubBinder(header)
+          LazyVerticalGrid(
+            contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
+            verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
+            columns = GridCells.Fixed(2),
+            modifier = if (statusBarPadding) Modifier
+              .fillMaxSize()
+              .statusBarsPadding() else Modifier.fillMaxSize()
+//              .nestedScroll(scrollBehavior.nestedScrollConnection)
+          ) {
+            if (viewModel.needContentPadding) {
+              item(span = { GridItemSpan(2) }) {
+                Spacer(modifier = Modifier.statusBarsPadding())
               }
             }
 
-            body.forEach { item ->
-              if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
-                items(item.children, key = { dItem -> dItem.id }, contentType = {
-                  item.component.javaClass.simpleName
-                }) { cItem ->
-                  HubBinder(cItem)
+            (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
+              if (header != null) {
+                item(
+                  key = header.id,
+                  span = { GridItemSpan(2) },
+                  contentType = header.component.javaClass.simpleName,
+                ) {
+                  HubBinder(header)
                 }
-              } else {
-                item(span = {
-                  GridItemSpan(if (item.component.isGrid()) 1 else 2)
-                }, key = item.id, contentType = {
-                  item.component.javaClass.simpleName
-                }) {
-                  HubBinder(item, isRenderingInGrid = item.component.isGrid())
+              }
+
+              body.forEach { item ->
+                if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
+                  items(
+                    item.children,
+                    key = { dItem -> dItem.id },
+                    contentType = { item.component.javaClass.simpleName }
+                  ) { cItem ->
+                    HubBinder(cItem)
+                  }
+                } else {
+                  item(
+                    span = { GridItemSpan(if (item.component.isGrid()) 1 else 2) },
+                    key = item.id,
+                    contentType = { item.component.javaClass.simpleName }
+                  ) {
+                    HubBinder(item, item.component.isGrid(), scrollBehavior = scrollBehavior)
+                  }
                 }
+              }
+            }
+          }
         }
       }
-
-      is HubScreenViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HubScreenViewModel.State.Error).error, onReload = { scope.launch { viewModel.reload(onAppBarTitleChange, loader) } }, modifier = Modifier.fillMaxSize())
-      HubScreenViewModel.State.Loading -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
     }
+
+    is HubScreenViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HubScreenViewModel.State.Error).error, onReload = { scope.launch { viewModel.reload(onAppBarTitleChange, loader) } }, modifier = Modifier.fillMaxSize())
+    HubScreenViewModel.State.Loading -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
   }
 }
 

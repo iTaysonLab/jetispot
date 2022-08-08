@@ -25,15 +25,17 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayFAB(
-  delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
+  val delegate = LocalHubScreenDelegate.current
+
   val fabSize = animateDpAsState(
     if (scrollBehavior.state.collapsedFraction <= 0.02f) 56.dp else 0.dp,
     animationSpec = tween(durationMillis = 500)
@@ -44,7 +46,7 @@ fun PlayFAB(
           .clip(RoundedCornerShape(16.dp))
           .size(fabSize)
           .background(MaterialTheme.colorScheme.primaryContainer)
-          .clickableHub(delegate, it)
+          .clickableHub(it)
     }?.let {
       Box(
         it

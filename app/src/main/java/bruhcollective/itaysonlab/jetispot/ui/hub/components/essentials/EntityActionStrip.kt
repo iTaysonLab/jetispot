@@ -79,7 +79,7 @@ fun EntityActionStrip (
             .height(56.dp)
             .width(142.dp)
             .background(MaterialTheme.colorScheme.secondaryContainer)
-            .clickableHub(delegate, item.children!![0])
+            .clickableHub(item.children!![0])
         ) {
           Icon(
             imageVector = Icons.Outlined.PlayArrow,
