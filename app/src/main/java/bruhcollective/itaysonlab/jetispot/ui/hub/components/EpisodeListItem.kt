@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.metadata.Metadata
@@ -34,7 +33,6 @@ import java.util.*
 
 @Composable
 fun EpisodeListItem (
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val episode = remember { item.custom!!["episode"] as Metadata.Episode }
@@ -101,7 +99,7 @@ fun EpisodeListItem (
 
       Box(
         Modifier
-          .clickableHub(delegate, item)
+          .clickableHub(item)
           .size(28.dp)
           .clip(CircleShape)
           .background(MaterialTheme.colorScheme.primary)

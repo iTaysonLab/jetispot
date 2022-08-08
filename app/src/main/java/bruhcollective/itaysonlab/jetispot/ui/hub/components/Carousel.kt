@@ -31,13 +31,14 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSnapperApi::class)
 @Composable
 fun Carousel(
-  delegate: HubScreenDelegate,
   item: HubItem,
 ) {
   val lazyListState = rememberLazyListState()
   val lazySnapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
-  Column(Modifier.padding(vertical = if (delegate.isSurroundedWithPadding()) 0.dp else 8.dp)) {
+  val isSurroundedWithPadding = LocalHubScreenDelegate.current.isSurroundedWithPadding()
+
+  Column(Modifier.padding(vertical = if (isSurroundedWithPadding) 0.dp else 8.dp)) {
     if (item.text != null) {
       Text(
         text = item.text.title!!,
@@ -45,7 +46,7 @@ fun Carousel(
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         modifier = Modifier
-          .padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)
+          .padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)
           .padding(top = 8.dp, bottom = 12.dp)
       )
     }
@@ -70,7 +71,7 @@ fun Carousel(
           )
         ) {
           items(item.children ?: listOf()) { cItem ->
-            HubBinder(delegate, cItem)
+            HubBinder(cItem)
           }
         }
       }

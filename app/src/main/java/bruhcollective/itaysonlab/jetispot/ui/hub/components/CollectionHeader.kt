@@ -41,13 +41,13 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CollectionHeader(
-  delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
   var expandSortDropdown by remember { mutableStateOf(false) }
+  val delegate = LocalHubScreenDelegate.current
 
   LargeTopAppBar(
     modifier = Modifier.statusBarsPadding(),

@@ -16,14 +16,13 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 @Composable
 fun SectionHeader(
   text: HubText,
-  delegate: HubScreenDelegate
 ) {
   Box(
     Modifier
+      .padding(top = 22.dp, bottom = 4.dp)
       .padding(
-        top = 22.dp,
-        bottom = 4.dp)
-      .padding(horizontal = if (delegate.isSurroundedWithPadding()) 0.dp else 16.dp)
+        horizontal = if (LocalHubScreenDelegate.current.isSurroundedWithPadding()) 0.dp else 16.dp
+      )
   ) {
     Text(
       text = text.title!!,

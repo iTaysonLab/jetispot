@@ -25,13 +25,14 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun AlbumTrackRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val delegate = LocalHubScreenDelegate.current
+
   Column {
     Row(
       horizontalArrangement = Arrangement.SpaceBetween,
-      modifier = Modifier.clickableHub(delegate, item)
+      modifier = Modifier.clickableHub(item)
     ) {
       Column(Modifier.fillMaxWidth(0.865f).padding(horizontal = 16.dp, vertical = 16.dp)) {
         var drawnTitle = false

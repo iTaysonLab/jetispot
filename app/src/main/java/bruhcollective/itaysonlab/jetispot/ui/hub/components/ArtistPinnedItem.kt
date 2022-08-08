@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -18,12 +17,11 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistPinnedItem (
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   Row(
     Modifier
-      .clickableHub(delegate, item)
+      .clickableHub(item)
       .padding(horizontal = 16.dp, vertical = 2.dp)) {
     PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(72.dp).padding(vertical = 8.dp).padding(end = 16.dp))
     Column(Modifier.align(Alignment.CenterVertically)) {

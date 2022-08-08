@@ -18,7 +18,6 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.evo.PlayFAB
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HubBinder (
-  delegate: HubScreenDelegate,
   item: HubItem,
   isRenderingInGrid: Boolean = false,
   scrollBehavior: TopAppBarScrollBehavior = rememberEUCScrollBehavior(),
@@ -30,59 +29,59 @@ fun HubBinder (
   val navController = LocalNavigationController.current
 
   when (item.component) {
-    HubComponent.HomeShortSectionHeader -> { if (everythingElse) HomeSectionHeader(item.text!!, delegate) }
-    HubComponent.HomeLargeSectionHeader -> { if (everythingElse) HomeSectionLargeHeader(delegate, item) }
-    HubComponent.GlueSectionHeader -> { if (everythingElse) SectionHeader(item.text!!, delegate) }
-    HubComponent.ShortcutsContainer -> { if (everythingElse) ShortcutsContainer(delegate, item.children!!) }
-    HubComponent.ShortcutsCard -> { if (everythingElse) ShortcutsCard(delegate, item) }
-    HubComponent.FindCard -> { if (everythingElse) FindCard(delegate, item) }
+    HubComponent.HomeShortSectionHeader -> { if (everythingElse) HomeSectionHeader(item.text!!) }
+    HubComponent.HomeLargeSectionHeader -> { if (everythingElse) HomeSectionLargeHeader(item) }
+    HubComponent.GlueSectionHeader -> { if (everythingElse) SectionHeader(item.text!!) }
+    HubComponent.ShortcutsContainer -> { if (everythingElse) ShortcutsContainer(item.children!!) }
+    HubComponent.ShortcutsCard -> { if (everythingElse) ShortcutsCard(item) }
+    HubComponent.FindCard -> { if (everythingElse) FindCard( item) }
 
-    HubComponent.SingleFocusCard -> { if (everythingElse) SingleFocusCard(delegate, item) }
+    HubComponent.SingleFocusCard -> { if (everythingElse) SingleFocusCard(item) }
 
-    HubComponent.Carousel -> { if (everythingElse) Carousel(delegate, item) }
+    HubComponent.Carousel -> { if (everythingElse) Carousel(item) }
     HubComponent.MediumCard -> {
       if (isRenderingInGrid) {
-        run { if (everythingElse) GridMediumCard(delegate, item) }
+        run { if (everythingElse) GridMediumCard(item) }
       } else {
-        run { if (everythingElse) MediumCard(delegate, item) }
+        run { if (everythingElse) MediumCard(item) }
       }
     }
 
-    HubComponent.ArtistLikedSongs -> { if (everythingElse) LikedSongsRow(delegate, item) }
+    HubComponent.ArtistLikedSongs -> { if (everythingElse) LikedSongsRow(item) }
 
-    HubComponent.AlbumTrackRow -> { if (everythingElse) AlbumTrackRow(delegate, item) }
-    HubComponent.ArtistTrackRow -> { if (everythingElse) ArtistTrackRow(delegate, item) }
-    HubComponent.PlaylistTrackRow -> { if (everythingElse) PlaylistTrackRow(delegate, item) }
+    HubComponent.AlbumTrackRow -> { if (everythingElse) AlbumTrackRow(item) }
+    HubComponent.ArtistTrackRow -> { if (everythingElse) ArtistTrackRow(item) }
+    HubComponent.PlaylistTrackRow -> { if (everythingElse) PlaylistTrackRow(item) }
 
-    HubComponent.ArtistPinnedItem -> { if (everythingElse) ArtistPinnedItem(delegate, item) }
+    HubComponent.ArtistPinnedItem -> { if (everythingElse) ArtistPinnedItem(item) }
     HubComponent.AlbumHeader -> {
-      if (albumHeader && !everythingElse) AlbumHeader(delegate, item, scrollBehavior)
-      if (showFAB) PlayFAB(delegate, item, scrollBehavior)
+      if (albumHeader && !everythingElse) AlbumHeader(item, scrollBehavior)
+      if (showFAB) PlayFAB(item, scrollBehavior)
     }
 
     // this way we can probably compose screens classic compose style for all non-server based
     // layout elements
     HubComponent.ArtistHeader -> { if (artistHeader) ArtistHeader(item, scrollBehavior) }
 
-    HubComponent.LargerRow -> { if (everythingElse) LargerRow(delegate, item) }
+    HubComponent.LargerRow -> { if (everythingElse) LargerRow(item) }
 
     HubComponent.PlaylistHeader -> {
-      if (everythingElse) PlaylistHeader(delegate, item, scrollBehavior)
-      if (showFAB) PlayFAB(delegate, item, scrollBehavior)
+      if (everythingElse) PlaylistHeader(item, scrollBehavior)
+      if (showFAB) PlayFAB(item, scrollBehavior)
     }
     HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(item, scrollBehavior) }
     HubComponent.CollectionHeader -> {
-      if (everythingElse) CollectionHeader(delegate, item, scrollBehavior)
-//      if (showFAB) PlayFAB(navController, delegate, item, scrollBehavior)
+      if (everythingElse) CollectionHeader(item, scrollBehavior)
+//      if (showFAB) PlayFAB(navController, item, scrollBehavior)
     }
     HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }
-    HubComponent.ImageRow -> { /* if (everythingElse) ImageRow(navController, delegate, item) */ }
+    HubComponent.ImageRow -> { /* if (everythingElse) ImageRow(navController, item) */ }
 
-    HubComponent.ShowHeader -> { if (everythingElse) ShowHeader(delegate, item) }
-    HubComponent.EpisodeListItem -> { if (everythingElse) EpisodeListItem(delegate, item) }
-    HubComponent.PodcastTopics -> { if (everythingElse) PodcastTopicsStrip(delegate, item) }
+    HubComponent.ShowHeader -> { if (everythingElse) ShowHeader(item) }
+    HubComponent.EpisodeListItem -> { if (everythingElse) EpisodeListItem(item) }
+    HubComponent.PodcastTopics -> { if (everythingElse) PodcastTopicsStrip(item) }
 
-    HubComponent.OutlinedButton -> { if (everythingElse) OutlineButton(delegate, item) }
+    HubComponent.OutlinedButton -> { if (everythingElse) OutlineButton(item) }
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {

@@ -19,10 +19,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
-fun LargerRow (
-  delegate: HubScreenDelegate,
-  item: HubItem
-) {
+fun LargerRow (item: HubItem) {
   // Popular releases
   Row(
     Modifier
@@ -32,7 +29,7 @@ fun LargerRow (
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
-    Row(Modifier.clickableHub(delegate, item).fillMaxWidth()) {
+    Row(Modifier.clickableHub(item).fillMaxWidth()) {
       PreviewableAsyncImage(
         imageUrl = item.images?.main?.uri,
         placeholderType = item.images?.main?.placeholder,

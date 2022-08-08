@@ -23,17 +23,14 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
-fun OutlineButton(
-  delegate: HubScreenDelegate,
-  item: HubItem
-) {
+fun OutlineButton(item: HubItem) {
   Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
     Box(
       Modifier
         .height(40.dp)
         .clip(RoundedCornerShape(64.dp))
         .background(MaterialTheme.colorScheme.secondaryContainer)
-        .clickableHub(delegate, item),
+        .clickableHub(item),
       contentAlignment = Alignment.Center
     ) {
       Text(

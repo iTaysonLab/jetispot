@@ -16,10 +16,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShortcutsCard(
-  delegate: HubScreenDelegate,
-  item: HubItem
-) {
+fun ShortcutsCard(item: HubItem) {
   Card(
     colors = CardDefaults.cardColors(
       containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)
@@ -27,7 +24,7 @@ fun ShortcutsCard(
     modifier = Modifier
       .height(56.dp)
       .fillMaxWidth()
-      .clickableHub(delegate, item)
+      .clickableHub(item)
   ) {
     Row {
       PreviewableAsyncImage(

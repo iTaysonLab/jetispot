@@ -35,11 +35,11 @@ import coil.compose.AsyncImage
 @OptIn(ExperimentalTextApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PlaylistHeader(
-  delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehaviour: TopAppBarScrollBehavior
 ) {
   val navController = LocalNavigationController.current
+  val delegate = LocalHubScreenDelegate.current
 //  val darkTheme = isSystemInDarkTheme()
 //  val dominantColor = remember { mutableStateOf(Color.Transparent) }
 //  val dominantColorAsBg = animateColorAsState(dominantColor.value)
@@ -248,7 +248,6 @@ fun LargePlaylistHeader(
 
 @Composable
 fun PlaylistHeaderAdditionalInfo(
-  delegate: HubScreenDelegate,
   custom: Map<String, Any>?
 ) {
   custom ?: return

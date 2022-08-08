@@ -24,13 +24,12 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistTrackRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   val navController = LocalNavigationController.current
   Row(
     Modifier
-      .clickableHub(delegate, item)
+      .clickableHub(item)
       .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
@@ -42,7 +41,7 @@ fun ArtistTrackRow(
       Text(text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
         .align(Alignment.CenterVertically)
         .padding(end = 16.dp)
-        )
+      )
 
       PreviewableAsyncImage(
         imageUrl = item.images?.main?.uri,

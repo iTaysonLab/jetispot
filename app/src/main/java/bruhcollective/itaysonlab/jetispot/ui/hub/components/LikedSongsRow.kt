@@ -32,9 +32,9 @@ import xyz.gianlu.librespot.metadata.ArtistId
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun LikedSongsRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
+  val delegate = LocalHubScreenDelegate.current
   val likedSongsInfo = remember { mutableStateOf("") }
 
   LaunchedEffect(Unit) {
@@ -47,7 +47,7 @@ fun LikedSongsRow(
   if (likedSongsInfo.value.isNotEmpty()) {
     Row(
       Modifier
-        .clickableHub(delegate, item)
+        .clickableHub(item)
         .padding(start = 16.dp, top = 16.dp)
     ) {
 

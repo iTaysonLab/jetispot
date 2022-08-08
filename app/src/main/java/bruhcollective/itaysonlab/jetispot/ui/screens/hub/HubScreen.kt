@@ -83,14 +83,12 @@ fun HubScreen(
 
         LazyVerticalGrid(
           contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
-          verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
-          horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
+          verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
+          horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 8.dp else 0.dp),
           columns = GridCells.Fixed(2),
           modifier = if (statusBarPadding) Modifier
             .fillMaxSize()
-            .statusBarsPadding() else Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .statusBarsPadding() else Modifier.fillMaxSize()
         ) {
           if (viewModel.needContentPadding) {
             item(span = { GridItemSpan(2) }) {
@@ -102,39 +100,30 @@ fun HubScreen(
             if (header != null) {
               item(
                 key = header.id,
-                span = { GridItemSpan(2) },
+                span = {
+                  GridItemSpan(2)
+                },
                 contentType = header.component.javaClass.simpleName,
               ) {
-                HubBinder(viewModel, header, scrollBehavior = scrollBehavior)
+                HubBinder(header)
               }
             }
 
             body.forEach { item ->
               if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
-                items(
-                  item.children,
-                  key = { dItem -> dItem.id },
-                  contentType = { item.component.javaClass.simpleName }
-                ) { cItem ->
-                  HubBinder(viewModel, cItem)
+                items(item.children, key = { dItem -> dItem.id }, contentType = {
+                  item.component.javaClass.simpleName
+                }) { cItem ->
+                  HubBinder(cItem)
                 }
               } else {
-                item(
-                  span = { GridItemSpan(if (item.component.isGrid()) 1 else 2) },
-                  key = item.id,
-                  contentType = { item.component.javaClass.simpleName }
-                ) {
-                  // also artist content
-                  HubBinder(
-                    viewModel,
-                    item,
-                    isRenderingInGrid = item.component.isGrid(),
-                    scrollBehavior = scrollBehavior
-                  )
+                item(span = {
+                  GridItemSpan(if (item.component.isGrid()) 1 else 2)
+                }, key = item.id, contentType = {
+                  item.component.javaClass.simpleName
+                }) {
+                  HubBinder(item, isRenderingInGrid = item.component.isGrid())
                 }
-              }
-            }
-          }
         }
       }
 

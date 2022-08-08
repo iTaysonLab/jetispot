@@ -24,7 +24,6 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun GridMediumCard(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   Surface(
@@ -36,7 +35,7 @@ fun GridMediumCard(
   ) {
     Column(
       horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.clickableHub(delegate, item).padding(14.dp)
+      modifier = Modifier.clickableHub(item).padding(14.dp)
     ) {
       var drawnTitle = false
       Surface(color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)) {

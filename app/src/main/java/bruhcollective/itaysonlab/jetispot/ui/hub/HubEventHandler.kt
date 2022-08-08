@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
+import bruhcollective.itaysonlab.jetispot.ui.shared.navAndHubClickable
 import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 
 object HubEventHandler {
@@ -24,6 +25,6 @@ object HubEventHandler {
 }
 
 @Stable
-fun Modifier.clickableHub(delegate: HubScreenDelegate, item: HubItem) = navClickable(enabled = item.events?.click != null) { navController ->
+fun Modifier.clickableHub(item: HubItem) = navAndHubClickable(enabled = item.events?.click != null) { navController, delegate ->
   HubEventHandler.handle(navController, delegate, item.events!!.click!!)
 }

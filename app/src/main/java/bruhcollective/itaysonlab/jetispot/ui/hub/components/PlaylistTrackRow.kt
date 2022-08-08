@@ -28,13 +28,12 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun PlaylistTrackRow(
-  delegate: HubScreenDelegate,
   item: HubItem
 ) {
   Column {
     Row(
       Modifier
-        .clickableHub(delegate, item)
+        .clickableHub(item)
         .fillMaxWidth()
         .padding(start = 16.dp, end = 2.dp, top = 16.dp, bottom = 16.dp),
       horizontalArrangement = Arrangement.SpaceBetween

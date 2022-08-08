@@ -115,7 +115,7 @@ fun NowPlayingFullscreenComposition (
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
         )
-        
+
         Column(Modifier.size((LocalConfiguration.current.screenWidthDp * 0.9).dp)) { }
 
         Column(Modifier.padding(horizontal = 8.dp)) {
@@ -128,7 +128,7 @@ fun NowPlayingFullscreenComposition (
         ControlsBottomAccessories(viewModel, queueOpened, setQueueOpened)
       }
     }
-    
+
     NowPlayingQueue(
       viewModel = viewModel,
       modifier = Modifier.fillMaxSize(),

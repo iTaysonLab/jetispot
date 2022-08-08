@@ -100,6 +100,14 @@ interface LocalCollectionDao {
   @Query("DELETE FROM lcEpisodes WHERE uri IN (:uris)")
   suspend fun deleteEpisodes(vararg uris: String)
 
+  //
+
+  @Query("SELECT * from lcAlbums WHERE uri = :uri")
+  suspend fun getAlbum(uri: String): List<CollectionAlbum>
+
+  @Query("SELECT * from lcTracks WHERE uri = :uri")
+  suspend fun getTrack(uri: String): List<CollectionTrack>
+
   // Flows
 
   @Query("SELECT * from lcArtists WHERE id = :id")

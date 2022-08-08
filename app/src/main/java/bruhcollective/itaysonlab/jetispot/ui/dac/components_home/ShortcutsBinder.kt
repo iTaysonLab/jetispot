@@ -87,19 +87,18 @@ private fun ShortcutComponentBinder(
   Card(
     colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
     shape = RoundedCornerShape(8.dp),
-    modifier = Modifier
-      .height(56.dp)
-      .fillMaxWidth()
-      .navClickable { navController -> navController.navigate(navigateUri) }
+    modifier = Modifier.height(56.dp).fillMaxWidth()
   ) {
-    Row(Modifier.fillMaxSize().padding(horizontal = 8.dp)) {
+    Row(
+      Modifier
+        .fillMaxSize()
+        .padding(horizontal = 8.dp)
+        .navClickable { navController -> navController.navigate(navigateUri) }
+    ) {
       PreviewableAsyncImage(
         imageUrl = imageUrl,
         placeholderType = imagePlaceholder,
-        modifier = Modifier
-          .size(42.dp)
-          .clip(RoundedCornerShape(3.dp))
-          .align(CenterVertically)
+        modifier = Modifier.size(42.dp).clip(RoundedCornerShape(3.dp)).align(CenterVertically)
       )
 
       Text(
@@ -109,9 +108,7 @@ private fun ShortcutComponentBinder(
         lineHeight = 18.sp,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = Modifier
-          .padding(start = 8.dp)
-          .align(CenterVertically)
+        modifier = Modifier.padding(start = 8.dp).align(CenterVertically)
       )
     }
   }

@@ -1,135 +1,55 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.history
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
-import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.AbsHubViewModel
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScaffold
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.ToolbarOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListeningHistoryScreen(
-  viewModel: HistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel()
 ) {
-  val navController = LocalNavigationController.current
-  val scrollBehavior = rememberEUCScrollBehavior()
-  val scope = rememberCoroutineScope()
-  val loadFunc: suspend CoroutineScope.() -> Unit = remember {{
-    viewModel.load {
-      getListeningHistory()
-    }
-  }}
+    val scope = rememberCoroutineScope()
 
-  LaunchedEffect(Unit) {
-    loadFunc()
-  }
-
-  when (viewModel.state) {
-    is HistoryViewModel.State.Loaded -> {
-      Scaffold(
-        topBar = {
-          LargeTopAppBar(
-            title = { Text(stringResource(id = R.string.listening_history)) },
-            navigationIcon = {
-              IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Rounded.ArrowBack, null)
-              }
-            },
-            contentPadding = PaddingValues(
-              top = with(LocalDensity.current) {
-                WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-              }
-            ),
-            scrollBehavior = scrollBehavior
-          )
-      },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
-      { padding ->
-        LazyColumn(modifier = Modifier.fillMaxHeight().padding(padding)) {
-          (viewModel.state as HistoryViewModel.State.Loaded).data.apply {
-            if (header != null) {
-              item(
-                key = header.id,
-                contentType = header.component.javaClass.simpleName,
-              ) {
-                HubBinder(viewModel, header)
-              }
-            }
-
-            items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
-              HubBinder(viewModel, it)
-            }
-          }
-        }
-      }
+    LaunchedEffect(Unit) {
+        viewModel.load()
     }
 
-    is HistoryViewModel.State.Error -> PagingErrorPage(exception = (viewModel.state as HistoryViewModel.State.Error).error, onReload = { scope.launch(block = loadFunc) }, modifier = Modifier.fillMaxSize())
-    HistoryViewModel.State.Loading -> PagingLoadingPage(Modifier.fillMaxSize())
-  }
+    HubScaffold(
+        appBarTitle = stringResource(id = R.string.listening_history),
+        state = viewModel.state,
+        viewModel = viewModel,
+        reloadFunc = { scope.launch { viewModel.reload() } },
+        toolbarOptions = ToolbarOptions(big = true, alwaysVisible = true)
+    )
 }
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-  private val spInternalApi: SpInternalApi,
-  private val spPlayerServiceManager: SpPlayerServiceManager
-) : ViewModel(), HubScreenDelegate {
-  private val _state = mutableStateOf<State>(State.Loading)
-  val state: State get() = _state.value
-
-  val nullState = mutableStateOf(false)
-  override fun getMainObjectAddedState() = nullState
-
-  suspend fun load(loader: suspend SpInternalApi.() -> HubResponse) {
-    _state.value = try {
-      State.Loaded(spInternalApi.loader())
-    } catch (e: Exception) {
-      e.printStackTrace()
-      State.Error(e)
+    private val spInternalApi: SpInternalApi,
+    private val spPlayerServiceManager: SpPlayerServiceManager
+) : AbsHubViewModel(), HubScreenDelegate {
+    suspend fun load() = load {
+      spInternalApi.getListeningHistory()
     }
-  }
 
-  suspend fun reload(loader: suspend SpInternalApi.() -> HubResponse) {
-    _state.value = State.Loading
-    load(loader)
-  }
+    suspend fun reload() = reload {
+      spInternalApi.getListeningHistory()
+    }
 
-  override fun play(data: PlayFromContextData) {
-    spPlayerServiceManager.play(data.uri, data.player)
-  }
-
-  override fun isSurroundedWithPadding() = false
-
-  override suspend fun calculateDominantColor(url: String, dark: Boolean) = Color.Transparent
-
-  sealed class State {
-    class Loaded(val data: HubResponse) : State()
-    class Error(val error: Exception) : State()
-    object Loading : State()
-  }
+    override fun play(data: PlayFromContextData) {
+        spPlayerServiceManager.play(data.uri, data.player)
+    }
 }

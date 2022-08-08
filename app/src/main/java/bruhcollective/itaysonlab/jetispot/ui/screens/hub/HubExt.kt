@@ -42,6 +42,7 @@ fun HubScaffold(
           .nestedScroll(topBarState.nestedScrollConnection)
           .fillMaxSize()
       ) { padding ->
+        CompositionLocalProvider(LocalHubScreenDelegate provides viewModel)
         Box {
           Column(
             Modifier
@@ -54,25 +55,27 @@ fun HubScaffold(
             }
 
             state.data.apply {
-                HubBinder(
-                  viewModel,
-                  body[0],
-                  scrollBehavior = topBarState,
-                  albumHeader = true,
-                  everythingElse = false
-                )
+              HubBinder(
+                viewModel,
+                body[0],
+                scrollBehavior = topBarState,
+                albumHeader = true,
+                everythingElse = false
+              )
             }
 
 
             LazyColumn(
               modifier = Modifier
                 .fillMaxHeight()
-//                .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
+                .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
             ) {
               state.data.apply {
                 items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
                   // Playlist track list
-                  HubBinder(viewModel, it, scrollBehavior = topBarState)
+                  Box(modifier = Modifier.animateItemPlacement()) {
+                    HubBinder(it, scrollBehavior = topBarState)
+                  }
                 }
               }
             }

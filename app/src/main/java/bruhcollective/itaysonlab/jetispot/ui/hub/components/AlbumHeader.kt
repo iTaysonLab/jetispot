@@ -17,6 +17,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
+import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
+import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
@@ -27,24 +30,13 @@ import dev.chrisbanes.snapper.ExperimentalSnapperApi
 @OptIn(ExperimentalSnapperApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumHeader(
-  delegate: HubScreenDelegate,
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   val navController = LocalNavigationController.current
-  // TODO: discard dominant color calculation for album header?
-//  val darkTheme = isSystemInDarkTheme()
-//  val dominantColor = remember { mutableStateOf(Color.Transparent) }
-//  val dominantColorAsBg = animateColorAsState(dominantColor.value)
-//
-//  LaunchedEffect(Unit) {
-//    launch {
-//      if (dominantColor.value != Color.Transparent) return@launch
-//      dominantColor.value = delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
-//    }
-//  }
-
+  val delegate = LocalHubScreenDelegate.current
   val artistScrollState = rememberLazyListState()
+
   Column() {
     ImageBackgroundTopAppBar(
       maxHeight = 224.dp,

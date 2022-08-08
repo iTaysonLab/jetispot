@@ -24,10 +24,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
-fun MediumCard(
-  delegate: HubScreenDelegate,
-  item: HubItem
-) {
+fun MediumCard(item: HubItem) {
   Surface(
     color = MaterialTheme.colorScheme.background,
     shape = RoundedCornerShape(20.dp)
@@ -36,7 +33,7 @@ fun MediumCard(
       horizontalAlignment = CenterHorizontally,
       modifier = Modifier
         .width(172.dp)
-        .clickableHub(delegate, item)
+        .clickableHub(item)
         .padding(bottom = 12.dp)
     ) {
       var drawnTitle = false
