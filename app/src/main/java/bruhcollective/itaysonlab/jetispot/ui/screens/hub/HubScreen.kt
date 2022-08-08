@@ -62,32 +62,14 @@ fun HubScreen(
                 artistHeader = true
               )
             }
-          }
 
-          LazyVerticalGrid(
-            contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
-            verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize()
-          ) {
-//            if (viewModel.needContentPadding) {
-////              item(span = { GridItemSpan(2) }) {
-////                Spacer(modifier = Modifier.statusBarsPadding())
-////              }
-//            }
-
-            (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
-              if (header != null) {
-                item(
-                  key = header.id,
-                  span = { GridItemSpan(2) },
-                  contentType = header.component.javaClass.simpleName,
-                ) {
-                  HubBinder(header, scrollBehavior = scrollBehavior)
-                }
-              }
-
+            LazyVerticalGrid(
+              contentPadding = PaddingValues(if (needContentPadding) 16.dp else 0.dp),
+              verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
+              horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
+              columns = GridCells.Fixed(2),
+              modifier = Modifier.fillMaxSize()
+            ) {
               body.forEach { item ->
                 if (item.component.isGrid() && !item.children.isNullOrEmpty()) {
                   items(
