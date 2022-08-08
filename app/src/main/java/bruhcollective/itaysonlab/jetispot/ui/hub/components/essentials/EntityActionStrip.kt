@@ -56,13 +56,13 @@ fun EntityActionStrip (
     Spacer(Modifier.width(16.dp))
 
     Row {
-      IconButton(onClick = { /*TODO*/ },
+      IconButton(onClick = { delegate.toggleMainObjectAddedState() },
         Modifier
           .clip(shape = CircleShape)
           .align(Alignment.CenterVertically)
           .background(MaterialTheme.colorScheme.surfaceVariant)
           .size(56.dp)
-          ) {
+      ) {
         Icon(
           if (delegate.getMainObjectAddedState().value) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
           null,
