@@ -71,7 +71,7 @@ fun YLRPinned(
           modifier = Modifier
             .size(58.dp)
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(12.dp))
         )
       } else {
         if (item.picture.isEmpty()) {
@@ -81,7 +81,7 @@ fun YLRPinned(
             modifier = Modifier
               .size(58.dp)
               .aspectRatio(1f)
-              .clip(RoundedCornerShape(14.dp))
+              .clip(RoundedCornerShape(12.dp))
           )
         } else {
           AsyncImage(
@@ -90,7 +90,7 @@ fun YLRPinned(
             modifier = Modifier
               .size(58.dp)
               .aspectRatio(1f)
-              .clip(RoundedCornerShape(14.dp))
+              .clip(RoundedCornerShape(12.dp))
           )
         }
       }
@@ -238,7 +238,7 @@ fun YLRGenericAlbumItem(
         modifier = Modifier
           .size(58.dp)
           .aspectRatio(1f)
-          .clip(RoundedCornerShape(14.dp))
+          .clip(RoundedCornerShape(12.dp))
       )
 
       Column(
