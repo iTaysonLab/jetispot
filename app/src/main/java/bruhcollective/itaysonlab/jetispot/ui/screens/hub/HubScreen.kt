@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,7 +23,6 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
@@ -71,16 +69,13 @@ fun HubScreen(
             verticalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
             horizontalArrangement = Arrangement.spacedBy(if (needContentPadding) 12.dp else 0.dp),
             columns = GridCells.Fixed(2),
-            modifier = if (statusBarPadding) Modifier
-              .fillMaxSize()
-              .statusBarsPadding() else Modifier.fillMaxSize()
-//              .nestedScroll(scrollBehavior.nestedScrollConnection)
+            modifier = Modifier.fillMaxSize()
           ) {
-            if (viewModel.needContentPadding) {
-              item(span = { GridItemSpan(2) }) {
-                Spacer(modifier = Modifier.statusBarsPadding())
-              }
-            }
+//            if (viewModel.needContentPadding) {
+////              item(span = { GridItemSpan(2) }) {
+////                Spacer(modifier = Modifier.statusBarsPadding())
+////              }
+//            }
 
             (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
               if (header != null) {
@@ -89,7 +84,7 @@ fun HubScreen(
                   span = { GridItemSpan(2) },
                   contentType = header.component.javaClass.simpleName,
                 ) {
-                  HubBinder(header)
+                  HubBinder(header, scrollBehavior = scrollBehavior)
                 }
               }
 

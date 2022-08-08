@@ -19,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 
@@ -65,7 +64,7 @@ fun AlbumTrackRow(item: HubItem) {
         modifier = Modifier
           .fillMaxWidth(1f)
           .align(CenterVertically)
-          .padding(start = 6.dp)
+          .padding(start = 2.dp)
       ) {
         Icon(
           imageVector = Icons.Default.MoreVert,

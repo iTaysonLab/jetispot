@@ -296,7 +296,7 @@ private fun TopAppBarLayout(
       Box(
         Modifier
           .layoutId("navigationIcon")
-          .padding(start = 6.dp, end = 4.dp)
+          .padding(start = 8.dp, end = 4.dp)
           .size(if (navigationIconVisible) 38.dp else 0.dp)
           .clip(CircleShape)
           .background(
@@ -337,7 +337,7 @@ private fun TopAppBarLayout(
       Box(
         Modifier
           .layoutId("actionIcons")
-          .padding(end = 6.dp)
+          .padding(end = 8.dp)
       ) {
         Box(modifier = Modifier) {
           CompositionLocalProvider(
