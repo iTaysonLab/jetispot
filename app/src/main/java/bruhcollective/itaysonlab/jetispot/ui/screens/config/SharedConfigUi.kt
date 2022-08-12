@@ -3,10 +3,12 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.config
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -16,17 +18,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
+import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
+import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import kotlinx.coroutines.launch
@@ -76,8 +89,21 @@ fun BaseConfigScreen(
             ConfigInfo(stringResource(item.text))
           }
 
+          is ConfigItem.BlendInfo -> {
+            BlendInfo(stringResource(item.text))
+          }
+
           is ConfigItem.Preference -> {
             ConfigPreference(
+              stringResource(item.title),
+              item.subtitle(LocalContext.current, dsConfig)
+            ) {
+              item.onClick(navController)
+            }
+          }
+
+          is ConfigItem.BlendButton -> {
+            BlendButton(
               stringResource(item.title),
               item.subtitle(LocalContext.current, dsConfig)
             ) {
@@ -108,6 +134,8 @@ fun BaseConfigScreen(
               scope.launch { viewModel.modifyDatastore { item.modify(this, newValue) }}
             }
           }
+
+          is ConfigItem.BlendPreview -> {BlendPreview()}
         }
       }
     }
@@ -140,6 +168,21 @@ fun ConfigInfo(
       color = MaterialTheme.colorScheme.onSurfaceVariant,
       fontSize = 14.sp,
       modifier = Modifier.padding(top = 12.dp)
+    )
+  }
+}
+
+@Composable
+fun BlendInfo(
+  text: String
+) {
+  Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Text(
+      text = text,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      fontSize = 14.sp,
+      modifier = Modifier.padding(top = 12.dp),
+      textAlign = TextAlign.Center
     )
   }
 }
@@ -266,6 +309,56 @@ fun ConfigPreference(
   }
 }
 
+@OptIn(ExperimentalTextApi::class)
+@Composable
+fun BlendButton(
+  title: String,
+  subtitle: String = "",
+  onClick: () -> Unit
+) {
+  /*
+  Box(
+    Modifier
+      .padding(16.dp)
+      .clip(RoundedCornerShape(24.dp))
+      .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+  ) {
+    Column(Modifier
+      .fillMaxWidth()
+      .clickable { onClick() }
+      .padding(16.dp),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Text(text = title, color = MaterialTheme.colorScheme.onBackground, fontSize = 18.sp)
+      if (subtitle.isNotEmpty()) Text(
+        text = subtitle,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        fontSize = 14.sp,
+        modifier = Modifier.padding(top = 4.dp)
+      )
+    }
+  }
+  */
+  Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Box(
+      Modifier
+        .padding(16.dp)
+        .height(40.dp)
+        .clip(RoundedCornerShape(64.dp))
+        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+        .clickable{onClick()},
+      contentAlignment = Alignment.Center
+    ) {
+      Text(
+        text = title,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+        fontWeight = FontWeight.Medium,
+        modifier = Modifier.padding(horizontal = 24.dp))
+    }
+  }
+}
+
 @Composable
 fun ConfigSlider(
   title: String,
@@ -314,13 +407,106 @@ fun ConfigSlider(
   }
 }
 
+@Composable
+fun BlendPreview() {
+  Box(modifier = Modifier
+    .padding(16.dp)
+    .fillMaxWidth(), contentAlignment = Alignment.Center){
+    Row() {
+      SpotifyBox(
+        backgroundColor = Color(0xFF1A2C2C),
+        circleColor = Color(0xFF016450),
+        centerColor = Color(0xFF008644),
+        bigBox = false
+      )
+      Spacer(modifier = Modifier.size(50.dp))
+      SpotifyBox(
+        backgroundColor = Color(0xFF231419),
+        circleColor = Color(0xFF8D1832),
+        centerColor = Color(0xFFB91641),
+        bigBox = false
+      )
+    }
+    SpotifyBox(
+      backgroundColor = Color(0xFF2C231A),
+      circleColor = Color(0xFFF59B23),
+      centerColor = Color(0xFFFABE10),
+      bigBox = true
+    )
+  }
+}
+
+@Composable
+private fun SpotifyBox(backgroundColor: Color, circleColor: Color, centerColor: Color, bigBox: Boolean){
+  Box(
+    modifier = Modifier
+      .size(if (bigBox) 175.dp else 125.dp)
+      .background(backgroundColor)
+  ){
+    androidx.compose.material.Icon(
+      ImageVector.vectorResource(id = R.drawable.spotify_logo),
+      contentDescription = null,
+      modifier = Modifier
+        .padding(4.dp)
+        .align(Alignment.TopStart)
+        .size(if (bigBox) 16.dp else 12.dp),
+      tint = Color.White
+    )
+    Box(
+      modifier = Modifier
+        .size(if (bigBox) 90.dp else 70.dp)
+        .align(Alignment.Center)
+    ){
+      Box(
+        modifier = Modifier
+          .clip(CircleShape)
+          .background(circleColor)
+          .size(if (bigBox) 65.dp else 45.dp)
+          .align(Alignment.BottomStart)
+      )
+
+      Box(
+        modifier = Modifier
+          .clip(CircleShape)
+          .background(centerColor)
+          .size(if (bigBox) 65.dp else 45.dp)
+          .align(Alignment.TopEnd)
+      )
+    }
+    Box(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .align(Alignment.BottomStart)
+    ){
+      androidx.compose.material.Text(
+        "Blend",
+        fontWeight = FontWeight(1000),
+        fontSize = if (bigBox) 16.sp else 12.sp,
+        color = Color.White,
+        modifier = Modifier.padding(vertical = if (bigBox) 14.dp else 8.dp)
+      )
+      Box(modifier = Modifier
+        .size(width = if (bigBox) 44.dp else 32.dp, height = if (bigBox) 6.dp else 4.dp)
+        .background(circleColor)
+        .align(Alignment.BottomEnd))
+    }
+  }
+}
+
 //
 
 sealed class ConfigItem {
   class Category(@StringRes val title: Int) : ConfigItem()
   class Info(@StringRes val text: Int) : ConfigItem()
+  class BlendInfo(@StringRes val text: Int) : ConfigItem()
 
   class Preference(
+    @StringRes val title: Int,
+    val subtitle: (Context, AppConfig) -> String,
+    val onClick: (NavigationController) -> Unit
+  ) : ConfigItem()
+
+  class BlendButton(
     @StringRes val title: Int,
     val subtitle: (Context, AppConfig) -> String,
     val onClick: (NavigationController) -> Unit
@@ -355,4 +541,6 @@ sealed class ConfigItem {
     val state: (AppConfig) -> Int,
     val modify: AppConfig.Builder.(Int) -> Unit
   ) : ConfigItem()
+  
+  class BlendPreview() : ConfigItem()
 }

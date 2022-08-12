@@ -31,7 +31,11 @@ class BlendCreateInvitationViewModel @Inject constructor(
   override fun provideTitle() = R.string.blend_create
 
   override fun provideConfigList() = buildList {
-    add(ConfigItem.Preference(
+    add(ConfigItem.BlendPreview())
+
+    add(ConfigItem.BlendInfo(R.string.blend_info))
+
+    add(ConfigItem.BlendButton(
       R.string.blend_create_btn, { _, _ -> "" }
     ) {
       launch {
@@ -39,7 +43,5 @@ class BlendCreateInvitationViewModel @Inject constructor(
         it.context().shareUrl(link, it.string(R.string.blend_invite))
       }
     })
-
-    add(ConfigItem.Info(R.string.blend_info))
   }
 }
