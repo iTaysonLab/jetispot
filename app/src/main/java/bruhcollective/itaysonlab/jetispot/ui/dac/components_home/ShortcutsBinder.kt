@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac.components_home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -84,16 +85,17 @@ private fun ShortcutComponentBinder(
   imagePlaceholder: String,
   title: String
 ) {
-  Card(
-    colors = CardDefaults.cardColors(containerColor = monet.compositeSurfaceElevation(4.dp)),
-    shape = RoundedCornerShape(8.dp),
-    modifier = Modifier.height(56.dp).fillMaxWidth()
+  Box(modifier = Modifier
+    .height(56.dp)
+    .fillMaxWidth()
+    .clip(RoundedCornerShape(8.dp))
+    .background(monet.compositeSurfaceElevation(4.dp))
+    .navClickable { navController -> navController.navigate(navigateUri) }
   ) {
     Row(
       Modifier
         .fillMaxSize()
         .padding(horizontal = 8.dp)
-        .navClickable { navController -> navController.navigate(navigateUri) }
     ) {
       PreviewableAsyncImage(
         imageUrl = imageUrl,

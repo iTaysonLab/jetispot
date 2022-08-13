@@ -139,11 +139,10 @@ fun YourLibraryContainerScreen(
                   .size(32.dp),
                 onCheckedChange = {
                   Grid.value = it
-                  UseGrid = it
+                  UseGrid = !UseGrid!!
                   scope.launch {
                     viewModel.content = emptyList()
                     viewModel.load()
-                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
                   }
                 }
               ) {

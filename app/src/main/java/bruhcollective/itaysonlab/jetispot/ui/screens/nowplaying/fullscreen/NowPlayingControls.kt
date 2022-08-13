@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -47,7 +49,7 @@ fun ControlsHeader(
 ) {
   Row(horizontalArrangement = Arrangement.SpaceBetween) {
     Column(modifier = Modifier.weight(0.9f)) {
-      Text(
+      MarqueeText(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
           .padding(horizontal = 14.dp)
@@ -55,32 +57,42 @@ fun ControlsHeader(
         fontSize = 24.sp,
         color = monet.onSecondaryContainer.copy(0.85f),
         fontWeight = FontWeight.ExtraBold,
-        maxLines = 1
+        basicGradientColor = if (isSystemInDarkTheme())
+          MaterialTheme.colorScheme.surface.blendWith(monet.primary, ratio = 0.05f)
+        else
+          MaterialTheme.colorScheme.surface.blendWith(monet.primary, ratio = 0.1f)
       )
 
       Spacer(Modifier.height(2.dp))
 
-      Text(
+      MarqueeText(
         text = viewModel.currentTrack.value.artist,
         modifier = Modifier
           .padding(horizontal = 14.dp)
           .navClickable { viewModel.navigateToArtist(scope, bottomSheetState, it) },
-        maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 18.sp,
-        color = monet.onSecondaryContainer.copy(alpha = 0.7f)
+        color = monet.onSecondaryContainer.copy(alpha = 0.7f),
+        basicGradientColor = if (isSystemInDarkTheme())
+          MaterialTheme.colorScheme.surface.blendWith(monet.primary, ratio = 0.05f)
+        else
+          MaterialTheme.colorScheme.surface.blendWith(monet.primary, ratio = 0.1f)
       )
     }
 
-    Icon(
-      imageVector = Icons.Rounded.Favorite,
-      contentDescription = "",
-      tint = monet.onSecondaryContainer.copy(0.85f),
-      modifier = Modifier
-        .align(Alignment.CenterVertically)
-        .padding(end = 12.dp)
-        .size(26.dp)
-    )
+    Box(modifier = Modifier
+      .weight(0.1f)
+      .align(Alignment.CenterVertically)
+    ) {
+      Icon(
+        imageVector = Icons.Rounded.Favorite,
+        contentDescription = "",
+        tint = monet.onSecondaryContainer.copy(0.85f),
+        modifier = Modifier
+          .padding(end = 12.dp)
+          .size(26.dp)
+      )
+    }
   }
 }
 
