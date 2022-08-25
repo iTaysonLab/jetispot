@@ -210,7 +210,7 @@ class MainActivity : ComponentActivity() {
                   authManager = authManager,
                   modifier = Modifier
                     .padding(innerScaffoldPadding)
-                    .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
+                    .padding(bottom = if (bsVisible) 0.dp else 80.dp)
                 )
               }
             }
