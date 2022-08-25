@@ -5,26 +5,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import com.spotify.metadata.Metadata
 import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ArtistId
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JumpToArtistBottomSheet(
   data: String
@@ -54,20 +56,28 @@ fun JumpToArtistBottomSheet(
 
   Column(
     Modifier
-      .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
+      .background(MaterialTheme.colorScheme.compositeSurfaceElevation(2.dp))
       .fillMaxWidth()
-      .clip(RoundedCornerShape(8.dp))
       .navigationBarsPadding()
   ) {
+    Divider(
+      modifier = Modifier
+        .width(32.dp)
+        .padding(vertical = 14.dp)
+        .clip(CircleShape)
+        .align(Alignment.CenterHorizontally),
+      thickness = 4.dp,
+      color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.4f)
+    )
+
     Text(
       text = "Choose an artist",
       fontSize = 22.sp,
-      fontWeight = FontWeight.Medium,
       color = MaterialTheme.colorScheme.onSurface,
       textAlign = TextAlign.Center,
       modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 16.dp)
+        .padding(bottom = 16.dp)
     )
 
     LazyColumn {
@@ -81,12 +91,17 @@ fun JumpToArtistBottomSheet(
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
         ) {
-          MediumText(text = artist.second, color = MaterialTheme.colorScheme.onSurface)
+          Text(
+            text = artist.second,
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.onSurface
+          )
           Spacer(modifier = Modifier.height(2.dp))
           Text(
             text = stringResource(id = artist.third),
+            fontSize = 16.sp,
             maxLines = 1,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface.copy(0.7f)
           )
         }
       }

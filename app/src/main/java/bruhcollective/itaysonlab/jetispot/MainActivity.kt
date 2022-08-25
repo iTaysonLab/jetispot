@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -141,7 +142,10 @@ class MainActivity : ComponentActivity() {
         }
 
         CompositionLocalProvider(LocalNavigationController provides lambdaNavController) {
-          ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+          ModalBottomSheetLayout(
+            bottomSheetNavigator = bottomSheetNavigator,
+            sheetShape = RoundedCornerShape(topStart = 28.dp,topEnd = 28.dp)
+          ) {
             Scaffold(
               bottomBar = {
                 val currentDestination = navBackStackEntry?.destination
