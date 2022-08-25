@@ -144,7 +144,9 @@ class MainActivity : ComponentActivity() {
         CompositionLocalProvider(LocalNavigationController provides lambdaNavController) {
           ModalBottomSheetLayout(
             bottomSheetNavigator = bottomSheetNavigator,
-            sheetShape = RoundedCornerShape(topStart = 28.dp,topEnd = 28.dp)
+            sheetShape = RoundedCornerShape(topStart = 28.dp,topEnd = 28.dp),
+            scrimColor = MaterialTheme.colorScheme.scrim.copy(0.5f),
+            sheetBackgroundColor = MaterialTheme.colorScheme.surface
           ) {
             Scaffold(
               bottomBar = {

@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.bottomsheets.jump_to_artist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import com.spotify.metadata.Metadata
 import xyz.gianlu.librespot.common.Utils
@@ -56,7 +54,6 @@ fun JumpToArtistBottomSheet(
 
   Column(
     Modifier
-      .background(MaterialTheme.colorScheme.compositeSurfaceElevation(2.dp))
       .fillMaxWidth()
       .navigationBarsPadding()
   ) {
