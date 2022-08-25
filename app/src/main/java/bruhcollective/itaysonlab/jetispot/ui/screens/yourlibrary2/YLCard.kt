@@ -28,6 +28,7 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import coil.compose.AsyncImage
 
@@ -158,10 +159,9 @@ fun YLPinnedCard(
             )
           }
           null -> {
-            Text(
+            MarqueeText(
               text = item.name,
               fontSize = 16.sp,
-              maxLines = 1,
               overflow = TextOverflow.Ellipsis,
               style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
@@ -174,7 +174,7 @@ fun YLPinnedCard(
           }
         }
 
-        Text(
+        MarqueeText(
           text = when (item.predefType) {
             PredefCeType.COLLECTION -> stringResource(
               id = R.string.liked_songs_desc,
@@ -188,7 +188,6 @@ fun YLPinnedCard(
           },
           fontSize = 12.sp,
           fontWeight = FontWeight.Medium,
-          maxLines = 1,
           style = TextStyle(platformStyle = PlatformTextStyle(false)),
           overflow = TextOverflow.Ellipsis,
           color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
@@ -231,7 +230,7 @@ fun YLAlbumCard(
       }
 
       Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-        Text(
+        MarqueeText(
           text = title,
           fontSize = 16.sp,
           maxLines = 1,
@@ -240,7 +239,7 @@ fun YLAlbumCard(
         )
 
         if (!subtitle.isNullOrEmpty()) {
-          Text(
+          MarqueeText(
             subtitle,
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
@@ -288,7 +287,7 @@ fun YLArtistCard(
       }
 
       Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-        Text(
+        MarqueeText(
           text = title,
           fontSize = 16.sp,
           maxLines = 1,

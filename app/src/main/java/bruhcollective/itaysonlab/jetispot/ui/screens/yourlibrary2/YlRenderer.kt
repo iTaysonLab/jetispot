@@ -30,6 +30,7 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.*
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.rootlist.CollectionRootlistItem
 import bruhcollective.itaysonlab.jetispot.ui.shared.ImagePreview
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import coil.compose.AsyncImage
@@ -121,10 +122,9 @@ fun YLRPinned(
               horizontalArrangement = Arrangement.SpaceBetween,
               verticalAlignment = Alignment.CenterVertically
             ) {
-              Text(
+              MarqueeText(
                 text = item.name,
                 fontSize = 16.sp,
-                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
               )
@@ -148,7 +148,7 @@ fun YLRPinned(
               .align(Alignment.CenterVertically)
           )
 
-          Text(
+          MarqueeText(
             text = when (item.predefType) {
               PredefCeType.COLLECTION -> stringResource(
                 id = R.string.liked_songs_desc,
@@ -162,7 +162,6 @@ fun YLRPinned(
             },
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
@@ -252,10 +251,9 @@ fun YLRGenericAlbumItem(
           horizontalArrangement = Arrangement.SpaceBetween,
           verticalAlignment = Alignment.CenterVertically
         ) {
-          Text(
+          MarqueeText(
             text = title,
             fontSize = 16.sp,
-            maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
           )
@@ -267,11 +265,10 @@ fun YLRGenericAlbumItem(
         }
 
         if (!subtitle.isNullOrEmpty()) {
-          Text(
+          MarqueeText(
             text = subtitle,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(false)),
             overflow = TextOverflow.Ellipsis,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
@@ -315,11 +312,9 @@ fun YLRGenericArtistItem(
           .padding(start = 16.dp)
           .align(Alignment.Top)
       ) {
-        Text(
+        MarqueeText(
           text = title,
           fontSize = 16.sp,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
           style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
 
@@ -327,9 +322,7 @@ fun YLRGenericArtistItem(
           stringResource(R.string.artist),
           fontSize = 14.sp,
           fontWeight = FontWeight.Medium,
-          maxLines = 1,
           style = TextStyle(platformStyle = PlatformTextStyle(false)),
-          overflow = TextOverflow.Ellipsis,
           color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
           modifier = Modifier.padding(top = 4.dp)
         )
