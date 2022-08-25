@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -19,14 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun AlbumTrackRow(item: HubItem) {
-  val delegate = LocalHubScreenDelegate.current
-
   Column {
     Row(
       horizontalArrangement = Arrangement.SpaceBetween,
@@ -37,19 +34,17 @@ fun AlbumTrackRow(item: HubItem) {
 
         if (!item.text?.title.isNullOrEmpty()) {
           drawnTitle = true
-          Text(
+          MarqueeText(
             item.text!!.title!!,
             fontSize = 16.sp,
-            maxLines = 1,
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
           )
         }
 
         if (!item.text?.subtitle.isNullOrEmpty()) {
-          Text(
+          MarqueeText(
             item.text!!.subtitle!!,
             fontSize = 14.sp,
-            maxLines = 1,
             fontWeight = FontWeight.Medium,
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
             modifier = Modifier

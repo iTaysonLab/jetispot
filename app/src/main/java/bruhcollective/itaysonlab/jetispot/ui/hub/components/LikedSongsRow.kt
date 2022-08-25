@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -24,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import kotlinx.coroutines.launch
 import xyz.gianlu.librespot.metadata.ArtistId
 
@@ -74,16 +73,14 @@ fun LikedSongsRow(
           .align(Alignment.CenterVertically)
           .padding(start = 16.dp)
       ) {
-        Text(
+        MarqueeText(
           item.text!!.title!!,
           fontSize = 16.sp,
-          maxLines = 1,
           style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
-        Text(
+        MarqueeText(
           likedSongsInfo.value,
           fontSize = 14.sp,
-          maxLines = 1,
           fontWeight = FontWeight.Medium,
           style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
           modifier = Modifier.padding(top = 4.dp).alpha(0.7f)

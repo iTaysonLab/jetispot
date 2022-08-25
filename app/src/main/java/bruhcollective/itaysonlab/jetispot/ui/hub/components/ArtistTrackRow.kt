@@ -14,13 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistTrackRow(
@@ -61,12 +60,18 @@ fun ArtistTrackRow(
 
         if (!item.text?.title.isNullOrEmpty()) {
           drawnTitle = true
-          MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
+          MarqueeText(
+            item.text!!.title!!,
+            fontSize = 16.sp
+          )
         }
 
         if (!item.text?.subtitle.isNullOrEmpty()) {
-          Subtext(
+          MarqueeText(
             item.text!!.subtitle!!,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
             modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
           )
         }
@@ -75,7 +80,9 @@ fun ArtistTrackRow(
 
     IconButton(
       onClick = { /*TODO*/ },
-      modifier = Modifier.fillMaxWidth(1f).align(Alignment.CenterVertically)
+      modifier = Modifier
+        .fillMaxWidth(1f)
+        .align(Alignment.CenterVertically)
     ) {
       Icon(
         imageVector = Icons.Default.MoreVert,
