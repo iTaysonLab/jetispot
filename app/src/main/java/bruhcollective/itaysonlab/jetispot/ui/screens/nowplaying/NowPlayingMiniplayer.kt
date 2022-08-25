@@ -25,12 +25,10 @@ fun NowPlayingMiniplayer(
   modifier: Modifier,
   bsOffset: Float
 ) {
-
-
   Surface(color = Color.Transparent, modifier = modifier) {
     Box(
       Modifier
-        .alpha(1f - bsOffset)
+        .alpha (1f - bsOffset * 3)
         .fillMaxSize()
     ) {
       LinearProgressIndicator(
