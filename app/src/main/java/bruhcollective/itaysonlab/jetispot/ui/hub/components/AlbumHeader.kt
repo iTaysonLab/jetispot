@@ -1,7 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,16 +14,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
-import bruhcollective.itaysonlab.jetispot.core.objs.hub.NavigateUri
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubEventHandler
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -48,10 +47,9 @@ fun AlbumHeader(
 //        )
       },
       smallTitle = {
-        Text(
+        MarqueeText(
           item.text!!.title!!,
-          overflow = TextOverflow.Ellipsis,
-          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
         )
       },
       picture = {
@@ -138,20 +136,14 @@ fun AlbumHeader(
           modifier = Modifier
             .clip(CircleShape)
             .size(38.dp)
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(0.5f))
         ) {
           Icon(
             imageVector = Icons.Default.MoreVert,
-            contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
-            tint = MaterialTheme.colorScheme.onBackground
+            contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}"
           )
         }
       },
-      contentPadding = PaddingValues(
-        top = with(LocalDensity.current) {
-          WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-        }
-      ),
       scrollBehavior = scrollBehavior,
       gradient = false,
       navigationIconPresent = true,

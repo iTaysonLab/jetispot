@@ -25,9 +25,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageBackgroundTopAppBar
 import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
@@ -55,10 +55,9 @@ fun PlaylistHeader(
 
   ImageTopAppBar(
     title = {
-      Text(
+      MarqueeText(
         text = item.text?.title!!,
         overflow = TextOverflow.Ellipsis,
-        maxLines = 3
       )
     },
     smallTitle = {
@@ -123,8 +122,7 @@ fun PlaylistHeader(
       IconButton(onClick = { /*TODO*/ }) {
         Icon(
           imageVector = Icons.Default.MoreVert,
-          contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
-          tint = MaterialTheme.colorScheme.onBackground
+          contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}"
         )
       }
     },
@@ -168,19 +166,17 @@ fun LargePlaylistHeader(
       )
     },
     title = {
-      Text(
+      MarqueeText(
         item.text!!.title!!,
         Modifier.fillMaxWidth(),
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 3
+        overflow = TextOverflow.Ellipsis
       )
     },
     smallTitle = {
-      Text(
+      MarqueeText(
         item.text!!.title!!,
         Modifier.fillMaxWidth(),
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1
+        overflow = TextOverflow.Ellipsis
       )
     },
     picture = {
@@ -203,7 +199,7 @@ fun LargePlaylistHeader(
         modifier = Modifier
           .clip(CircleShape)
           .size(38.dp)
-          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(0.5f))
       ) {
         Icon(Icons.Rounded.Favorite, contentDescription = null)
       }
@@ -215,20 +211,14 @@ fun LargePlaylistHeader(
         modifier = Modifier
           .clip(CircleShape)
           .size(38.dp)
-          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp).copy(0.5f))
+          .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(0.5f))
       ) {
         Icon(
           imageVector = Icons.Default.MoreVert,
           contentDescription = "Options for ${item.text!!.title!!} by ${item.text!!.subtitle!!}",
-          tint = MaterialTheme.colorScheme.onBackground
         )
       }
     },
-    contentPadding = PaddingValues(
-      top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-      }
-    ),
     scrollBehavior = scrollBehavior,
     maxHeight = 256.dp,
     gradient = true,

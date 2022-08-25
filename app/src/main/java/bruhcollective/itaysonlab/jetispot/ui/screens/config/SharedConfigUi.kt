@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -39,7 +38,6 @@ import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
-import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import kotlinx.coroutines.launch
@@ -65,7 +63,7 @@ fun BaseConfigScreen(
   val navController = LocalNavigationController.current
 
   Scaffold(topBar = {
-    bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar(title = {
+    LargeTopAppBar(title = {
       Text(stringResource(viewModel.provideTitle()))
     }, navigationIcon = {
       if (!viewModel.isRoot()) {
@@ -73,7 +71,7 @@ fun BaseConfigScreen(
           Icon(Icons.Rounded.ArrowBack, null)
         }
       }
-    }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
+    }, scrollBehavior = scrollBehavior)
   }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
     LazyColumn(
       Modifier

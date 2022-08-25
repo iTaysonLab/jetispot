@@ -23,7 +23,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -34,7 +33,6 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.UseGrid
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,12 +79,7 @@ fun YourLibraryContainerScreen(
             IconButton(onClick = { /* TODO */ }) {
               Icon(Icons.Rounded.Search, null)
             }
-          },
-          contentPadding = PaddingValues(
-            top = with(LocalDensity.current) {
-              WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-            }
-          )
+          }
         )
 
         Box(

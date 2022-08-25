@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -23,7 +21,6 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import com.google.protobuf.Any
 import com.google.protobuf.Message
 import com.spotify.dac.api.components.VerticalListComponent
@@ -46,14 +43,7 @@ fun DacRendererScreen(
 ) {
   val navController = LocalNavigationController.current
 
-  val sbd = rememberSplineBasedDecay<Float>()
   val topBarState = rememberEUCScrollBehavior()
-  val scrollBehavior = remember {
-    if (fullscreen)
-      TopAppBarDefaults.pinnedScrollBehavior(topBarState.state)
-    else
-      TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState.state)
-  }
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(Unit) {
@@ -72,11 +62,6 @@ fun DacRendererScreen(
                  Icon(Icons.Rounded.ArrowBack, null)
                }
           },
-            contentPadding = PaddingValues(
-              top = with(LocalDensity.current) {
-                WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-              }
-            ),
             scrollBehavior = topBarState
           )
         }

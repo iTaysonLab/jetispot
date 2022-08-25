@@ -16,6 +16,10 @@ package bruhcollective.itaysonlab.jetispot.ui.shared.evo
  * limitations under the License.
  */
 
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateTo
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -26,7 +30,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -45,6 +48,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -57,10 +61,10 @@ fun ImageBackgroundTopAppBar(
   description: @Composable () -> Unit = {},
   picture: @Composable () -> Unit = {},
   modifier: Modifier = Modifier,
+  windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable() (RowScope.() -> Unit) = {},
   colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
-  contentPadding: PaddingValues = PaddingValues(0.dp),
   scrollBehavior: TopAppBarScrollBehavior? = null,
   maxHeight: Dp = 152.dp,
   gradient: Boolean = true,
@@ -82,7 +86,7 @@ fun ImageBackgroundTopAppBar(
     pinnedHeight = 64.dp,
     scrollBehavior = scrollBehavior,
     gradient = gradient,
-    contentPadding = contentPadding,
+    windowInsets = windowInsets,
     navigationIconVisible = navigationIconPresent,
   )
 }
@@ -105,6 +109,7 @@ private fun TwoRowsTopAppBar(
   smallTitleTextStyle: TextStyle,
   navigationIcon: @Composable () -> Unit,
   actions: @Composable() (RowScope.() -> Unit),
+  windowInsets: WindowInsets,
   colors: TopAppBarColors,
   maxHeight: Dp,
   pinnedHeight: Dp,
@@ -112,7 +117,6 @@ private fun TwoRowsTopAppBar(
   description: @Composable () -> Unit,
   picture: @Composable () -> Unit,
   gradient: Boolean,
-  contentPadding: PaddingValues,
   navigationIconVisible: Boolean,
 ) {
   if (maxHeight <= pinnedHeight) {
@@ -147,8 +151,7 @@ private fun TwoRowsTopAppBar(
     0 -> scrollBehavior.state.collapsedFraction
     else -> 0f
   }
-
-  val appBarContainerColor by colors.containerColor(colorTransitionFraction)
+  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(scrollBehavior.state.collapsedFraction)
 
   // Wrap the given actions in a Row.
   val actionsRow = @Composable {
@@ -165,14 +168,17 @@ private fun TwoRowsTopAppBar(
   val hideBottomRowSemantics = !hideTopRowSemantics
 
   // Set up support for resizing the top app bar when vertically dragging the bar itself.
-  val appBarDragModifier = Modifier.draggable(
-    orientation = Orientation.Vertical,
-    state = rememberDraggableState { delta ->
-      if (!scrollBehavior.isPinned) {
+  val appBarDragModifier = if (scrollBehavior != null && !scrollBehavior.isPinned) {
+    Modifier.draggable(
+      orientation = Orientation.Vertical,
+      state = rememberDraggableState { delta ->
         scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
-      }
-    }
-  )
+      },
+      onDragStopped = { snapTopAppBar(scrollBehavior.state) }
+    )
+  } else {
+    Modifier
+  }
 
   Box(modifier = modifier.background(color = appBarContainerColor).then(appBarDragModifier)) {
     Box(
@@ -201,15 +207,21 @@ private fun TwoRowsTopAppBar(
       ) {}
     }
 
+    val colors = MaterialTheme.colorScheme
     Column(
-      modifier = Modifier.padding(contentPadding)
+      Modifier
+        .windowInsetsPadding(windowInsets)
+        // clip after padding so we don't know the title over the inset area
+        .clipToBounds()
     ) {
       TopAppBarLayout(
         modifier = Modifier,
         heightPx = pinnedHeightPx,
-        navigationIconContentColor = colors.navigationIconContentColor(colorTransitionFraction).value,
-        titleContentColor = colors.titleContentColor(colorTransitionFraction).value,
-        actionIconContentColor = colors.actionIconContentColor(colorTransitionFraction).value,
+        navigationIconContentColor = colors.onBackground,
+        titleContentColor = colors.onBackground.copy(colorTransitionFraction),
+        actionIconContentColor = colors.onBackground.blendWith(
+          colors.onSurfaceVariant, scrollBehavior.state.collapsedFraction
+        ),
         title = smallTitle,
         description = { },
         titleTextStyle = smallTitleTextStyle,
@@ -225,11 +237,9 @@ private fun TwoRowsTopAppBar(
       TopAppBarLayout(
         modifier = Modifier.clipToBounds(),
         heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior.state.heightOffset ?: 0f),
-        navigationIconContentColor =
-        colors.navigationIconContentColor(colorTransitionFraction).value,
-        titleContentColor = colors.titleContentColor(colorTransitionFraction).value,
-        actionIconContentColor =
-        colors.actionIconContentColor(colorTransitionFraction).value,
+        navigationIconContentColor = Color.Transparent,
+        titleContentColor = colors.onBackground.copy(colorTransitionFraction),
+        actionIconContentColor = Color.Transparent,
         title = title,
         description = description,
         titleTextStyle = titleTextStyle,
@@ -243,6 +253,20 @@ private fun TwoRowsTopAppBar(
         navigationIconVisible = false,
       )
     }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private suspend fun snapTopAppBar(state: TopAppBarState) {
+  // In case the app bar motion was stopped in a state where it's partially visible, snap it to
+  // the nearest state.
+  if (state.heightOffset < 0 &&
+    state.heightOffset > state.heightOffsetLimit
+  ) {
+    AnimationState(initialValue = state.heightOffset).animateTo(
+      if (state.collapsedFraction < 0.5f) 0f else state.heightOffsetLimit,
+      animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+    ) { state.heightOffset = value }
   }
 }
 
@@ -301,7 +325,7 @@ private fun TopAppBarLayout(
           .clip(CircleShape)
           .background(
             MaterialTheme.colorScheme
-              .surfaceColorAtElevation(2.dp)
+              .surfaceColorAtElevation(4.dp)
               .copy(0.5f)
           )
       ) {

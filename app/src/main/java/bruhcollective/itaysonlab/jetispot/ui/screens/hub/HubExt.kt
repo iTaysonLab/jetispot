@@ -3,11 +3,13 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,20 +36,25 @@ fun HubScaffold(
   reloadFunc: suspend () -> Unit
 ) {
   val scope = rememberCoroutineScope()
-//  val sbd = rememberSplineBasedDecay<Float>()
   val topBarState = rememberEUCScrollBehavior()
-//  val scrollBehavior = rememberLazyListState()
+
+  val fabPadding = animateDpAsState(
+    if (topBarState.state.collapsedFraction <= 0.02f) 16.dp else 0.dp,
+    animationSpec = tween(durationMillis = 500)
+  ).value
 
   when (state) {
     is HubState.Loaded -> {
-      Scaffold(
+      Column(
         modifier = Modifier
+          .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
           .nestedScroll(topBarState.nestedScrollConnection)
           .fillMaxSize()
-      ) { padding ->
+      ) {
         CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
           Box {
             Column(Modifier.fillMaxHeight()) {
+              // Playlist header
               state.data.apply {
                 if (header != null) {
                   HubBinder(header, scrollBehavior = topBarState)
@@ -63,64 +70,18 @@ fun HubScaffold(
                 )
               }
 
-
               LazyColumn(
                 modifier = Modifier
                   .fillMaxHeight()
-                  .let { if (toolbarOptions.alwaysVisible) it.padding(padding) else it }
               ) {
                 state.data.apply {
                   items(body, key = { it.id }, contentType = { it.component.javaClass.simpleName }) {
                     // Playlist track list
-                    Box(modifier = Modifier.animateItemPlacement()) {
-                      HubBinder(it, scrollBehavior = topBarState)
-                    }
+                    HubBinder(it, scrollBehavior = topBarState)
                   }
                 }
               }
             }
-
-            val fabPadding = animateDpAsState(
-              if (topBarState.state.collapsedFraction <= 0.02f) 16.dp else 0.dp,
-              animationSpec = tween(durationMillis = 500)
-            ).value
-
-//          // album FAB
-//          Box(
-//            modifier = Modifier
-//              .align(Alignment.BottomEnd)
-//              .padding(bottom = fabPadding, end = fabPadding)
-//          ) {
-//            state.data.apply {
-//              HubBinder(
-//                viewModel,
-//                body[0],
-//                scrollBehavior = topBarState,
-//                showFAB = true,
-//                everythingElse = false
-//              )
-//            }
-//          }
-
-            // TODO liked songs FAB
-//          Box(
-//            modifier = Modifier
-//              .align(Alignment.BottomEnd)
-//              .padding(bottom = fabPadding, end = fabPadding)
-//          ) {
-//            state.data.apply {
-//              state.data.header?.let {
-//                HubBinder(
-//                  navController,
-//                  viewModel,
-//                  it.children?.get(0) ?: it,
-//                  scrollBehavior = topBarState,
-//                  showFAB = true,
-//                  everythingElse = false
-//                )
-//              }
-//            }
-//          }
 
             // playlist FAB
             Box(

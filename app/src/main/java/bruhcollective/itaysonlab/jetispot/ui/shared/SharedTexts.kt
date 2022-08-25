@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -74,7 +75,6 @@ fun MarqueeText(
   text: String,
   modifier: Modifier = Modifier,
   textModifier: Modifier = Modifier,
-
   color: Color = Color.Unspecified,
   fontSize: TextUnit = TextUnit.Unspecified,
   fontStyle: FontStyle? = null,
@@ -84,12 +84,13 @@ fun MarqueeText(
   textDecoration: TextDecoration? = null,
   textAlign: TextAlign? = null,
   lineHeight: TextUnit = TextUnit.Unspecified,
+  maxLines: Int = 1,
   overflow: TextOverflow = TextOverflow.Clip,
   softWrap: Boolean = true,
   onTextLayout: (TextLayoutResult) -> Unit = {},
-  style: TextStyle = LocalTextStyle.current,
+  style: TextStyle = LocalTextStyle.current.plus(TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))),
   sideGradientColor: Color = Color.Transparent,
-  basicGradientColor: Color = Color.White,
+  basicGradientColor: Color = Color.Transparent,
 ) {
   val createText = @Composable { localModifier: Modifier ->
     Text(
@@ -201,7 +202,7 @@ private fun GradientEdge(
       .fillMaxHeight()
       .background(
         brush = Brush.horizontalGradient(
-          0f to startColor, 1f to endColor,
+          listOf(startColor, endColor)
         )
       )
   )

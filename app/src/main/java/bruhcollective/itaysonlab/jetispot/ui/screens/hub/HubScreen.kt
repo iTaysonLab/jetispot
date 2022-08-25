@@ -25,7 +25,7 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
+import bruhcollective.itaysonlab.jetispot.ui.shared.evo.ImageTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,7 +50,7 @@ fun HubScreen(
 
   when (viewModel.state) {
     is HubScreenViewModel.State.Loaded -> {
-      LargeTopAppBar({}, Modifier.height(0.dp), scrollBehavior = scrollBehavior, maxHeight = 64.01.dp)
+      ImageTopAppBar({}, {}, {}, Modifier.height(0.dp), scrollBehavior = scrollBehavior, maxHeight = 64.01.dp)
       CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
         Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
           (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {

@@ -56,7 +56,6 @@ fun HubBinder (
     HubComponent.ArtistPinnedItem -> { if (everythingElse) ArtistPinnedItem(item) }
     HubComponent.AlbumHeader -> {
       if (albumHeader && !everythingElse) AlbumHeader(item, scrollBehavior)
-      if (showFAB) PlayFAB(item, scrollBehavior)
     }
 
     // this way we can probably compose screens classic compose style for all non-server based
@@ -70,10 +69,7 @@ fun HubBinder (
       if (showFAB) PlayFAB(item, scrollBehavior)
     }
     HubComponent.LargePlaylistHeader -> { if (everythingElse) LargePlaylistHeader(item, scrollBehavior) }
-    HubComponent.CollectionHeader -> {
-      if (everythingElse) CollectionHeader(item, scrollBehavior)
-//      if (showFAB) PlayFAB(navController, item, scrollBehavior)
-    }
+    HubComponent.CollectionHeader -> { if (everythingElse) CollectionHeader(item, scrollBehavior) }
     HubComponent.TextRow -> { if (everythingElse) TextRow(item.text!!) }
     HubComponent.ImageRow -> { /* if (everythingElse) ImageRow(navController, item) */ }
 
