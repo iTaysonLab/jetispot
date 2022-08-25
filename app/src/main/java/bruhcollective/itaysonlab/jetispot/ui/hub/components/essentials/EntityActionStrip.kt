@@ -1,6 +1,8 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -23,6 +25,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +35,7 @@ fun EntityActionStrip (
   scrollBehavior: TopAppBarScrollBehavior
 ) {
   val scrollHeight = (56 * (1f - scrollBehavior.state.collapsedFraction)).dp
+  val scrolled = scrollBehavior.state.collapsedFraction >= 0.01f
 
   Row(
     Modifier
@@ -41,17 +45,35 @@ fun EntityActionStrip (
       .height(scrollHeight),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
-    Text(
-      item.text!!.title!!,
-      fontSize = 24.sp,
-      overflow = TextOverflow.Ellipsis,
-      maxLines = 2,
-      modifier = Modifier
-        .weight(1f)
-        .align(Alignment.CenterVertically)
-        .animateContentSize()
-    )
-
+    Box(
+      Modifier.weight(1f).align(Alignment.CenterVertically),
+      contentAlignment = Alignment.CenterStart
+    ) {
+      androidx.compose.animation.AnimatedVisibility(
+        visible = !scrolled,
+        enter = fadeIn(),
+        exit = fadeOut()
+      ) {
+        Text(
+          item.text!!.title!!,
+          fontSize = 24.sp,
+          maxLines = 2,
+          overflow = TextOverflow.Ellipsis,
+          modifier = Modifier.animateContentSize()
+        )
+      }
+      androidx.compose.animation.AnimatedVisibility(
+        visible = scrolled,
+        enter = fadeIn(),
+        exit = fadeOut()
+      ) {
+        MarqueeText(
+          item.text!!.title!!,
+          fontSize = 24.sp,
+          overflow = TextOverflow.Ellipsis
+        )
+      }
+    }
 
     Spacer(Modifier.width(16.dp))
 
