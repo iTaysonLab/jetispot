@@ -151,7 +151,7 @@ private fun TwoRowsTopAppBar(
     0 -> scrollBehavior.state.collapsedFraction
     else -> 0f
   }
-  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(scrollBehavior.state.collapsedFraction)
+  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp).copy(scrollBehavior.state.collapsedFraction)
 
   // Wrap the given actions in a Row.
   val actionsRow = @Composable {

@@ -136,7 +136,7 @@ fun AlbumHeader(
           modifier = Modifier
             .clip(CircleShape)
             .size(38.dp)
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(0.5f))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp).copy(0.5f))
         ) {
           Icon(
             imageVector = Icons.Default.MoreVert,

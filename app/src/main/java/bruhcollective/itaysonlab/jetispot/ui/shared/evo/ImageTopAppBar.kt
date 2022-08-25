@@ -113,7 +113,7 @@ private fun TwoRowsTopAppBar(
   // This will potentially animate or interpolate a transition between the container color and the
   // container's scrolled color according to the app bar's scroll state.
   val scrollFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
-  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(scrollFraction)
+  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp).copy(scrollFraction)
 
   // Wrap the given actions in a Row.
   val actionsRow = @Composable {
