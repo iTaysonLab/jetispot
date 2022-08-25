@@ -67,8 +67,8 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     errorContainer = DScheme.errorContainer.color(),
     onErrorContainer = DScheme.onErrorContainer.color(),
     outline = DScheme.outline.color(),
-    outlineVariant = DScheme.outline.color(), //TODO: Implement actual color roles
-    scrim = DScheme.tertiary.color()
+    outlineVariant = DScheme.outlineVariant.color(),
+    scrim = DScheme.scrim.color()
   )
 
   val LScheme = Scheme.light(android.graphics.Color.parseColor(ColorOfScheme))
@@ -100,8 +100,8 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     errorContainer = LScheme.errorContainer.color(),
     onErrorContainer = LScheme.onErrorContainer.color(),
     outline = LScheme.outline.color(),
-    outlineVariant = LScheme.outline.color(), //TODO: Implement actual color roles
-    scrim = LScheme.tertiary.color()
+    outlineVariant = DScheme.outlineVariant.color(),
+    scrim = DScheme.scrim.color()
   )
   return when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> if (darkTheme) {
