@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -114,7 +113,7 @@ private fun TwoRowsTopAppBar(
   // This will potentially animate or interpolate a transition between the container color and the
   // container's scrolled color according to the app bar's scroll state.
   val scrollFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
-  val appBarContainerColor by colors.containerColor(scrollFraction)
+  val appBarContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp).copy(scrollFraction)
 
   // Wrap the given actions in a Row.
   val actionsRow = @Composable {
@@ -124,6 +123,7 @@ private fun TwoRowsTopAppBar(
       content = actions
     )
   }
+  val colors = MaterialTheme.colorScheme
   val titleAlpha = 1f - scrollPercentage
   // Hide the top row title semantics when its alpha value goes below 0.5 threshold.
   // Hide the bottom row title semantics when the top title semantics are active.
@@ -136,9 +136,9 @@ private fun TwoRowsTopAppBar(
       TopAppBarLayout(
         modifier = Modifier,
         heightPx = pinnedHeightPx,
-        navigationIconContentColor = colors.navigationIconContentColor(scrollFraction).value,
-        titleContentColor = colors.titleContentColor(scrollFraction).value,
-        actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
+        navigationIconContentColor = colors.onBackground,
+        titleContentColor = colors.onBackground.copy(scrollFraction),
+        actionIconContentColor = colors.onSurfaceVariant,
         title = smallTitle,
         artwork = {
           Column(Modifier.size(pinnedHeight), Arrangement.Center) {
@@ -165,9 +165,9 @@ private fun TwoRowsTopAppBar(
       TopAppBarLayout(
         modifier = Modifier.clipToBounds(),
         heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.heightOffset ?: 0f),
-        navigationIconContentColor = colors.navigationIconContentColor(scrollFraction).value,
-        titleContentColor = colors.titleContentColor(scrollFraction).value,
-        actionIconContentColor = colors.actionIconContentColor(scrollFraction).value,
+        navigationIconContentColor = Color.Transparent,
+        titleContentColor = colors.onBackground.copy(scrollFraction),
+        actionIconContentColor = Color.Transparent,
         title = title,
         artwork = {
           Column(
