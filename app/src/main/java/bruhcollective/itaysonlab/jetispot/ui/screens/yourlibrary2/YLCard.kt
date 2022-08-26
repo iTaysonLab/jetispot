@@ -210,7 +210,7 @@ fun YLAlbumCard(
 ) {
   Surface(
     color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
-    shape = RoundedCornerShape(20.dp),
+    shape = RoundedCornerShape(24.dp),
     modifier = Modifier
       .height(264.dp)
       .width(164.dp)
@@ -266,7 +266,7 @@ fun YLArtistCard(
 ) {
   Surface(
     color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
-    shape = RoundedCornerShape(20.dp),
+    shape = RoundedCornerShape(24.dp),
     modifier = Modifier
       .height(264.dp)
       .width(164.dp)
