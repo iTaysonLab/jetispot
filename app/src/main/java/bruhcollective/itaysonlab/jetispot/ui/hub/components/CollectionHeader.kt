@@ -38,13 +38,6 @@ fun CollectionHeader(
 
   LargeTopAppBar(
     title = { Text("Liked Songs") },
-//    description = {
-//      Text(
-//        "${item.custom!!["count"]} songs",
-//        fontSize = 12.sp,
-//        color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-//      )
-//    },
     scrollBehavior = scrollBehavior,
     navigationIcon = {
       IconButton(onClick = { navController.popBackStack() }) {
@@ -52,9 +45,7 @@ fun CollectionHeader(
       }
     },
     actions = {
-      IconButton(
-        onClick = { expandSortDropdown = !expandSortDropdown }
-      ) {
+      IconButton(onClick = { expandSortDropdown = !expandSortDropdown }) {
         Icon(Icons.Rounded.Sort, null)
       }
 
@@ -64,71 +55,122 @@ fun CollectionHeader(
         Icon(Icons.Rounded.Search, null)
       }
     },
-//    contentPadding = PaddingValues(
-//      top = with(LocalDensity.current) {
-//        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
-//      }
-//    )
   )
 
-  Column() {
+  Column {
     Row(Modifier.padding(horizontal = 16.dp)) {
       Box(Modifier.align(Alignment.CenterVertically)) {
-        DropdownMenu(expanded = expandSortDropdown, offset = DpOffset(4.dp, 4.dp), onDismissRequest = { expandSortDropdown = false }) {
-          Subtext(text = stringResource(id = R.string.sort), modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp))
+        DropdownMenu(
+          expanded = expandSortDropdown,
+          offset = DpOffset(4.dp, 4.dp),
+          onDismissRequest = { expandSortDropdown = false }
+        ) {
+          Subtext(
+            text = stringResource(id = R.string.sort),
+            modifier = Modifier
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+          )
 
-          val sel = delegate.sendCustomCommand(scope, CollectionViewModel.Command.GetSort) as LocalCollectionDao.TrackSorts
+          val sel = delegate.sendCustomCommand(
+            scope,
+            CollectionViewModel.Command.GetSort
+          ) as LocalCollectionDao.TrackSorts
 
-          DropdownMenuItem(text = {
-            Text(stringResource(id = R.string.sort_time))
-          }, onClick = {
-            delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByTime))
-          }, trailingIcon = {
-            if (sel == LocalCollectionDao.TrackSorts.ByTime) {
-              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
+          DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.sort_time)) },
+            onClick = {
+              delegate.sendCustomCommand(
+                scope,
+                CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByTime)
+              )
+            },
+            trailingIcon = {
+              if (sel == LocalCollectionDao.TrackSorts.ByTime) {
+                Icon(
+                  Icons.Rounded.Check,
+                  null,
+                  modifier = Modifier.padding(start = 12.dp)
+                )
+              }
             }
-          })
+          )
 
-          DropdownMenuItem(text = {
-            Text(stringResource(id = R.string.sort_title))
-          }, onClick = {
-            delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByName))
-          }, trailingIcon = {
-            if (sel == LocalCollectionDao.TrackSorts.ByName) {
-              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
+          DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.sort_title)) },
+            onClick = {
+              delegate.sendCustomCommand(
+                scope,
+                CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByName))
+            },
+            trailingIcon = {
+              if (sel == LocalCollectionDao.TrackSorts.ByName) {
+                Icon(
+                  Icons.Rounded.Check,
+                  null,
+                  modifier = Modifier.padding(start = 12.dp)
+                )
+              }
             }
-          })
+          )
 
-          DropdownMenuItem(text = {
-            Text(stringResource(id = R.string.sort_artist))
-          }, onClick = {
-            delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByArtist))
-          }, trailingIcon = {
-            if (sel == LocalCollectionDao.TrackSorts.ByArtist) {
-              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
+          DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.sort_artist)) },
+            onClick = {
+              delegate.sendCustomCommand(
+                scope,
+                CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByArtist)
+              )
+            },
+            trailingIcon = {
+              if (sel == LocalCollectionDao.TrackSorts.ByArtist) {
+                Icon(
+                  Icons.Rounded.Check,
+                  null,
+                  modifier = Modifier.padding(start = 12.dp)
+                )
+              }
             }
-          })
+          )
 
-          DropdownMenuItem(text = {
-            Text(stringResource(id = R.string.sort_album))
-          }, onClick = {
-            delegate.sendCustomCommand(scope, CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByAlbum))
-          }, trailingIcon = {
-            if (sel == LocalCollectionDao.TrackSorts.ByAlbum) {
-              Icon(Icons.Rounded.Check, null, modifier = Modifier.padding(start = 12.dp))
+          DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.sort_album)) },
+            onClick = {
+              delegate.sendCustomCommand(
+                scope,
+                CollectionViewModel.Command.SetSort(LocalCollectionDao.TrackSorts.ByAlbum))
+            },
+            trailingIcon = {
+              if (sel == LocalCollectionDao.TrackSorts.ByAlbum) {
+                Icon(
+                  Icons.Rounded.Check,
+                  null,
+                  modifier = Modifier.padding(start = 12.dp)
+                )
+              }
             }
-          })
+          )
 
-          Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 4.dp))
+          Divider(
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+            modifier = Modifier.padding(vertical = 4.dp)
+          )
 
-          DropdownMenuItem(text = {
-            Text(stringResource(id = R.string.sort_invert))
-          }, onClick = {
-            delegate.sendCustomCommand(scope, CollectionViewModel.Command.ToggleSortInvert)
-          }, trailingIcon = {
-            Checkbox(checked = delegate.sendCustomCommand(scope, CollectionViewModel.Command.GetSortInvert) as Boolean, onCheckedChange = {}, Modifier.offset(x = 10.dp))
-          })
+          DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.sort_invert)) },
+            onClick = {
+              delegate.sendCustomCommand(scope, CollectionViewModel.Command.ToggleSortInvert)
+            },
+            trailingIcon = {
+              Checkbox(
+                checked = delegate.sendCustomCommand(
+                  scope,
+                  CollectionViewModel.Command.GetSortInvert
+                ) as Boolean,
+                onCheckedChange = {},
+                Modifier.offset(x = 10.dp)
+              )
+            }
+          )
         }
       }
     }
@@ -136,23 +178,29 @@ fun CollectionHeader(
     val tags = item.custom?.get("cfr") as List<CollectionContentFilter>
     val currentTag = item.custom["cfr_cur"] as String
 
-    val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction)).value
     LazyRow(
       modifier = Modifier
-        .height(animHeight.dp)
-        .padding(bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp)),
+        .height(animateFloatAsState(32 * (1f - scrollBehavior.state.collapsedFraction)).value.dp)
+        .padding(bottom = 0.dp),
       contentPadding = PaddingValues(horizontal = 16.dp),
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       items(tags) { item ->
         val selected = currentTag == item.name
-        FilterChip(selected = selected, onClick = {
-          delegate.sendCustomCommand(scope, if (selected) CollectionViewModel.Command.ClearTag else CollectionViewModel.Command.SetTag(item.query))
-        }, label = {
-          Text(item.name)
-        }, leadingIcon = {
-          if (selected) Icon(Icons.Rounded.Check, null)
-        })
+        FilterChip(
+          selected = selected,
+          onClick = {
+            delegate.sendCustomCommand(
+              scope,
+              if (selected)
+                CollectionViewModel.Command.ClearTag
+              else
+                CollectionViewModel.Command.SetTag(item.query)
+            )
+          },
+          label = { Text(item.name) },
+          leadingIcon = { if (selected) Icon(Icons.Rounded.Check, null) }
+        )
       }
     }
   }

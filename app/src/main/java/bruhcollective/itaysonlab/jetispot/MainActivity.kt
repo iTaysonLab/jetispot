@@ -1,12 +1,17 @@
 package bruhcollective.itaysonlab.jetispot
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +22,7 @@ import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -66,6 +72,7 @@ class MainActivity : ComponentActivity() {
     super.onDestroy()
   }
 
+  @RequiresApi(Build.VERSION_CODES.S)
   @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -80,7 +87,7 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         val bsState = rememberBottomSheetScaffoldState()
 
-        val bottomSheetNavigator = rememberBottomSheetNavigator()
+        val bottomSheetNavigator = rememberBottomSheetNavigator(animationSpec = tween(easing = FastOutLinearInEasing))
         val navController = rememberNavController(bottomSheetNavigator)
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val lambdaNavController = NavigationController { navController }
@@ -90,9 +97,6 @@ class MainActivity : ComponentActivity() {
 
         val bsVisible =
           playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
-        val bsPeek by animateDpAsState(
-          if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
-        )
 
         var bsQueueOpened by remember { mutableStateOf(false) }
 
@@ -206,7 +210,9 @@ class MainActivity : ComponentActivity() {
                   )
                 },
                 scaffoldState = bsState,
-                sheetPeekHeight = bsPeek,
+                sheetPeekHeight = animateDpAsState(
+                  if (bsVisible) 80.dp + 64.dp + navBarHeightDp else 0.dp
+                ).value,
                 backgroundColor = MaterialTheme.colorScheme.surface,
                 sheetGesturesEnabled = !bsQueueOpened
               ) { innerScaffoldPadding ->
@@ -215,6 +221,11 @@ class MainActivity : ComponentActivity() {
                   sessionManager = sessionManager,
                   authManager = authManager,
                   modifier = Modifier
+                    .blur(
+                      animateFloatAsState(
+                        64 * bsOffset()
+                      ).value.dp
+                    )
                     .padding(innerScaffoldPadding)
                     .padding(bottom = if (bsVisible) 0.dp else 80.dp)
                 )

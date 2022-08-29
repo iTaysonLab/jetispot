@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +10,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
@@ -136,7 +135,11 @@ fun AlbumHeader(
           modifier = Modifier
             .clip(CircleShape)
             .size(38.dp)
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp).copy(0.5f))
+            .background(
+              MaterialTheme.colorScheme
+                .surfaceColorAtElevation(3.dp)
+                .copy(0.5f)
+            )
         ) {
           Icon(
             imageVector = Icons.Default.MoreVert,
@@ -149,7 +152,12 @@ fun AlbumHeader(
       navigationIconPresent = true,
     )
 
-    EntityActionStrip(delegate, item, scrollBehavior)
+    Box(
+      Modifier.height((88 * (1f - scrollBehavior.state.collapsedFraction)).dp),
+      contentAlignment = Alignment.Center
+    ) {
+      EntityActionStrip(delegate, item, scrollBehavior)
+    }
   }
 
 //  LargeTopAppBar(

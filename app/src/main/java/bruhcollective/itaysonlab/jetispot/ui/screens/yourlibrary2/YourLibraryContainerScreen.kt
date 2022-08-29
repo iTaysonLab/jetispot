@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.End
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -49,7 +48,6 @@ fun YourLibraryContainerScreen(
   val columnState = rememberLazyListState()
   val gridState = rememberLazyGridState()
   val scrollBehavior = rememberEUCScrollBehavior()
-  val animatedHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction))
   val Grid = remember { mutableStateOf(false) }
   Grid.value = UseGrid!!
 
@@ -82,66 +80,58 @@ fun YourLibraryContainerScreen(
           }
         )
 
-        Box(
-          Modifier
-            .height(animatedHeight.value.dp)
-            .padding(bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp))
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(animateFloatAsState(32 * (1f - scrollBehavior.state.collapsedFraction)).value.dp),
+          horizontalArrangement = Arrangement.SpaceBetween
         ) {
-          Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Box(Modifier.width(295.dp)){
-              AnimatedChipRow(
-                listOf(
-                  ChipItem("playlists", "Playlists"),
-                  ChipItem("artists", "Artists"),
-                  ChipItem("albums", "Albums")
-                ),
-                viewModel.selectedTabId
-              ) {
-                viewModel.selectedTabId = it
-                scope.launch {
-                  viewModel.load()
-                  if (viewModel.selectedTabId == "") {
-                    delay(25L)
-                    if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
-                  }
+          Box(Modifier.width(295.dp)){
+            AnimatedChipRow(
+              listOf(
+                ChipItem("playlists", "Playlists"),
+                ChipItem("artists", "Artists"),
+                ChipItem("albums", "Albums")
+              ),
+              viewModel.selectedTabId
+            ) {
+              viewModel.selectedTabId = it
+              scope.launch {
+                viewModel.load()
+                if (viewModel.selectedTabId == "") {
+                  delay(25L)
+                  if (UseGrid!!) gridState.animateScrollToItem(0) else columnState.animateScrollToItem(0)
                 }
               }
             }
+          }
 
 
-            Row(
-              Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp)
-                .padding(top = ((8 * (1f - scrollBehavior.state.collapsedFraction)).dp)),
-              horizontalArrangement = End
-            ){
-              IconToggleButton(
-                checked = Grid.value,
-                colors = IconButtonDefaults.iconToggleButtonColors (
-                  disabledContentColor = LocalContentColor.current.copy(
-                    alpha = LocalContentAlpha.current
-                  ),
-                  checkedContentColor = LocalContentColor.current.copy(
-                    alpha = LocalContentAlpha.current
-                  )
-                ),
-                modifier = Modifier
-                  .clip(RoundedCornerShape(8.dp))
-                  .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
-                  .size(32.dp),
-                onCheckedChange = {
-                  Grid.value = it
-                  UseGrid = !UseGrid!!
-                  scope.launch {
-                    viewModel.content = emptyList()
-                    viewModel.load()
-                  }
-                }
-              ) {
-                Icon(if (Grid.value) Icons.Rounded.ViewList else Icons.Rounded.Apps, null)
+          IconToggleButton(
+            checked = Grid.value,
+            colors = IconButtonDefaults.iconToggleButtonColors (
+              disabledContentColor = LocalContentColor.current.copy(
+                alpha = LocalContentAlpha.current
+              ),
+              checkedContentColor = LocalContentColor.current.copy(
+                alpha = LocalContentAlpha.current
+              )
+            ),
+            modifier = Modifier
+              .padding(horizontal = 12.dp)
+              .clip(RoundedCornerShape(8.dp))
+              .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+              .size(32.dp),
+            onCheckedChange = {
+              Grid.value = it
+              UseGrid = !UseGrid!!
+              scope.launch {
+                viewModel.content = emptyList()
+                viewModel.load()
               }
             }
+          ) {
+            Icon(if (Grid.value) Icons.Rounded.ViewList else Icons.Rounded.Apps, null)
           }
         }
       }
@@ -154,12 +144,11 @@ fun YourLibraryContainerScreen(
           state = gridState,
           modifier = Modifier
             .padding(padding)
-            .padding(horizontal = 4.dp)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
           verticalArrangement = Arrangement.spacedBy(12.dp),
           horizontalArrangement = Arrangement.spacedBy(12.dp),
-          contentPadding = PaddingValues(12.dp)
+          contentPadding = PaddingValues(16.dp)
         ) {
           items(
             viewModel.content,
@@ -178,9 +167,9 @@ fun YourLibraryContainerScreen(
         LazyColumn(
           state = columnState,
           verticalArrangement = Arrangement.spacedBy(12.dp),
+          contentPadding = PaddingValues(16.dp),
           modifier = Modifier
             .padding(padding)
-            .padding(horizontal = 4.dp)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
         ) {

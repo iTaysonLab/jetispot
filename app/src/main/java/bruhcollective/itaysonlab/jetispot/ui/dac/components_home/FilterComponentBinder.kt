@@ -22,11 +22,14 @@ fun FilterComponentBinder (
   selectedFacet: String,
   selectFacet: (String) -> Unit
 ) {
-  val animHeight = animateFloatAsState(56 * (1f - scrollBehavior.state.collapsedFraction)).value.dp
   LazyRow(
     Modifier
-      .padding(start = 16.dp, bottom = ((16 * (scrollBehavior.state.collapsedFraction)).dp))
-      .height(animHeight),
+      .padding(start = 16.dp, bottom = 16.dp)
+      .height(
+        animateFloatAsState(
+          32 * (1f - scrollBehavior.state.collapsedFraction)
+        ).value.dp
+      ),
     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
     items(component.facetsList) { item ->
       val selected = selectedFacet == item.value

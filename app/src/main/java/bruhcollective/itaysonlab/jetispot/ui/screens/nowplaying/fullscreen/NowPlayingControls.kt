@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import android.text.format.DateUtils
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
@@ -289,7 +289,7 @@ fun ControlsBottomAccessories(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, animatedCorners: Dp) {
+fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, bsOffset: Float) {
   HorizontalPager(
     count = viewModel.currentQueue.value.size,
     state = pagerState,
@@ -299,7 +299,7 @@ fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, animate
   ) { page ->
     val artworkModifier = Modifier
       .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
-      .clip(RoundedCornerShape(animatedCorners))
+      .clip(RoundedCornerShape(animateDpAsState((8 + (24f * bsOffset)).dp).value))
 
     if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
       Image(

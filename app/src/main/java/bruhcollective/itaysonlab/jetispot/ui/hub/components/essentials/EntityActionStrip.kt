@@ -34,15 +34,13 @@ fun EntityActionStrip (
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
-  val scrollHeight = (56 * (1f - scrollBehavior.state.collapsedFraction)).dp
   val scrolled = scrollBehavior.state.collapsedFraction >= 0.01f
 
   Row(
     Modifier
       .fillMaxWidth()
-      .padding(horizontal = 16.dp)
-      .padding(top = (16 * (1f - scrollBehavior.state.collapsedFraction)).dp)
-      .height(scrollHeight),
+      .height(56.dp)
+      .padding(horizontal = 16.dp),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
     Box(

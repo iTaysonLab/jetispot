@@ -58,7 +58,6 @@ fun YLRPinned(
   Box(
     Modifier
       .height(86.dp)
-      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
@@ -226,7 +225,6 @@ fun YLRGenericAlbumItem(
   Box(
     Modifier
       .height(86.dp)
-      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {
@@ -293,7 +291,6 @@ fun YLRGenericArtistItem(
   Box(
     Modifier
       .height(88.dp)
-      .padding(horizontal = 12.dp)
       .clip(RoundedCornerShape(24.dp))
       .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
   ) {

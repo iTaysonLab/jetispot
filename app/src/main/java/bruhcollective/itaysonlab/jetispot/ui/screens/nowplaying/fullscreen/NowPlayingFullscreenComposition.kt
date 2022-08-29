@@ -38,55 +38,57 @@ fun NowPlayingFullscreenComposition (
   bsOffset: Float
 ) {
   val scope = rememberCoroutineScope()
-  val artworkSize = animateDpAsState(
-    48.dp + (bsOffset * LocalConfiguration.current.screenWidthDp).dp,
-    animationSpec = spring()
-  ).value
-  val artworkX = animateDpAsState(
-    bsOffset.dp,
-    animationSpec = spring()
-  ).value
-  val artworkY = animateDpAsState(
-    with(LocalDensity.current) { (1f + ((bsOffset * -70) * (LocalConfiguration.current.screenHeightDp / -215f))).toDp() },
-    animationSpec = spring()
-  ).value
-  val artworkPaddingStart = animateDpAsState((16f * (1f - bsOffset)).dp).value
-  val artworkPaddingTop = animateDpAsState((8f - bsOffset).dp).value
-  val animatedCorners = animateDpAsState((8 + (24f * bsOffset)).dp).value
 
-  val queueProgress = animateFloatAsState(targetValue = if (queueOpened) 1f else 0f, animationSpec = tween(500, easing = FastOutSlowInEasing))
-  val queueProgressValue = queueProgress.value
-
-  val backgroundColor = if (isSystemInDarkTheme())
-    animateColorAsState(
-      monet.surface.blendWith(monet.primary, ratio = 0.05f),
-      tween(durationMillis = 500)
-    ).value
-  else
-    animateColorAsState(
-      monet.surface.blendWith(monet.primary, ratio = 0.1f),
-      tween(durationMillis = 500)
-    ).value
 
   Box(modifier = Modifier
     .fillMaxSize()
-    .background(backgroundColor)) {
+    .background(
+      if (isSystemInDarkTheme())
+        animateColorAsState(
+          monet.surface.blendWith(monet.primary, ratio = 0.05f),
+          tween(durationMillis = 500)
+        ).value
+      else
+        animateColorAsState(
+          monet.surface.blendWith(monet.primary, ratio = 0.1f),
+          tween(durationMillis = 500)
+        ).value
+    )
+  ) {
     ApplicationTheme() {
       Box(modifier = Modifier.alpha(1f - bsOffset).fillMaxSize().background(monet.compositeSurfaceElevation(3.dp)))
     }
 
-    Row(Modifier.padding(start = artworkPaddingStart, top = artworkPaddingTop)) {
+    Row(
+      Modifier
+        .padding(
+          start = animateDpAsState((16f * (1f - bsOffset)).dp).value,
+          top = animateDpAsState((8f - bsOffset).dp).value
+        )
+    ) {
       Surface(
         color = Color.Transparent,
         modifier = Modifier
-          .size(artworkSize)
+          .size(
+            animateDpAsState(
+              48.dp + (bsOffset * LocalConfiguration.current.screenWidthDp).dp,
+              animationSpec = spring()
+            ).value
+          )
           .align(Alignment.Top)
           .absoluteOffset(
-            x = artworkX,
-            y = artworkY
+            x =
+            animateDpAsState(
+              bsOffset.dp,
+              animationSpec = spring()
+            ).value,
+            y = animateDpAsState(
+              with(LocalDensity.current) { (1f + ((bsOffset * -70) * (LocalConfiguration.current.screenHeightDp / -215f))).toDp() },
+              animationSpec = spring()
+            ).value
           )
       ) {
-        ArtworkPager(viewModel, mainPagerState, animatedCorners)
+        ArtworkPager(viewModel, mainPagerState, bsOffset)
       }
     }
 
@@ -108,7 +110,10 @@ fun NowPlayingFullscreenComposition (
             else
               scope.launch { bottomSheetState.collapse() }
           },
-          queueStateProgress = queueProgressValue,
+          queueStateProgress = animateFloatAsState(
+            targetValue = if (queueOpened) 1f else 0f,
+            animationSpec = tween(500, easing = FastOutSlowInEasing)
+          ).value,
           state = viewModel.getHeaderText(),
           modifier = Modifier
             .statusBarsPadding()
@@ -132,7 +137,10 @@ fun NowPlayingFullscreenComposition (
     NowPlayingQueue(
       viewModel = viewModel,
       modifier = Modifier.fillMaxSize(),
-      rvStateProgress = queueProgress.value
+      rvStateProgress = animateFloatAsState(
+        targetValue = if (queueOpened) 1f else 0f,
+        animationSpec = tween(500, easing = FastOutSlowInEasing)
+      ).value
     )
   }
 }

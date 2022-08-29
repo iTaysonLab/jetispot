@@ -38,10 +38,6 @@ fun HubScaffold(
   val scope = rememberCoroutineScope()
   val topBarState = rememberEUCScrollBehavior()
 
-  val fabPadding = animateDpAsState(
-    if (topBarState.state.collapsedFraction <= 0.02f) 16.dp else 0.dp,
-    animationSpec = tween(durationMillis = 500)
-  ).value
 
   when (state) {
     is HubState.Loaded -> {
@@ -87,7 +83,12 @@ fun HubScaffold(
             Box(
               modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = fabPadding, end = fabPadding)
+                .padding(
+                  animateDpAsState(
+                    if (topBarState.state.collapsedFraction <= 0.02f) 16.dp else 0.dp,
+                    animationSpec = tween(durationMillis = 500)
+                  ).value
+                )
             ) {
               state.data.apply {
                 state.data.header?.let {
