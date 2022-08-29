@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -219,10 +221,10 @@ class MainActivity : ComponentActivity() {
                   sessionManager = sessionManager,
                   authManager = authManager,
                   modifier = Modifier
-                    .blur(
-                      animateFloatAsState(
-                        64 * bsOffset()
-                      ).value.dp
+                    .blur(animateFloatAsState(64 * bsOffset(), spring()).value.dp)
+                    .graphicsLayer(
+                      scaleX = animateFloatAsState(1f - bsOffset() * 0.1f, spring()).value,
+                      scaleY = animateFloatAsState(1f - bsOffset() * 0.1f, spring()).value
                     )
                     .padding(innerScaffoldPadding)
                     .padding(bottom = if (bsVisible) 0.dp else 80.dp)
