@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
@@ -45,7 +44,6 @@ fun AlbumTrackRow(item: HubItem) {
           MarqueeText(
             item.text!!.subtitle!!,
             fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
             modifier = Modifier
               .padding(top = 4.dp)

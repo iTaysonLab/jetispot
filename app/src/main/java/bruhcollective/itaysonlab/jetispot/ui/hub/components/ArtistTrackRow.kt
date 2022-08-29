@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
@@ -70,7 +69,6 @@ fun ArtistTrackRow(
           MarqueeText(
             item.text!!.subtitle!!,
             fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
             modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
           )

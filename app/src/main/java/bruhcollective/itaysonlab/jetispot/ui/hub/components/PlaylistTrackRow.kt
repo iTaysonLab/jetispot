@@ -17,11 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
@@ -59,7 +57,6 @@ fun PlaylistTrackRow(
             drawnTitle = true
             Text(
               item.text!!.title!!,
-              fontWeight = FontWeight.Normal,
               fontSize = 16.sp,
               maxLines = 1,
               style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
@@ -71,7 +68,6 @@ fun PlaylistTrackRow(
               item.text!!.subtitle!!,
               fontSize = 14.sp,
               maxLines = 1,
-              fontWeight = FontWeight.Medium,
               style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
               modifier = Modifier
                 .padding(top = if (drawnTitle) 4.dp else 8.dp)
