@@ -8,10 +8,8 @@ import androidx.activity.addCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -87,7 +85,7 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         val bsState = rememberBottomSheetScaffoldState()
 
-        val bottomSheetNavigator = rememberBottomSheetNavigator(animationSpec = tween(easing = FastOutLinearInEasing))
+        val bottomSheetNavigator = rememberBottomSheetNavigator()
         val navController = rememberNavController(bottomSheetNavigator)
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val lambdaNavController = NavigationController { navController }
