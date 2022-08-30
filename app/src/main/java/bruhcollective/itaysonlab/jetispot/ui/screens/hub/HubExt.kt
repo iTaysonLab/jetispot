@@ -9,19 +9,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import kotlinx.coroutines.launch
@@ -35,6 +40,7 @@ fun HubScaffold(
   toolbarOptions: ToolbarOptions = ToolbarOptions(),
   reloadFunc: suspend () -> Unit
 ) {
+  val navController = LocalNavigationController.current
   val scope = rememberCoroutineScope()
   val topBarState = rememberEUCScrollBehavior()
 
@@ -48,6 +54,18 @@ fun HubScaffold(
           .fillMaxSize()
       ) {
         CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
+          if (appBarTitle == stringResource(id = R.string.listening_history)) {
+            LargeTopAppBar(
+              title = { Text(appBarTitle) },
+              navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                  Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
+                }
+              },
+              scrollBehavior = topBarState
+            )
+          }
+
           Box {
             Column(Modifier.fillMaxHeight()) {
               // Playlist header
