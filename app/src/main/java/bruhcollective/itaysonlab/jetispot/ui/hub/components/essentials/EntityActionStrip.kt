@@ -1,8 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,11 +12,17 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.text.Paragraph
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
@@ -34,36 +39,50 @@ fun EntityActionStrip (
   item: HubItem,
   scrollBehavior: TopAppBarScrollBehavior
 ) {
-  val scrolled = scrollBehavior.state.collapsedFraction >= 0.01f
+  // calculate text width for the animation
+  var textWidth by remember { mutableStateOf(60000) }
+
+  val isTooLong = Paragraph(
+    text = item.text!!.title!!,
+    style = TextStyle(fontSize = 24.sp),
+    constraints = Constraints(maxWidth = textWidth),
+    maxLines = 1,
+    density = LocalDensity.current,
+    fontFamilyResolver = LocalFontFamilyResolver.current,
+  ).didExceedMaxLines
+
+  val scrolled = if (isTooLong) scrollBehavior.state.collapsedFraction >= 0.12f else false
 
   Row(
-    Modifier
-      .fillMaxWidth()
-      .height(56.dp)
-      .padding(horizontal = 16.dp),
-    horizontalArrangement = Arrangement.SpaceBetween
+    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Box(
-      Modifier.weight(1f).align(Alignment.CenterVertically),
+      Modifier
+        .weight(1f)
+        .align(Alignment.CenterVertically)
+        .onGloballyPositioned { coordinates -> textWidth = coordinates.size.width },
       contentAlignment = Alignment.CenterStart
     ) {
       androidx.compose.animation.AnimatedVisibility(
         visible = !scrolled,
-        enter = fadeIn(),
-        exit = fadeOut()
+        enter = fadeIn(tween(10)) + slideInVertically(initialOffsetY = { 30 }),
+        exit = fadeOut(tween(300))
       ) {
         Text(
           item.text!!.title!!,
           fontSize = 24.sp,
-          maxLines = 2,
+          maxLines = if (scrolled) 1 else 3,
           overflow = TextOverflow.Ellipsis,
           modifier = Modifier.animateContentSize()
         )
       }
+
       androidx.compose.animation.AnimatedVisibility(
         visible = scrolled,
-        enter = fadeIn(),
-        exit = fadeOut()
+        enter = fadeIn(tween(200)),
+        exit = fadeOut(tween(100)) + slideOutVertically(targetOffsetY = { 30 })
       ) {
         MarqueeText(
           item.text!!.title!!,
@@ -75,7 +94,7 @@ fun EntityActionStrip (
 
     Spacer(Modifier.width(16.dp))
 
-    Row {
+    Row(Modifier.height(56.dp)) {
       IconButton(onClick = { delegate.toggleMainObjectAddedState() },
         Modifier
           .clip(shape = CircleShape)
@@ -84,7 +103,10 @@ fun EntityActionStrip (
           .size(56.dp)
       ) {
         Icon(
-          if (delegate.getMainObjectAddedState().value) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+          if (delegate.getMainObjectAddedState().value)
+            Icons.Rounded.Favorite
+          else
+            Icons.Rounded.FavoriteBorder,
           null,
           tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
