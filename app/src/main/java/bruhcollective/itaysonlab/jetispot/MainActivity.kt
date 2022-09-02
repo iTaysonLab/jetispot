@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
                     .offset {
                       IntOffset(
                         0,
-                        ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
+                        ((80.dp + navBarHeightDp).toPx() * (bsOffset() * 3)).toInt()
                       )
                     }
                     .background(
