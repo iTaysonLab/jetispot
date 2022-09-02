@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
@@ -41,13 +40,8 @@ fun NowPlayingFullscreenComposition (
 ) {
   val scope = rememberCoroutineScope()
   var artworkPositionCalc by remember { mutableStateOf(Rect(0f, 0f, 0f, 0f)) }
-  val artworkPosition = animateIntOffsetAsState(
-    IntOffset(
-      x = (artworkPositionCalc.toAndroidRect().left * bsOffset).toInt(),
-      y = (artworkPositionCalc.toAndroidRect().top * bsOffset).toInt()
-    ),
-    spring(6f, 100000f)
-  ).value
+  val damping = 0.8f
+  val stiffness = 600f
 
   Box(
     modifier = Modifier
@@ -55,11 +49,11 @@ fun NowPlayingFullscreenComposition (
       .background(
         if (isSystemInDarkTheme())
           animateColorAsState(
-            monet.surface.blendWith(monet.primary, ratio = 0.05f), tween(500)
+            monet.surface.blendWith(monet.primary,0.05f), tween(500)
           ).value
         else
           animateColorAsState(
-            monet.surface.blendWith(monet.primary, ratio = 0.1f), tween(500)
+            monet.surface.blendWith(monet.primary,0.1f), tween(500)
           ).value
       )
   ) {
@@ -73,19 +67,39 @@ fun NowPlayingFullscreenComposition (
     Row(
       Modifier
         .padding(
-          start = animateDpAsState((16f * (1f - bsOffset)).dp, spring()).value,
-          top = animateDpAsState((8f - bsOffset).dp, spring()).value
+          start = animateDpAsState((13f * (1f - bsOffset)).dp, spring()).value,
+          top = animateDpAsState((4f - bsOffset).dp, spring()).value
         )
     ) {
-      Surface(
-        color = Color.Transparent,
-        modifier = Modifier
-          .fillMaxWidth(0.125f + bsOffset)
-          .size(48.dp + (bsOffset * LocalConfiguration.current.screenWidthDp * 0.825).dp)
-          .absoluteOffset { artworkPosition }
-      ) {
-        ArtworkPager(viewModel, mainPagerState, bsOffset)
+      animateIntOffsetAsState(
+        IntOffset(
+          x = (artworkPositionCalc.left * bsOffset).toInt(),
+          y = ((bsOffset * 2000 * (1f - bsOffset)) + (artworkPositionCalc.top * bsOffset)).toInt()
+        ),
+        spring(damping, stiffness, IntOffset(1, 1))
+      ).value.let {
+        Surface(
+          color = Color.Transparent,
+          modifier = Modifier
+            .width(
+              animateDpAsState (
+                (53 + (bsOffset * (LocalConfiguration.current.screenWidthDp))).dp,
+                spring(damping, stiffness)
+              ).value
+            )
+            .size(
+              animateDpAsState(
+                (53 + (bsOffset * (LocalConfiguration.current.screenWidthDp * 0.825))).dp,
+                spring(damping, stiffness)
+              ).value
+            )
+            .aspectRatio(1f)
+            .absoluteOffset { it }
+        ) {
+          ArtworkPager(viewModel, mainPagerState, bsOffset)
+        }
       }
+
     }
 
     Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {

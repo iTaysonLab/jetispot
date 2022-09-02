@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -295,10 +294,10 @@ fun ArtworkPager(viewModel: NowPlayingViewModel, pagerState: PagerState, bsOffse
     state = pagerState,
     modifier = Modifier
       .fillMaxWidth()
-      .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
   ) { page ->
     val artworkModifier = Modifier
-      .size((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+      .fillMaxSize(0.9f)
+      .aspectRatio(1f)
       .clip(RoundedCornerShape(animateDpAsState((8 + (24f * bsOffset)).dp).value))
 
     if (page == viewModel.currentQueuePosition.value && viewModel.currentTrack.value.artworkCompose != null) {
