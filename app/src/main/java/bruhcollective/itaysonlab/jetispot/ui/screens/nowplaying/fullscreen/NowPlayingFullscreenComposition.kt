@@ -8,15 +8,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toAndroidRect
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
@@ -38,55 +40,49 @@ fun NowPlayingFullscreenComposition (
   bsOffset: Float
 ) {
   val scope = rememberCoroutineScope()
+  var artworkPositionCalc by remember { mutableStateOf(Rect(0f, 0f, 0f, 0f)) }
+  val artworkPosition = animateIntOffsetAsState(
+    IntOffset(
+      x = (artworkPositionCalc.toAndroidRect().left * bsOffset).toInt(),
+      y = (artworkPositionCalc.toAndroidRect().top * bsOffset).toInt()
+    ),
+    spring(6f, 100000f)
+  ).value
 
-
-  Box(modifier = Modifier
-    .fillMaxSize()
-    .background(
-      if (isSystemInDarkTheme())
-        animateColorAsState(
-          monet.surface.blendWith(monet.primary, ratio = 0.05f),
-          tween(durationMillis = 500)
-        ).value
-      else
-        animateColorAsState(
-          monet.surface.blendWith(monet.primary, ratio = 0.1f),
-          tween(durationMillis = 500)
-        ).value
-    )
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(
+        if (isSystemInDarkTheme())
+          animateColorAsState(
+            monet.surface.blendWith(monet.primary, ratio = 0.05f), tween(500)
+          ).value
+        else
+          animateColorAsState(
+            monet.surface.blendWith(monet.primary, ratio = 0.1f), tween(500)
+          ).value
+      )
   ) {
     ApplicationTheme() {
-      Box(modifier = Modifier.alpha(1f - bsOffset).fillMaxSize().background(monet.compositeSurfaceElevation(3.dp)))
+      Box(modifier = Modifier
+        .alpha(1f - bsOffset)
+        .fillMaxSize()
+        .background(monet.compositeSurfaceElevation(3.dp)))
     }
 
     Row(
       Modifier
         .padding(
-          start = animateDpAsState((16f * (1f - bsOffset)).dp).value,
-          top = animateDpAsState((8f - bsOffset).dp).value
+          start = animateDpAsState((16f * (1f - bsOffset)).dp, spring()).value,
+          top = animateDpAsState((8f - bsOffset).dp, spring()).value
         )
     ) {
       Surface(
         color = Color.Transparent,
         modifier = Modifier
-          .size(
-            animateDpAsState(
-              48.dp + (bsOffset * LocalConfiguration.current.screenWidthDp).dp,
-              animationSpec = spring()
-            ).value
-          )
-          .align(Alignment.Top)
-          .absoluteOffset(
-            x =
-            animateDpAsState(
-              bsOffset.dp,
-              animationSpec = spring()
-            ).value,
-            y = animateDpAsState(
-              with(LocalDensity.current) { (1f + ((bsOffset * -70) * (LocalConfiguration.current.screenHeightDp / -215f))).toDp() },
-              animationSpec = spring()
-            ).value
-          )
+          .fillMaxWidth(0.125f + bsOffset)
+          .size(48.dp + (bsOffset * LocalConfiguration.current.screenWidthDp * 0.825).dp)
+          .absoluteOffset { artworkPosition }
       ) {
         ArtworkPager(viewModel, mainPagerState, bsOffset)
       }
@@ -121,7 +117,12 @@ fun NowPlayingFullscreenComposition (
             .padding(horizontal = 16.dp)
         )
 
-        Column(Modifier.size((LocalConfiguration.current.screenWidthDp * 0.9).dp)) { }
+        Column(
+          Modifier
+            .fillMaxWidth()
+            .height((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+            .onGloballyPositioned { artworkPositionCalc = it.boundsInParent() }
+        ) { }
 
         Column(Modifier.padding(horizontal = 8.dp)) {
           ControlsHeader(scope, bottomSheetState, viewModel)
