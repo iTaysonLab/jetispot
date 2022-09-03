@@ -41,7 +41,7 @@ fun NowPlayingFullscreenComposition (
   val scope = rememberCoroutineScope()
   var artworkPositionCalc by remember { mutableStateOf(Rect(0f, 0f, 0f, 0f)) }
   val damping = 0.75f
-  val stiffness = 800f
+  val stiffness = 600f
 
   Box(
     modifier = Modifier
@@ -73,7 +73,7 @@ fun NowPlayingFullscreenComposition (
     ) {
       animateIntOffsetAsState(
         IntOffset(
-          x = (artworkPositionCalc.left * bsOffset).toInt(),
+          x = (((LocalConfiguration.current.screenWidthDp) * bsOffset) * (1f - bsOffset)).toInt(),
           y = ((bsOffset * 2500 * (1f - bsOffset)) + (artworkPositionCalc.top * bsOffset)).toInt()
         ),
         spring(damping, stiffness, IntOffset(1, 1))
