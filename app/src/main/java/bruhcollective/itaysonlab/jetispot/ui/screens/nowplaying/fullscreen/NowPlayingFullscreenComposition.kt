@@ -40,8 +40,8 @@ fun NowPlayingFullscreenComposition (
 ) {
   val scope = rememberCoroutineScope()
   var artworkPositionCalc by remember { mutableStateOf(Rect(0f, 0f, 0f, 0f)) }
-  val damping = 0.8f
-  val stiffness = 600f
+  val damping = 0.75f
+  val stiffness = 800f
 
   Box(
     modifier = Modifier
@@ -68,13 +68,13 @@ fun NowPlayingFullscreenComposition (
       Modifier
         .padding(
           start = animateDpAsState((13f * (1f - bsOffset)).dp, spring()).value,
-          top = animateDpAsState((4f - bsOffset).dp, spring()).value
+          top = animateDpAsState((4f * (1f - bsOffset)).dp, spring()).value
         )
     ) {
       animateIntOffsetAsState(
         IntOffset(
           x = (artworkPositionCalc.left * bsOffset).toInt(),
-          y = ((bsOffset * 2000 * (1f - bsOffset)) + (artworkPositionCalc.top * bsOffset)).toInt()
+          y = ((bsOffset * 2500 * (1f - bsOffset)) + (artworkPositionCalc.top * bsOffset)).toInt()
         ),
         spring(damping, stiffness, IntOffset(1, 1))
       ).value.let {
@@ -82,17 +82,12 @@ fun NowPlayingFullscreenComposition (
           color = Color.Transparent,
           modifier = Modifier
             .width(
-              animateDpAsState (
-                (53 + (bsOffset * (LocalConfiguration.current.screenWidthDp))).dp,
-                spring(damping, stiffness)
-              ).value
-            )
-            .size(
               animateDpAsState(
-                (53 + (bsOffset * (LocalConfiguration.current.screenWidthDp * 0.825))).dp,
-                spring(damping, stiffness)
+                ((54 * (1f - bsOffset)) + (bsOffset * (LocalConfiguration.current.screenWidthDp))).dp,
+                spring(damping, stiffness, 1.dp)
               ).value
             )
+            .size(((54 * (1f - bsOffset)) + (bsOffset * (LocalConfiguration.current.screenWidthDp * 0.975f))).dp)
             .aspectRatio(1f)
             .absoluteOffset { it }
         ) {
