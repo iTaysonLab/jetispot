@@ -150,11 +150,11 @@ fun AppNavigation(
     dialog(Dialog.ColorSelect.route){
       AlertDialog(
         onDismissRequest = { navController.popBackStack() },
-        title = { Text(stringResource(id = R.string.color_theme), textAlign = TextAlign.Center) },
+        title = { Text(stringResource(id = R.string.config_color_theme), textAlign = TextAlign.Center) },
 
         text = {
           Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(stringResource(id = R.string.reload_message), textAlign = TextAlign.Center)
+            Text(stringResource(id = R.string.theme_reload_message), textAlign = TextAlign.Center)
 
             Row(Modifier.align(Alignment.CenterHorizontally)){
               colorSchemePreviewBoxV1(SchemeColor = "#1DB954", onClick = { ColorScheme = "#1DB954" }) // TODO: maybe kill all activity and start MainActivity?
@@ -190,11 +190,11 @@ fun AppNavigation(
     dialog(Dialog.SetArtworkData.route) {
       AlertDialog(
         onDismissRequest = { navController.popBackStack() },
-        title = { Text(stringResource(id = R.string.edit_animation), textAlign = TextAlign.Start) },
+        title = { Text(stringResource(id = R.string.config_edit_animation), textAlign = TextAlign.Start) },
         text = {
           Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            var sliderData by remember { mutableStateOf(NPAnimationDamping!!) }
-            Text("Damping: ${(sliderData*100).roundToInt().toFloat()/100}", textAlign = TextAlign.Center)
+            var sliderData by remember { mutableStateOf(0f) }
+            Text("Damping: $sliderData", textAlign = TextAlign.Center)
             Slider(
               value = sliderData,
               onValueChange = {
@@ -202,8 +202,8 @@ fun AppNavigation(
                 sliderData = roundedData
                 NPAnimationDamping = roundedData
               },
-              steps = 19, valueRange = 0f..10f
-
+              steps = 19,
+              valueRange = 0f..10f
             )
 
             var sliderData2 by remember { mutableStateOf(NPAnimationStiffness!!) }
@@ -211,11 +211,12 @@ fun AppNavigation(
             Slider(
               value = sliderData2,
               onValueChange = {
-                val roundedData = (it*100).roundToInt().toFloat()/100
+                val roundedData = (it * 100).roundToInt().toFloat() / 100
                 sliderData2 =  roundedData
                 NPAnimationStiffness = roundedData
               },
-              steps = 19)
+              steps = 19
+            )
           }
         },
         confirmButton = {
@@ -225,7 +226,7 @@ fun AppNavigation(
               .fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(onClick = {NPAnimationDamping = 0.75f; NPAnimationStiffness = 0.6f}
             ) {
-              Text(stringResource(id = R.string.set_default))
+              Text(stringResource(id = R.string.edit_animation_set_default))
             }
             Spacer(Modifier.width(6.dp))
             Button(onClick = { navController.popBackStack() }
