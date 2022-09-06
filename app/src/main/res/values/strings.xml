@@ -25,6 +25,7 @@
     <string name="config_account">Account</string>
     <string name="config_about">About</string>
     <string name="config_device">Device</string>
+    <string name="config_ui">UI</string>
 
     <string name="config_pbquality">Audio quality</string>
 
@@ -82,7 +83,7 @@
     <string name="logout_title">Sign out?</string>
     <string name="logout_message">This will remove all data linked to your account from this device. Settings won\'t be reset to default.</string>
     <string name="logout_confirm">Confirm</string>
-    <string name="logout_cancel">Cancel</string>
+    <string name="cancel">Cancel</string>
 
     <string name="listening_history">Listening history</string>
 
@@ -151,6 +152,10 @@
     <string name="auto_tabs_recent">Recent</string>
     <string name="auto_tabs_browse">Browse</string>
     <string name="auto_tabs_library">Library</string>
+
     <string name="color_theme">Select color scheme</string>
     <string name="reload_message">The app will restart to change the theme</string>
+
+    <string name="edit_animation">Edit NowPlaying animation</string>
+    <string name="set_default">Set default</string>
 </resources>

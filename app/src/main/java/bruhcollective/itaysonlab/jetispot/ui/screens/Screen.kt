@@ -48,7 +48,8 @@ enum class Dialog(
 ) {
   AuthDisclaimer("dialogs/disclaimers"),
   ColorSelect("dialogs/ColorSelect"),
-  Logout("dialogs/logout")
+  Logout("dialogs/logout"),
+  SetArtworkData("dialogs/SetArtworkData")
 }
 
 @Immutable

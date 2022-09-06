@@ -20,9 +20,17 @@ object AppPreferences {
         get() = Key.UseGrid.getBoolean(defValue = false, elseValue = false)
         set(value) = Key.UseGrid.setBoolean(value)
 
+    var NPAnimationDamping: Float?
+        get() = Key.NPAnimationDamping.getFloat(defValue = 0.75f, elseValue = 0.75f)
+        set(value) = Key.NPAnimationDamping.setFloat(value)
+
+    var NPAnimationStiffness: Float?
+        get() = Key.NPAnimationStiffness.getFloat(defValue = 0.6f, elseValue = 0.6f)
+        set(value) = Key.NPAnimationStiffness.setFloat(value)
+
 
     private enum class Key {
-        ColorScheme, UseGrid;
+        ColorScheme, UseGrid, NPAnimationDamping, NPAnimationStiffness;
 
         fun getBoolean(defValue: Boolean = false, elseValue: Boolean? = null): Boolean? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getBoolean(name, defValue) else elseValue
         fun getFloat(defValue: Float = 0f, elseValue: Float? = null): Float? = if (sharedPreferences?.contains(name) == true) sharedPreferences!!.getFloat(name, defValue) else elseValue
