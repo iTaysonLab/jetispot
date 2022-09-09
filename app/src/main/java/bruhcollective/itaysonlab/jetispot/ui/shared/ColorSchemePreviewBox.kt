@@ -43,6 +43,7 @@ fun colorSchemePreviewBoxV1(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
+            .padding(2.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.background)
             .size(64.dp)

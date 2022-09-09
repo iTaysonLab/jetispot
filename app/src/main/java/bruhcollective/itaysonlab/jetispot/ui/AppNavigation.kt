@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,10 +33,13 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
-import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.NPAnimationDamping
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.NPAnimationStiffness
+import bruhcollective.itaysonlab.jetispot.ui.shared.AppPreferences.ColorScheme
 import bruhcollective.itaysonlab.jetispot.ui.shared.colorSchemePreviewBoxV1
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @Composable
@@ -141,7 +142,7 @@ fun AppNavigation(
         }
       }, dismissButton = {
         TextButton(onClick = { navController.popBackStack() }) {
-          Text(stringResource(id = R.string.logout_cancel))
+          Text(stringResource(id = R.string.cancel))
         }
       })
     }
@@ -149,29 +150,29 @@ fun AppNavigation(
     dialog(Dialog.ColorSelect.route){
       AlertDialog(
         onDismissRequest = { navController.popBackStack() },
-        title = { Text(stringResource(id = R.string.color_theme), textAlign = TextAlign.Center) },
+        title = { Text(stringResource(id = R.string.config_color_theme), textAlign = TextAlign.Center) },
 
         text = {
           Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(stringResource(id = R.string.reload_message), textAlign = TextAlign.Center)
+            Text(stringResource(id = R.string.theme_reload_message), textAlign = TextAlign.Center)
 
             Row(Modifier.align(Alignment.CenterHorizontally)){
-              colorSchemePreviewBoxV1(SchemeColor = "#1DB954", onClick = { AppPreferences.ColorScheme = "#1DB954" }) // TODO: maybe kill all activity and start MainActivity?
-              colorSchemePreviewBoxV1(SchemeColor = "#134D2B", onClick = { AppPreferences.ColorScheme = "#134D2B" })
-              colorSchemePreviewBoxV1(SchemeColor = "#4DA818", onClick = { AppPreferences.ColorScheme = "#4DA818" })
-              colorSchemePreviewBoxV1(SchemeColor = "#A1A818", onClick = { AppPreferences.ColorScheme = "#A1A818" })
+              colorSchemePreviewBoxV1(SchemeColor = "#1DB954", onClick = { ColorScheme = "#1DB954" }) // TODO: maybe kill all activity and start MainActivity?
+              colorSchemePreviewBoxV1(SchemeColor = "#134D2B", onClick = { ColorScheme = "#134D2B" })
+              colorSchemePreviewBoxV1(SchemeColor = "#4DA818", onClick = { ColorScheme = "#4DA818" })
+              colorSchemePreviewBoxV1(SchemeColor = "#A1A818", onClick = { ColorScheme = "#A1A818" })
             }
 
             Row(Modifier.align(Alignment.CenterHorizontally)){
-              colorSchemePreviewBoxV1(SchemeColor = "#EB4034", onClick = { AppPreferences.ColorScheme = "#EB4034" })
-              colorSchemePreviewBoxV1(SchemeColor = "#B60A0D", onClick = { AppPreferences.ColorScheme = "#B60A0D" })
-              colorSchemePreviewBoxV1(SchemeColor = "#6E1E32", onClick = { AppPreferences.ColorScheme = "#6E1E32" })
-              colorSchemePreviewBoxV1(SchemeColor = "#B60A86", onClick = { AppPreferences.ColorScheme = "#B60A86" })
+              colorSchemePreviewBoxV1(SchemeColor = "#EB4034", onClick = { ColorScheme = "#EB4034" })
+              colorSchemePreviewBoxV1(SchemeColor = "#B60A0D", onClick = { ColorScheme = "#B60A0D" })
+              colorSchemePreviewBoxV1(SchemeColor = "#6E1E32", onClick = { ColorScheme = "#6E1E32" })
+              colorSchemePreviewBoxV1(SchemeColor = "#B60A86", onClick = { ColorScheme = "#B60A86" })
             }
 
             Row(Modifier.align(Alignment.CenterHorizontally)){
-              colorSchemePreviewBoxV1(SchemeColor = "#056786", onClick = { AppPreferences.ColorScheme = "#056786" })
-              colorSchemePreviewBoxV1(SchemeColor = "#009182", onClick = { AppPreferences.ColorScheme = "#009182" })
+              colorSchemePreviewBoxV1(SchemeColor = "#056786", onClick = { ColorScheme = "#056786" })
+              colorSchemePreviewBoxV1(SchemeColor = "#009182", onClick = { ColorScheme = "#009182" })
             }
           }
         },
@@ -179,7 +180,58 @@ fun AppNavigation(
           Row(Modifier.padding(all = 8.dp), horizontalArrangement = Arrangement.Center) {
             Button(modifier = Modifier.fillMaxWidth(), onClick = { navController.popBackStack() }
             ) {
-              Text(stringResource(id = R.string.dismiss))
+              Text(stringResource(id = R.string.cancel))
+            }
+          }
+        }
+      )
+    }
+
+    dialog(Dialog.SetArtworkData.route) {
+      AlertDialog(
+        onDismissRequest = { navController.popBackStack() },
+        title = { Text(stringResource(id = R.string.config_edit_animation), textAlign = TextAlign.Start) },
+        text = {
+          Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            var sliderData by remember { mutableStateOf(0f) }
+            Text("Damping: $sliderData", textAlign = TextAlign.Center)
+            Slider(
+              value = sliderData,
+              onValueChange = {
+                val roundedData = (it * 100).roundToInt().toFloat() / 100
+                sliderData = roundedData
+                NPAnimationDamping = roundedData
+              },
+              steps = 19,
+              valueRange = 0f..10f
+            )
+
+            var sliderData2 by remember { mutableStateOf(NPAnimationStiffness!!) }
+            Text("Stiffness: $sliderData2", textAlign = TextAlign.Center)
+            Slider(
+              value = sliderData2,
+              onValueChange = {
+                val roundedData = (it * 100).roundToInt().toFloat() / 100
+                sliderData2 =  roundedData
+                NPAnimationStiffness = roundedData
+              },
+              steps = 19
+            )
+          }
+        },
+        confirmButton = {
+          Row(
+            Modifier
+              .padding(all = 8.dp)
+              .fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Button(onClick = {NPAnimationDamping = 0.75f; NPAnimationStiffness = 0.6f}
+            ) {
+              Text(stringResource(id = R.string.edit_animation_set_default))
+            }
+            Spacer(Modifier.width(6.dp))
+            Button(onClick = { navController.popBackStack() }
+            ) {
+              Text(stringResource(id = R.string.cancel))
             }
           }
         }
