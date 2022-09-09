@@ -8,12 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "bruhcollective.itaysonlab.jetispot"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode version_code
         versionName version_name
         resConfigs 'en'
@@ -86,7 +86,7 @@ dependencies {
 
     // AndroidX
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
-    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
@@ -109,7 +109,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
     // Images
-    implementation "io.coil-kt:coil-compose:2.1.0"
+    implementation "io.coil-kt:coil-compose:2.2.0"
 
     // DI
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
@@ -117,7 +117,7 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Playback
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"
@@ -137,18 +137,18 @@ dependencies {
     // Data - SQL
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-paging:2.5.0-alpha02"
+    implementation "androidx.room:room-paging:2.5.0-alpha03"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Data - Proto
     implementation "androidx.datastore:datastore:1.0.0"
-    implementation "com.google.protobuf:protobuf-java:3.21.1"
-    implementation "com.tencent:mmkv:1.2.13"
+    implementation "com.google.protobuf:protobuf-java:3.21.5"
+    implementation "com.tencent:mmkv:1.2.14"
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.21.1"
+        artifact = "com.google.protobuf:protoc:3.21.5"
     }
 
     generateProtoTasks {

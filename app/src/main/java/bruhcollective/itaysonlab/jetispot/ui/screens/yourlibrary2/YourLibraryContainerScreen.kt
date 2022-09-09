@@ -14,7 +14,6 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,7 +24,6 @@ import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEn
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.SmallTopAppBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,11 +59,7 @@ fun YourLibraryContainerScreen(
         IconButton(onClick = { /* TODO */ }) {
           Icon(Icons.Rounded.Search, null)
         }
-      }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
-        WindowInsets.statusBars.getTop(
-          LocalDensity.current
-        ).toDp()
-      }))
+      })
       AnimatedChipRow(
         listOf(
           ChipItem("playlists", stringResource(id = R.string.filter_playlist)),

@@ -38,7 +38,6 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.findActivity
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,11 +69,7 @@ fun StorageScreen(
           IconButton(onClick = { ctx.findActivity().onBackPressed() }) {
             Icon(Icons.Rounded.ArrowBack, null)
           }
-        }, contentPadding = PaddingValues(top = with(LocalDensity.current) {
-          WindowInsets.statusBars.getTop(
-            LocalDensity.current
-          ).toDp()
-        }), scrollBehavior = scrollBehavior)
+        }, scrollBehavior = scrollBehavior)
       }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(
           modifier = Modifier

@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,7 +22,6 @@ import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 import com.google.protobuf.Any
 import com.google.protobuf.Message
 import com.spotify.dac.api.components.VerticalListComponent
@@ -46,9 +44,7 @@ fun DacRendererScreen(
 ) {
   val navController = LocalNavigationController.current
 
-  val sbd = rememberSplineBasedDecay<Float>()
-  val topBarState = rememberTopAppBarState()
-  val scrollBehavior = remember { if (fullscreen) TopAppBarDefaults.pinnedScrollBehavior(topBarState) else TopAppBarDefaults.exitUntilCollapsedScrollBehavior(sbd, topBarState) }
+  val scrollBehavior = if (!fullscreen) TopAppBarDefaults.exitUntilCollapsedScrollBehavior() else TopAppBarDefaults.pinnedScrollBehavior()
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(Unit) {
@@ -59,7 +55,7 @@ fun DacRendererScreen(
     is DacViewModel.State.Loaded -> {
       Scaffold(topBar = {
         if (fullscreen) {
-          SmallTopAppBar(title = {}, colors = TopAppBarDefaults.smallTopAppBarColors(
+          TopAppBar(title = {}, colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = Color.Transparent,
             scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
           ), scrollBehavior = scrollBehavior)
@@ -70,8 +66,7 @@ fun DacRendererScreen(
             IconButton(onClick = { navController.popBackStack() }) {
               Icon(Icons.Rounded.ArrowBack, null)
             }
-          }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(
-            LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
+          }, scrollBehavior = scrollBehavior)
         }
       }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
         LazyColumn(

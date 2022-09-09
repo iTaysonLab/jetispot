@@ -52,7 +52,7 @@ fun BaseConfigScreen(
   val navController = LocalNavigationController.current
 
   Scaffold(topBar = {
-    bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar(title = {
+    LargeTopAppBar(title = {
       Text(stringResource(viewModel.provideTitle()))
     }, navigationIcon = {
       if (!viewModel.isRoot()) {
@@ -60,7 +60,7 @@ fun BaseConfigScreen(
           Icon(Icons.Rounded.ArrowBack, null)
         }
       }
-    }, contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
+    }, scrollBehavior = scrollBehavior)
   }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
     LazyColumn(
       Modifier

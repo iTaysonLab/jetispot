@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.shared.evo.LargeTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +28,7 @@ fun BrowseScreen(
       IconButton(onClick = { navController.popBackStack() }) {
         Icon(Icons.Rounded.ArrowBack, null)
       }
-    }, colors = TopAppBarDefaults.largeTopAppBarColors(), contentPadding = PaddingValues(top = with(LocalDensity.current) { WindowInsets.statusBars.getTop(LocalDensity.current).toDp() }), scrollBehavior = scrollBehavior)
+    }, colors = TopAppBarDefaults.largeTopAppBarColors(), scrollBehavior = scrollBehavior)
   }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
     Box(Modifier.padding(padding)) {
       HubScreen(
