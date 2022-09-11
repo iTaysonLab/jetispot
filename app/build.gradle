@@ -119,8 +119,9 @@ dependencies {
     // Playback
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
-    implementation "androidx.media2:media2-session:$media2_version"
-    implementation "androidx.media2:media2-player:$media2_version"
+
+    implementation "androidx.media3:media3-session:1.0.0-beta02"
+    implementation "androidx.media3:media3-common:1.0.0-beta02"
 
     // Librespot
     implementation ("com.github.iTaysonLab.librespot-java:librespot-player:$librespot_commit:thin") {

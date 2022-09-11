@@ -7,6 +7,7 @@ import androidx.media.AudioAttributesCompat
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.SessionPlayer
+import androidx.media3.common.BasePlayer
 import com.spotify.context.ContextTrackOuterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -17,7 +18,7 @@ import java.util.concurrent.Executors
 
 class SpPlayerWrapper(
   private val service: SpPlaybackService
-) : SessionPlayer() {
+) : BasePlayer() {
   val playbackExecutor = Executors.newSingleThreadExecutor()
   val state = State()
   val audioFocus get() = service.audioFocusManager

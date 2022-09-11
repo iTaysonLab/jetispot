@@ -1,8 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.playback.service.refl
 
-import androidx.media2.common.SessionPlayer
 import com.google.gson.JsonParser
-import xyz.gianlu.librespot.player.PagesLoader
 import xyz.gianlu.librespot.player.Player
 
 class SpReflect(
@@ -16,19 +14,18 @@ class SpReflect(
     }
   }
 
-  @SessionPlayer.RepeatMode
+  @androidx.media3.common.Player.RepeatMode
   fun getRepeatMode(): Int {
     val options = stateOf(player()).options
     return when {
-      options.repeatingContext -> SessionPlayer.REPEAT_MODE_ALL
-      options.repeatingTrack -> SessionPlayer.REPEAT_MODE_ONE
-      else -> SessionPlayer.REPEAT_MODE_NONE
+      options.repeatingContext -> androidx.media3.common.Player.REPEAT_MODE_ALL
+      options.repeatingTrack -> androidx.media3.common.Player.REPEAT_MODE_ONE
+      else -> androidx.media3.common.Player.REPEAT_MODE_OFF
     }
   }
 
-  @SessionPlayer.ShuffleMode
-  fun getShuffleMode(): Int {
-    return if (stateOf(player()).options.shufflingContext) SessionPlayer.SHUFFLE_MODE_ALL else SessionPlayer.SHUFFLE_MODE_NONE
+  fun getShuffleMode(): Boolean {
+    return stateOf(player()).options.shufflingContext
   }
 
   private fun stateOf(player: Player) = player.stateWrapper.state

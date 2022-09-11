@@ -6,20 +6,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.media2.session.LibraryResult
-import androidx.media2.session.MediaLibraryService
-import androidx.media2.session.MediaSession
-import androidx.media2.session.SessionResult
+import androidx.media3.common.MediaItem
+import androidx.media3.session.*
 import bruhcollective.itaysonlab.jetispot.MainActivity
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerManager
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.playback.service.library.MediaLibraryConnector
 import bruhcollective.itaysonlab.jetispot.playback.service.library.SessionControllerVerifier
+import com.google.common.collect.ImmutableList
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.guava.future
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,7 +51,7 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
 
   override fun onDestroy() {
     audioFocusManager.abandonFocus()
-    mediaLibrarySession.close()
+    mediaLibrarySession.release()
     super.onDestroy()
   }
 
@@ -64,26 +65,41 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
     }
 
     mediaLibrarySession =
-      MediaLibrarySession.Builder(this, playerWrapper, playerWrapper.playbackExecutor, librarySessionCallback).apply {
-        setSessionActivity(
-          PendingIntent.getActivity(
-            this@SpPlaybackService,
-            100,
-            Intent(this@SpPlaybackService, MainActivity::class.java).apply {
-              putExtra("openPlayer", true)
-            },
-            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0) or PendingIntent.FLAG_UPDATE_CURRENT
-          )
-        )
-      }.build()
+      MediaLibrarySession.Builder(this, playerWrapper, librarySessionCallback)
+        .setSessionActivity(PendingIntent.getActivity(
+          this@SpPlaybackService,
+          100,
+          Intent(this@SpPlaybackService, MainActivity::class.java).apply {
+            putExtra("openPlayer", true)
+          },
+          (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0) or PendingIntent.FLAG_UPDATE_CURRENT
+        ))
+        .build()
   }
 
-  inner class SessionCallback : MediaLibrarySession.MediaLibrarySessionCallback() {
+  inner class SessionCallback : MediaLibrarySession.Callback {
+    override fun onConnect(
+      session: MediaSession,
+      controller: MediaSession.ControllerInfo
+    ): SessionCommandGroup {
+      return SessionCommandGroup.Builder()
+        .addAllPredefinedCommands(SessionCommand.COMMAND_VERSION_CURRENT)
+        .addCommand(SpSessionCommands.Repeat)
+        .addCommand(SpSessionCommands.Shuffle)
+        .build()
+    }
+
+    override fun onPostConnect(session: MediaSession, controller: MediaSession.ControllerInfo) {
+      super.onPostConnect(session, controller)
+    }
+
     override fun onGetLibraryRoot(
       session: MediaLibrarySession,
       controller: MediaSession.ControllerInfo,
       params: LibraryParams?
-    ) = mediaLibraryConnector.root(controller, params)
+    ): ListenableFuture<LibraryResult<MediaItem>> = future {
+      mediaLibraryConnector.root(controller, params)
+    }
 
     override fun onGetChildren(
       session: MediaLibrarySession,
@@ -92,7 +108,24 @@ class SpPlaybackService : MediaLibraryService(), CoroutineScope by CoroutineScop
       page: Int,
       pageSize: Int,
       params: LibraryParams?
-    ) = runBlocking { mediaLibraryConnector.load(this@SpPlaybackService, parentId, page, pageSize) }
+    ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = future {
+      mediaLibraryConnector.load(this@SpPlaybackService, parentId, page, pageSize)
+    }
+
+    override fun onCustomCommand(
+      session: MediaSession,
+      controller: MediaSession.ControllerInfo,
+      customCommand: SessionCommand,
+      args: Bundle
+    ): ListenableFuture<SessionResult> {
+      return super.onCustomCommand(session, controller, customCommand, args)
+    }
+
+    override fun onAddMediaItems(
+      mediaSession: MediaSession,
+      controller: MediaSession.ControllerInfo,
+      mediaItems: List<MediaItem>
+    ): ListenableFuture<List<MediaItem>> = Futures.immediateFuture(mediaItems) // TODO: we might resolve all needed data here
 
     override fun onSetMediaUri(
       session: MediaSession,
