@@ -12,8 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,7 +67,10 @@ private fun ControlsArtwork(
             }
         },
         placeholderType = "track",
-        modifier = Modifier.padding(horizontal = 14.dp).size(128.dp).clip(RoundedCornerShape(12.dp))
+        modifier = Modifier
+            .padding(horizontal = 14.dp)
+            .size(128.dp)
+            .clip(RoundedCornerShape(12.dp))
     )
 }
 
@@ -82,12 +84,12 @@ private fun ControlsHeader(
     MediumText(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
-          .padding(horizontal = 14.dp)
-          .navClickable(
-            enableRipple = false
-          ) { navController ->
-            viewModel.navigateToSource(scope, bottomSheetState, navController)
-          },
+            .padding(horizontal = 14.dp)
+            .navClickable(
+                enableRipple = false
+            ) { navController ->
+                viewModel.navigateToSource(scope, bottomSheetState, navController)
+            },
         fontSize = 24.sp, color = Color.White,
     )
     
@@ -95,12 +97,12 @@ private fun ControlsHeader(
     
     Text(text = viewModel.currentTrack.value.artist,
         modifier = Modifier
-          .padding(horizontal = 14.dp)
-          .navClickable(
-            enableRipple = false
-          ) { navController ->
-            viewModel.navigateToArtist(scope, bottomSheetState, navController)
-          },
+            .padding(horizontal = 14.dp)
+            .navClickable(
+                enableRipple = false
+            ) { navController ->
+                viewModel.navigateToArtist(scope, bottomSheetState, navController)
+            },
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 16.sp,
@@ -112,25 +114,48 @@ private fun ControlsHeader(
 private fun ControlsSeekbar(
     viewModel: NowPlayingViewModel,
 ) {
-    Slider(value = viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
+    var isSeekbarDragging by remember { mutableStateOf(false) }
+    var seekbarDraggingProgress by remember { mutableStateOf(0f) }
+
+    val elapsedTime = remember(viewModel.currentPosition.value, isSeekbarDragging, seekbarDraggingProgress) {
+        val ms = if (isSeekbarDragging) {
+            (seekbarDraggingProgress * viewModel.currentTrack.value.duration).toLong()
+        } else {
+            viewModel.currentPosition.value.progressMilliseconds
+        } / 1000L
+
+        DateUtils.formatElapsedTime(ms)
+    }
+
+    val totalTime = remember(viewModel.currentPosition.value) {
+        DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L)
+    }
+
+    Slider(value = if (isSeekbarDragging) seekbarDraggingProgress else viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
         thumbColor = Color.White,
         activeTrackColor = Color.White,
         inactiveTrackColor = Color.White.copy(alpha = 0.5f)
-    ), onValueChange = {}, modifier = Modifier.padding(horizontal = 8.dp))
+    ), onValueChange = {
+        isSeekbarDragging = true
+        seekbarDraggingProgress = it
+    }, onValueChangeFinished = {
+        isSeekbarDragging = false
+        // TODO
+    }, modifier = Modifier.padding(horizontal = 8.dp))
 
     Row(
-      Modifier
-        .padding(horizontal = 14.dp)
-        .offset(y = (-6).dp)
+        Modifier
+            .padding(horizontal = 14.dp)
+            .offset(y = (-6).dp)
     ) {
         Text(
-            text = DateUtils.formatElapsedTime(viewModel.currentPosition.value.progressMilliseconds / 1000L),
+            text = elapsedTime,
             color = Color.White.copy(alpha = 0.7f),
             fontSize = 12.sp
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = DateUtils.formatElapsedTime(viewModel.currentTrack.value.duration / 1000L),
+            text = totalTime,
             color = Color.White.copy(alpha = 0.7f),
             fontSize = 12.sp
         )
@@ -165,7 +190,9 @@ private fun ControlsMainButtons(
 
         IconButton(
             onClick = { viewModel.skipPrevious() },
-            modifier = Modifier.clip(CircleShape).size(42.dp),
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(42.dp),
             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
         ) {
             Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
@@ -175,7 +202,9 @@ private fun ControlsMainButtons(
 
         IconButton(
             onClick = { viewModel.skipNext() },
-            modifier = Modifier.clip(CircleShape).size(42.dp),
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(42.dp),
             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
         ) {
             Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
@@ -185,7 +214,9 @@ private fun ControlsMainButtons(
 
         IconButton(
             onClick = { },
-            modifier = Modifier.clip(CircleShape).size(42.dp),
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(42.dp),
             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
         ) {
             Icon(imageVector = Icons.Rounded.FavoriteBorder, contentDescription = null)
@@ -195,9 +226,12 @@ private fun ControlsMainButtons(
 
         IconButton(
             onClick = { setQueueOpened(!queueOpened) },
-            modifier = Modifier.clip(CircleShape).size(42.dp).onGloballyPositioned { coords ->
-                viewModel.queueButtonParams = coords.positionInRoot()
-            },
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(42.dp)
+                .onGloballyPositioned { coords ->
+                    viewModel.queueButtonParams = coords.positionInRoot()
+                },
             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = Color.White)
         ) {
             Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
