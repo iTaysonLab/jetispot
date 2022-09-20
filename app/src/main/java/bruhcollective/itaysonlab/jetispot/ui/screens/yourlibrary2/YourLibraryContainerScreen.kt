@@ -49,7 +49,7 @@ fun YourLibraryContainerScreen(
 
   Scaffold(topBar = {
     Column {
-      SmallTopAppBar(title = {
+      TopAppBar(title = {
         Text("Your Library")
       }, navigationIcon = {
         IconButton(onClick = { /* TODO */ }) {
@@ -60,6 +60,7 @@ fun YourLibraryContainerScreen(
           Icon(Icons.Rounded.Search, null)
         }
       })
+
       AnimatedChipRow(
         listOf(
           ChipItem("playlists", stringResource(id = R.string.filter_playlist)),
@@ -79,7 +80,7 @@ fun YourLibraryContainerScreen(
         }
       }
     }
-  }) { padding ->
+  }, contentWindowInsets = WindowInsets(bottom = 0.dp)) { padding ->
     if (viewModel.content.isNotEmpty()) {
       LazyColumn(
         state = state,
