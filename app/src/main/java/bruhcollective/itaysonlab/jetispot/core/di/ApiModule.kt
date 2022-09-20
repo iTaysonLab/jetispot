@@ -80,5 +80,9 @@ object ApiModule {
 
   @Provides
   @Singleton
+  fun provideColorLyricsApi(retrofit: Retrofit): SpColorLyricsApi = retrofit.create("https://spclient.wg.spotify.com")
+
+  @Provides
+  @Singleton
   fun provideExternalIntegrationApi(retrofit: Retrofit): SpExternalIntegrationApi = retrofit.create("https://spclient.wg.spotify.com/external-integration-recs/")
 }

@@ -39,6 +39,8 @@ fun NowPlayingControls(
     scope: CoroutineScope,
     queueOpened: Boolean,
     setQueueOpened: (Boolean) -> Unit,
+    lyricsOpened: Boolean,
+    setLyricsOpened: (Boolean) -> Unit,
     bottomSheetState: BottomSheetState,
     viewModel: NowPlayingViewModel,
     modifier: Modifier
@@ -51,6 +53,8 @@ fun NowPlayingControls(
         ControlsMainButtons(viewModel, queueOpened, setQueueOpened)
         Spacer(Modifier.height(12.dp))
         ControlsSeekbar(viewModel)
+        Spacer(Modifier.height(12.dp))
+        NowPlayingLyricsContainer(viewModel, lyricsOpened, setLyricsOpened)
     }
 }
 
@@ -140,7 +144,7 @@ private fun ControlsSeekbar(
         seekbarDraggingProgress = it
     }, onValueChangeFinished = {
         isSeekbarDragging = false
-        // TODO
+        viewModel.seekTo((seekbarDraggingProgress * viewModel.currentTrack.value.duration).toLong())
     }, modifier = Modifier.padding(horizontal = 8.dp))
 
     Row(

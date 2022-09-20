@@ -24,6 +24,8 @@ fun NowPlayingScreen(
   bsOffset: () -> Float,
   queueOpened: Boolean,
   setQueueOpened: (Boolean) -> Unit,
+  lyricsOpened: Boolean,
+  setLyricsOpened: (Boolean) -> Unit,
   viewModel: NowPlayingViewModel = hiltViewModel()
 ) {
   val scope = rememberCoroutineScope()
@@ -32,6 +34,8 @@ fun NowPlayingScreen(
     NowPlayingFullscreenComposition(
       queueOpened = queueOpened,
       setQueueOpened = setQueueOpened,
+      lyricsOpened = lyricsOpened,
+      setLyricsOpened = setLyricsOpened,
       bottomSheetState = bottomSheetState,
       viewModel = viewModel
     )

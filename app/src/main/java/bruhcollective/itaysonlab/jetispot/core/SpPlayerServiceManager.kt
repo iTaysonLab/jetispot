@@ -72,6 +72,7 @@ class SpPlayerServiceManager @Inject constructor(
 
   fun skipNext() = impl.awaitService { this.skipToNextPlaylistItem() }
   fun skipPrevious() = impl.awaitService { this.skipToPreviousPlaylistItem() }
+  fun seekTo(ms: Long) = impl.awaitService { this.seekTo(ms) }
 
   enum class PlaybackState {
     Idle, Playing, Paused
@@ -80,6 +81,7 @@ class SpPlayerServiceManager @Inject constructor(
   // for extra UI updates
   interface ServiceExtraListener {
     fun onTrackIndexChanged(new: Int)
+    fun onTrackProgressChanged(pos: Long)
   }
 
   fun registerExtra(l: ServiceExtraListener) { extraListeners.add(l) }

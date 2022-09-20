@@ -92,6 +92,7 @@ class MainActivity : ComponentActivity() {
                 )
 
                 var bsQueueOpened by remember { mutableStateOf(false) }
+                var bsLyricsOpened by remember { mutableStateOf(false) }
 
                 // lambdas
                 val bsOffset = {
@@ -110,13 +111,16 @@ class MainActivity : ComponentActivity() {
                     backPressedDispatcherOwner,
                     scope,
                     bsState.bottomSheetState.isExpanded,
-                    bsQueueOpened
+                    bsQueueOpened,
+                    bsLyricsOpened
                 ) {
                     val callback = backPressedDispatcherOwner?.onBackPressedDispatcher?.addCallback(
                         owner = backPressedDispatcherOwner,
-                        enabled = bsQueueOpened || bsState.bottomSheetState.isExpanded,
+                        enabled = bsLyricsOpened || bsQueueOpened || bsState.bottomSheetState.isExpanded,
                     ) {
-                        if (bsQueueOpened) {
+                        if (bsLyricsOpened) {
+                            bsLyricsOpened = false
+                        } else if (bsQueueOpened) {
                             bsQueueOpened = false
                         } else {
                             scope.launch {
@@ -193,13 +197,15 @@ class MainActivity : ComponentActivity() {
                                         bottomSheetState = bsState.bottomSheetState,
                                         bsOffset = bsOffset,
                                         queueOpened = bsQueueOpened,
-                                        setQueueOpened = { bsQueueOpened = it }
+                                        setQueueOpened = { bsQueueOpened = it },
+                                        lyricsOpened = bsLyricsOpened,
+                                        setLyricsOpened = { bsLyricsOpened = it }
                                     )
                                 },
                                 scaffoldState = bsState,
                                 sheetPeekHeight = bsPeek,
                                 backgroundColor = MaterialTheme.colorScheme.surface,
-                                sheetGesturesEnabled = !bsQueueOpened
+                                sheetGesturesEnabled = !bsQueueOpened && !bsLyricsOpened
                             ) { innerScaffoldPadding ->
                                 AppNavigation(
                                     navController = navController,

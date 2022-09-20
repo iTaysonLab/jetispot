@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
+import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
@@ -27,10 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class NowPlayingViewModel @Inject constructor(
   private val spPlayerServiceManager: SpPlayerServiceManager,
-  private val spPartnersApi: SpPartnersApi
+  private val spPartnersApi: SpPartnersApi,
+  val spLyricsController: SpLyricsController
 ) : ViewModel(), SpPlayerServiceManager.ServiceExtraListener, CoroutineScope by MainScope() {
   // ui states
   var queueButtonParams by mutableStateOf(Offset.Zero)
+  var lyricsCardParams by mutableStateOf(Offset.Zero to IntSize(0, 0))
 
   // states
   val currentTrack get() = spPlayerServiceManager.currentTrack
@@ -54,6 +57,7 @@ class NowPlayingViewModel @Inject constructor(
   fun skipPrevious() = spPlayerServiceManager.skipPrevious()
   fun togglePlayPause() = spPlayerServiceManager.playPause()
   fun skipNext() = spPlayerServiceManager.skipNext()
+  fun seekTo(ms: Long) = spPlayerServiceManager.seekTo(ms)
 
   @OptIn(ExperimentalMaterialApi::class)
   fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: NavigationController) {
@@ -83,6 +87,8 @@ class NowPlayingViewModel @Inject constructor(
     if (currentQueue.value.isEmpty()) return
     uiOnTrackIndexChanged.invoke(new)
 
+    spLyricsController.setSong(currentQueue.value[new])
+
     imageColorTask?.cancel()
     imageColorTask = launch(Dispatchers.IO) {
       currentBgColor.value = calculateDominantColor(
@@ -92,6 +98,10 @@ class NowPlayingViewModel @Inject constructor(
         false
       ).blendWith(Color.Black, 0.1f)
     }
+  }
+
+  override fun onTrackProgressChanged(pos: Long) {
+    spLyricsController.setProgress(pos)
   }
 
   fun getHeaderTitle(): Int {
