@@ -1,10 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -54,7 +51,7 @@ fun HubScaffold(
             }
           }, colors = TopAppBarDefaults.largeTopAppBarColors(), scrollBehavior = scrollBehavior)
         } else {
-          SmallTopAppBar(title = {
+          TopAppBar(title = {
             Text(appBarTitle, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.alpha(scrollBehavior.state.overlappedFraction))
           }, navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
@@ -67,7 +64,7 @@ fun HubScaffold(
         }
       }, modifier = Modifier
         .fillMaxSize()
-        .nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+        .nestedScroll(scrollBehavior.nestedScrollConnection), contentWindowInsets = WindowInsets(top = 0.dp)) { padding ->
         CompositionLocalProvider(LocalHubScreenDelegate provides viewModel) {
           LazyColumn(
             modifier = Modifier

@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 
@@ -28,7 +30,7 @@ fun BrowseRadioScreen() {
         Icon(Icons.Rounded.ArrowBack, null)
       }
     }, colors = TopAppBarDefaults.largeTopAppBarColors(), scrollBehavior = scrollBehavior)
-  }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+  }, modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection), contentWindowInsets = WindowInsets(top = 0.dp)) { padding ->
     Box(Modifier.padding(padding)) {
       HubScreen(
         needContentPadding = false,

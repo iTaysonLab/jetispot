@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.dac
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,14 +9,12 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.proto.ErrorComponent
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.FilterComponentBinder
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
@@ -28,13 +27,16 @@ import com.spotify.dac.api.components.VerticalListComponent
 import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.home.dac.component.experimental.v1.proto.FilterComponent
 import com.spotify.home.dac.component.v1.proto.HomePageComponent
+import com.spotify.home.dac.component.v1.proto.ToolbarComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 // generally just a HubScreen with simplifed code and DAC arch usage
 // DAC is something like another ServerSideUI from Spotify
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun DacRendererScreen(
   title: String,
@@ -55,10 +57,9 @@ fun DacRendererScreen(
     is DacViewModel.State.Loaded -> {
       Scaffold(topBar = {
         if (fullscreen) {
-          TopAppBar(title = {}, colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
-          ), scrollBehavior = scrollBehavior)
+          (viewModel.state as? DacViewModel.State.Loaded)?.sticky?.let { msg ->
+            DacRender(msg)
+          }
         } else {
           LargeTopAppBar(title = {
             Text(title)
@@ -68,54 +69,24 @@ fun DacRendererScreen(
             }
           }, scrollBehavior = scrollBehavior)
         }
-      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), contentWindowInsets = WindowInsets(top = 0.dp)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()
-            .let { if (!fullscreen) it.padding(padding) else it }
+            .padding(padding)
         ) {
-          (viewModel.state as? DacViewModel.State.Loaded)?.data?.apply {
-            val cmBind: (List<Any>) -> Unit = { componentsList ->
-              items(componentsList) { item ->
-                var exception: Exception? = null
-                var unpackedItem: Message? = null
-
-                try {
-                  unpackedItem = item.dynamicUnpack()
-                } catch (e: Exception) {
-                  exception = e
-                }
-
-                if (unpackedItem == null && exception != null) {
-                  when (exception) {
-                    is ClassNotFoundException -> {
-                      Text("DAC unsupported component", Modifier.padding(horizontal = 16.dp))
-                      Text(exception.message ?: "", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), modifier = Modifier.padding(top = 4.dp).padding(horizontal = 16.dp))
-                    }
-                    else -> {
-                      Text("DAC rendering error: ${exception.message}\n\n${exception.stackTraceToString()}")
-                    }
-                  }
-
-                  Spacer(modifier = Modifier.height(8.dp))
-                } else if (unpackedItem != null) {
-                  if (unpackedItem is FilterComponent) {
-                    FilterComponentBinder(unpackedItem, viewModel.facet) { nf ->
-                      scope.launch {
-                        viewModel.facet = nf
-                        viewModel.reload(loader)
-                      }
-                    }
-                  } else {
-                    DacRender(unpackedItem)
+          (viewModel.state as? DacViewModel.State.Loaded)?.apply {
+            items(data) { item ->
+              if (item is FilterComponent) {
+                FilterComponentBinder(item, viewModel.facet) { nf ->
+                  scope.launch {
+                    viewModel.facet = nf
+                    viewModel.reload(loader)
                   }
                 }
+              } else {
+                DacRender(item)
               }
-            }
-
-            when (this) {
-              is VerticalListComponent -> cmBind(this.componentsList)
-              is HomePageComponent -> cmBind(this.componentsList)
             }
 
             item {
@@ -138,8 +109,7 @@ fun DacRendererScreen(
 
 @HiltViewModel
 class DacViewModel @Inject constructor(
-  private val spInternalApi: SpInternalApi,
-  private val spPlayerServiceManager: SpPlayerServiceManager
+  private val spInternalApi: SpInternalApi
 ) : ViewModel() {
   var facet = "default"
 
@@ -148,12 +118,34 @@ class DacViewModel @Inject constructor(
 
   suspend fun load(loader: suspend SpInternalApi.(String) -> DacResponse) {
     _state.value = try {
-      val unpackedRaw = spInternalApi.loader(facet)
-      val unpackedMessage = unpackedRaw.component.dynamicUnpack()
-      State.Loaded(unpackedMessage)
+      val (sticky, list) = withContext(Dispatchers.Default) {
+        val messages = parseMessages(when (val protoList = spInternalApi.loader(facet).component.dynamicUnpack()) {
+          is VerticalListComponent -> protoList.componentsList
+          is HomePageComponent -> protoList.componentsList
+          else -> error("Invalid root for DAC renderer! Found: ${protoList.javaClass.simpleName}")
+        })
+
+        if (messages.first() is ToolbarComponent) {
+          messages.first() to messages.drop(1)
+        } else {
+          null to messages
+        }
+      }
+
+      State.Loaded(sticky, list)
     } catch (e: Exception) {
       e.printStackTrace()
       State.Error(e)
+    }
+  }
+
+  private fun parseMessages(list: List<Any>): List<Message> = list.map { item ->
+    try {
+      item.dynamicUnpack()
+    } catch (e: ClassNotFoundException) {
+      ErrorComponent.newBuilder().setType(ErrorComponent.ErrorType.UNSUPPORTED).setMessage(e.message).build()
+    } catch (e: java.lang.Exception) {
+      ErrorComponent.newBuilder().setType(ErrorComponent.ErrorType.GENERIC_EXCEPTION).setMessage(e.message + "\n\n" + e.stackTraceToString()).build()
     }
   }
 
@@ -163,7 +155,7 @@ class DacViewModel @Inject constructor(
   }
 
   sealed class State {
-    class Loaded(val data: Message) : State()
+    class Loaded(val sticky: Message?, val data: List<Message>) : State()
     class Error(val error: Exception) : State()
     object Loading : State()
   }

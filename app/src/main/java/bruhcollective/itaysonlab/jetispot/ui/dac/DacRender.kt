@@ -1,11 +1,15 @@
 package bruhcollective.itaysonlab.jetispot.ui.dac
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.proto.ErrorComponent
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.*
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.*
 import com.google.protobuf.Message
@@ -37,11 +41,25 @@ fun DacRender (
     is SectionHeaderComponent -> SectionHeaderComponentBinder(item.title)
     is SectionComponent -> SectionComponentBinder(item)
     is RecentlyPlayedSectionComponent -> RecentlyPlayedSectionComponentBinder()
+
     // is SnappyGridSectionComponent -> SnappyGridSectionComponentBinder(item)
     // Other
+
+    is ErrorComponent -> {
+      Column {
+        Text(if (item.type == ErrorComponent.ErrorType.UNSUPPORTED) {
+          "DAC unsupported component"
+        } else {
+          "DAC rendering error"
+        }, Modifier.padding(horizontal = 16.dp))
+        Text(item.message ?: "", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), modifier = Modifier
+          .padding(top = 4.dp)
+          .padding(horizontal = 16.dp))
+      }
+    }
+
     else -> {
-      Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}")
-      Spacer(modifier = Modifier.height(8.dp))
+      Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}", modifier = Modifier.padding(16.dp))
     }
   }
 }

@@ -61,7 +61,7 @@ fun BaseConfigScreen(
         }
       }
     }, scrollBehavior = scrollBehavior)
-  }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+  }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), contentWindowInsets = WindowInsets(top = 0.dp)) { padding ->
     LazyColumn(
       Modifier
         .fillMaxHeight()

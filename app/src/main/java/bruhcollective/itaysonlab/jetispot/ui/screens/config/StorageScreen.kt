@@ -70,7 +70,7 @@ fun StorageScreen(
             Icon(Icons.Rounded.ArrowBack, null)
           }
         }, scrollBehavior = scrollBehavior)
-      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) { padding ->
+      }, modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), contentWindowInsets = WindowInsets(top = 0.dp)) { padding ->
         LazyColumn(
           modifier = Modifier
             .fillMaxHeight()

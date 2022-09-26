@@ -99,8 +99,8 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.customview:customview:1.2.0-alpha01"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.customview:customview:1.2.0-alpha02"
     debugImplementation "androidx.customview:customview-poolingcontainer:1.0.0"
 
     // Compose - Additions
