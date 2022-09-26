@@ -1,8 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,14 +11,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.ui.ext.disableTouch
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -34,10 +30,10 @@ fun NowPlayingFullscreenComposition (
 ) {
   val scope = rememberCoroutineScope()
 
-  val queueProgress = animateFloatAsState(targetValue = if (queueOpened) 1f else 0f, animationSpec = tween(500, easing = FastOutSlowInEasing))
+  val queueProgress = animateFloatAsState(targetValue = if (queueOpened) 1f else 0f, animationSpec = spring(stiffness = 450f))
   val queueProgressValue = queueProgress.value
 
-  val lyricsProgress = animateFloatAsState(targetValue = if (lyricsOpened) 1f else 0f, animationSpec = tween(500, easing = FastOutSlowInEasing))
+  val lyricsProgress = animateFloatAsState(targetValue = if (lyricsOpened) 1f else 0f, animationSpec = spring(stiffness = 450f))
   val lyricsProgressValue = lyricsProgress.value
 
   val anySuperProgress = remember(queueProgressValue, lyricsProgressValue) {
