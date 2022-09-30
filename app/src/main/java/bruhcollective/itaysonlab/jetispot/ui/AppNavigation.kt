@@ -29,7 +29,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.StorageScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.hub.BrowseRootScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
@@ -101,7 +101,7 @@ fun AppNavigation(
     composable(Screen.StorageConfig.route) { StorageScreen() }
     composable(Screen.QualityConfig.route) { QualityConfigScreen() }
     composable(Screen.NormalizationConfig.route) { NormalizationConfigScreen() }
-    composable(Screen.Search.route) { BrowseRootScreen() }
+    composable(Screen.Search.route) { SearchScreen() }
     composable(Screen.Library.route) { YourLibraryContainerScreen() }
 
     dialog(Dialog.AuthDisclaimer.route) {

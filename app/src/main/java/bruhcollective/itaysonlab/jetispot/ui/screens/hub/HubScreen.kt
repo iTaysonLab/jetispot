@@ -54,12 +54,6 @@ fun HubScreen(
             .fillMaxSize()
             .statusBarsPadding() else Modifier.fillMaxSize()
         ) {
-          if (viewModel.needContentPadding) {
-            item(span = { GridItemSpan(2) }) {
-              Spacer(modifier = Modifier.statusBarsPadding())
-            }
-          }
-
           (viewModel.state as HubScreenViewModel.State.Loaded).data.apply {
             if (header != null) {
               item(

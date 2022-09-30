@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+option java_package = "bruhcollective.itaysonlab.jetispot.proto";
+option java_multiple_files = true;
+
 message SearchViewResponse {
   repeated SearchEntity hits = 1;
 }

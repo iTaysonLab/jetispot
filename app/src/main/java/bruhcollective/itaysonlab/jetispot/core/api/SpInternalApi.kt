@@ -3,6 +3,9 @@ package bruhcollective.itaysonlab.jetispot.core.api
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
+import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
+import bruhcollective.itaysonlab.jetispot.proto.Searchview
+import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchViewModel
 import com.spotify.dac.api.v1.proto.DacRequest
 import com.spotify.dac.api.v1.proto.DacResponse
 import com.spotify.home.dac.viewservice.v1.proto.HomeViewServiceRequest
@@ -69,6 +72,17 @@ interface SpInternalApi {
     @Query("handlesContent") handles: String = "",
     @Query("hint_revision") targetRevision: String,
   ): Playlist4ApiProto.SelectedListContent
+
+  @GET("/searchview/v3/search")
+  suspend fun search(
+    @Query("request_id") id: String = UUID.randomUUID().toString(),
+    @Query("query") query: String,
+    @Query("catalogue") catalogue: String = "premium",
+    @Query("entity_types") types: String = "album,artist,genre,playlist,user_profile,track,audio_episode,show",
+    @Query("timestamp") timestamp: Long = System.currentTimeMillis(),
+    @Query("limit") limit: Int = 15,
+    @Query("page_token") pageToken: String = ""
+  ): SearchViewResponse
 
   companion object {
     fun buildDacRequestForHome (bFacet: String = "default") = DacRequest.newBuilder().apply {

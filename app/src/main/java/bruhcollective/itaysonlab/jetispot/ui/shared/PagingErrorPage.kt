@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.shared
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -58,6 +59,36 @@ fun PagingErrorPage(
         onClick = { onReload() }) {
         Text(stringResource(id = R.string.err_act_reload))
       }
+    }
+  }
+}
+
+@Composable
+fun PagingInfoPage(
+  title: String,
+  text: String,
+  modifier: Modifier
+) {
+  Box(modifier) {
+    Column(
+      Modifier
+        .align(Alignment.Center)
+    ) {
+      Icon(
+        Icons.Rounded.Info, contentDescription = null, modifier = Modifier
+          .align(Alignment.CenterHorizontally)
+          .size(56.dp)
+      )
+
+      Text(
+        title,
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+      )
+
+      Text(
+        text,
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+      )
     }
   }
 }
