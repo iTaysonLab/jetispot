@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.jetispot.core.util
 
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
+import com.spotify.dac.player.v1.proto.PlayCommand
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapter
 
 @DslMarker
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
@@ -35,3 +38,15 @@ class PlayCommandBuilder (
     }
 }
 
+fun PlayCommand.toApplicationPlayCommand(moshi: Moshi): PlayFromContextData {
+    val context = moshi.adapter(PfcContextData::class.java).fromJson(this.context.toStringUtf8())!!
+    val options = moshi.adapter(PlayFromContextPlayerData::class.java).fromJson(this.options.toStringUtf8())!!.options!!
+
+    return PlayFromContextData(
+        uri = context.uri,
+        player = PlayFromContextPlayerData(
+            context = context,
+            options = options
+        )
+    )
+}

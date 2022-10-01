@@ -10,4 +10,5 @@ option java_package = "com.spotify.home.dac.viewservice.v1.proto";
 message HomeViewServiceRequest {
   string facet = 1;
   string client_timezone = 2;
+  map<string, string> feature_flags = 3;
 }

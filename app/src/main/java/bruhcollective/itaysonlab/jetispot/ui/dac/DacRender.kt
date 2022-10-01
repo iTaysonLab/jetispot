@@ -15,7 +15,9 @@ import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.*
 import com.google.protobuf.Message
 import com.spotify.allplans.v1.DisclaimerComponent
 import com.spotify.allplans.v1.PlanComponent
+import com.spotify.home.dac.component.heading.v1.proto.RecsplanationHeadingSingleTextComponent
 import com.spotify.home.dac.component.v1.proto.*
+import com.spotify.home.dac.component.v2.proto.ToolbarComponentV2
 import com.spotify.planoverview.v1.*
 
 @Composable
@@ -33,17 +35,27 @@ fun DacRender (
     is SingleUserTrialComponent -> SingleUserComponentBinder(item)
     // Home
     is ToolbarComponent -> ToolbarComponentBinder(item)
+    is ToolbarComponentV2 -> ToolbarComponent2Binder(item)
     is ShortcutsSectionComponent -> ShortcutsBinder(item)
+
     is AlbumCardActionsSmallComponent -> SmallActionCardBinder(title = item.title, subtitle = item.subtitle, navigateUri = item.navigateUri, likeUri = item.likeUri, imageUri = item.imageUri, imagePlaceholder = "album", playCommand = item.playCommand)
     is ArtistCardActionsSmallComponent -> SmallActionCardBinder(title = item.title, subtitle = item.subtitle, navigateUri = item.navigateUri, likeUri = item.followUri, imageUri = item.imageUri, imagePlaceholder = "artist", playCommand = item.playCommand)
     is PlaylistCardActionsSmallComponent -> SmallActionCardBinder(title = item.title, subtitle = item.subtitle, navigateUri = item.navigateUri, likeUri = item.likeUri, imageUri = item.imageUri, imagePlaceholder = "playlist", playCommand = item.playCommand)
+    is AlbumCardActionsMediumComponent -> MediumActionCardBinder(title = item.title, subtitle = item.description, navigateUri = item.navigateUri, likeUri = item.likeUri, imageUri = item.imageUri, imagePlaceholder = "album", playCommand = item.playCommand, contentType = item.contentType, fact = item.conciseFact, gradientColor = item.gradientColor)
+    is ArtistCardActionsMediumComponent -> MediumActionCardBinder(title = item.title, subtitle = item.description, navigateUri = item.navigateUri, likeUri = item.followUri, imageUri = item.imageUri, imagePlaceholder = "artist", playCommand = item.playCommand, contentType = item.contentType, fact = item.conciseFact, gradientColor = item.gradientColor)
+    is PlaylistCardActionsMediumComponent -> MediumActionCardBinder(title = item.title, subtitle = item.description, navigateUri = item.navigateUri, likeUri = item.likeUri, imageUri = item.imageUri, imagePlaceholder = "playlist", playCommand = item.playCommand, contentType = item.contentType, fact = item.conciseFact, gradientColor = item.gradientColor)
+
     is RecsplanationHeadingComponent -> RecsplanationHeadingComponentBinder(item)
+    is RecsplanationHeadingSingleTextComponent -> RecsplanationHeadingSingleTextComponentBinder(item)
+
     is SectionHeaderComponent -> SectionHeaderComponentBinder(item.title)
     is SectionComponent -> SectionComponentBinder(item)
     is RecentlyPlayedSectionComponent -> RecentlyPlayedSectionComponentBinder()
 
     // is SnappyGridSectionComponent -> SnappyGridSectionComponentBinder(item)
     // Other
+
+    is SnappyGridSectionComponent -> {}
 
     is ErrorComponent -> {
       Column {

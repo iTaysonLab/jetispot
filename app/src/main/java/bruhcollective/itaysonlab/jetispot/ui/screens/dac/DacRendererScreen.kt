@@ -13,9 +13,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
+import bruhcollective.itaysonlab.jetispot.core.util.toApplicationPlayCommand
 import bruhcollective.itaysonlab.jetispot.proto.ErrorComponent
+import bruhcollective.itaysonlab.jetispot.ui.dac.DacDelegate
 import bruhcollective.itaysonlab.jetispot.ui.dac.DacRender
+import bruhcollective.itaysonlab.jetispot.ui.dac.LocalDacDelegate
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.FilterComponentBinder
 import bruhcollective.itaysonlab.jetispot.ui.ext.dynamicUnpack
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
@@ -25,9 +29,12 @@ import com.google.protobuf.Any
 import com.google.protobuf.Message
 import com.spotify.dac.api.components.VerticalListComponent
 import com.spotify.dac.api.v1.proto.DacResponse
+import com.spotify.dac.player.v1.proto.PlayCommand
 import com.spotify.home.dac.component.experimental.v1.proto.FilterComponent
 import com.spotify.home.dac.component.v1.proto.HomePageComponent
 import com.spotify.home.dac.component.v1.proto.ToolbarComponent
+import com.spotify.home.dac.component.v2.proto.ToolbarComponentV2
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +43,7 @@ import javax.inject.Inject
 
 // generally just a HubScreen with simplifed code and DAC arch usage
 // DAC is something like another ServerSideUI from Spotify
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DacRendererScreen(
   title: String,
@@ -85,7 +92,9 @@ fun DacRendererScreen(
                   }
                 }
               } else {
-                DacRender(item)
+                CompositionLocalProvider(LocalDacDelegate provides viewModel) {
+                  DacRender(item)
+                }
               }
             }
 
@@ -109,8 +118,10 @@ fun DacRendererScreen(
 
 @HiltViewModel
 class DacViewModel @Inject constructor(
-  private val spInternalApi: SpInternalApi
-) : ViewModel() {
+  private val spInternalApi: SpInternalApi,
+  private val spPlayerServiceManager: SpPlayerServiceManager,
+  private val moshi: Moshi
+) : ViewModel(), DacDelegate {
   var facet = "default"
 
   private val _state = mutableStateOf<State>(State.Loading)
@@ -125,7 +136,7 @@ class DacViewModel @Inject constructor(
           else -> error("Invalid root for DAC renderer! Found: ${protoList.javaClass.simpleName}")
         })
 
-        if (messages.first() is ToolbarComponent) {
+        if (messages.first() is ToolbarComponent || messages.first() is ToolbarComponentV2) {
           messages.first() to messages.drop(1)
         } else {
           null to messages
@@ -158,5 +169,9 @@ class DacViewModel @Inject constructor(
     class Loaded(val sticky: Message?, val data: List<Message>) : State()
     class Error(val error: Exception) : State()
     object Loading : State()
+  }
+
+  override fun dispatchPlay(command: PlayCommand) {
+    spPlayerServiceManager.play(command.toApplicationPlayCommand(moshi))
   }
 }

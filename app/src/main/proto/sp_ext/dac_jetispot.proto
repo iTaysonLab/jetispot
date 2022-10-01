@@ -1,4 +1,4 @@
-// A custom DAC blocks for Jetispot usage
+// Сustom DAC blocks for Jetispot usage
 syntax = "proto3";
 
 option java_package = "bruhcollective.itaysonlab.jetispot.proto";

@@ -90,6 +90,7 @@ interface SpInternalApi {
       featureRequest = com.google.protobuf.Any.pack(HomeViewServiceRequest.newBuilder().apply {
         facet = bFacet
         clientTimezone = TimeZone.getDefault().id
+        putFeatureFlags("ic_flag_enabled", "true")
       }.build())
       clientInfo = DacRequest.ClientInfo.newBuilder().apply {
         appName = "ANDROID_MUSIC_APP"

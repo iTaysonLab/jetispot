@@ -8,7 +8,7 @@ import xyz.gianlu.librespot.common.Utils
 import xyz.gianlu.librespot.metadata.ImageId
 
 object SpUtils {
-    const val SPOTIFY_APP_VERSION = "8.7.38.86"
+    const val SPOTIFY_APP_VERSION = "8.7.68.568"
 
     fun getDeviceName(appContext: Context): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
