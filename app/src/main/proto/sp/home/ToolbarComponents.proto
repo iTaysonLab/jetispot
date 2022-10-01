@@ -9,22 +9,22 @@ option java_multiple_files = true;
 option java_package = "com.spotify.home.dac.component.v1.proto";
 
 message ToolbarComponent {
-  string dayPartMessage = 1;
+  string day_part_message = 1;
   string subtitle = 2;
   repeated google.protobuf.Any items = 4;
 }
 
 message ToolbarItemFeedComponent {
   string title = 1;
-  string navigateUri = 2;
+  string navigate_uri = 2;
 }
 
 message ToolbarItemListeningHistoryComponent {
   string title = 1;
-  string navigateUri = 2;
+  string navigate_uri = 2;
 }
 
 message ToolbarItemSettingsComponent {
   string title = 1;
-  string navigateUri = 2;
+  string navigate_uri = 2;
 }

@@ -9,5 +9,5 @@ option java_package = "com.spotify.home.dac.viewservice.v1.proto";
 
 message HomeViewServiceRequest {
   string facet = 1;
-  string clientTimezone = 2;
+  string client_timezone = 2;
 }

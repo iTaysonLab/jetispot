@@ -15,37 +15,37 @@ message ShortcutsSectionComponent {
 
 message AlbumCardShortcutComponent {
   string title = 1;
-  string navigateUri = 2;
-  string imageUri = 3;
-  com.spotify.dac.player.v1.proto.PlayCommand playCommand = 4;
+  string navigate_uri = 2;
+  string image_uri = 3;
+  com.spotify.dac.player.v1.proto.PlayCommand play_command = 4;
 }
 
 message PlaylistCardShortcutComponent {
   string title = 1;
-  string navigateUri = 2;
-  string imageUri = 3;
-  com.spotify.dac.player.v1.proto.PlayCommand playCommand = 4;
+  string navigate_uri = 2;
+  string image_uri = 3;
+  com.spotify.dac.player.v1.proto.PlayCommand play_command = 4;
 }
 
 message ShowCardShortcutComponent {
   string title = 1;
-  string navigateUri = 2;
-  string imageUri = 3;
-  com.spotify.dac.player.v1.proto.PlayCommand playCommand = 4;
+  string navigate_uri = 2;
+  string image_uri = 3;
+  com.spotify.dac.player.v1.proto.PlayCommand play_command = 4;
 }
 
 message ArtistCardShortcutComponent {
   string title = 1;
-  string navigateUri = 2;
-  string imageUri = 3;
-  com.spotify.dac.player.v1.proto.PlayCommand playCommand = 4;
+  string navigate_uri = 2;
+  string image_uri = 3;
+  com.spotify.dac.player.v1.proto.PlayCommand play_command = 4;
 }
 
 message EpisodeCardShortcutComponent {
   string title = 1;
-  string navigateUri = 2;
-  string imageUri = 3;
+  string navigate_uri = 2;
+  string image_uri = 3;
   bool fresh = 4;
-  int64 progressPercentage = 5;
-  com.spotify.dac.player.v1.proto.PlayCommand playCommand = 6;
+  int64 progress_percentage = 5;
+  com.spotify.dac.player.v1.proto.PlayCommand play_command = 6;
 }

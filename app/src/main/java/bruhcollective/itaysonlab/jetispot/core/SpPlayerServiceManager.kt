@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.util.Pair
+import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
 import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import com.google.common.util.concurrent.ListenableFuture
@@ -58,11 +59,13 @@ class SpPlayerServiceManager @Inject constructor(
   //
 
   // Uri should be spotify:<track/album/..>:<id>
-  fun play (uri: String, data: PlayFromContextPlayerData) = impl.awaitService {
+  fun play(data: PlayFromContextData) = play(data.uri, data.player)
+
+  fun play(uri: String, data: PlayFromContextPlayerData) = impl.awaitService {
     setMediaUri(uri.toUri(), Bundle().also { it.putString("sp_json", moshi.adapter<PlayFromContextPlayerData>().toJson(data)) })
   }
 
-  fun playPause () = impl.awaitService {
+  fun playPause() = impl.awaitService {
     if (playbackState.value == PlaybackState.Playing) {
       this.pause()
     } else {

@@ -9,6 +9,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcContextData
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
+import bruhcollective.itaysonlab.jetispot.core.util.playCommand
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -33,9 +34,11 @@ class SearchViewModel @Inject constructor(
     }
 
     fun dispatchPlay(uri: String) {
-        spPlayerServiceManager.play(uri, data = PlayFromContextPlayerData(context = PfcContextData(
-            uri = "spotify:search:${searchQuery.text.replace(" ", "+")}"
-        )))
+        spPlayerServiceManager.play(
+            playCommand(uri) {
+                contextUri = "spotify:search:${searchQuery.text.replace(" ", "+")}"
+            }
+        )
     }
 
     fun clear() {

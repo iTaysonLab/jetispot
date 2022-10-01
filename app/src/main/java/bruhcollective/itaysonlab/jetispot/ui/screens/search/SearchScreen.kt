@@ -27,7 +27,6 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 import bruhcollective.itaysonlab.jetispot.ui.shared.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingInfoPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -129,20 +128,40 @@ private fun SearchBinder(
         else -> {
             LazyColumn(Modifier.fillMaxSize()) {
                 items(response.hitsList) { entity ->
-                    when (entity.entityCase) {
-                        SearchEntity.EntityCase.TRACK -> {
-                            TwoColumnAndImageBlock(
-                                artworkUri = entity.imageUri,
-                                title = entity.name,
-                                text = remember(entity.uri) { entity.track.trackArtistsList.joinToString { it.name } },
-                                modifier = Modifier.clickable {
-                                    onClick(entity.entityCase, entity.uri)
-                                }
-                            )
-                        }
+                    val text = remember(entity) {
+                        when (entity.entityCase) {
+                            SearchEntity.EntityCase.TRACK -> {
+                                "Song • " + entity.track.trackArtistsList.joinToString { it.name }
+                            }
 
-                        else -> {}
+                            SearchEntity.EntityCase.PLAYLIST -> {
+                                when {
+                                    entity.playlist.personalized -> "Playlist • Personalized for you"
+                                    entity.playlist.ownedBySpotify -> "Playlist • By Spotify"
+                                    else -> "Playlist"
+                                }
+                            }
+
+                            SearchEntity.EntityCase.ALBUM -> {
+                                "Album • " + entity.album.artistNamesList.joinToString()
+                            }
+
+                            SearchEntity.EntityCase.ARTIST -> {
+                                "Artist"
+                            }
+
+                            else -> ""
+                        }
                     }
+
+                    TwoColumnAndImageBlock(
+                        artworkUri = entity.imageUri,
+                        title = entity.name,
+                        text = text,
+                        modifier = Modifier.clickable {
+                            onClick(entity.entityCase, entity.uri)
+                        }
+                    )
                 }
             }
         }

@@ -22,11 +22,11 @@ message SectionComponent {
 message RecsplanationHeadingComponent {
   string title = 1;
   string subtitle = 2;
-  string navigateUri = 3;
-  string imageUri = 4;
+  string navigate_uri = 3;
+  string image_uri = 4;
 }
 
-// only ubi(soft?!) data here, I guess recents are fetched separately
+// only ubi(soft?!) data here, recent played data are fetched separately
 message RecentlyPlayedSectionComponent {}
 
 message SnappyGridSectionComponent {

@@ -7,23 +7,23 @@ option java_package = "com.spotify.home.dac.component.v1.proto";
 
 message ShowCardSmallComponent {
   string title = 1;
-  string showCategories = 2;
-  string navigateUri = 3;
-  string imageUri = 4;
+  string show_categories = 2;
+  string navigate_uri = 3;
+  string image_uri = 4;
 }
 
 message ShowCardMediumComponent {
   string title = 1;
   string subtitle = 2;
-  string showCategories = 3;
-  string navigateUri = 4;
-  string imageUri = 5;
+  string show_categories = 3;
+  string navigate_uri = 4;
+  string image_uri = 5;
 }
 
 message ShowCardLargeComponent {
   string title = 1;
   string subtitle = 2;
-  string showCategories = 3;
-  string navigateUri = 4;
-  string imageUri = 5;
+  string show_categories = 3;
+  string navigate_uri = 4;
+  string image_uri = 5;
 }
