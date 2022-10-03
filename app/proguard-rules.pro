@@ -52,6 +52,8 @@
 -keep class com.spotify.** {*;}
 -keep class spotify.** {*;}
 -keep class bruhcollective.itaysonlab.swedentricks.** {*;}
+-keep class bruhcollective.itaysonlab.jetispot.proto.** {*;}
+-keep class com.google.protobuf.Any {*;}
 -keep class * extends com.google.protobuf.AbstractMessage {*;}
 
 # librespot

@@ -64,7 +64,7 @@ fun MediumActionCardBinder(
 
                     Column {
                         Subtext(text = contentType)
-                        MediumText(text = title)
+                        MediumText(text = title, maxLines = 2)
                         Spacer(modifier = Modifier.height(8.dp))
                         Subtext(text = subtitle)
                     }
@@ -82,7 +82,7 @@ fun MediumActionCardBinder(
 
                     Subtext(text = fact)
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
 
                     DynamicPlayButton(
                         command = playCommand,

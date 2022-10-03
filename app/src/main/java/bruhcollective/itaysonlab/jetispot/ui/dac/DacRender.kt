@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.BuildConfig
 import bruhcollective.itaysonlab.jetispot.proto.ErrorComponent
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_home.*
 import bruhcollective.itaysonlab.jetispot.ui.dac.components_plans.*
@@ -58,20 +59,30 @@ fun DacRender (
     is SnappyGridSectionComponent -> {}
 
     is ErrorComponent -> {
-      Column {
-        Text(if (item.type == ErrorComponent.ErrorType.UNSUPPORTED) {
-          "DAC unsupported component"
-        } else {
-          "DAC rendering error"
-        }, Modifier.padding(horizontal = 16.dp))
-        Text(item.message ?: "", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), modifier = Modifier
-          .padding(top = 4.dp)
-          .padding(horizontal = 16.dp))
+      if (BuildConfig.DEBUG) {
+        Column {
+          Text(
+            if (item.type == ErrorComponent.ErrorType.UNSUPPORTED) {
+              "DAC unsupported component"
+            } else {
+              "DAC rendering error"
+            }, Modifier.padding(horizontal = 16.dp)
+          )
+          Text(
+            item.message ?: "",
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            modifier = Modifier
+              .padding(top = 4.dp)
+              .padding(horizontal = 16.dp)
+          )
+        }
       }
     }
 
     else -> {
-      Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}", modifier = Modifier.padding(16.dp))
+      if (BuildConfig.DEBUG) {
+        Text("DAC proto-known, but UI-unknown component: ${item::class.java.simpleName}\n\n${item}", modifier = Modifier.padding(16.dp))
+      }
     }
   }
 }
