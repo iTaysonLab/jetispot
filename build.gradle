@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        version_code = 12
-        version_name = "poc_v12"
+        version_code = 13
+        version_name = "poc_v13"
 
         compose_version = "1.3.0-beta03"
         compose_m3_version = "1.0.0-beta03"
