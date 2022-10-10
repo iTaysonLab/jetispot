@@ -73,6 +73,10 @@ android {
         }
     }
     namespace 'bruhcollective.itaysonlab.jetispot'
+    
+    lintOptions { 
+      abortOnError false 
+    }
 }
 
 moshi {
