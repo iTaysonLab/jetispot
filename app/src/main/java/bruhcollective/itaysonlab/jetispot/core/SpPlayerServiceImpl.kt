@@ -9,6 +9,7 @@ import androidx.media2.common.SessionPlayer
 import androidx.media2.session.MediaController
 import androidx.media2.session.SessionCommandGroup
 import androidx.media2.session.SessionToken
+import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
 import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper
 import bruhcollective.itaysonlab.jetispot.playback.service.SpPlaybackService
@@ -20,7 +21,7 @@ import kotlinx.coroutines.flow.flow
 
 class SpPlayerServiceImpl(
   private val context: Context,
-  private val manager: SpPlayerServiceManager
+  private val manager: SpPlayerServiceManager,
 ) : MediaController.ControllerCallback(), CoroutineScope by MainScope() {
   private var mediaController: MediaController? = null
   private var svcInit: (MediaController.() -> Unit)? = null
@@ -32,8 +33,8 @@ class SpPlayerServiceImpl(
       if (manager.playbackState.value == SpPlayerServiceManager.PlaybackState.Playing) {
         emit(mediaController?.currentPosition ?: 0L)
       }
-
-      delay(1000)
+      //Delay Ms
+      delay(50)
     }
   }.catch {
     emit(0L)
@@ -138,7 +139,6 @@ class SpPlayerServiceImpl(
                 p
               )
             )
-
             manager.runExtra {
               it.onTrackProgressChanged(p)
             }

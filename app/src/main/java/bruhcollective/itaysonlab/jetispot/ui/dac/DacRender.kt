@@ -26,6 +26,7 @@ fun DacRender (
   item: Message
 ) {
   when (item) {
+
     // AllPlans / PlanOverview
     is MultiUserMemberComponent -> MultiUserMemberComponentBinder(item)
     is BenefitListComponent -> BenefitListComponentBinder(item)
@@ -34,6 +35,8 @@ fun DacRender (
     is SingleUserRecurringComponent -> SingleUserComponentBinder(item)
     is SingleUserPrepaidComponent -> SingleUserComponentBinder(item)
     is SingleUserTrialComponent -> SingleUserComponentBinder(item)
+    is FallbackPlanComponent -> FallbackPlanComponentBinder(item)
+
     // Home
     is ToolbarComponent -> ToolbarComponentBinder(item)
     is ToolbarComponentV2 -> ToolbarComponent2Binder(item)

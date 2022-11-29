@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.jetispot
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
@@ -19,13 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import bruhcollective.itaysonlab.jetispot.SpApp.Companion.applicationScope
+import bruhcollective.itaysonlab.jetispot.SpApp.Companion.context
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.AppNavigation
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
@@ -37,7 +44,11 @@ import com.google.accompanist.navigation.material.ExperimentalMaterialNavigation
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -220,6 +231,22 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+    companion object{
+
+        fun updateLanguage(context: Context = SpApp.context, language: String) {
+            val locale = Locale(language)
+            Locale.setDefault(locale)
+            val config = Configuration()
+            if (language.isEmpty()) {
+                val emptyLocaleList = LocaleListCompat.getEmptyLocaleList()
+                config.setLocale(emptyLocaleList[0])
+            } else {
+                config.setLocale(locale)
+            }
+
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
         }
     }
 }

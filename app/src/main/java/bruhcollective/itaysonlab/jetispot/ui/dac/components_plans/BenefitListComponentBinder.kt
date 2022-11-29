@@ -33,13 +33,11 @@ fun BenefitListComponentBinder(
       Row(Modifier.padding(16.dp)) {
         MediumText(text = stringResource(id = R.string.plan_includes))
       }
-
       Surface(
         tonalElevation = 8.dp, modifier = Modifier
           .height(1.dp)
           .fillMaxWidth()
       ) {}
-
       item.benefitsList.forEach { benefit ->
         Row(
           Modifier

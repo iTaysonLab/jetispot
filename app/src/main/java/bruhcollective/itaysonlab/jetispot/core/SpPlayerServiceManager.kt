@@ -8,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.util.Pair
+import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
+import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsRequester
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
 import bruhcollective.itaysonlab.jetispot.playback.helpers.MediaItemWrapper

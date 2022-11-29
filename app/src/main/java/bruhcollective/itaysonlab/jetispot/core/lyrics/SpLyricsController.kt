@@ -1,20 +1,21 @@
 package bruhcollective.itaysonlab.jetispot.core.lyrics
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import com.spotify.lyrics.v2.lyrics.proto.LyricsResponse.LyricsLine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import xyz.gianlu.librespot.common.Base62
-import xyz.gianlu.librespot.common.Utils
-import xyz.gianlu.librespot.metadata.TrackId
 import javax.inject.Inject
 
 class SpLyricsController @Inject constructor(
-    private val requester: SpLyricsRequester
+    private val requester: SpLyricsRequester,
+    private val manager: SpPlayerServiceManager
 ): CoroutineScope by MainScope() {
     private val base62 = Base62.createInstanceWithInvertedCharacterSet()
     private var _songJob: Job? = null
@@ -52,10 +53,14 @@ class SpLyricsController @Inject constructor(
         }
     }
 
-    fun setProgress(pos: Long) {
-        currentSongLine = currentLyricsLines.firstOrNull {
-            it.startTimeMs >= pos
-        }?.words ?: ""
+    fun setProgress(pos: Long){
+        val lyricIndex = currentLyricsLines.indexOfLast { it.startTimeMs < pos }
+
+        if (lyricIndex == -1) {
+            currentSongLine = "\uD83C\uDFB5"
+        } else {
+            currentSongLine = currentLyricsLines[lyricIndex].words
+        }
     }
 
     class ProviderInfo(
