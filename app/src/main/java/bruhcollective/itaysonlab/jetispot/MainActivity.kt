@@ -78,6 +78,9 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        runBlocking{
+            updateLanguage(context, LocaleHelper.getLanguage(context))
+        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 

@@ -68,9 +68,10 @@ fun NowPlayingLyricsComposition(
                         IntOffset(x = 0, y = (48.dp.toPx() * (1f - rvStateProgress)).toInt())
                     }) {
 
-                LazyColumn {
+                LazyColumn(modifier = Modifier.padding(12.dp)) {
                     items(viewModel.spLyricsController.currentLyricsLines) { line ->
                         Text(text = line.words, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.height(4.dp))
                     }
                 }
             }

@@ -47,7 +47,8 @@ fun NowPlayingScreen(
         .clickable { scope.launch { bottomSheetState.expand() } }
         .fillMaxWidth()
         .height(72.dp)
-        .align(Alignment.TopStart)
+        .align(Alignment.TopStart),
+      visible = bsOffset() <= 0.99f
     )
   }
 }

@@ -29,22 +29,22 @@
     <string name="config_pbquality">Audio quality</string>
 
     <string name="quality_low">Low</string>
-    <string name="quality_low_desc">~ 24kbit/s</string>
+    <string name="quality_low_desc" translatable="false">~ 24kbit/s</string>
     <string name="quality_normal">Normal</string>
-    <string name="quality_normal_desc">~ 96kbit/s</string>
+    <string name="quality_normal_desc" translatable="false">~ 96kbit/s</string>
     <string name="quality_high">High</string>
-    <string name="quality_high_desc">~ 160kbit/s</string>
+    <string name="quality_high_desc" translatable="false">~ 160kbit/s</string>
     <string name="quality_very_high">Very high</string>
-    <string name="quality_very_high_desc">~ 320kbit/s</string>
+    <string name="quality_very_high_desc" translatable="false">~ 320kbit/s</string>
 
     <string name="config_normalization">Audio normalization</string>
     <string name="normalization_disabled">Disabled</string>
     <string name="normalization_quiet">Quiet</string>
-    <string name="normalization_quiet_desc">-5 dB</string>
+    <string name="normalization_quiet_desc" translatable="false">-5 dB</string>
     <string name="normalization_balanced">Normal</string>
-    <string name="normalization_balanced_desc">3 dB</string>
+    <string name="normalization_balanced_desc" translatable="false">3 dB</string>
     <string name="normalization_loud">Loud</string>
-    <string name="normalization_loud_desc">6 dB</string>
+    <string name="normalization_loud_desc" translatable="false">6 dB</string>
 
     <string name="config_crossfade">Crossfade</string>
     <string name="crossfade_disabled">Disabled</string>
@@ -152,4 +152,5 @@
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
     <string name="system_default">System default</string>
+    <string name="your_library">Your library</string>
 </resources>

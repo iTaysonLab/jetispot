@@ -25,7 +25,7 @@ fun PreviewableAsyncImage (
   placeholderType: String?,
   modifier: Modifier
 ) {
-  if (imageUrl.isNullOrEmpty() || imageUrl == "https://i.scdn.co/image/") {
+  if (imageUrl.isNullOrEmpty() || imageUrl == "https://i.scdn.co/image/" || imageUrl.startsWith("spotify:mosaic")) {
     Box(modifier) {
       ImagePreview(placeholderType, modifier)
     }

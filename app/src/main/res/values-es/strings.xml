@@ -108,4 +108,12 @@
     <string name="auto_tabs_recent">Reciente</string>
     <string name="auto_tabs_browse">Buscar</string>
     <string name="auto_tabs_library">Biblioteca</string>
+    <string name="your_library">Tu biblioteca</string>
+    <string name="system_default">Predeterminado del sistema</string>
+    <string name="auth_err_premium">Para usar Jetispot necesitas una cuenta premium... O no jeje</string>
+    <string name="config_crossfade">Crossfade</string>
+    <string name="crossfade_disabled">Deshabilitado</string>
+    <string name="plan_member">Miembro del plan</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
 </resources>

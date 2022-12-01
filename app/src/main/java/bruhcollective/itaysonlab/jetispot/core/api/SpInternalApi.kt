@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
+import bruhcollective.itaysonlab.jetispot.core.objs.playlists.LikedSongsResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
@@ -24,6 +25,9 @@ interface SpInternalApi {
 
   @GET("/radio-apollo/v5/radio-hub")
   suspend fun getRadioHub(): HubResponse
+
+  @GET("/me/tracks")
+  suspend fun getSavedTracks(): LikedSongsResponse
 
   @GET("/hubview-mobile-v1/browse/{id}")
   suspend fun getBrowseView(@Path("id") pageId: String = ""): HubResponse

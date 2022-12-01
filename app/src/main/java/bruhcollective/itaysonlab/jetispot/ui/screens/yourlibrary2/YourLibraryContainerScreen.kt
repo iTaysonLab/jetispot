@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.collection.db.LocalCollectionDao
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.CollectionEntry
 import bruhcollective.itaysonlab.jetispot.core.collection.db.model2.PredefCeType
@@ -50,7 +51,7 @@ fun YourLibraryContainerScreen(
   Scaffold(topBar = {
     Column {
       TopAppBar(title = {
-        Text("Your Library")
+        Text(stringResource(id = R.string.your_library))
       }, navigationIcon = {
         IconButton(onClick = { /* TODO */ }) {
           Icon(Icons.Rounded.AccountCircle, null)
