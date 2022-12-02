@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.playback.helpers
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.media2.common.MediaItem
 import androidx.media2.common.MediaMetadata
+import bruhcollective.itaysonlab.jetispot.R
 
 class MediaItemWrapper(
   private val item: MediaItem? = null

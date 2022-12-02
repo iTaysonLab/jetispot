@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.hub
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -41,6 +42,7 @@ class LikedSongsViewModel @Inject constructor(
   override suspend fun calculateDominantColor(url: String, dark: Boolean) = Color.Transparent
 
   suspend fun load(fullUri: String, id: String) = load {
+    Log.i("LikedSongsViewModel", "Loading liked songs; Full URI: $fullUri, ID: $id")
     val artistTracks = spCollectionManager.tracksByArtist(ArtistId.fromBase62(id).hexId())
 
     HubResponse(body = buildList {

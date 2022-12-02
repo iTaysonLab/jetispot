@@ -10,6 +10,8 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubComponent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
 
+//TODO: FIX UNSUPPORTED ID IN LISTENING HISTORY - BOBBYESP
+
 @Composable
 fun HubBinder (
   item: HubItem,

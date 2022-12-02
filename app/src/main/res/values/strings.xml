@@ -153,4 +153,16 @@
     <string name="spanish">Spanish</string>
     <string name="system_default">System default</string>
     <string name="your_library">Your library</string>
+    <string name="unknown_title">Unknown Title</string>
+    <string name="unknown_artist">Unknown Artist</string>
+    <string name="unknown_album">Unknown Album</string>
+    <string name="search_placeholder">What would you like to listen?</string>
+    <string name="song_prefix_with_dot">"Song • "</string>
+    <string name="playlist_personalized_for_you">Playlist • Personalized for you</string>
+    <string name="playlist_owned_by_spotify">Playlist • By Spotify</string>
+    <string name="playlist_prefix">"Playlist"</string>
+    <string name="album_with_dot">"Album • "</string>
+    <string name="artist">Artist</string>
+    <string name="search_no_results">Nothing was found</string>
+    <string name="search_no_results_desc">Correct your request and try again</string>
 </resources>

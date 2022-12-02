@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetispot.core
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,6 +65,7 @@ class SpPlayerServiceManager @Inject constructor(
   fun play(data: PlayFromContextData) = play(data.uri, data.player)
 
   fun play(uri: String, data: PlayFromContextPlayerData) = impl.awaitService {
+    Log.i("SpPlayerServiceManager", "Trying to play audio with $uri as URI and $data as data")
     setMediaUri(uri.toUri(), Bundle().also { it.putString("sp_json", moshi.adapter<PlayFromContextPlayerData>().toJson(data)) })
   }
 
