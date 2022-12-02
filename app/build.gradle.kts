@@ -124,6 +124,17 @@ android {
         kotlinCompilerExtensionVersion = compose_compiler_version
     }
 
+    applicationVariants.all {
+        outputs.all {
+            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName =
+                "Spowlo-${defaultConfig.versionName}-${name}.apk"
+        }
+    }
+
+    lint {
+        disable.addAll(listOf("MissingTranslation", "ExtraTranslation"))
+    }
+
     packagingOptions {
         resources {
             excludes += "/META-INF/*.kotlin_module"
