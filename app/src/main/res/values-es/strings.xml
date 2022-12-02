@@ -119,4 +119,13 @@
     <string name="unknown_title">Título desconocido</string>
     <string name="unknown_artist">Artista desconocido</string>
     <string name="unknown_album">Álbum desconocido</string>
+    <string name="search_placeholder">Que te gustaría escuchar?</string>
+    <string name="song_prefix_with_dot">"Canción • "</string>
+    <string name="playlist_personalized_for_you">Lista de reproducción • Personalizada para tí</string>
+    <string name="playlist_owned_by_spotify">Lista de reproducción • Hecha por Spotify</string>
+    <string name="album_with_dot">"Álbum • "</string>
+    <string name="artist">Artista</string>
+    <string name="search_no_results">No se han encontrado resultados</string>
+    <string name="search_no_results_desc">Cambia tu criterio de búsqueda y vuelve a intentarlo</string>
+    <string name="playlist_prefix">Lista de reproducción</string>
 </resources>

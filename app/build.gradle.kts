@@ -13,8 +13,8 @@ plugins {
 apply(plugin = "dagger.hilt.android.plugin")
 
 val versionMajor = 0
-val versionMinor = 2
-val versionPatch = 1
+val versionMinor = 1
+val versionPatch = 0
 val versionBuild = 0
 val isStable = true
 
@@ -150,6 +150,8 @@ moshi {
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+
 
     // AndroidX
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")

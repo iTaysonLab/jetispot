@@ -104,6 +104,8 @@ fun AppNavigation(
     composable(Screen.Search.route) { SearchScreen() }
     composable(Screen.Library.route) { YourLibraryContainerScreen() }
 
+    //DIALOGS
+
     dialog(Dialog.AuthDisclaimer.route) {
       AlertDialog(onDismissRequest = { navController.popBackStack() }, icon = {
         Icon(Icons.Rounded.Warning, null)
@@ -138,6 +140,10 @@ fun AppNavigation(
           Text(stringResource(id = R.string.logout_cancel))
         }
       })
+    }
+
+    dialog(Dialog.UpdateAvailable.route){
+      //TODO: implement update dialog
     }
 
     bottomSheet(BottomSheet.JumpToArtist.route) { entry ->

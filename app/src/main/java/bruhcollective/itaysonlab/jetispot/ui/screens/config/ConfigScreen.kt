@@ -109,12 +109,12 @@ class ConfigScreenViewModel @Inject constructor(
     }, {}))
 
     add(ConfigItem.Preference(R.string.about_sources, { ctx, _ -> "" }, {
-      it.openInBrowser("https://github.com/itaysonlab/jetispot")
+      it.openInBrowser("https://github.com/BobbyESP/Jetispot")
     }))
 
-    add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
+    /*add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
       it.openInBrowser("https://t.me/bruhcollective")
-    }))
+    }))*/
   }
 
   override fun isRoot() = false

@@ -47,7 +47,8 @@ enum class Dialog(
   val route: String
 ) {
   AuthDisclaimer("dialogs/disclaimers"),
-  Logout("dialogs/logout")
+  Logout("dialogs/logout"),
+  UpdateAvailable("dialogs/updateAvailable")
 }
 
 @Immutable
