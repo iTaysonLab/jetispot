@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
@@ -113,13 +114,14 @@ class NowPlayingViewModel @Inject constructor(
       "playlist" -> R.string.playing_src_playlist
       "album" -> R.string.playing_src_album
       "artist" -> R.string.playing_src_artist
+      "search" -> R.string.playing_src_search
       else -> R.string.playing_src_unknown
     }
   }
 
   fun getHeaderText(): String {
     return when {
-      currentContextUri.value.contains("collection") -> "Liked Songs" // TODO: to R.string
+      currentContextUri.value.contains("collection") -> SpApp.context.getString(R.string.liked_songs) // TODO: to R.string
       else -> currentContext.value
     }
   }

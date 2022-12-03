@@ -18,7 +18,7 @@ import java.util.*
 // TODO: Leave as it right now, later separate into other interfaces
 interface SpInternalApi {
   @GET("/homeview/v1/home")
-  suspend fun getHomeView(@Query("is_car_connected") carConnected: Boolean): HubResponse
+  suspend fun getHomeView(@Query("is_car_connected") carConnected: Boolean, @Query("locale") locale: String? = ""): HubResponse
 
   @GET("/chartview/v5/overview/android")
   suspend fun getChartView(): HubResponse

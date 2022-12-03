@@ -42,7 +42,7 @@ class SearchViewModel @Inject constructor(
                 PlayFromContextPlayerData(
                     context = PfcContextData(url = "context://$uri", uri = uri),
                     state = PfcState(PfcStateOptions(shuffling_context = false)),
-                    options = PfcOptions(player_options_override = PfcStateOptions(shuffling_context = false) )
+                    options = PfcOptions(player_options_override = PfcStateOptions(shuffling_context = false))
                 )
 
         ))
