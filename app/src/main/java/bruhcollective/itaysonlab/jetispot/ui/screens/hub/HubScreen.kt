@@ -49,17 +49,6 @@ fun HubScreen(
 
   LaunchedEffect(Unit) {
     viewModel.load(onAppBarTitleChange, loader)
-      /*launch(Dispatchers.IO) {
-        kotlin.runCatching {
-          val temp = UpdateUtil.checkForUpdate()
-          if (temp != null) {
-            latestRelease = temp
-            showUpdateDialog = true
-          }
-        }.onFailure {
-          it.printStackTrace()
-        }
-      }*/
   }
 
   if(showUpdateDialog) {
@@ -165,3 +154,15 @@ class HubScreenViewModel @Inject constructor(
     object Loading : State()
   }
 }
+
+/*launch(Dispatchers.IO) {
+  kotlin.runCatching {
+    val temp = UpdateUtil.checkForUpdate()
+    if (temp != null) {
+      latestRelease = temp
+      showUpdateDialog = true
+    }
+  }.onFailure {
+    it.printStackTrace()
+  }
+}*/
