@@ -18,17 +18,27 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.SubtextOverline
 
 @Composable
-fun HomeSectionLargeHeader (
-  item: HubItem
+fun HomeSectionLargeHeader(
+    item: HubItem
 ) {
-  Row(Modifier.padding(vertical = 8.dp).clickableHub(item)) {
-    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
-      .size(48.dp)
-      .clip(CircleShape))
+    Row(
+      Modifier
+        .padding(vertical = 8.dp)
+        .clickableHub(item)) {
+        PreviewableAsyncImage(
+            imageUrl = item.images?.main?.uri,
+            placeholderType = item.images?.main?.placeholder,
+            modifier = Modifier
+              .size(48.dp)
+              .clip(CircleShape)
+        )
 
-    Column(Modifier.padding(horizontal = 12.dp).align(Alignment.CenterVertically)) {
-      SubtextOverline(item.text!!.subtitle!!.uppercase(), modifier = Modifier)
-      MediumText(item.text.title!!, modifier = Modifier.padding(top = 2.dp), fontSize = 21.sp)
+        Column(
+          Modifier
+            .padding(horizontal = 12.dp)
+            .align(Alignment.CenterVertically)) {
+            SubtextOverline(item.text!!.subtitle!!.uppercase(), modifier = Modifier)
+            MediumText(item.text.title!!, modifier = Modifier.padding(top = 2.dp), fontSize = 21.sp)
+        }
     }
-  }
 }

@@ -33,78 +33,100 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AlbumHeader(
-  item: HubItem
+    item: HubItem
 ) {
-  val darkTheme = isSystemInDarkTheme()
-  val dominantColor = remember { mutableStateOf(Color.Transparent) }
-  val dominantColorAsBg = animateColorAsState(dominantColor.value)
-  val delegate = LocalHubScreenDelegate.current
+    val darkTheme = isSystemInDarkTheme()
+    val dominantColor = remember { mutableStateOf(Color.Transparent) }
+    val dominantColorAsBg = animateColorAsState(dominantColor.value)
+    val delegate = LocalHubScreenDelegate.current
 
-  LaunchedEffect(Unit) {
-    launch {
-      if (dominantColor.value != Color.Transparent) return@launch
-      dominantColor.value = delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
-    }
-  }
-
-  Column(modifier = Modifier
-    .fillMaxHeight()
-    .background(
-      brush = Brush.verticalGradient(
-        colors = listOf(dominantColorAsBg.value, Color.Transparent)
-      )
-    )
-    .padding(top = 16.dp)
-    .statusBarsPadding()) {
-
-    PreviewableAsyncImage(item.images?.main?.uri, item.images?.main?.placeholder, modifier = Modifier
-      .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
-      .align(Alignment.CenterHorizontally)
-      .padding(bottom = 8.dp))
-
-    MediumText(text = item.text!!.title!!, fontSize = 21.sp, modifier = Modifier
-      .padding(horizontal = 16.dp)
-      .padding(top = 8.dp))
-
-    if (item.metadata!!.album!!.artists.size == 1) {
-      // large
-      Row(modifier = Modifier
-        .navClickable(enableRipple = false) { navController ->
-          HubEventHandler.handle(
-            navController,
-            delegate,
-            HubEvent.NavigateToUri(NavigateUri(item.metadata.album!!.artists[0].uri!!))
-          )
+    LaunchedEffect(Unit) {
+        launch {
+            if (dominantColor.value != Color.Transparent) return@launch
+            dominantColor.value =
+                delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
         }
-        .padding(horizontal = 16.dp)
-        .padding(vertical = 12.dp)) {
-        AsyncImage(model = item.metadata.album!!.artists.first().images!![0].uri, contentScale = ContentScale.Crop, contentDescription = null, modifier = Modifier
-          .clip(CircleShape)
-          .size(32.dp))
-        MediumText(text = item.metadata.album.artists.first().name!!, fontSize = 13.sp, modifier = Modifier
-          .align(Alignment.CenterVertically)
-          .padding(start = 12.dp))
-      }
-    } else {
-      Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        item.metadata.album!!.artists.forEachIndexed { idx, artist ->
-          MediumText(text = artist.name!!, fontSize = 13.sp, modifier = Modifier.navClickable(enableRipple = false) { navController ->
-            HubEventHandler.handle(
-              navController,
-              delegate,
-              HubEvent.NavigateToUri(NavigateUri(artist.uri!!))
+    }
+
+    Column(
+        modifier = Modifier
+          .fillMaxHeight()
+          .background(
+            brush = Brush.verticalGradient(
+              colors = listOf(dominantColorAsBg.value, Color.Transparent)
             )
-          })
+          )
+          .padding(top = 16.dp)
+          .statusBarsPadding()
+    ) {
 
-          if (idx != item.metadata.album.artists.lastIndex) {
-            MediumText(text = " • ", fontSize = 13.sp)
-          }
+        PreviewableAsyncImage(
+            item.images?.main?.uri, item.images?.main?.placeholder, modifier = Modifier
+            .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
+            .align(Alignment.CenterHorizontally)
+            .padding(bottom = 8.dp)
+        )
+
+        MediumText(
+            text = item.text!!.title!!, fontSize = 21.sp, modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp)
+        )
+
+        if (item.metadata!!.album!!.artists.size == 1) {
+            // large
+            Row(modifier = Modifier
+              .navClickable(enableRipple = false) { navController ->
+                HubEventHandler.handle(
+                  navController,
+                  delegate,
+                  HubEvent.NavigateToUri(NavigateUri(item.metadata.album!!.artists[0].uri!!))
+                )
+              }
+              .padding(horizontal = 16.dp)
+              .padding(vertical = 12.dp)) {
+                AsyncImage(
+                    model = item.metadata.album!!.artists.first().images!![0].uri,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier
+                      .clip(CircleShape)
+                      .size(32.dp)
+                )
+                MediumText(
+                    text = item.metadata.album.artists.first().name!!,
+                    fontSize = 13.sp,
+                    modifier = Modifier
+                      .align(Alignment.CenterVertically)
+                      .padding(start = 12.dp)
+                )
+            }
+        } else {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                item.metadata.album!!.artists.forEachIndexed { idx, artist ->
+                    MediumText(
+                        text = artist.name!!,
+                        fontSize = 13.sp,
+                        modifier = Modifier.navClickable(enableRipple = false) { navController ->
+                            HubEventHandler.handle(
+                                navController,
+                                delegate,
+                                HubEvent.NavigateToUri(NavigateUri(artist.uri!!))
+                            )
+                        })
+
+                    if (idx != item.metadata.album.artists.lastIndex) {
+                        MediumText(text = " • ", fontSize = 13.sp)
+                    }
+                }
+            }
         }
-      }
+
+        Subtext(
+            text = "${item.metadata.album!!.type} • ${item.metadata.album.year}",
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        EntityActionStrip(delegate, item)
     }
-
-    Subtext(text = "${item.metadata.album!!.type} • ${item.metadata.album.year}", modifier = Modifier.padding(horizontal = 16.dp))
-
-    EntityActionStrip(delegate, item)
-  }
 }

@@ -32,94 +32,134 @@ import java.text.DateFormat
 import java.util.*
 
 @Composable
-fun EpisodeListItem (
-  item: HubItem
+fun EpisodeListItem(
+    item: HubItem
 ) {
-  val episode = remember { item.custom!!["episode"] as Metadata.Episode }
-  val imageUrl = remember { SpUtils.getImageUrl(episode.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId) }
-  val formattedDuration = remember { DateUtils.formatElapsedTime(episode.duration / 1000L) }
-  val formattedPublishDate = remember {
-    DateFormat.getDateInstance().format(Calendar.getInstance().apply {
-      set(episode.publishTime.year, episode.publishTime.month, episode.publishTime.day, episode.publishTime.hour, episode.publishTime.minute)
-    }.time)
-  }
-
-  Column(
-    Modifier
-      .fillMaxWidth()
-      .padding(horizontal = 16.dp, vertical = 8.dp)) {
-    Row {
-      PreviewableAsyncImage(imageUrl = imageUrl, placeholderType = "podcast", modifier = Modifier
-        .size(56.dp)
-        .clip(RoundedCornerShape(8.dp)))
-      Text(text = episode.name, modifier = Modifier
-        .padding(start = 16.dp)
-        .align(Alignment.CenterVertically), color = MaterialTheme.colorScheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
+    val episode = remember { item.custom!!["episode"] as Metadata.Episode }
+    val imageUrl =
+        remember { SpUtils.getImageUrl(episode.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId) }
+    val formattedDuration = remember { DateUtils.formatElapsedTime(episode.duration / 1000L) }
+    val formattedPublishDate = remember {
+        DateFormat.getDateInstance().format(Calendar.getInstance().apply {
+            set(
+                episode.publishTime.year,
+                episode.publishTime.month,
+                episode.publishTime.day,
+                episode.publishTime.hour,
+                episode.publishTime.minute
+            )
+        }.time)
     }
 
-    Spacer(Modifier.height(16.dp))
-
-    Text(text = episode.description, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), fontSize = 13.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
-
-    Spacer(Modifier.height(16.dp))
-
-    Row {
-      if (episode.explicit) {
-        Icon(Icons.Rounded.Explicit, tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), contentDescription = null, modifier = Modifier
-          .size(16.dp)
-          .align(Alignment.CenterVertically))
-        Text(text = " • ", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), fontSize = 13.sp)
-      }
-
-      Text(text = "$formattedDuration • $formattedPublishDate", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f), fontSize = 13.sp)
-    }
-
-    Spacer(Modifier.height(16.dp))
-
-    Row {
-      IconButton(onClick = { /*TODO*/ },
-        Modifier
-          .offset(y = 2.dp)
-          .align(Alignment.CenterVertically)
-          .size(28.dp)) {
-        Icon(Icons.Rounded.AddCircle, null)
-      }
-
-      Spacer(Modifier.width(16.dp))
-
-      IconButton(onClick = { /*TODO*/ },
-        Modifier
-          .offset(y = 2.dp)
-          .align(Alignment.CenterVertically)
-          .size(28.dp)) {
-        Icon(Icons.Rounded.Share, null)
-      }
-
-      Spacer(Modifier.weight(1f))
-
-      Box(
-        Modifier
-          .clickableHub(item)
-          .size(28.dp)
-          .clip(CircleShape)
-          .background(MaterialTheme.colorScheme.primary)
-      ) {
-        Icon(
-          imageVector = Icons.Rounded.PlayArrow,
-          tint = MaterialTheme.colorScheme.onPrimary,
-          contentDescription = null,
-          modifier = Modifier
-            .size(24.dp)
-            .align(Alignment.Center)
-        )
-      }
-    }
-
-    Box(
+    Column(
       Modifier
-        .padding(top = 16.dp)
-        .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
         .fillMaxWidth()
-        .height(1.dp)) {}
-  }
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row {
+            PreviewableAsyncImage(
+                imageUrl = imageUrl, placeholderType = "podcast", modifier = Modifier
+                .size(56.dp)
+                .clip(RoundedCornerShape(8.dp))
+            )
+            Text(
+                text = episode.name,
+                modifier = Modifier
+                  .padding(start = 16.dp)
+                  .align(Alignment.CenterVertically),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            text = episode.description,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 13.sp,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Row {
+            if (episode.explicit) {
+                Icon(
+                    Icons.Rounded.Explicit,
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    contentDescription = null,
+                    modifier = Modifier
+                      .size(16.dp)
+                      .align(Alignment.CenterVertically)
+                )
+                Text(
+                    text = " • ",
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    fontSize = 13.sp
+                )
+            }
+
+            Text(
+                text = "$formattedDuration • $formattedPublishDate",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                fontSize = 13.sp
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Row {
+            IconButton(
+                onClick = { /*TODO*/ },
+              Modifier
+                .offset(y = 2.dp)
+                .align(Alignment.CenterVertically)
+                .size(28.dp)
+            ) {
+                Icon(Icons.Rounded.AddCircle, null)
+            }
+
+            Spacer(Modifier.width(16.dp))
+
+            IconButton(
+                onClick = { /*TODO*/ },
+              Modifier
+                .offset(y = 2.dp)
+                .align(Alignment.CenterVertically)
+                .size(28.dp)
+            ) {
+                Icon(Icons.Rounded.Share, null)
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            Box(
+              Modifier
+                .clickableHub(item)
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primary)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.PlayArrow,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    contentDescription = null,
+                    modifier = Modifier
+                      .size(24.dp)
+                      .align(Alignment.Center)
+                )
+            }
+        }
+
+        Box(
+          Modifier
+            .padding(top = 16.dp)
+            .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
+            .fillMaxWidth()
+            .height(1.dp)
+        ) {}
+    }
 }

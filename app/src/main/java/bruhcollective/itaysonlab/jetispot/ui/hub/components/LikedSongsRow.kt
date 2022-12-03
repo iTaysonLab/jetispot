@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
@@ -24,6 +25,7 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 import kotlinx.coroutines.launch
+import bruhcollective.itaysonlab.jetispot.R
 import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
@@ -36,7 +38,7 @@ fun LikedSongsRow(
   LaunchedEffect(Unit) {
     launch {
       val count = delegate.getLikedSongsCount(ArtistId.fromBase62((item.events!!.click as HubEvent.NavigateToUri).data.uri.split(":").last()).hexId())
-      likedSongsInfo.value = if (count == 0) "" else "$count songs by ${item.metadata!!.artist!!.name}"
+      likedSongsInfo.value = if (count == 0) "" else "$count " + SpApp.context.getString(R.string.songs_by) + " ${item.metadata!!.artist!!.name}"
     }
   }
 

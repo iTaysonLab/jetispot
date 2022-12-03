@@ -26,8 +26,8 @@ fun ShortcutsCard(
                 3.dp
             )
         ), modifier = Modifier
-        .height(56.dp)
-        .fillMaxWidth()
+            .height(56.dp)
+            .fillMaxWidth()
     ) {
         Row(Modifier.clickableHub(item)) {
             PreviewableAsyncImage(
@@ -42,9 +42,9 @@ fun ShortcutsCard(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                  .align(Alignment.CenterVertically)
-                  .padding(horizontal = 8.dp)
-                  .fillMaxWidth()
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth()
             )
         }
     }

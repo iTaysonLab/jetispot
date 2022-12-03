@@ -24,20 +24,21 @@ fun GridMediumCard(
     val size = 160.dp
 
     Column(
-      Modifier
-        .fillMaxWidth()
-        .clickableHub(item)) {
+        Modifier
+            .fillMaxWidth()
+            .clickableHub(item)
+    ) {
         var drawnTitle = false
 
         PreviewableAsyncImage(
             imageUrl = item.images?.main?.uri,
             placeholderType = item.images?.main?.placeholder,
             modifier = Modifier
-              .size(size)
-              .clip(
-                RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
-              )
-              .align(Alignment.CenterHorizontally)
+                .size(size)
+                .clip(
+                    RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
+                )
+                .align(Alignment.CenterHorizontally)
         )
 
         if (!item.text?.title.isNullOrEmpty()) {
@@ -46,9 +47,9 @@ fun GridMediumCard(
                 item.text!!.title!!,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(top = 8.dp)
-                  .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 16.dp)
             )
         }
 
@@ -57,18 +58,18 @@ fun GridMediumCard(
                 item.text!!.subtitle!!,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp)
-                  .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp)
+                    .padding(horizontal = 16.dp)
             )
         } else if (!item.text?.description.isNullOrEmpty()) {
             Subtext(
                 item.text!!.description!!,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp)
-                  .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .padding(top = if (drawnTitle) 2.dp else 8.dp, bottom = 12.dp)
+                    .padding(horizontal = 16.dp)
             )
         }
     }

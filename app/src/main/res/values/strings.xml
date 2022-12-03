@@ -166,4 +166,7 @@
     <string name="search_no_results">Nothing was found</string>
     <string name="search_no_results_desc">Correct your request and try again</string>
     <string name="playing_src_search">playing from search</string>
+    <string name="songs">songs</string>
+    <string name="songs_by">songs by</string>
+    <string name="likes_dot">"likes • "</string>
 </resources>

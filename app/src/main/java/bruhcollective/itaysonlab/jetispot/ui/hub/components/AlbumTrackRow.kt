@@ -14,18 +14,26 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun AlbumTrackRow(
-  item: HubItem
+    item: HubItem
 ) {
-  Column(Modifier.clickableHub(item).fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-    var drawnTitle = false
+    Column(
+      Modifier
+        .clickableHub(item)
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        var drawnTitle = false
 
-    if (!item.text?.title.isNullOrEmpty()) {
-      drawnTitle = true
-      MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
-    }
+        if (!item.text?.title.isNullOrEmpty()) {
+            drawnTitle = true
+            MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
+        }
 
-    if (!item.text?.subtitle.isNullOrEmpty()) {
-      Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
+        if (!item.text?.subtitle.isNullOrEmpty()) {
+            Subtext(
+                item.text!!.subtitle!!,
+                modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+            )
+        }
     }
-  }
 }

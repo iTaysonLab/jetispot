@@ -15,10 +15,20 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 
 @Composable
-fun HomeSectionHeader (
-  text: HubText,
+fun HomeSectionHeader(
+    text: HubText,
 ) {
-  Box(Modifier.padding(vertical = 8.dp).padding(horizontal = if (LocalHubScreenDelegate.current.isSurroundedWithPadding()) 0.dp else 16.dp)) {
-    Text(text = text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 21.sp, modifier = Modifier.align(Alignment.CenterStart))
-  }
+    Box(
+      Modifier
+        .padding(vertical = 8.dp)
+        .padding(horizontal = if (LocalHubScreenDelegate.current.isSurroundedWithPadding()) 0.dp else 16.dp)
+    ) {
+        Text(
+            text = text.title!!,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold,
+            fontSize = 21.sp,
+            modifier = Modifier.align(Alignment.CenterStart)
+        )
+    }
 }

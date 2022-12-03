@@ -54,7 +54,7 @@ fun CollectionHeader(
       .padding(horizontal = 16.dp)
       .padding(top = 8.dp))
 
-    Subtext(text = "${item.custom!!["count"]} songs", fontSize = 14.sp, modifier = Modifier
+    Subtext(text = "${item.custom!!["count"]}" + stringResource(id = R.string.songs), fontSize = 14.sp, modifier = Modifier
       .padding(horizontal = 16.dp)
       .padding(top = 2.dp))
 

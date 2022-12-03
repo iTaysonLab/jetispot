@@ -17,26 +17,41 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun MediumCard(
-  item: HubItem
+    item: HubItem
 ) {
-  val size = 160.dp
-  
-  Column(Modifier.width(size).clickableHub(item)) {
-    var drawnTitle = false
+    val size = 160.dp
 
-    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(size).clip(
-      RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
-    ))
+    Column(
+      Modifier
+        .width(size)
+        .clickableHub(item)) {
+        var drawnTitle = false
 
-    if (!item.text?.title.isNullOrEmpty()) {
-      drawnTitle = true
-      MediumText(item.text!!.title!!, modifier = Modifier.padding(top = 8.dp))
+        PreviewableAsyncImage(
+            imageUrl = item.images?.main?.uri,
+            placeholderType = item.images?.main?.placeholder,
+            modifier = Modifier
+              .size(size)
+              .clip(
+                RoundedCornerShape(if (item.images?.main?.isRounded == true) 12.dp else 0.dp)
+              )
+        )
+
+        if (!item.text?.title.isNullOrEmpty()) {
+            drawnTitle = true
+            MediumText(item.text!!.title!!, modifier = Modifier.padding(top = 8.dp))
+        }
+
+        if (!item.text?.subtitle.isNullOrEmpty()) {
+            Subtext(
+                item.text!!.subtitle!!,
+                modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+            )
+        } else if (!item.text?.description.isNullOrEmpty()) {
+            Subtext(
+                item.text!!.description!!,
+                modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+            )
+        }
     }
-
-    if (!item.text?.subtitle.isNullOrEmpty()) {
-      Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
-    } else if (!item.text?.description.isNullOrEmpty()) {
-      Subtext(item.text!!.description!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
-    }
-  }
 }

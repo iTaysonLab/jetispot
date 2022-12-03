@@ -17,12 +17,29 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 
 @Composable
 fun FindCard(
-  item: HubItem
+    item: HubItem
 ) {
-  Card(modifier = Modifier.height(100.dp).fillMaxWidth().clickableHub(item)) {
-    Box {
-      PreviewableAsyncImage(imageUrl = item.images?.background?.uri, placeholderType = item.images?.background?.placeholder, modifier = Modifier.fillMaxSize())
-      Text(item.text!!.title!!, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.TopStart).padding(12.dp))
+    Card(modifier = Modifier
+      .height(100.dp)
+      .fillMaxWidth()
+      .clickableHub(item)) {
+        Box {
+            PreviewableAsyncImage(
+                imageUrl = item.images?.background?.uri,
+                placeholderType = item.images?.background?.placeholder,
+                modifier = Modifier.fillMaxSize()
+            )
+            Text(
+                item.text!!.title!!,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                  .align(Alignment.TopStart)
+                  .padding(12.dp)
+            )
+        }
     }
-  }
 }
