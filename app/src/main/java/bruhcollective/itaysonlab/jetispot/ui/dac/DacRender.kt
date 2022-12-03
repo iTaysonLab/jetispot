@@ -56,6 +56,9 @@ fun DacRender (
     is SectionComponent -> SectionComponentBinder(item)
     is RecentlyPlayedSectionComponent -> RecentlyPlayedSectionComponentBinder()
 
+    //Podcasts
+    //EpisodeCardActionsMediumComponent ->
+
     // is SnappyGridSectionComponent -> SnappyGridSectionComponentBinder(item)
     // Other
 
