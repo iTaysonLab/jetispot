@@ -49,7 +49,7 @@ fun HubScreen(
 
   LaunchedEffect(Unit) {
     viewModel.load(onAppBarTitleChange, loader)
-      launch(Dispatchers.IO) {
+      /*launch(Dispatchers.IO) {
         kotlin.runCatching {
           val temp = UpdateUtil.checkForUpdate()
           if (temp != null) {
@@ -59,7 +59,7 @@ fun HubScreen(
         }.onFailure {
           it.printStackTrace()
         }
-      }
+      }*/
   }
 
   if(showUpdateDialog) {

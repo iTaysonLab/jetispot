@@ -14,7 +14,7 @@ apply(plugin = "dagger.hilt.android.plugin")
 
 val versionMajor = 0
 val versionMinor = 1
-val versionPatch = 0
+val versionPatch = 1
 val versionBuild = 0
 val isStable = true
 
@@ -87,7 +87,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources = true
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -127,7 +127,7 @@ android {
     applicationVariants.all {
         outputs.all {
             (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName =
-                "Spowlo-${defaultConfig.versionName}-${name}.apk"
+                "Jetispot-${defaultConfig.versionName}-${name}.apk"
         }
     }
 
