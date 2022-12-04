@@ -62,20 +62,21 @@ fun NowPlayingControls(
 private fun ControlsArtwork(
     viewModel: NowPlayingViewModel,
 ) {
-    PreviewableAsyncImage(
-        imageUrl = remember(viewModel.currentTrack.value) {
-            if (viewModel.currentQueue.value.isNotEmpty()) {
-                SpUtils.getImageUrl(viewModel.currentQueue.value[viewModel.currentQueuePosition.value].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
-            } else {
-                null
-            }
-        },
-        placeholderType = "track",
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .size(128.dp)
-            .clip(RoundedCornerShape(12.dp))
-    )
+    ElevatedCard(modifier = Modifier.padding(horizontal = 14.dp).clip(RoundedCornerShape(12.dp))) {
+        PreviewableAsyncImage(
+            imageUrl = remember(viewModel.currentTrack.value) {
+                if (viewModel.currentQueue.value.isNotEmpty()) {
+                    SpUtils.getImageUrl(viewModel.currentQueue.value[viewModel.currentQueuePosition.value].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
+                } else {
+                    null
+                }
+            },
+            placeholderType = "track",
+            modifier = Modifier
+                .size(128.dp)
+
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
