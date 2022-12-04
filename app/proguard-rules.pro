@@ -54,6 +54,7 @@
 -keep class bruhcollective.itaysonlab.swedentricks.** {*;}
 -keep class bruhcollective.itaysonlab.jetispot.proto.** {*;}
 -keep class com.google.protobuf.Any {*;}
+-keep class com.google.protobuf.GeneratedMessageV3 {*;}
 -keep class * extends com.google.protobuf.AbstractMessage {*;}
 
 # librespot
@@ -92,30 +93,5 @@
 -keep,allowobfuscation,allowshrinking interface retrofit2.Call
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
--dontwarn javax.sound.sampled.AudioFormat$Encoding
--dontwarn javax.sound.sampled.AudioFormat
--dontwarn javax.sound.sampled.AudioSystem
--dontwarn javax.sound.sampled.Control$Type
--dontwarn javax.sound.sampled.Control
--dontwarn javax.sound.sampled.DataLine$Info
--dontwarn javax.sound.sampled.FloatControl$Type
--dontwarn javax.sound.sampled.FloatControl
--dontwarn javax.sound.sampled.Line$Info
--dontwarn javax.sound.sampled.Line
--dontwarn javax.sound.sampled.LineUnavailableException
--dontwarn javax.sound.sampled.Mixer$Info
--dontwarn javax.sound.sampled.Mixer
--dontwarn javax.sound.sampled.SourceDataLine
 -dontwarn kotlinx.serialization.KSerializer
 -dontwarn kotlinx.serialization.Serializable
--dontwarn org.apache.logging.log4j.Level
--dontwarn org.apache.logging.log4j.core.config.Configurator
--dontwarn org.bouncycastle.jsse.BCSSLParameters
--dontwarn org.bouncycastle.jsse.BCSSLSocket
--dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
--dontwarn org.conscrypt.Conscrypt$Version
--dontwarn org.conscrypt.Conscrypt
--dontwarn org.conscrypt.ConscryptHostnameVerifier
--dontwarn org.openjsse.javax.net.ssl.SSLParameters
--dontwarn org.openjsse.javax.net.ssl.SSLSocket
--dontwarn org.openjsse.net.ssl.OpenJSSE
