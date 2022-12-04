@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -73,7 +72,6 @@ fun AppNavigation(
       DacRendererScreen("", true, {
         getDacHome(SpInternalApi.buildDacRequestForHome(it))
       })
-      Log.i("AppNavigation", "Feed loaded")
     }
 
     composable(Screen.SpotifyIdRedirect.route, deepLinks = listOf(navDeepLink {

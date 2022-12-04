@@ -27,7 +27,6 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -154,15 +153,3 @@ class HubScreenViewModel @Inject constructor(
     object Loading : State()
   }
 }
-
-/*launch(Dispatchers.IO) {
-  kotlin.runCatching {
-    val temp = UpdateUtil.checkForUpdate()
-    if (temp != null) {
-      latestRelease = temp
-      showUpdateDialog = true
-    }
-  }.onFailure {
-    it.printStackTrace()
-  }
-}*/

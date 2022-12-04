@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
-import android.util.Log
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.playlists.LikedSongsResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
@@ -101,7 +100,6 @@ interface SpInternalApi {
         appName = "ANDROID_MUSIC_APP"
         version = SpUtils.SPOTIFY_APP_VERSION
       }.build()
-      Log.d("SpInternalApi", "buildDacRequestForHome: $this")
     }.build()
   }
 }
