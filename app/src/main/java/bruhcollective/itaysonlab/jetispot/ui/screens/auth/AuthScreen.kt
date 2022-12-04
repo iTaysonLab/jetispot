@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
@@ -66,6 +67,11 @@ fun AuthScreen(
     if (snackbarContent.isNotEmpty()) {
       snackbarHostState.showSnackbar(snackbarContent)
     }
+  }
+
+  fun onLoginSuccess(){
+    navController.navigateAndClearStack(Screen.Feed)
+    viewModel.updateAudioQualityIfPremium(AudioQuality.VERY_HIGH)
   }
 
   val autofill = LocalAutofill.current
@@ -173,7 +179,7 @@ fun AuthScreen(
             viewModel.auth(
               username = username,
               password = password,
-              onSuccess = { navController.navigateAndClearStack(Screen.Feed) },
+              onSuccess = { onLoginSuccess() },
               onFailure = setSnackbarContent,
             )
           },

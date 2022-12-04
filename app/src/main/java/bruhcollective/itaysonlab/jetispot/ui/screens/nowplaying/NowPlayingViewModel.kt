@@ -121,7 +121,7 @@ class NowPlayingViewModel @Inject constructor(
 
   fun getHeaderText(): String {
     return when {
-      currentContextUri.value.contains("collection") -> SpApp.context.getString(R.string.liked_songs) // TODO: to R.string
+      currentContextUri.value.contains("collection") -> SpApp.context.getString(R.string.liked_songs)
       else -> currentContext.value
     }
   }

@@ -8,55 +8,69 @@ import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
+import com.spotify.pamviewservice.v1.proto.PremiumPlanRow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @Composable
 fun QualityConfigScreen(
-  viewModel: QualityConfigScreenViewModel = hiltViewModel()
+    viewModel: QualityConfigScreenViewModel = hiltViewModel()
 ) {
-  BaseConfigScreen(viewModel)
+    BaseConfigScreen(viewModel)
 }
 
 @HiltViewModel
 class QualityConfigScreenViewModel @Inject constructor(
-  private val spSessionManager: SpSessionManager,
-  private val spConfigurationManager: SpConfigurationManager
+    private val spSessionManager: SpSessionManager,
+    private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel(), ConfigViewModel {
-  private val configList = buildList {
-    add(ConfigItem.Radio(R.string.quality_low, R.string.quality_low_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.LOW
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.LOW).build()
-    }))
 
-    add(ConfigItem.Radio(R.string.quality_normal, R.string.quality_normal_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.NORMAL
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.NORMAL).build()
-    }))
-
-    add(ConfigItem.Radio(R.string.quality_high, R.string.quality_high_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.HIGH
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.HIGH).build()
-    }))
-
-    add(ConfigItem.Radio(R.string.quality_very_high, R.string.quality_very_high_desc, {
-      it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH
-    }, { true }, {
-      playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
-    }))
-
-    add(ConfigItem.Info(R.string.warn_quality))
-  }
-
-  override fun provideTitle() = R.string.config_pbquality
-  override fun provideDataStore() = spConfigurationManager.dataStore
-  override fun provideConfigList() = configList
-  override suspend fun modifyDatastore (runOnBuilder: AppConfig.Builder.() -> Unit) {
-    spConfigurationManager.dataStore.updateData {
-      it.toBuilder().apply(runOnBuilder).build()
+    suspend fun updateAudioQuality(audioQuality: AudioQuality) {
+        kotlin.run {
+            modifyDatastore {
+                playerConfig = playerConfig.toBuilder().setPreferredQuality(audioQuality).build()
+            }
+        }
     }
-  }
+
+    private val configList = buildList {
+        add(ConfigItem.Radio(R.string.quality_low, R.string.quality_low_desc, {
+            it.playerConfig.preferredQuality == AudioQuality.LOW
+        }, { true }, {
+            playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.LOW).build()
+        }))
+
+        add(ConfigItem.Radio(R.string.quality_normal, R.string.quality_normal_desc, {
+            it.playerConfig.preferredQuality == AudioQuality.NORMAL
+        }, { true }, {
+            playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.NORMAL).build()
+        }))
+
+        add(ConfigItem.Radio(R.string.quality_high, R.string.quality_high_desc, {
+            it.playerConfig.preferredQuality == AudioQuality.HIGH
+        }, { true }, {
+            playerConfig = playerConfig.toBuilder().setPreferredQuality(AudioQuality.HIGH).build()
+        }))
+
+        //if the user doesn't have premium, don't show the option to select very high quality
+        if (spSessionManager.session?.getUserAttribute("player-license") == "premium") {
+            add(ConfigItem.Radio(R.string.quality_very_high, R.string.quality_very_high_desc, {
+                it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH
+            }, { true }, {
+                playerConfig =
+                    playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
+            }))
+        }
+
+        add(ConfigItem.Info(R.string.warn_quality))
+    }
+
+    override fun provideTitle() = R.string.config_pbquality
+    override fun provideDataStore() = spConfigurationManager.dataStore
+    override fun provideConfigList() = configList
+    override suspend fun modifyDatastore(runOnBuilder: AppConfig.Builder.() -> Unit) {
+        spConfigurationManager.dataStore.updateData {
+            it.toBuilder().apply(runOnBuilder).build()
+        }
+    }
 }

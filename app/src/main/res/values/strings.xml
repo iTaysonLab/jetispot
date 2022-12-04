@@ -171,4 +171,5 @@
     <string name="likes_dot">"likes • "</string>
     <string name="no_lyrics">Ups, seems like this song have no lyrics…</string>
     <string name="language">Language</string>
+    <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Account.</string>
 </resources>

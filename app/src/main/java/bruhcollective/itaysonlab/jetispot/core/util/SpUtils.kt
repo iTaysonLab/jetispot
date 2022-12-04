@@ -26,4 +26,6 @@ object SpUtils {
 
     fun getScannableUrl(uri: String) = "https://scannables.scdn.co/uri/800/$uri"
     fun getImageUrl(bytes: ByteString?) = if (bytes != null) "https://i.scdn.co/image/${Utils.bytesToHex(bytes).lowercase()}" else null
+    //check if it's premium account
+
 }
