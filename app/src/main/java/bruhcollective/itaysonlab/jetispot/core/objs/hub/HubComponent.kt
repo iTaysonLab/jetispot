@@ -26,6 +26,9 @@ sealed class HubComponent {
   @TypeLabel("artist:likedSongsRow")
   object ArtistLikedSongs: HubComponent()
 
+  @TypeLabel("listeninghistory:playlistContextRow")
+  object HistoryPlaylist: HubComponent()
+
   // BROWSE
 
   @TypeLabel("find:categoryCard")

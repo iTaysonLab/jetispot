@@ -13,7 +13,6 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.clickableHub
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistPinnedItem(
@@ -38,7 +37,6 @@ fun ArtistPinnedItem(
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
-            Subtext(item.text.subtitle!!)
         }
     }
 }

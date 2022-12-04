@@ -53,7 +53,7 @@ class QualityConfigScreenViewModel @Inject constructor(
         }))
 
         //if the user doesn't have premium, don't show the option to select very high quality
-        if (spSessionManager.session?.getUserAttribute("player-license") == "premium") {
+        if (spSessionManager.session?.getUserAttribute("name") != "Spotify Free") {
             add(ConfigItem.Radio(R.string.quality_very_high, R.string.quality_very_high_desc, {
                 it.playerConfig.preferredQuality == AudioQuality.VERY_HIGH
             }, { true }, {

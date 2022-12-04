@@ -60,6 +60,7 @@ fun HubBinder (
     HubComponent.PodcastTopics -> PodcastTopicsStrip(item)
 
     HubComponent.OutlinedButton -> OutlineButton(item)
+    HubComponent.HistoryPlaylist -> PlaylistTrackRowLarger(item)
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {

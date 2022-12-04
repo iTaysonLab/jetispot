@@ -18,7 +18,7 @@ import java.util.*
 // TODO: Leave as it right now, later separate into other interfaces
 interface SpInternalApi {
   @GET("/homeview/v1/home")
-  suspend fun getHomeView(@Query("is_car_connected") carConnected: Boolean, @Query("locale") locale: String? = ""): HubResponse
+  suspend fun getHomeView(@Query("is_car_connected") carConnected: Boolean, @Query("locale") locale: String = "ES"): HubResponse
 
   @GET("/chartview/v5/overview/android")
   suspend fun getChartView(): HubResponse
@@ -49,7 +49,7 @@ interface SpInternalApi {
   suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true): ContentFilterResponse
 
   @POST("/home-dac-viewservice/v1/view")
-  suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome()): DacResponse
+  suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome(), @Query("locale") locale: String = "ES"): DacResponse
 
   @GET("/pam-view-service/v1/AllPlans")
   suspend fun getAllPlans(): DacResponse
@@ -95,6 +95,7 @@ interface SpInternalApi {
         facet = bFacet
         clientTimezone = TimeZone.getDefault().id
         putFeatureFlags("ic_flag_enabled", "true")
+        putFeatureFlags("locale", "ES")
       }.build())
       clientInfo = DacRequest.ClientInfo.newBuilder().apply {
         appName = "ANDROID_MUSIC_APP"
