@@ -27,6 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bruhcollective.itaysonlab.jetispot.SpApp
+import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 
 @Composable
@@ -43,8 +46,16 @@ fun NowPlayingLyricsComposition(
             )
 
             val size = Size(
-                width = lerp(viewModel.lyricsCardParams.second.width.toFloat(), size.width, rvStateProgress),
-                height = lerp(viewModel.lyricsCardParams.second.height.toFloat(), size.height, rvStateProgress),
+                width = lerp(
+                    viewModel.lyricsCardParams.second.width.toFloat(),
+                    size.width,
+                    rvStateProgress
+                ),
+                height = lerp(
+                    viewModel.lyricsCardParams.second.height.toFloat(),
+                    size.height,
+                    rvStateProgress
+                ),
             )
 
             val radius = androidx.compose.ui.unit.lerp(12.dp, 0.dp, rvStateProgress).toPx()
@@ -69,9 +80,31 @@ fun NowPlayingLyricsComposition(
                     }) {
 
                 LazyColumn(modifier = Modifier.padding(12.dp)) {
-                    items(viewModel.spLyricsController.currentLyricsLines) { line ->
-                        Text(text = line.words, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                        Spacer(modifier = Modifier.height(4.dp))
+                    if (viewModel.spLyricsController.currentLyricsState == SpLyricsController.LyricsState.Unavailable) {
+                        items(listOf(SpApp.context.getString(R.string.no_lyrics))) { item ->
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = item,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                        }
+                    } else {
+                        items(viewModel.spLyricsController.currentLyricsLines) { line ->
+                            Text(
+                                text = line.words,
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
                     }
                 }
             }
