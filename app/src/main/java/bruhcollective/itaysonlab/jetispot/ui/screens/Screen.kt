@@ -28,6 +28,7 @@ enum class Screen(
   // config
   Config("config"),
   StorageConfig("config/storage"),
+  LanguageConfig("config/language"),
   QualityConfig("config/playbackQuality"),
   NormalizationConfig("config/playbackNormalization");
 

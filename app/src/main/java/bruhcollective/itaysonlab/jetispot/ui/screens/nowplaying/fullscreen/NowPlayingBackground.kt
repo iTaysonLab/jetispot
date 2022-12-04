@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -38,11 +39,11 @@ fun NowPlayingBackground(
 ) {
   val currentColor = viewModel.currentBgColor.value
   val dominantColorAsBg = animateColorAsState(if (currentColor == Color.Transparent) MaterialTheme.colorScheme.surface else currentColor)
-
+  val isSystemInDarkTheme = isSystemInDarkTheme()
   Canvas(modifier) {
     drawRect(
       brush = Brush.radialGradient(
-        colors = listOf(dominantColorAsBg.value, Color.Black),
+        colors = listOf(dominantColorAsBg.value, if(isSystemInDarkTheme) Color.Black else Color.White),
         center = Offset(
           x = size.width * 0.1f,
           y = size.height * 0.75f

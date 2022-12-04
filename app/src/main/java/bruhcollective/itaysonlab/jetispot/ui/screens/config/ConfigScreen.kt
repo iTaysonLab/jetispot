@@ -83,6 +83,9 @@ class ConfigScreenViewModel @Inject constructor(
     add(ConfigItem.Preference(R.string.storage, { ctx, cfg -> "" }, {
       it.navigate(Screen.StorageConfig)
     }))
+    add(ConfigItem.Preference(R.string.language, { ctx, cfg -> "" }, {
+      it.navigate(Screen.LanguageConfig)
+    }))
 
     add(ConfigItem.Category(R.string.config_account))
 
