@@ -31,6 +31,9 @@ class ConfigScreenViewModel @Inject constructor(
   private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel(), ConfigViewModel {
   private val configList = buildList {
+
+    add(ConfigItem.Hint())
+
     add(ConfigItem.Category(R.string.config_playback))
 
     add(ConfigItem.Preference(R.string.config_pbquality, { ctx, cfg ->

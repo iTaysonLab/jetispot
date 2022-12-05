@@ -171,5 +171,7 @@
     <string name="likes_dot">"likes • "</string>
     <string name="no_lyrics">Ups, seems like this song have no lyrics…</string>
     <string name="language">Language</string>
-    <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Account.</string>
+    <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Premium account.</string>
+    <string name="battery_configuration">Battery configuration</string>
+    <string name="battery_configuration_desc">Ignore system\'s battery optimization to be able to keep the app in the background.</string>
 </resources>

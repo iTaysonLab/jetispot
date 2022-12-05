@@ -128,4 +128,13 @@
     <string name="search_no_results">No se han encontrado resultados</string>
     <string name="search_no_results_desc">Cambia tu criterio de búsqueda y vuelve a intentarlo</string>
     <string name="playlist_prefix">Lista de reproducción</string>
+    <string name="playing_src_search">reproduciendo desde búsqueda</string>
+    <string name="songs">canciones</string>
+    <string name="songs_by">canciones por</string>
+    <string name="likes_dot">"me gusta • "</string>
+    <string name="no_lyrics">Ups, parece que esta canción no tiene letra...</string>
+    <string name="language">Idioma</string>
+    <string name="plan_overview_fallback_plan">Parece que no tienes una cuenta de Spotify Premium.</string>
+    <string name="battery_configuration">Configuración de la batería</string>
+    <string name="battery_configuration_desc">Ignora la optimización de batería del sistema para esta app para poder mantenerse en segundo plano.</string>
 </resources>

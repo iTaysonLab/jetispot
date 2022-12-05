@@ -61,6 +61,8 @@ fun HubBinder (
 
     HubComponent.OutlinedButton -> OutlineButton(item)
     HubComponent.HistoryPlaylist -> PlaylistTrackRowLarger(item)
+
+    //TODO: Keep adding components searching them in the API (Thunder client)
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {
