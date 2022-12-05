@@ -110,7 +110,7 @@
     <string name="auto_tabs_library">Biblioteca</string>
     <string name="your_library">Tu biblioteca</string>
     <string name="system_default">Predeterminado del sistema</string>
-    <string name="auth_err_premium">Para usar Jetispot necesitas una cuenta premium... O no jeje</string>
+    <string name="auth_err_premium">Para usar Jetispot necesitas una cuenta premium…</string>
     <string name="config_crossfade">Crossfade</string>
     <string name="crossfade_disabled">Deshabilitado</string>
     <string name="plan_member">Miembro del plan</string>
@@ -132,7 +132,7 @@
     <string name="songs">canciones</string>
     <string name="songs_by">canciones por</string>
     <string name="likes_dot">"me gusta • "</string>
-    <string name="no_lyrics">Ups, parece que esta canción no tiene letra...</string>
+    <string name="no_lyrics">Ups, parece que esta canción no tiene letra…</string>
     <string name="language">Idioma</string>
     <string name="plan_overview_fallback_plan">Parece que no tienes una cuenta de Spotify Premium.</string>
     <string name="battery_configuration">Configuración de la batería</string>

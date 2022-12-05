@@ -174,4 +174,5 @@
     <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Premium account.</string>
     <string name="battery_configuration">Battery configuration</string>
     <string name="battery_configuration_desc">Ignore system\'s battery optimization to be able to keep the app in the background.</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
