@@ -45,10 +45,10 @@ fun NowPlayingBackground(
       brush = Brush.radialGradient(
         colors = listOf(dominantColorAsBg.value, if(isSystemInDarkTheme) Color.Black else Color.White),
         center = Offset(
-          x = size.width * 0.1f,
-          y = size.height * 0.75f
+          x = size.width * 0.2f,
+          y = size.height * 0.55f
         ),
-        radius = size.width * 1.5f
+        radius = size.width * 1.3f
       )
     )
   }
