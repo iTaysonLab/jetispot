@@ -49,6 +49,7 @@ Spotify Premium account is **REQUIRED***. Offline caching, DRM bypassing or raw 
 You can go to the [releases page](https://github.com/BobbyESP/Jetispot/releases) and download any version updated.
 
 ## Credits
+- [iTaysonLab](https://github.com/iTaysonLab) for creating this project. My fork is a continuation of it's work. If some day is interested in working back to the project, I'll be making a PR for merging changes. 
 - [librespot-java](https://github.com/librespot-org/librespot-java) for the core API part and playback
 - [librespot-android](https://github.com/devgianlu/librespot-android) for sink and decoder source (in Jetispot they are rewritten to Kotlin)  
 - [moshi](https://github.com/square/moshi/) and [moshix](https://github.com/ZacSweers/MoshiX/) for the undocumented API JSON parsing
