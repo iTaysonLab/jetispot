@@ -52,21 +52,21 @@ fun EpisodeListItem(
     }
 
     Column(
-      Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp)
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row {
             PreviewableAsyncImage(
                 imageUrl = imageUrl, placeholderType = "podcast", modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(8.dp))
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(8.dp))
             )
             Text(
                 text = episode.name,
                 modifier = Modifier
-                  .padding(start = 16.dp)
-                  .align(Alignment.CenterVertically),
+                    .padding(start = 16.dp)
+                    .align(Alignment.CenterVertically),
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -92,8 +92,8 @@ fun EpisodeListItem(
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     contentDescription = null,
                     modifier = Modifier
-                      .size(16.dp)
-                      .align(Alignment.CenterVertically)
+                        .size(16.dp)
+                        .align(Alignment.CenterVertically)
                 )
                 Text(
                     text = " • ",
@@ -114,10 +114,10 @@ fun EpisodeListItem(
         Row {
             IconButton(
                 onClick = { /*TODO*/ },
-              Modifier
-                .offset(y = 2.dp)
-                .align(Alignment.CenterVertically)
-                .size(28.dp)
+                Modifier
+                    .offset(y = 2.dp)
+                    .align(Alignment.CenterVertically)
+                    .size(28.dp)
             ) {
                 Icon(Icons.Rounded.AddCircle, null)
             }
@@ -126,10 +126,10 @@ fun EpisodeListItem(
 
             IconButton(
                 onClick = { /*TODO*/ },
-              Modifier
-                .offset(y = 2.dp)
-                .align(Alignment.CenterVertically)
-                .size(28.dp)
+                Modifier
+                    .offset(y = 2.dp)
+                    .align(Alignment.CenterVertically)
+                    .size(28.dp)
             ) {
                 Icon(Icons.Rounded.Share, null)
             }
@@ -137,29 +137,29 @@ fun EpisodeListItem(
             Spacer(Modifier.weight(1f))
 
             Box(
-              Modifier
-                .clickableHub(item)
-                .size(28.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
+                Modifier
+                    .clickableHub(item)
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.PlayArrow,
                     tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = null,
                     modifier = Modifier
-                      .size(24.dp)
-                      .align(Alignment.Center)
+                        .size(24.dp)
+                        .align(Alignment.Center)
                 )
             }
         }
 
         Box(
-          Modifier
-            .padding(top = 16.dp)
-            .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
-            .fillMaxWidth()
-            .height(1.dp)
+            Modifier
+                .padding(top = 16.dp)
+                .background(MaterialTheme.colorScheme.compositeSurfaceElevation(8.dp))
+                .fillMaxWidth()
+                .height(1.dp)
         ) {}
     }
 }
