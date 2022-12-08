@@ -8,7 +8,7 @@ A Spotify unofficial client built with Jetpack Compose, Material You/3 and libre
 
 </div>
 
-## FORK
+## ⚠️ FORK
 I don't want confusions so I'm telling this. This repository is just a fork of the one made by [iTaysonLab](https://github.com/iTaysonLab/jetispot) as I say in the credtis. At the moment of writing this, the project is kind of abandonated. By what I know, the original creator of the app is making an amazing Steam client for Android, Jetisteam. I will be adding new features to the app and also fixing bugs. If in some day Tayson want to go back to the project, I'll be glad to open a Pull Request to have all my work merged in it's original repository. Thanks for your comprehension!
 
 ## 📣 NOTICE
