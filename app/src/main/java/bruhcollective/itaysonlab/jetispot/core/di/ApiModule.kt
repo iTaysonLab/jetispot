@@ -31,9 +31,7 @@ object ApiModule {
     interceptRequest { orig ->
       // 1. Authorization (& client token)
       header("Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
-      Log.d("Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
       header("client-token", tokenHandler.requestToken())
-      Log.d("client-token", tokenHandler.requestToken())
 
       // 2. Default headers
       header("User-Agent", "Spotify/${SpUtils.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))")
