@@ -137,4 +137,7 @@
     <string name="plan_overview_fallback_plan">Parece que no tienes una cuenta de Spotify Premium.</string>
     <string name="battery_configuration">Configuración de la batería</string>
     <string name="battery_configuration_desc">Ignora la optimización de batería del sistema para esta app para poder mantenerse en segundo plano.</string>
+    <string name="dismiss">Descartar</string>
+    <string name="update_available_title">Actualización disponible</string>
+    <string name="update">Actualizar</string>
 </resources>
