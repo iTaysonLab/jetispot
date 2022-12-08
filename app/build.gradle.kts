@@ -9,7 +9,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id("com.google.protobuf") version "0.8.18"
-    kotlin("plugin.serialization") version "1.4.21"
+    kotlin("plugin.serialization") version "1.7.21"
 }
 apply(plugin = "dagger.hilt.android.plugin")
 

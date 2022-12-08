@@ -96,6 +96,8 @@ fun AppNavigation(
     navController.navigate(if (sessionManager.isSignedIn()) Screen.Feed.route else Screen.Authorization.route) {
       popUpTo(Screen.NavGraph.route)
     }
+  }
+  LaunchedEffect(Unit){
     launch(Dispatchers.IO) {
       kotlin.runCatching {
         val temp = UpdateUtil.checkForUpdate()
