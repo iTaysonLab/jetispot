@@ -175,4 +175,6 @@
     <string name="battery_configuration">Battery configuration</string>
     <string name="battery_configuration_desc">Ignore system\'s battery optimization to be able to keep the app in the background.</string>
     <string name="dismiss">Dismiss</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update">Update</string>
 </resources>

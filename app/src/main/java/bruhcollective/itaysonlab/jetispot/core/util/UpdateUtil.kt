@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
-import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.SpApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +32,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object UpdateUtil {
+
     private const val OWNER = "BobbyESP"
     private const val REPO = "Jetispot"
     private const val ARM64 = "arm64-v8a"
@@ -47,7 +46,7 @@ object UpdateUtil {
         Request.Builder().url("https://api.github.com/repos/${OWNER}/${REPO}/releases/latest")
             .build()
     private val jsonFormat = Json { ignoreUnknownKeys = true }
-
+    
     private suspend fun getLatestRelease(): LatestRelease {
         return suspendCoroutine { continuation ->
             client.newCall(requestForLatestRelease).enqueue(object : Callback {
@@ -102,7 +101,7 @@ object UpdateUtil {
             startActivity(intent)
         }.onFailure { throwable: Throwable ->
             throwable.printStackTrace()
-
+            Log.e(TAG, "installLatestApk: ", throwable)
         }
     }
 
@@ -110,7 +109,6 @@ object UpdateUtil {
         context: Context = SpApp.context,
         latestRelease: LatestRelease
     ): Flow<DownloadStatus> = withContext(Dispatchers.IO) {
-
         val apkVersion = context.packageManager.getPackageArchiveInfo(
             context.getLatestApk().absolutePath, 0
         )?.versionName?.toVersion() ?: Version()
@@ -136,7 +134,6 @@ object UpdateUtil {
         val targetUrl = latestRelease.assets?.find {
             return@find it.name?.contains(preferredArch) ?: false
         }?.browserDownloadUrl ?: return@withContext emptyFlow()
-
         val request = Request.Builder().url(targetUrl).build()
         try {
             val response = client.newCall(request).execute()
