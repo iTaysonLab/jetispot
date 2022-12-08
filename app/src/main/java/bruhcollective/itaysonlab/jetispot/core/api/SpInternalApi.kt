@@ -46,7 +46,7 @@ interface SpInternalApi {
 
   @GET("/content-filter/v1/liked-songs")
   @Headers("Accept: application/json")
-  suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true, @Header("Accept-Language") language:String = Locale.getDefault().language): ContentFilterResponse
+  suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true): ContentFilterResponse
 
   @POST("/home-dac-viewservice/v1/view")
   suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome(), @Header("Accept-Language") acceptLanguage: String = Locale.getDefault().language): DacResponse
