@@ -140,4 +140,5 @@
     <string name="dismiss">Descartar</string>
     <string name="update_available_title">Actualización disponible</string>
     <string name="update">Actualizar</string>
+    <string name="choose_artist">Escoge un artista</string>
 </resources>
