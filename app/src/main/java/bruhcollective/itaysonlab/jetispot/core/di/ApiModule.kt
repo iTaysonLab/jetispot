@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.core.di
 
+import bruhcollective.itaysonlab.jetispot.BuildConfig
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.*
 import bruhcollective.itaysonlab.jetispot.core.di.ext.interceptRequest
@@ -31,7 +32,13 @@ object ApiModule {
     interceptRequest { orig ->
       // 1. Authorization (& client token)
       header("Authorization", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
+      if(BuildConfig.DEBUG){
+        Log.d("Authorization Bearer token", "Bearer ${sessionManager.session.tokens().get("playlist-read")}")
+      }
       header("client-token", tokenHandler.requestToken())
+      if(BuildConfig.DEBUG){
+        Log.d("Authorization Client Token", tokenHandler.requestToken())
+      }
 
       // 2. Default headers
       header("User-Agent", "Spotify/${SpUtils.SPOTIFY_APP_VERSION} Android/32 (Pixel 4a (5G))")
