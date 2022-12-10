@@ -8,9 +8,6 @@ A Spotify unofficial client built with Jetpack Compose, Material You/3 and libre
 
 </div>
 
-## ⚠️ FORK
-I don't want confusions so I'm telling this. This repository is just a fork of the one made by [iTaysonLab](https://github.com/iTaysonLab/jetispot) as I say in the credtis. At the moment of writing this, the project is kind of abandonated. By what I know, the original creator of the app is making an amazing Steam client for Android, Jetisteam. I will be adding new features to the app and also fixing bugs. If in some day Tayson want to go back to the project, I'll be glad to open a Pull Request to have all my work merged in it's original repository. Thanks for your comprehension!
-
 ## 📣 NOTICE
 Spotify Premium account is **REQUIRED***. Offline caching, DRM bypassing or raw file downloading is prohibted by ToS and will NEVER be implemented in Jetispot. Don't waste your time trying to request these features.
 
@@ -46,13 +43,12 @@ Spotify Premium account is **REQUIRED***. Offline caching, DRM bypassing or raw 
 - pictures: Coil
 - storage: Room (collection), MMKV (metadata)
 - arch: MVVM
-- preferences: Jetpack Datastore (proto) [maybe in a future MMKV will be used for some app variables]
+- preferences: Jetpack Datastore (proto)
 
 ## ⬇️ Downloads
 You can go to the [releases page](https://github.com/BobbyESP/Jetispot/releases) and download any version updated.
 
 ## Credits
-- [iTaysonLab](https://github.com/iTaysonLab) for creating this project. My fork is a continuation of it's work. If some day is interested in working back to the project, I'll be making a PR for merging changes. 
 - [librespot-java](https://github.com/librespot-org/librespot-java) for the core API part and playback
 - [librespot-android](https://github.com/devgianlu/librespot-android) for sink and decoder source (in Jetispot they are rewritten to Kotlin)  
 - [moshi](https://github.com/square/moshi/) and [moshix](https://github.com/ZacSweers/MoshiX/) for the undocumented API JSON parsing

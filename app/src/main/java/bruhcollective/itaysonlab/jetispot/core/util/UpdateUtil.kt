@@ -33,8 +33,8 @@ import kotlin.coroutines.suspendCoroutine
 
 object UpdateUtil {
 
-    private const val OWNER = "BobbyESP"
-    private const val REPO = "Jetispot"
+    private const val OWNER = "iTaysonLab"
+    private const val REPO = "jetispot"
     private const val ARM64 = "arm64-v8a"
     private const val ARM32 = "armeabi-v7a"
     private const val X86 = "x86"
