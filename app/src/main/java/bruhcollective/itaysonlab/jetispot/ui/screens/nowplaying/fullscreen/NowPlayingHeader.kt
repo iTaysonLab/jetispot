@@ -31,18 +31,25 @@ fun NowPlayingHeader(
 ) {
   Row(modifier, verticalAlignment = Alignment.CenterVertically) {
     IconButton(onClick = onCloseClick, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, tint = Color.White, contentDescription = null, modifier = Modifier.scale(1f - queueStateProgress).alpha(1f - queueStateProgress))
-      Icon(imageVector = Icons.Rounded.Close, tint = Color.White, contentDescription = null, modifier = Modifier.scale(queueStateProgress).alpha(queueStateProgress))
+      Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null, modifier = Modifier
+        .scale(1f - queueStateProgress)
+        .alpha(1f - queueStateProgress))
+      Icon(imageVector = Icons.Rounded.Close, contentDescription = null, modifier = Modifier
+        .scale(queueStateProgress)
+        .alpha(queueStateProgress))
     }
 
-    Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
+    Column(
+      Modifier
+        .weight(1f)
+        .padding(vertical = 8.dp)) {
       Text(
         text = stateTitle.uppercase(),
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
         textAlign = TextAlign.Center,
-        color = Color.White.copy(alpha = 0.7f),
+        color = oppositeColorOfSystem(alpha = 0.7f),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         letterSpacing = 2.sp,
@@ -54,7 +61,7 @@ fun NowPlayingHeader(
         modifier = Modifier
           .fillMaxWidth()
           .padding(horizontal = 16.dp),
-        color = Color.White,
+        color = oppositeColorOfSystem(alpha = 1f),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         textAlign = TextAlign.Center,
@@ -64,7 +71,7 @@ fun NowPlayingHeader(
     }
 
     IconButton(onClick = { /*TODO*/ }, Modifier.size(32.dp)) {
-      Icon(imageVector = Icons.Rounded.MoreVert, tint = Color.White, contentDescription = null)
+      Icon(imageVector = Icons.Rounded.MoreVert, tint = oppositeColorOfSystem(alpha = 1f), contentDescription = null)
     }
   }
 }

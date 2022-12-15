@@ -46,7 +46,7 @@ object UpdateUtil {
         Request.Builder().url("https://api.github.com/repos/${OWNER}/${REPO}/releases/latest")
             .build()
     private val jsonFormat = Json { ignoreUnknownKeys = true }
-    
+
     private suspend fun getLatestRelease(): LatestRelease {
         return suspendCoroutine { continuation ->
             client.newCall(requestForLatestRelease).enqueue(object : Callback {

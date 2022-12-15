@@ -39,6 +39,7 @@ fun NowPlayingLyricsComposition(
     rvStateProgress: Float
 ) {
     Box(modifier) {
+        val color = oppositeColorOfSystem(alpha = 0.2f)
         Canvas(modifier = Modifier.fillMaxSize()) {
             val offset = Offset(
                 x = lerp(viewModel.lyricsCardParams.first.x, 0f, rvStateProgress),
@@ -61,7 +62,7 @@ fun NowPlayingLyricsComposition(
             val radius = androidx.compose.ui.unit.lerp(12.dp, 0.dp, rvStateProgress).toPx()
 
             drawRoundRect(
-                color = Color.White.copy(alpha = 0.2f),
+                color = color,
                 topLeft = offset,
                 size = size,
                 cornerRadius = CornerRadius(radius, radius)
@@ -99,7 +100,7 @@ fun NowPlayingLyricsComposition(
                         items(viewModel.spLyricsController.currentLyricsLines) { line ->
                             Text(
                                 text = line.words,
-                                color = Color.White,
+                                color = oppositeColorOfSystem(alpha = 1f),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
