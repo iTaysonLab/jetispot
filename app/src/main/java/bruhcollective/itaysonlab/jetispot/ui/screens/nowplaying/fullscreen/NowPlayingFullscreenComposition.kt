@@ -2,9 +2,11 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,8 +16,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.ext.disableTouch
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
+import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -26,6 +30,7 @@ fun NowPlayingFullscreenComposition(
     lyricsOpened: Boolean,
     setLyricsOpened: (Boolean) -> Unit,
     bottomSheetState: BottomSheetState,
+    bsOffset: Float,
     viewModel: NowPlayingViewModel
 ) {
     val scope = rememberCoroutineScope()
@@ -49,11 +54,13 @@ fun NowPlayingFullscreenComposition(
             lyricsProgressValue
         }
     }
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.compositeSurfaceElevation(
+        3.dp
+    ))) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
         NowPlayingBackground(
             viewModel = viewModel,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().alpha(1f * bsOffset),
         )
 
         // main content
