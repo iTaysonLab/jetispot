@@ -72,7 +72,8 @@ class NowPlayingViewModel @Inject constructor(
     navigationController.navigate(BottomSheet.MoreOptions, mapOf(
       "trackName" to currentTrack.value.title,
       "artistName" to currentTrack.value.artist,
-      "artworkUrl" to Utils.bytesToHex(getCurrentTrackAsMetadata().album.coverGroup.imageList[0].fileId).lowercase(),
+      "artworkUrl" to Utils.bytesToHex(getCurrentTrackAsMetadata().album.coverGroup.imageList[0].fileId).lowercase(),  // <-- INFO: THIS IS NOT THE FULL URL. Just the ID of it. Passing a full URL will cause a crash because we can't use them in a DeepLink Navigation URL.
+      "artistsData" to getCurrentTrackAsMetadata().artistWithRoleList.joinToString("|") { Utils.bytesToHex(it.toByteString()) }
     ))
   }
 

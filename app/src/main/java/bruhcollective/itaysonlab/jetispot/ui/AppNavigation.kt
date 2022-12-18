@@ -45,7 +45,6 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.StorageScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
-import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -216,7 +215,8 @@ fun AppNavigation(
       val trackName = remember {entry.arguments!!.getString("trackName")!!}
       val artistName = remember {entry.arguments!!.getString("artistName")!!}
       val artworkUrl = remember {entry.arguments!!.getString("artworkUrl")!!}
-      MoreOptionsBottomSheet(trackName = trackName, artistName = artistName, artworkUrl = artworkUrl)
+      val artistsData = remember {entry.arguments!!.getString("artistsData")!!}
+      MoreOptionsBottomSheet(trackName, artistName, artworkUrl, artistsData)
     }
   }
 
