@@ -178,4 +178,8 @@
     <string name="update_available_title">Update available</string>
     <string name="update">Update</string>
     <string name="choose_artist">Choose an artist</string>
+    <string name="more_options">More options</string>
+    <string name="go_to_artist">Go to the artist\'s profile</string>
+    <string name="save_to_your_music">Add this song to favourites</string>
+    <string name="share">Share this track</string>
 </resources>

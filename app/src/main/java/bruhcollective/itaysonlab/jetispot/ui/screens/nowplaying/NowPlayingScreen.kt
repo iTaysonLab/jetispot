@@ -37,7 +37,8 @@ fun NowPlayingScreen(
       lyricsOpened = lyricsOpened,
       setLyricsOpened = setLyricsOpened,
       bottomSheetState = bottomSheetState,
-      viewModel = viewModel
+      viewModel = viewModel,
+      bsOffset = bsOffset()
     )
 
     NowPlayingMiniplayer(

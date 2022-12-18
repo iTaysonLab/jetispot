@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
+import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableSyncImage
 
@@ -60,14 +61,14 @@ fun NowPlayingMiniplayer(
                         .padding(horizontal = 14.dp)
                         .align(Alignment.CenterVertically)
                     ) {
-                        Text(
+                        MarqueeText(
                           if (viewModel.currentTrack.value.title == "Unknown Title") stringResource(id = R.string.unknown_title) else viewModel.currentTrack.value.title,
                             color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 16.sp
                         )
-                        Text(
+                        MarqueeText(
                             if(viewModel.currentTrack.value.artist == "Unknown Artist") stringResource(id = R.string.unknown_artist) else viewModel.currentTrack.value.artist,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                             maxLines = 1,

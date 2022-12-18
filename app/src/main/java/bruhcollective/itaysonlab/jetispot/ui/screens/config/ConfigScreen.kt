@@ -86,9 +86,10 @@ class ConfigScreenViewModel @Inject constructor(
     add(ConfigItem.Preference(R.string.storage, { ctx, cfg -> "" }, {
       it.navigate(Screen.StorageConfig)
     }))
-    add(ConfigItem.Preference(R.string.language, { ctx, cfg -> "" }, {
+
+    /*add(ConfigItem.Preference(R.string.language, { ctx, cfg -> "" }, {
       it.navigate(Screen.LanguageConfig)
-    }))
+    }))*/
 
     add(ConfigItem.Category(R.string.config_account))
 
@@ -115,12 +116,12 @@ class ConfigScreenViewModel @Inject constructor(
     }, {}))
 
     add(ConfigItem.Preference(R.string.about_sources, { ctx, _ -> "" }, {
-      it.openInBrowser("https://github.com/BobbyESP/Jetispot")
+      it.openInBrowser("https://github.com/iTaysonLab/jetispot")
     }))
 
-    /*add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
+    add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
       it.openInBrowser("https://t.me/bruhcollective")
-    }))*/
+    }))
   }
 
   override fun isRoot() = false
