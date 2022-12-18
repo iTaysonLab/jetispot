@@ -33,6 +33,7 @@ import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.core.util.UpdateUtil
+import bruhcollective.itaysonlab.jetispot.ui.bottomsheets.MoreOptionsBottomSheet
 import bruhcollective.itaysonlab.jetispot.ui.bottomsheets.jump_to_artist.JumpToArtistBottomSheet
 import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
@@ -44,6 +45,7 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.config.StorageScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
+import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -203,9 +205,18 @@ fun AppNavigation(
       })
     }
 
+    //Bottom Sheet Dialogs
+
     bottomSheet(BottomSheet.JumpToArtist.route) { entry ->
       val data = remember { entry.arguments!!.getString("artistIdsAndRoles")!! }
       JumpToArtistBottomSheet(data = data)
+    }
+
+    bottomSheet(BottomSheet.MoreOptions.route) { entry ->
+      val trackName = remember {entry.arguments!!.getString("trackName")!!}
+      val artistName = remember {entry.arguments!!.getString("artistName")!!}
+      val artworkUrl = remember {entry.arguments!!.getString("artworkUrl")!!}
+      MoreOptionsBottomSheet(trackName = trackName, artistName = artistName, artworkUrl = artworkUrl)
     }
   }
 

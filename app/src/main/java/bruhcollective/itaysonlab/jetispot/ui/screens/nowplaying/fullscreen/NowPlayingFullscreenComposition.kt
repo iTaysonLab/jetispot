@@ -1,7 +1,10 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomSheetState
@@ -54,36 +57,46 @@ fun NowPlayingFullscreenComposition(
             lyricsProgressValue
         }
     }
-    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.compositeSurfaceElevation(
-        3.dp
-    ))) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(
+            MaterialTheme.colorScheme.compositeSurfaceElevation(
+                3.dp
+            )
+        )) {
 
         NowPlayingBackground(
             viewModel = viewModel,
-            modifier = Modifier.fillMaxSize().alpha(1f * bsOffset),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(1f * bsOffset),
         )
 
         // main content
-        NowPlayingHeader(
-            stateTitle = stringResource(id = viewModel.getHeaderTitle()),
-            onCloseClick = {
-                if (lyricsOpened) {
-                    setLyricsOpened(false)
-                } else if (queueOpened) {
-                    setQueueOpened(false)
-                } else {
-                    scope.launch { bottomSheetState.collapse() }
-                }
-            },
-            state = viewModel.getHeaderText(),
-            queueStateProgress = anySuperProgress,
-            modifier = Modifier
-                .statusBarsPadding()
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-
+        AnimatedVisibility(visible = bsOffset >= 0.99f, enter = fadeIn(), exit = fadeOut()) {
+            NowPlayingHeader(
+                stateTitle = stringResource(id = viewModel.getHeaderTitle()),
+                onCloseClick = {
+                    if (lyricsOpened) {
+                        setLyricsOpened(false)
+                    } else if (queueOpened) {
+                        setQueueOpened(false)
+                    } else {
+                        scope.launch { bottomSheetState.collapse() }
+                    }
+                },
+                state = viewModel.getHeaderText(),
+                queueStateProgress = anySuperProgress,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                viewModel = viewModel,
+                bottomSheetState = bottomSheetState,
+                scope = scope,
+            )
+        }
         // composite
 
         if (anySuperProgress != 1f) {

@@ -15,7 +15,7 @@ class SpMetadataDb @Inject constructor(
 
   fun contains(uri: String) = instance.containsKey(uri)
 
-  fun get(uri: String): ByteArray = instance.getBytes(uri, null)
+  fun get(uri: String): ByteArray = instance.getBytes(uri, null)!!
   fun put(uri: String, msg: ByteArray) = instance.encode(uri, msg)
 
   fun clear() = instance.clearAll()

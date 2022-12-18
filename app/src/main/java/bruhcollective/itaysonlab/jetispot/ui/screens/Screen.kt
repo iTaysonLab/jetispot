@@ -56,5 +56,6 @@ enum class Dialog(
 enum class BottomSheet(
   val route: String
 ) {
-  JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}") // ID=ROLE|ID=ROLE
+  JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}"), // ID=ROLE|ID=ROLE
+  MoreOptions("bs/moreOptions/{trackName}/{artistName}/{artworkUrl}") //TODO: ADD ARGUMENTS
 }

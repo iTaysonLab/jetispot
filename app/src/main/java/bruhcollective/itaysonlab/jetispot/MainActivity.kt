@@ -89,6 +89,11 @@ class MainActivity : ComponentActivity() {
                 val backPressedDispatcherOwner = LocalOnBackPressedDispatcherOwner.current
                 // remembers
                 val scope = rememberCoroutineScope()
+
+                //q: can a remember bottom sheet scaffold state be used for multiple bottom sheets?
+                //a: yes, but you need to use the same scaffold state for all of them
+
+                //In conclusion, you can have multiple bottom sheets, but you can only have one bottom sheet scaffold state
                 val bsState = rememberBottomSheetScaffoldState()
 
                 val bottomSheetNavigator = rememberBottomSheetNavigator()

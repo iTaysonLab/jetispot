@@ -15,6 +15,7 @@ import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
@@ -64,6 +65,15 @@ class NowPlayingViewModel @Inject constructor(
   fun navigateToSource(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: NavigationController) {
     scope.launch { sheetState.collapse() }
     navigationController.navigate(currentContextUri.value)
+  }
+
+  @OptIn(ExperimentalMaterialApi::class)
+  fun navigateToMoreOptions(navigationController: NavigationController, scope: CoroutineScope, bottomSheetState: BottomSheetState) {
+    navigationController.navigate(BottomSheet.MoreOptions, mapOf(
+      "trackName" to currentTrack.value.title,
+      "artistName" to currentTrack.value.artist,
+      "artworkUrl" to Utils.bytesToHex(getCurrentTrackAsMetadata().album.coverGroup.imageList[0].fileId).lowercase(),
+    ))
   }
 
   @OptIn(ExperimentalMaterialApi::class)
