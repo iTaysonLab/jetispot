@@ -57,5 +57,5 @@ enum class BottomSheet(
   val route: String
 ) {
   JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}"), // ID=ROLE|ID=ROLE
-  MoreOptions("bs/moreOptions/{trackName}/{artistName}/{artworkUrl}") //TODO: ADD ARGUMENTS
+  MoreOptions("bs/moreOptions/{trackName}/{artistName}/{artworkUrl}/{artistsData}") //TODO: ADD ARGUMENTS
 }

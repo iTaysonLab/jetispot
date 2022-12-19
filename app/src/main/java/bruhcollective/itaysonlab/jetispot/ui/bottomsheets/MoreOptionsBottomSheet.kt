@@ -24,18 +24,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
+import bruhcollective.itaysonlab.jetispot.core.util.helpers.MoreOptionsDialogHelper
 import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
+import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
+import bruhcollective.itaysonlab.jetispot.ui.screens.BottomSheet
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
 import bruhcollective.itaysonlab.jetispot.ui.shared.MarqueeText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import com.spotify.metadata.Metadata
+import xyz.gianlu.librespot.common.Utils
+import xyz.gianlu.librespot.metadata.ArtistId
 
 @Composable
 fun MoreOptionsBottomSheet(
     trackName: String,
     artistName: String,
     artworkUrl: String,
+    artistsData: String,
 ) {
+    val navController = LocalNavigationController.current
+
     val decodedUrl = "https://i.scdn.co/image/${artworkUrl}"
     Column(
         modifier = Modifier
@@ -75,16 +83,18 @@ fun MoreOptionsBottomSheet(
                     modifier = Modifier.size(64.dp)
                 )
             }
-            Column(modifier = Modifier.padding(start = 16.dp)) {
+            Column(modifier = Modifier.padding(start = 16.dp, end = 8.dp)) {
                 MarqueeText(
                     text = trackName,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 MarqueeText(
                     text = artistName,
-                    color = MaterialTheme.colorScheme.onSurface.copy(0.7f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.7f),
+                    fontSize = 12.sp,
                 )
             }
         }
@@ -101,7 +111,10 @@ fun MoreOptionsBottomSheet(
             actionButton(
                 icon = Icons.Rounded.Person,
                 text = stringResource(id = R.string.go_to_artist),
-                onClick = {})
+                onClick = {
+                    navController.navigate(BottomSheet.JumpToArtist, mapOf(
+                    "artistIdsAndRoles" to artistsData
+                ))})
             buttonsDivider()
             actionButton(
                 icon = Icons.Filled.Star,
