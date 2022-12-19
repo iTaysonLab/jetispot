@@ -7,8 +7,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PfcContextData
-import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextPlayerData
+import bruhcollective.itaysonlab.jetispot.core.objs.player.*
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.util.playCommand
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +21,7 @@ class SearchViewModel @Inject constructor(
     private val spInternalApi: SpInternalApi,
     private val spPlayerServiceManager: SpPlayerServiceManager
 ): ViewModel(), CoroutineScope by MainScope() {
+
     var searchQuery by mutableStateOf(TextFieldValue())
 
     var searchResponse by mutableStateOf<SearchViewResponse?>(null)
@@ -34,11 +35,17 @@ class SearchViewModel @Inject constructor(
     }
 
     fun dispatchPlay(uri: String) {
+        Log.d("Dispatcher", "Dispatching play command for $uri")
         spPlayerServiceManager.play(
-            playCommand(uri) {
-                contextUri = "spotify:search:${searchQuery.text.replace(" ", "+")}"
-            }
-        )
+            PlayFromContextData(
+                "spotify:search:${searchQuery.text.replace(" ", "+")}",
+                PlayFromContextPlayerData(
+                    context = PfcContextData(url = "context://$uri", uri = uri),
+                    state = PfcState(PfcStateOptions(shuffling_context = false)),
+                    options = PfcOptions(player_options_override = PfcStateOptions(shuffling_context = false))
+                )
+
+        ))
     }
 
     fun clear() {

@@ -1,29 +1,47 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.config
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.PowerManager
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.EnergySavingsLeaf
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
+import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.SpApp.Companion.context
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
@@ -51,6 +69,14 @@ fun BaseConfigScreen(
   val dsConfig = dsConfigState.value
   val navController = LocalNavigationController.current
 
+  //Energy things
+  val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+  var showBatteryHint by remember { mutableStateOf(!pm.isIgnoringBatteryOptimizations(context.packageName)) }
+  val launcher =
+    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+      showBatteryHint = !pm.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
   Scaffold(topBar = {
     LargeTopAppBar(title = {
       Text(stringResource(viewModel.provideTitle()))
@@ -68,6 +94,26 @@ fun BaseConfigScreen(
         .padding(padding)) {
       items(viewModel.provideConfigList()) { item ->
         when (item) {
+          is ConfigItem.Hint -> {
+            Column(modifier = Modifier.padding()) {
+              androidx.compose.animation.AnimatedVisibility(
+                visible = showBatteryHint,
+                exit = shrinkVertically() + fadeOut()
+              ) {
+                PreferencesHint(
+                  title = stringResource(R.string.battery_configuration),
+                  icon = Icons.Rounded.EnergySavingsLeaf,
+                  description = stringResource(R.string.battery_configuration_desc)
+                ) {
+                  launcher.launch(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:${context.packageName}")
+                  })
+                  showBatteryHint = !pm.isIgnoringBatteryOptimizations(context.packageName)
+                }
+              }
+            }
+          }
+
           is ConfigItem.Category -> {
             ConfigCategory(stringResource(item.title))
           }
@@ -314,6 +360,59 @@ fun ConfigSlider(
   }
 }
 
+@Composable
+fun PreferencesHint(
+  title: String = "Title ".repeat(2),
+  description: String? = "Description text ".repeat(3),
+  icon: ImageVector? = Icons.Outlined.Translate,
+  onClick: () -> Unit = {},
+) {
+
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp, vertical = 12.dp)
+      .clip(MaterialTheme.shapes.extraLarge)
+      .background(MaterialTheme.colorScheme.secondaryContainer)
+      .clickable { onClick() }
+      .padding(horizontal = 12.dp, vertical = 16.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    icon?.let {
+      Icon(
+        imageVector = icon,
+        contentDescription = null,
+        modifier = Modifier
+          .padding(start = 8.dp, end = 16.dp)
+          .size(24.dp),
+        tint = MaterialTheme.colorScheme.secondary
+      )
+    }
+    Column(
+      modifier = Modifier
+        .weight(1f)
+        .padding(start = if (icon == null) 12.dp else 0.dp, end = 12.dp)
+    ) {
+      with(MaterialTheme) {
+
+        Text(
+          text = title,
+          maxLines = 1,
+          style = typography.titleLarge.copy(fontSize = 20.sp),
+          color = colorScheme.onSecondaryContainer
+        )
+        if (description != null)
+          Text(
+            text = description,
+            color = colorScheme.onSecondaryContainer,
+            maxLines = 2, overflow = TextOverflow.Ellipsis,
+            style = typography.bodyMedium,
+          )
+      }
+    }
+  }
+}
+
 //
 
 sealed class ConfigItem {
@@ -354,5 +453,8 @@ sealed class ConfigItem {
     val stepCount: Int,
     val state: (AppConfig) -> Int,
     val modify: AppConfig.Builder.(Int) -> Unit
+  ) : ConfigItem()
+
+  class Hint(
   ) : ConfigItem()
 }

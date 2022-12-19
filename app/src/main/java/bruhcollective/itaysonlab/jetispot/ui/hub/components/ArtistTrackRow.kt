@@ -18,29 +18,44 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
 fun ArtistTrackRow(
-  item: HubItem
+    item: HubItem
 ) {
-  Row(
-    Modifier
-      .clickableHub(item)
-      .padding(horizontal = 16.dp, vertical = 12.dp)) {
-    Text(text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
-      .align(Alignment.CenterVertically)
-      .padding(end = 16.dp))
+    Row(
+      Modifier
+        .clickableHub(item)
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        Text(
+            text = (item.custom!!["rowNumber"] as Double).toInt().toString(), modifier = Modifier
+            .align(Alignment.CenterVertically)
+            .padding(end = 16.dp)
+        )
 
-    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.align(Alignment.CenterVertically).size(48.dp))
+        PreviewableAsyncImage(
+            imageUrl = item.images?.main?.uri,
+            placeholderType = item.images?.main?.placeholder,
+            modifier = Modifier
+              .align(Alignment.CenterVertically)
+              .size(48.dp)
+        )
 
-    Column(Modifier.align(Alignment.CenterVertically).padding(start = 16.dp)) {
-      var drawnTitle = false
+        Column(
+          Modifier
+            .align(Alignment.CenterVertically)
+            .padding(start = 16.dp)) {
+            var drawnTitle = false
 
-      if (!item.text?.title.isNullOrEmpty()) {
-        drawnTitle = true
-        MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
-      }
+            if (!item.text?.title.isNullOrEmpty()) {
+                drawnTitle = true
+                MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal)
+            }
 
-      if (!item.text?.subtitle.isNullOrEmpty()) {
-        Subtext(item.text!!.subtitle!!, modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp))
-      }
+            if (!item.text?.subtitle.isNullOrEmpty()) {
+                Subtext(
+                    item.text!!.subtitle!!,
+                    modifier = Modifier.padding(top = if (drawnTitle) 4.dp else 8.dp)
+                )
+            }
+        }
     }
-  }
 }

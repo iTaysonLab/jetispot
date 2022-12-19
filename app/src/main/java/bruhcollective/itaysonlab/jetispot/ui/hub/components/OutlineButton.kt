@@ -20,10 +20,25 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 fun OutlineButton(
     item: HubItem
 ) {
-    Box(Modifier.clickableHub(item).padding(16.dp)) {
+    Box(
+        Modifier
+            .clickableHub(item)
+            .padding(16.dp)
+    ) {
         Row(Modifier.align(Alignment.Center)) {
-            MediumText(text = item.text?.title!!, modifier = Modifier.align(Alignment.CenterVertically))
-            Icon(Icons.Rounded.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(start = 2.dp).size(20.dp).align(Alignment.CenterVertically))
+            MediumText(
+                text = item.text?.title!!,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+            Icon(
+                Icons.Rounded.ChevronRight,
+                null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(start = 2.dp)
+                    .size(20.dp)
+                    .align(Alignment.CenterVertically)
+            )
         }
     }
 }

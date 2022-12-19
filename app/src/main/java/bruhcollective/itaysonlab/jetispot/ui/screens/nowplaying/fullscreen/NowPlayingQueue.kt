@@ -32,6 +32,10 @@ fun NowPlayingQueue(
     rvStateProgress: Float
 ) {
     Box(modifier) {
+
+        //return the color using oppositeSystemColor function
+        val color = oppositeColorOfSystem(alpha = 0.2f)
+
         Canvas(modifier = Modifier.fillMaxSize()) {
             val offsetPx = 4.dp.toPx()
             val sizePx = 40.dp.toPx()
@@ -49,7 +53,7 @@ fun NowPlayingQueue(
             val radius = lerp(36.dp, 0.dp, rvStateProgress).toPx()
 
             drawRoundRect(
-                color = Color.White.copy(alpha = 0.2f),
+                color = color,
                 topLeft = offset,
                 size = size,
                 cornerRadius = CornerRadius(radius, radius)
@@ -67,7 +71,12 @@ fun NowPlayingQueue(
                         IntOffset(x = 0, y = (48.dp.toPx() * (1f - rvStateProgress)).toInt())
                     }) {
 
-                LazyColumn(contentPadding = PaddingValues(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())) {
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        bottom = WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding()
+                    )
+                ) {
                     items(viewModel.currentQueue.value) { queueItem ->
                         QueueItem(queueItem)
                     }
@@ -105,7 +114,7 @@ private fun QueueItem(
         ) {
             MediumText(item.name, fontWeight = FontWeight.Normal)
             Spacer(modifier = Modifier.height(4.dp))
-            Subtext(item.artistList.joinToString(", ") { it.name }, maxLines = 1,)
+            Subtext(item.artistList.joinToString(", ") { it.name }, maxLines = 1)
         }
     }
 }

@@ -25,6 +25,7 @@ class SpCollectionManager @Inject constructor(
   private val dao: LocalCollectionDao,
   private val metadataRequester: SpMetadataRequester
 ): DealerClient.MessageListener {
+
   // it's important to use queuing here
   private val scopeDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
   private val scope = CoroutineScope(scopeDispatcher + SupervisorJob())
@@ -64,7 +65,7 @@ class SpCollectionManager @Inject constructor(
   }
 
   suspend fun performScanIfEmpty(of: String) {
-    Log.d("SpColManager", "Performing scan of $of (if empty)")
+    Log.d("SpCollectionManager", "Performing scan of $of (if empty)")
     dao.getCollection(of) ?: writer.performScan(of)
   }
 

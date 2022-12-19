@@ -16,23 +16,36 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
-fun SingleFocusCard (
-  item: HubItem
+fun SingleFocusCard(
+    item: HubItem
 ) {
-  Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(3.dp)), modifier = Modifier
-    .height(120.dp)
-    .fillMaxWidth()
-    .clickableHub(item)) {
-    Row {
-      PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier
-        .fillMaxHeight()
-        .width(120.dp))
-      Box(Modifier.fillMaxSize().padding(16.dp)) {
-        Column(Modifier.align(Alignment.TopStart)) {
-          MediumText(text = item.text!!.title!!)
-          Subtext(text = item.text.subtitle!!)
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(
+                3.dp
+            )
+        ), modifier = Modifier
+        .height(120.dp)
+        .fillMaxWidth()
+        .clickableHub(item)
+    ) {
+        Row {
+            PreviewableAsyncImage(
+                imageUrl = item.images?.main?.uri,
+                placeholderType = item.images?.main?.placeholder,
+                modifier = Modifier
+                  .fillMaxHeight()
+                  .width(120.dp)
+            )
+            Box(
+              Modifier
+                .fillMaxSize()
+                .padding(16.dp)) {
+                Column(Modifier.align(Alignment.TopStart)) {
+                    MediumText(text = item.text!!.title!!)
+                    Subtext(text = item.text.subtitle!!)
+                }
+            }
         }
-      }
     }
-  }
 }

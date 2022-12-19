@@ -8,6 +8,7 @@ import bruhcollective.itaysonlab.jetispot.core.objs.hub.*
 import bruhcollective.itaysonlab.jetispot.core.objs.player.*
 import bruhcollective.itaysonlab.jetispot.core.tracks
 import bruhcollective.itaysonlab.jetispot.core.user
+import bruhcollective.itaysonlab.jetispot.ui.screens.hub.LikedSongsViewModel
 import com.google.protobuf.ByteString
 import com.google.protobuf.StringValue
 import com.spotify.metadata.Metadata

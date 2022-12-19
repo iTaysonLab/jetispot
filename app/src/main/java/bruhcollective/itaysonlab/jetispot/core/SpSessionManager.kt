@@ -13,15 +13,23 @@ import javax.inject.Singleton
 @Suppress("BlockingMethodInNonBlockingContext")
 @Singleton
 class SpSessionManager @Inject constructor(
-  @ApplicationContext val appContext: Context,
+    @ApplicationContext val appContext: Context,
 ) {
-  private var _session: Session? = null
-  val session get() = _session ?: throw IllegalStateException("Session is not created yet!")
+    private var _session: Session? = null
+    val session get() = _session ?: throw IllegalStateException("Session is not created yet!")
 
-  fun createSession(): Session.Builder = Session.Builder(createCfg()).setDeviceType(Connect.DeviceType.SMARTPHONE).setDeviceName(
-    SpUtils.getDeviceName(appContext)).setDeviceId(null).setPreferredLocale(Locale.getDefault().language)
-  private fun createCfg() = Session.Configuration.Builder().setCacheEnabled(true).setDoCacheCleanUp(true).setCacheDir(File(appContext.cacheDir, "spa_cache")).setStoredCredentialsFile(File(appContext.filesDir, "spa_creds")).build()
+    fun createSession(): Session.Builder =
+        Session.Builder(createCfg()).setDeviceType(Connect.DeviceType.SMARTPHONE).setDeviceName(
+            SpUtils.getDeviceName(appContext)
+        ).setDeviceId(null).setPreferredLocale(Locale.getDefault().language)
 
-  fun isSignedIn() = _session?.isValid == true
-  fun setSession(s: Session) { _session = s }
+    private fun createCfg() =
+        Session.Configuration.Builder().setCacheEnabled(true).setDoCacheCleanUp(true)
+            .setCacheDir(File(appContext.cacheDir, "spa_cache"))
+            .setStoredCredentialsFile(File(appContext.filesDir, "spa_creds")).build()
+
+    fun isSignedIn() = _session?.isValid == true
+    fun setSession(s: Session) {
+        _session = s
+    }
 }

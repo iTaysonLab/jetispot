@@ -8,19 +8,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
+import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
+import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
+import bruhcollective.itaysonlab.jetispot.proto.AppConfig
+import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
+import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreenViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import bruhcollective.itaysonlab.jetispot.proto.PlayerConfig as PlayerConfig
 
 @Stable
 @HiltViewModel
 class AuthScreenViewModel @Inject constructor(
   private val authManager: SpAuthManager,
   private val resources: Resources,
+  private val spSessionManager: SpSessionManager,
+    private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel() {
 
   private val _isAuthInProgress = mutableStateOf(false)
   val isAuthInProgress: State<Boolean> = _isAuthInProgress
+
+  fun updateAudioQualityIfPremium(audioQuality: AudioQuality) {
+    viewModelScope.launch {
+      if (spSessionManager.session?.getUserAttribute("player-license") == "premium") {
+        modifyDatastore {
+          playerConfig = playerConfig.toBuilder().setPreferredQuality(audioQuality).build()
+        }
+      }
+    }
+  }
 
   fun auth(
     username: String,
@@ -51,6 +69,11 @@ class AuthScreenViewModel @Inject constructor(
       }
 
       _isAuthInProgress.value = false
+    }
+  }
+  suspend fun modifyDatastore(runOnBuilder: AppConfig.Builder.() -> Unit) {
+    spConfigurationManager.dataStore.updateData {
+      it.toBuilder().apply(runOnBuilder).build()
     }
   }
 }

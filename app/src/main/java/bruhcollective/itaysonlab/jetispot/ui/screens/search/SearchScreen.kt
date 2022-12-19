@@ -15,9 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.proto.SearchEntity
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
@@ -59,7 +62,7 @@ fun SearchScreen(
                     onValueChange = { viewModel.searchQuery = it },
                     placeholder = {
                         if (viewModel.searchQuery.text.isEmpty()) {
-                            Text(text = "What would you like to listen?")
+                            Text(text = stringResource(id = R.string.search_placeholder))
                         }
                     },
                     leadingIcon = {
@@ -123,7 +126,11 @@ private fun SearchBinder(
     onClick: (SearchEntity.EntityCase, String) -> Unit
 ) {
     when {
-        response?.hitsCount == 0 -> PagingInfoPage(title = "Nothing found", text = "Correct your request and try again", modifier = Modifier.fillMaxSize())
+        response?.hitsCount == 0 -> PagingInfoPage(
+            title = SpApp.context.getString(R.string.search_no_results),
+            text = SpApp.context.getString(R.string.search_no_results_desc),
+            modifier = Modifier.fillMaxSize()
+        )
         response == null -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
         else -> {
             LazyColumn(Modifier.fillMaxSize()) {
@@ -131,23 +138,23 @@ private fun SearchBinder(
                     val text = remember(entity) {
                         when (entity.entityCase) {
                             SearchEntity.EntityCase.TRACK -> {
-                                "Song • " + entity.track.trackArtistsList.joinToString { it.name }
+                                SpApp.context.getString(R.string.song_prefix_with_dot) + entity.track.trackArtistsList.joinToString { it.name }
                             }
 
                             SearchEntity.EntityCase.PLAYLIST -> {
                                 when {
-                                    entity.playlist.personalized -> "Playlist • Personalized for you"
-                                    entity.playlist.ownedBySpotify -> "Playlist • By Spotify"
-                                    else -> "Playlist"
+                                    entity.playlist.personalized -> SpApp.context.getString(R.string.playlist_personalized_for_you)
+                                    entity.playlist.ownedBySpotify -> SpApp.context.getString(R.string.playlist_owned_by_spotify)
+                                    else -> SpApp.context.getString(R.string.playlist_prefix)
                                 }
                             }
 
                             SearchEntity.EntityCase.ALBUM -> {
-                                "Album • " + entity.album.artistNamesList.joinToString()
+                                SpApp.context.getString(R.string.album_with_dot)+ entity.album.artistNamesList.joinToString()
                             }
 
                             SearchEntity.EntityCase.ARTIST -> {
-                                "Artist"
+                                SpApp.context.getString(R.string.artist)
                             }
 
                             else -> ""

@@ -11,9 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetispot.R
+import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.api.SpPartnersApi
 import bruhcollective.itaysonlab.jetispot.core.lyrics.SpLyricsController
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.ext.blendWith
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
@@ -66,6 +68,16 @@ class NowPlayingViewModel @Inject constructor(
   }
 
   @OptIn(ExperimentalMaterialApi::class)
+  fun navigateToMoreOptions(navigationController: NavigationController, scope: CoroutineScope, bottomSheetState: BottomSheetState) {
+    navigationController.navigate(BottomSheet.MoreOptions, mapOf(
+      "trackName" to currentTrack.value.title,
+      "artistName" to currentTrack.value.artist,
+      "artworkUrl" to Utils.bytesToHex(getCurrentTrackAsMetadata().album.coverGroup.imageList[0].fileId).lowercase(),  // <-- INFO: THIS IS NOT THE FULL URL. Just the ID of it. Passing a full URL will cause a crash because we can't use them in a DeepLink Navigation URL.
+      "artistsData" to getCurrentTrackAsMetadata().artistWithRoleList.joinToString("|") { Utils.bytesToHex(it.toByteString()) }
+    ))
+  }
+
+  @OptIn(ExperimentalMaterialApi::class)
   fun navigateToArtist(scope: CoroutineScope, sheetState: BottomSheetState, navigationController: NavigationController) {
     scope.launch { sheetState.collapse() }
     navigationController.navigate(
@@ -113,13 +125,14 @@ class NowPlayingViewModel @Inject constructor(
       "playlist" -> R.string.playing_src_playlist
       "album" -> R.string.playing_src_album
       "artist" -> R.string.playing_src_artist
+      "search" -> R.string.playing_src_search
       else -> R.string.playing_src_unknown
     }
   }
 
   fun getHeaderText(): String {
     return when {
-      currentContextUri.value.contains("collection") -> "Liked Songs" // TODO: to R.string
+      currentContextUri.value.contains("collection") -> SpApp.context.getString(R.string.liked_songs)
       else -> currentContext.value
     }
   }

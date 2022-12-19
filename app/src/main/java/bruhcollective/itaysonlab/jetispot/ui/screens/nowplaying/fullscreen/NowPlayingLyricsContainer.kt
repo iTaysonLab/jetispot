@@ -46,13 +46,27 @@ fun NowPlayingLyricsContainer(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Rounded.Lyrics, contentDescription = null, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Lyrics", color = Color.White.copy(alpha = 0.7f), letterSpacing = 2.sp, fontSize = 13.sp)
+            Text(
+                text = "Lyrics",
+                color = oppositeColorOfSystem(alpha = 0.7f),
+                letterSpacing = 2.sp,
+                fontSize = 13.sp
+            )
             Spacer(modifier = Modifier.weight(1f))
-            Icon(Icons.Rounded.Fullscreen, contentDescription = null, modifier = Modifier.size(16.dp))
+            Icon(
+                Icons.Rounded.Fullscreen,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = viewModel.spLyricsController.currentSongLine, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            text = viewModel.spLyricsController.currentSongLine,
+            color = oppositeColorOfSystem(alpha = 1f),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }

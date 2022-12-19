@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 import android.text.format.DateUtils
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,21 +16,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewModel
-import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
-import bruhcollective.itaysonlab.jetispot.ui.shared.PlayPauseButton
-import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
-import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
+import bruhcollective.itaysonlab.jetispot.ui.shared.*
 import com.spotify.metadata.Metadata
 import kotlinx.coroutines.CoroutineScope
 
@@ -62,20 +61,23 @@ fun NowPlayingControls(
 private fun ControlsArtwork(
     viewModel: NowPlayingViewModel,
 ) {
-    PreviewableAsyncImage(
-        imageUrl = remember(viewModel.currentTrack.value) {
-            if (viewModel.currentQueue.value.isNotEmpty()) {
-                SpUtils.getImageUrl(viewModel.currentQueue.value[viewModel.currentQueuePosition.value].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
-            } else {
-                null
-            }
-        },
-        placeholderType = "track",
-        modifier = Modifier
-            .padding(horizontal = 14.dp)
-            .size(128.dp)
-            .clip(RoundedCornerShape(12.dp))
-    )
+    ElevatedCard(modifier = Modifier
+        .padding(horizontal = 14.dp)
+        .clip(RoundedCornerShape(12.dp))) {
+        PreviewableAsyncImage(
+            imageUrl = remember(viewModel.currentTrack.value) {
+                if (viewModel.currentQueue.value.isNotEmpty()) {
+                    SpUtils.getImageUrl(viewModel.currentQueue.value[viewModel.currentQueuePosition.value].album.coverGroup.imageList.find { it.size == Metadata.Image.Size.LARGE }?.fileId)
+                } else {
+                    null
+                }
+            },
+            placeholderType = "track",
+            modifier = Modifier
+                .size(128.dp)
+
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -85,7 +87,7 @@ private fun ControlsHeader(
     bottomSheetState: BottomSheetState,
     viewModel: NowPlayingViewModel,
 ) {
-    MediumText(
+    MarqueeText(
         text = viewModel.currentTrack.value.title,
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -94,13 +96,15 @@ private fun ControlsHeader(
             ) { navController ->
                 viewModel.navigateToSource(scope, bottomSheetState, navController)
             },
-        fontSize = 24.sp, color = Color.White,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
     )
     
     Spacer(Modifier.height(2.dp))
-    
-    Text(text = viewModel.currentTrack.value.artist,
+
+    MarqueeText(text = viewModel.currentTrack.value.artist,
         modifier = Modifier
+            .alpha(0.7f)
             .padding(horizontal = 14.dp)
             .navClickable(
                 enableRipple = false
@@ -110,7 +114,6 @@ private fun ControlsHeader(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 16.sp,
-        color = Color.White.copy(alpha = 0.7f)
     )
 }
 
@@ -136,9 +139,9 @@ private fun ControlsSeekbar(
     }
 
     Slider(value = if (isSeekbarDragging) seekbarDraggingProgress else viewModel.currentPosition.value.progressRange, colors = SliderDefaults.colors(
-        thumbColor = Color.White,
-        activeTrackColor = Color.White,
-        inactiveTrackColor = Color.White.copy(alpha = 0.5f)
+        thumbColor = oppositeColorOfSystem(alpha = 1f),
+        activeTrackColor = oppositeColorOfSystem(alpha = 0.7f),
+        inactiveTrackColor = oppositeColorOfSystem(alpha = 0.35f)
     ), onValueChange = {
         isSeekbarDragging = true
         seekbarDraggingProgress = it
@@ -154,14 +157,14 @@ private fun ControlsSeekbar(
     ) {
         Text(
             text = elapsedTime,
-            color = Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.alpha(0.7f),
             fontSize = 12.sp
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = totalTime,
-            color = Color.White.copy(alpha = 0.7f),
-            fontSize = 12.sp
+            fontSize = 12.sp,
+            modifier = Modifier.alpha(0.7f)
         )
     }
 }
@@ -173,17 +176,17 @@ private fun ControlsMainButtons(
     setQueueOpened: (Boolean) -> Unit,
 ) {
     Row(Modifier.padding(horizontal = 14.dp)) {
-        Surface(color = Color.White, modifier = Modifier
+        Surface(color = oppositeColorOfSystem(if (!isSystemInDarkTheme()) 0.75f else 1f), modifier = Modifier
             .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = Color.Black)
+                indication = rememberRipple(color = systemThemeColor(alpha = 1f))
             ) {
                 viewModel.togglePlayPause()
             }) {
             PlayPauseButton(
                 isPlaying = viewModel.currentState.value == SpPlayerServiceManager.PlaybackState.Playing,
-                color = Color.Black,
+                color = systemThemeColor(1f),
                 modifier = Modifier
                     .size(42.dp)
                     .align(Alignment.CenterVertically)
@@ -197,7 +200,7 @@ private fun ControlsMainButtons(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(42.dp),
-            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
+            colors = IconButtonDefaults.iconButtonColors(containerColor = oppositeColorOfSystem(0.2f), contentColor = oppositeColorOfSystem(1f))
         ) {
             Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
         }
@@ -209,7 +212,7 @@ private fun ControlsMainButtons(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(42.dp),
-            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
+            colors = IconButtonDefaults.iconButtonColors(containerColor = oppositeColorOfSystem(0.2f), contentColor = oppositeColorOfSystem(1f))
         ) {
             Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
         }
@@ -221,7 +224,7 @@ private fun ControlsMainButtons(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(42.dp),
-            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White.copy(0.2f), contentColor = Color.White)
+            colors = IconButtonDefaults.iconButtonColors(containerColor = oppositeColorOfSystem(0.2f), contentColor = oppositeColorOfSystem(1f))
         ) {
             Icon(imageVector = Icons.Rounded.FavoriteBorder, contentDescription = null)
         }
@@ -236,9 +239,10 @@ private fun ControlsMainButtons(
                 .onGloballyPositioned { coords ->
                     viewModel.queueButtonParams = coords.positionInRoot()
                 },
-            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = Color.White)
+            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.Transparent, contentColor = oppositeColorOfSystem(1f))
         ) {
             Icon(imageVector = Icons.Rounded.QueueMusic, contentDescription = null)
         }
     }
 }
+

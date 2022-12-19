@@ -21,39 +21,49 @@ import com.spotify.podcastextensions.proto.PodcastTopics
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PodcastTopicsStrip (
-  item: HubItem
+fun PodcastTopicsStrip(
+    item: HubItem
 ) {
-  val navController = LocalNavigationController.current
-  val topics = remember { item.custom!!["topics"] as PodcastTopics }
-  val rating = remember { item.custom!!["ratings"] as PodcastRating }
+    val navController = LocalNavigationController.current
+    val topics = remember { item.custom!!["topics"] as PodcastTopics }
+    val rating = remember { item.custom!!["ratings"] as PodcastRating }
 
-  LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(horizontal = 16.dp)) {
-    item {
-      ElevatedSuggestionChip(onClick = {
-        // TODO
-      }, icon = {
-        Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
-      }, label = {
-        Text(text = "${String.format("%.2f", rating.averageRating.average)} (${rating.averageRating.totalRatings})")
-      })
-    }
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        item {
+            ElevatedSuggestionChip(onClick = {
+                // TODO
+            }, icon = {
+                Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
+            }, label = {
+                Text(
+                    text = "${
+                        String.format(
+                            "%.2f",
+                            rating.averageRating.average
+                        )
+                    } (${rating.averageRating.totalRatings})"
+                )
+            })
+        }
 
-    items(topics.topicsList) { topic ->
-      PodcastTopic(topic = topic, onClick = navController::navigate)
+        items(topics.topicsList) { topic ->
+            PodcastTopic(topic = topic, onClick = navController::navigate)
+        }
     }
-  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PodcastTopic (
-  topic: PodcastTopic,
-  onClick: (String) -> Unit
+private fun PodcastTopic(
+    topic: PodcastTopic,
+    onClick: (String) -> Unit
 ) {
-  ElevatedSuggestionChip(onClick = {
-    onClick(topic.uri)
-  }, label = {
-    Text(text = topic.title)
-  })
+    ElevatedSuggestionChip(onClick = {
+        onClick(topic.uri)
+    }, label = {
+        Text(text = topic.title)
+    })
 }

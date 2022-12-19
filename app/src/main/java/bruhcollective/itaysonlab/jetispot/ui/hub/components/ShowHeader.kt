@@ -21,53 +21,58 @@ import com.spotify.metadata.Metadata
 
 @Composable
 fun ShowHeader(
-  item: HubItem
+    item: HubItem
 ) {
-  val show = remember { item.custom!!["show"] as Metadata.Show }
-  val imageUrl = remember { SpUtils.getImageUrl(show.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId) }
+    val show = remember { item.custom!!["show"] as Metadata.Show }
+    val imageUrl =
+        remember { SpUtils.getImageUrl(show.coverImage.imageList.first { it.size == Metadata.Image.Size.DEFAULT }.fileId) }
 
-  Column {
-    Box(
-      Modifier
-        .fillMaxWidth()
-        .height(240.dp)
-    ) {
-      AsyncImage(
-        model = imageUrl,
-        contentScale = ContentScale.Crop,
-        contentDescription = null,
-        modifier = Modifier
-          .fillMaxSize()
-      )
-
-      Box(
-        Modifier
-          .background(
-            brush = Brush.verticalGradient(
-              colors = listOf(Color.Transparent, MaterialTheme.colorScheme.surface.copy(alpha = 0.9f), MaterialTheme.colorScheme.surface)
+    Column {
+        Box(
+          Modifier
+            .fillMaxWidth()
+            .height(240.dp)
+        ) {
+            AsyncImage(
+                model = imageUrl,
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
             )
-          )
-          .fillMaxSize()
-      )
 
-      MediumText(
-        text = show.name,
-        fontSize = 48.sp,
-        lineHeight = 52.sp,
-        maxLines = 2,
-        modifier = Modifier
-          .align(Alignment.BottomStart)
-          .padding(horizontal = 16.dp)
-          .padding(bottom = 8.dp)
-      )
+            Box(
+              Modifier
+                .background(
+                  brush = Brush.verticalGradient(
+                    colors = listOf(
+                      Color.Transparent,
+                      MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                      MaterialTheme.colorScheme.surface
+                    )
+                  )
+                )
+                .fillMaxSize()
+            )
+
+            MediumText(
+                text = show.name,
+                fontSize = 48.sp,
+                lineHeight = 52.sp,
+                maxLines = 2,
+                modifier = Modifier
+                  .align(Alignment.BottomStart)
+                  .padding(horizontal = 16.dp)
+                  .padding(bottom = 8.dp)
+            )
+        }
+
+        Text(
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            fontSize = 12.sp,
+            lineHeight = 18.sp,
+            text = show.description, modifier = Modifier
+                .padding(horizontal = 16.dp)
+        )
     }
-
-    Text(
-      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-      fontSize = 12.sp,
-      lineHeight = 18.sp,
-      text = show.description, modifier = Modifier
-        .padding(horizontal = 16.dp)
-    )
-  }
 }

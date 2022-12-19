@@ -2,6 +2,8 @@ package bruhcollective.itaysonlab.jetispot.ui.hub
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubComponent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.*
+
+//TODO: FIX UNSUPPORTED ID IN LISTENING HISTORY - BOBBYESP
 
 @Composable
 fun HubBinder (
@@ -58,6 +62,11 @@ fun HubBinder (
     HubComponent.PodcastTopics -> PodcastTopicsStrip(item)
 
     HubComponent.OutlinedButton -> OutlineButton(item)
+
+    HubComponent.HistoryPlaylist -> PlaylistTrackRowLarger(item)
+    HubComponent.HistoryDivider -> Divider(modifier = Modifier.padding(start = 14.dp, end = 14.dp).height(2.dp))
+
+    //TODO: Keep adding components searching them in the API (Thunder client)
     HubComponent.EmptySpace, HubComponent.Ignored -> {}
 
     else -> {

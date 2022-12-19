@@ -18,20 +18,30 @@ import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 
 @Composable
 fun Carousel(
-  item: HubItem,
+    item: HubItem,
 ) {
-  val isSurroundedWithPadding = LocalHubScreenDelegate.current.isSurroundedWithPadding()
-  
-  Column(Modifier.padding(vertical = if (isSurroundedWithPadding) 0.dp else 8.dp)) {
-    if (item.text != null) {
-      Text(text = item.text.title!!, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold, fontSize = 16.sp,
-        modifier = Modifier.padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp).padding(bottom = 12.dp))
-    }
+    val isSurroundedWithPadding = LocalHubScreenDelegate.current.isSurroundedWithPadding()
 
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)) {
-      items(item.children ?: listOf()) { cItem ->
-        HubBinder(cItem)
-      }
+    Column(Modifier.padding(vertical = if (isSurroundedWithPadding) 0.dp else 8.dp)) {
+        if (item.text != null) {
+            Text(
+                text = item.text.title!!,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier
+                  .padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)
+                  .padding(bottom = 12.dp)
+            )
+        }
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)
+        ) {
+            items(item.children ?: listOf()) { cItem ->
+                HubBinder(cItem)
+            }
+        }
     }
-  }
 }

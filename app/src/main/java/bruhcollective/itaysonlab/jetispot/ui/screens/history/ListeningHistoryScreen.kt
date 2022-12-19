@@ -41,12 +41,13 @@ class HistoryViewModel @Inject constructor(
     private val spInternalApi: SpInternalApi,
     private val spPlayerServiceManager: SpPlayerServiceManager
 ) : AbsHubViewModel(), HubScreenDelegate {
+
     suspend fun load() = load {
-      spInternalApi.getListeningHistory()
+        spInternalApi.getListeningHistory()
     }
 
     suspend fun reload() = reload {
-      spInternalApi.getListeningHistory()
+        spInternalApi.getListeningHistory()
     }
 
     override fun play(data: PlayFromContextData) {

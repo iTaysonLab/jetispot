@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.api
 
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
+import bruhcollective.itaysonlab.jetispot.core.objs.playlists.LikedSongsResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.tags.ContentFilterResponse
 import bruhcollective.itaysonlab.jetispot.core.util.SpUtils
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
@@ -23,35 +24,38 @@ interface SpInternalApi {
   suspend fun getChartView(): HubResponse
 
   @GET("/radio-apollo/v5/radio-hub")
-  suspend fun getRadioHub(): HubResponse
+  suspend fun getRadioHub(@Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
+
+  @GET("/me/tracks")
+  suspend fun getSavedTracks(): LikedSongsResponse
 
   @GET("/hubview-mobile-v1/browse/{id}")
-  suspend fun getBrowseView(@Path("id") pageId: String = ""): HubResponse
+  suspend fun getBrowseView(@Path("id") pageId: String = "", @Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
 
   @GET("/album-entity-view/v2/album/{id}")
-  suspend fun getAlbumView(@Path("id") pageId: String, @Query("checkDeviceCapability") checkDeviceCapability: Boolean = true): HubResponse
+  suspend fun getAlbumView(@Path("id") pageId: String, @Query("checkDeviceCapability") checkDeviceCapability: Boolean = true, @Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
 
   @GET("/artistview/v1/artist/{id}")
-  suspend fun getArtistView(@Path("id") pageId: String, @Query("purchase_allowed") purchaseAllowed: Boolean = false, @Query("timeFormat") timeFormat: String = "24h"): HubResponse
+  suspend fun getArtistView(@Path("id") pageId: String, @Query("purchase_allowed") purchaseAllowed: Boolean = false, @Query("timeFormat") timeFormat: String = "24h", @Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
 
   @GET("/artistview/v1/artist/{id}/releases")
-  suspend fun getReleasesView(@Path("id") pageId: String, @Query("checkDeviceCapability") checkDeviceCapability: Boolean = true): HubResponse
+  suspend fun getReleasesView(@Path("id") pageId: String, @Query("checkDeviceCapability") checkDeviceCapability: Boolean = true, @Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
 
   @GET("/listening-history/v2/mobile/{timestamp}")
-  suspend fun getListeningHistory(@Path("timestamp") timestamp: String = "", @Query("type") type: String = "merged", @Query("last_component_had_play_context") idk: Boolean = false): HubResponse
+  suspend fun getListeningHistory(@Path("timestamp") timestamp: String = "", @Query("type") type: String = "merged", @Query("last_component_had_play_context") idk: Boolean = false, @Header("Accept-Language") language:String = Locale.getDefault().language): HubResponse
 
   @GET("/content-filter/v1/liked-songs")
-  @Headers("Accept: application/json", "Accept-Language: en-US")
+  @Headers("Accept: application/json")
   suspend fun getCollectionTags(@Query("subjective") subjective: Boolean = true): ContentFilterResponse
 
   @POST("/home-dac-viewservice/v1/view")
-  suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome()): DacResponse
+  suspend fun getDacHome(@Body request: DacRequest = buildDacRequestForHome(), @Header("Accept-Language") acceptLanguage: String = Locale.getDefault().language): DacResponse
 
   @GET("/pam-view-service/v1/AllPlans")
-  suspend fun getAllPlans(): DacResponse
+  suspend fun getAllPlans(@Header("Accept-Language") language:String = Locale.getDefault().language): DacResponse
 
   @GET("/pam-view-service/v1/PlanOverview")
-  suspend fun getPlanOverview(): DacResponse
+  suspend fun getPlanOverview(@Header("Accept-Language") language:String = Locale.getDefault().language): DacResponse
 
   @GET("/popcount/v2/playlist/{id}/count")
   suspend fun getPlaylistPopCount(@Path("id") id: String = ""): Popcount2External.PopcountResult

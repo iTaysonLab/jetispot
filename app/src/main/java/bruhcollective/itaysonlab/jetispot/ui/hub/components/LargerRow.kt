@@ -16,17 +16,29 @@ import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.Subtext
 
 @Composable
-fun LargerRow (
-  item: HubItem
+fun LargerRow(
+    item: HubItem
 ) {
-  Row(
-    Modifier
-      .clickableHub(item)
-      .padding(horizontal = 16.dp, vertical = 2.dp)) {
-    PreviewableAsyncImage(imageUrl = item.images?.main?.uri, placeholderType = item.images?.main?.placeholder, modifier = Modifier.size(72.dp).padding(end = 16.dp).padding(vertical = 8.dp))
-    Column(Modifier.align(Alignment.CenterVertically)) {
-      MediumText(item.text!!.title!!, fontWeight = FontWeight.Normal, modifier = Modifier.padding(bottom = 4.dp))
-      Subtext(item.text.subtitle!!)
+    Row(
+      Modifier
+        .clickableHub(item)
+        .padding(horizontal = 16.dp, vertical = 2.dp)
+    ) {
+        PreviewableAsyncImage(
+            imageUrl = item.images?.main?.uri,
+            placeholderType = item.images?.main?.placeholder,
+            modifier = Modifier
+              .size(72.dp)
+              .padding(end = 16.dp)
+              .padding(vertical = 8.dp)
+        )
+        Column(Modifier.align(Alignment.CenterVertically)) {
+            MediumText(
+                item.text!!.title!!,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Subtext(item.text.subtitle!!)
+        }
     }
-  }
 }

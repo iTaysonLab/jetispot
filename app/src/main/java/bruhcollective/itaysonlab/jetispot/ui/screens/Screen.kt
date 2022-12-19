@@ -28,6 +28,7 @@ enum class Screen(
   // config
   Config("config"),
   StorageConfig("config/storage"),
+  LanguageConfig("config/language"),
   QualityConfig("config/playbackQuality"),
   NormalizationConfig("config/playbackNormalization");
 
@@ -47,12 +48,14 @@ enum class Dialog(
   val route: String
 ) {
   AuthDisclaimer("dialogs/disclaimers"),
-  Logout("dialogs/logout")
+  Logout("dialogs/logout"),
+  UpdateAvailable("dialogs/updateAvailable")
 }
 
 @Immutable
 enum class BottomSheet(
   val route: String
 ) {
-  JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}") // ID=ROLE|ID=ROLE
+  JumpToArtist("bs/jumpToArtist/{artistIdsAndRoles}"), // ID=ROLE|ID=ROLE
+  MoreOptions("bs/moreOptions/{trackName}/{artistName}/{artworkUrl}/{artistsData}") //TODO: ADD ARGUMENTS
 }

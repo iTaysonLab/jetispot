@@ -26,8 +26,13 @@ sealed class HubComponent {
   @TypeLabel("artist:likedSongsRow")
   object ArtistLikedSongs: HubComponent()
 
-  // BROWSE
+  @TypeLabel("listeninghistory:playlistContextRow", alternateLabels = ["listeninghistory:collectionContextRow", "listeninghistory:albumContextRow"])
+  object HistoryPlaylist: HubComponent()
 
+  @TypeLabel("listeninghistory:dividerAfterPlaysFromContextRow")
+  object HistoryDivider: HubComponent()
+
+  // BROWSE
   @TypeLabel("find:categoryCard")
   object FindCard: HubComponent(), ComponentInGrid
 
@@ -96,7 +101,7 @@ sealed class HubComponent {
 
   // IGNORING
 
-  @TypeLabel("listeninghistory:dividerAfterEntityRow")
+  @TypeLabel("listeninghistory:dividerAfterEntityRow", alternateLabels = ["listeninghistory:playsFromContextRow", "listeninghistory:artistContextRow" /*This by the moment*/])
   object EmptySpace: HubComponent()
 
   @TypeLabel("freetier:offlineSwitchComponent", alternateLabels = ["find:header"])

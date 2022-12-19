@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubEvent
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
+import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import bruhcollective.itaysonlab.jetispot.ui.shared.navAndHubClickable
 import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
@@ -18,7 +19,9 @@ object HubEventHandler {
           navController.navigate(event.data.uri)
         }
       }
+
       is HubEvent.PlayFromContext -> delegate.play(event.data)
+
       HubEvent.Unknown -> {}
     }
   }

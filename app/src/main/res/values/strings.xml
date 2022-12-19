@@ -15,7 +15,7 @@
     <string name="auth_err_badcreds">Incorrect username or password.</string>
     <string name="auth_err_premium">To use Jetispot, you must have a Spotify Premium account.</string>
     <string name="auth_err_empty">Username or password field is empty.</string>
-    <string name="auth_disclaimer_text">
+    <string name="auth_disclaimer_text" translatable="false">
         Jetispot is an unofficial application which is not connected in any ways to Spotify AB.\n\nBy entering your account details and pressing \"Sign in\", you confirm that:\n- you own your account\n- you have an active Spotify Premium subscription\n- you know that Jetispot can\'t download music, save it to offline storage or bypass DRM (and never will be)
     </string>
 
@@ -29,22 +29,22 @@
     <string name="config_pbquality">Audio quality</string>
 
     <string name="quality_low">Low</string>
-    <string name="quality_low_desc">~ 24kbit/s</string>
+    <string name="quality_low_desc" translatable="false">~ 24kbit/s</string>
     <string name="quality_normal">Normal</string>
-    <string name="quality_normal_desc">~ 96kbit/s</string>
+    <string name="quality_normal_desc" translatable="false">~ 96kbit/s</string>
     <string name="quality_high">High</string>
-    <string name="quality_high_desc">~ 160kbit/s</string>
+    <string name="quality_high_desc" translatable="false">~ 160kbit/s</string>
     <string name="quality_very_high">Very high</string>
-    <string name="quality_very_high_desc">~ 320kbit/s</string>
+    <string name="quality_very_high_desc" translatable="false">~ 320kbit/s</string>
 
     <string name="config_normalization">Audio normalization</string>
     <string name="normalization_disabled">Disabled</string>
     <string name="normalization_quiet">Quiet</string>
-    <string name="normalization_quiet_desc">-5 dB</string>
+    <string name="normalization_quiet_desc" translatable="false">-5 dB</string>
     <string name="normalization_balanced">Normal</string>
-    <string name="normalization_balanced_desc">3 dB</string>
+    <string name="normalization_balanced_desc" translatable="false">3 dB</string>
     <string name="normalization_loud">Loud</string>
-    <string name="normalization_loud_desc">6 dB</string>
+    <string name="normalization_loud_desc" translatable="false">6 dB</string>
 
     <string name="config_crossfade">Crossfade</string>
     <string name="crossfade_disabled">Disabled</string>
@@ -136,17 +136,50 @@
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
 
-    <string name="artist_role_main">main artist</string>
-    <string name="artist_role_feat">featured artist</string>
-    <string name="artist_role_remixer">remixer</string>
-    <string name="artist_role_actor">actor</string>
-    <string name="artist_role_composer">composer</string>
-    <string name="artist_role_conductor">conductor</string>
-    <string name="artist_role_orchestra">orchestra</string>
-    <string name="artist_role_unknown">unknown role</string>
+    <string name="artist_role_main">Main artist</string>
+    <string name="artist_role_feat">Featured artist</string>
+    <string name="artist_role_remixer">Remixer</string>
+    <string name="artist_role_actor">Actor</string>
+    <string name="artist_role_composer">Composer</string>
+    <string name="artist_role_conductor">Conductor</string>
+    <string name="artist_role_orchestra">Orchestra</string>
+    <string name="artist_role_unknown">Unknown role</string>
 
     <string name="auto_tabs_home">Home</string>
     <string name="auto_tabs_recent">Recent</string>
     <string name="auto_tabs_browse">Browse</string>
     <string name="auto_tabs_library">Library</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="system_default">System default</string>
+    <string name="your_library">Your library</string>
+    <string name="unknown_title">Unknown Title</string>
+    <string name="unknown_artist">Unknown Artist</string>
+    <string name="unknown_album">Unknown Album</string>
+    <string name="search_placeholder">What would you like to listen?</string>
+    <string name="song_prefix_with_dot">"Song • "</string>
+    <string name="playlist_personalized_for_you">Playlist • Personalized for you</string>
+    <string name="playlist_owned_by_spotify">Playlist • By Spotify</string>
+    <string name="playlist_prefix">"Playlist"</string>
+    <string name="album_with_dot">"Album • "</string>
+    <string name="artist">Artist</string>
+    <string name="search_no_results">Nothing was found</string>
+    <string name="search_no_results_desc">Correct your request and try again</string>
+    <string name="playing_src_search">playing from search</string>
+    <string name="songs">songs</string>
+    <string name="songs_by">songs by</string>
+    <string name="likes_dot">"likes • "</string>
+    <string name="no_lyrics">Ups, seems like this song have no lyrics…</string>
+    <string name="language">Language</string>
+    <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Premium account.</string>
+    <string name="battery_configuration">Battery configuration</string>
+    <string name="battery_configuration_desc">Ignore system\'s battery optimization to be able to keep the app in the background.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update">Update</string>
+    <string name="choose_artist">Choose an artist</string>
+    <string name="more_options">More options</string>
+    <string name="go_to_artist">Go to the artist\'s profile</string>
+    <string name="save_to_your_music">Add this song to favorites</string>
+    <string name="share">Share this track</string>
 </resources>

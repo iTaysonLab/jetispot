@@ -31,6 +31,9 @@ class ConfigScreenViewModel @Inject constructor(
   private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel(), ConfigViewModel {
   private val configList = buildList {
+
+    add(ConfigItem.Hint())
+
     add(ConfigItem.Category(R.string.config_playback))
 
     add(ConfigItem.Preference(R.string.config_pbquality, { ctx, cfg ->
@@ -84,6 +87,10 @@ class ConfigScreenViewModel @Inject constructor(
       it.navigate(Screen.StorageConfig)
     }))
 
+    /*add(ConfigItem.Preference(R.string.language, { ctx, cfg -> "" }, {
+      it.navigate(Screen.LanguageConfig)
+    }))*/
+
     add(ConfigItem.Category(R.string.config_account))
 
     add(ConfigItem.Preference(R.string.config_logout, { ctx, cfg ->
@@ -109,7 +116,7 @@ class ConfigScreenViewModel @Inject constructor(
     }, {}))
 
     add(ConfigItem.Preference(R.string.about_sources, { ctx, _ -> "" }, {
-      it.openInBrowser("https://github.com/itaysonlab/jetispot")
+      it.openInBrowser("https://github.com/iTaysonLab/jetispot")
     }))
 
     add(ConfigItem.Preference(R.string.about_channel, { ctx, _ -> "" }, {
