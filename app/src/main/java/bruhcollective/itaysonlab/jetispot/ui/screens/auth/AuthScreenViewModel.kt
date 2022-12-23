@@ -12,68 +12,74 @@ import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
-import bruhcollective.itaysonlab.jetispot.ui.screens.config.QualityConfigScreenViewModel
+import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
+import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import bruhcollective.itaysonlab.jetispot.proto.PlayerConfig as PlayerConfig
 
 @Stable
 @HiltViewModel
 class AuthScreenViewModel @Inject constructor(
-  private val authManager: SpAuthManager,
-  private val resources: Resources,
-  private val spSessionManager: SpSessionManager,
+    private val authManager: SpAuthManager,
+    private val resources: Resources,
+    private val spSessionManager: SpSessionManager,
     private val spConfigurationManager: SpConfigurationManager
 ) : ViewModel() {
+    private val _isAuthInProgress = mutableStateOf(false)
+    val isAuthInProgress: State<Boolean> = _isAuthInProgress
 
-  private val _isAuthInProgress = mutableStateOf(false)
-  val isAuthInProgress: State<Boolean> = _isAuthInProgress
+    fun onLoginSuccess(navController: NavigationController) {
+        navController.navigateAndClearStack(Screen.Feed)
+        updateAudioQualityIfPremium(AudioQuality.VERY_HIGH)
+    }
 
-  fun updateAudioQualityIfPremium(audioQuality: AudioQuality) {
-    viewModelScope.launch {
-      if (spSessionManager.session?.getUserAttribute("player-license") == "premium") {
-        modifyDatastore {
-          playerConfig = playerConfig.toBuilder().setPreferredQuality(audioQuality).build()
+    fun auth(
+        username: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+    ) {
+        if (isAuthInProgress.value) return
+
+        viewModelScope.launch {
+            if (username.isEmpty() || password.isEmpty()) {
+                onFailure(resources.getString(R.string.auth_err_empty))
+                return@launch
+            }
+
+            _isAuthInProgress.value = true
+
+            when (val result = authManager.authWith(username, password)) {
+                SpAuthManager.AuthResult.Success -> onSuccess()
+                is SpAuthManager.AuthResult.Exception -> onFailure("Java Error: ${result.e.message}")
+                is SpAuthManager.AuthResult.SpError -> onFailure(
+                    when (result.msg) {
+                        "BadCredentials" -> resources.getString(R.string.auth_err_badcreds)
+                        "PremiumAccountRequired" -> resources.getString(R.string.auth_err_premium)
+                        else -> "Spotify API error: ${result.msg}"
+                    }
+                )
+            }
+
+            _isAuthInProgress.value = false
         }
-      }
     }
-  }
 
-  fun auth(
-    username: String,
-    password: String,
-    onSuccess: () -> Unit,
-    onFailure: (String) -> Unit,
-  ) {
-    if (isAuthInProgress.value) return
-
-    viewModelScope.launch {
-      if (username.isEmpty() || password.isEmpty()) {
-        onFailure(resources.getString(R.string.auth_err_empty))
-        return@launch
-      }
-
-      _isAuthInProgress.value = true
-
-      when (val result = authManager.authWith(username, password)) {
-        SpAuthManager.AuthResult.Success -> onSuccess()
-        is SpAuthManager.AuthResult.Exception -> onFailure("Java Error: ${result.e.message}")
-        is SpAuthManager.AuthResult.SpError -> onFailure(
-          when (result.msg) {
-            "BadCredentials" -> resources.getString(R.string.auth_err_badcreds)
-            "PremiumAccountRequired" -> resources.getString(R.string.auth_err_premium)
-            else -> "Spotify API error: ${result.msg}"
-          }
-        )
-      }
-
-      _isAuthInProgress.value = false
+    private suspend fun modifyDatastore(runOnBuilder: AppConfig.Builder.() -> Unit) {
+        spConfigurationManager.dataStore.updateData {
+            it.toBuilder().apply(runOnBuilder).build()
+        }
     }
-  }
-  suspend fun modifyDatastore(runOnBuilder: AppConfig.Builder.() -> Unit) {
-    spConfigurationManager.dataStore.updateData {
-      it.toBuilder().apply(runOnBuilder).build()
+
+    private fun updateAudioQualityIfPremium() {
+        viewModelScope.launch {
+            if (spSessionManager.session.getUserAttribute("player-license") == "premium") {
+                modifyDatastore {
+                    playerConfig =
+                        playerConfig.toBuilder().setPreferredQuality(AudioQuality.VERY_HIGH).build()
+                }
+            }
+        }
     }
-  }
 }

@@ -1,16 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.auth
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.*
@@ -27,6 +23,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillNode
 import androidx.compose.ui.autofill.AutofillType
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
@@ -56,209 +53,223 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
-  viewModel: AuthScreenViewModel = hiltViewModel()
+    viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
-  val navController = LocalNavigationController.current
+    val navController = LocalNavigationController.current
 
-  val snackbarHostState = remember { SnackbarHostState() }
-  val (snackbarContent, setSnackbarContent) = remember { mutableStateOf("", neverEqualPolicy()) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val (snackbarContent, setSnackbarContent) = remember { mutableStateOf("", neverEqualPolicy()) }
 
-  LaunchedEffect(snackbarContent) {
-    if (snackbarContent.isNotEmpty()) {
-      snackbarHostState.showSnackbar(snackbarContent)
-    }
-  }
-
-  fun onLoginSuccess(){
-    navController.navigateAndClearStack(Screen.Feed)
-    viewModel.updateAudioQualityIfPremium(AudioQuality.VERY_HIGH)
-  }
-
-  val autofill = LocalAutofill.current
-  val focusManager = LocalFocusManager.current
-
-  val (username, setUsername) = rememberSaveable { mutableStateOf("") }
-  val (password, setPassword) = rememberSaveable { mutableStateOf("") }
-  val (usernameFocusRequester, passwordFocusRequester) = remember { FocusRequester.createRefs() }
-
-  var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-  Box(
-    modifier = Modifier
-      .fillMaxSize()
-      .systemBarsPadding()
-  ) {
-    Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.spacedBy(8.dp),
-      modifier = Modifier.padding(top = 32.dp).fillMaxWidth()
-    ) {
-      Text(
-        text = stringResource(R.string.auth_welcome),
-        fontSize = 24.sp,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterHorizontally)
-      )
-      Text(
-        text = stringResource(R.string.auth_welcome_text),
-        fontSize = 14.sp,
-        modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.CenterHorizontally)
-      )
+    LaunchedEffect(snackbarContent) {
+        if (snackbarContent.isNotEmpty()) {
+            snackbarHostState.showSnackbar(snackbarContent)
+        }
     }
 
-    Column(
-      verticalArrangement = Arrangement.spacedBy(8.dp),
-      modifier = Modifier
-        .align(Alignment.Center)
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
-    ) {
-      Autofill(
-        autofillTypes = listOf(AutofillType.EmailAddress, AutofillType.Username),
-        onFill = setUsername
-      ) { autofillNode ->
-        OutlinedTextField(
-          value = username,
-          onValueChange = setUsername,
-          keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next
-          ),
-          keyboardActions = KeyboardActions {
-            passwordFocusRequester.requestFocus()
-          },
-          singleLine = true,
-          label = { Text(stringResource(R.string.username)) },
-          modifier = Modifier
-            .fillMaxWidth()
-            .focusTarget()
-            .focusRequester(usernameFocusRequester)
-            .onFocusChanged {
-              autofill?.apply {
-                if (it.isFocused) {
-                  requestAutofillForNode(autofillNode)
-                } else {
-                  cancelAutofillForNode(autofillNode)
-                }
-              }
-            }
-            .focusProperties { next = passwordFocusRequester },
-        )
-      }
+    val autofill = LocalAutofill.current
+    val focusManager = LocalFocusManager.current
 
-      Autofill(
-        autofillTypes = listOf(AutofillType.Password),
-        onFill = setPassword
-      ) { autofillNode ->
-        OutlinedTextField(
-          value = password,
-          onValueChange = setPassword,
-          label = { Text(stringResource(R.string.password)) },
-          singleLine = true,
-          visualTransformation = if (passwordVisible)
-            VisualTransformation.None
-          else
-            PasswordVisualTransformation(),
-          modifier = Modifier
-            .fillMaxWidth()
-            .focusTarget()
-            .focusRequester(passwordFocusRequester)
-            .onFocusChanged {
-              autofill?.apply {
-                if (it.isFocused) {
-                  requestAutofillForNode(autofillNode)
-                } else {
-                  cancelAutofillForNode(autofillNode)
-                }
-              }
-            }
-            .focusProperties { previous = usernameFocusRequester },
-          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-          keyboardActions = KeyboardActions {
-            focusManager.clearFocus()
-            viewModel.auth(
-              username = username,
-              password = password,
-              onSuccess = { onLoginSuccess() },
-              onFailure = setSnackbarContent,
-            )
-          },
-          trailingIcon = {
-            IconButton(
-              onClick = { passwordVisible = !passwordVisible }
-            ) {
-              if (passwordVisible)
-                Icon(Icons.Rounded.Visibility, stringResource(R.string.hide_password))
-              else
-                Icon(Icons.Rounded.VisibilityOff, stringResource(R.string.show_password))
-            }
-          }
-        )
-      }
-    }
+    val (username, setUsername) = rememberSaveable { mutableStateOf("") }
+    val (password, setPassword) = rememberSaveable { mutableStateOf("") }
+    val (usernameFocusRequester, passwordFocusRequester) = remember { FocusRequester.createRefs() }
+
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     Box(
-      Modifier
-        .align(Alignment.BottomStart)
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp)
-        .offset(y = 80.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
     ) {
-      OutlinedButton(
-        onClick = { navController.navigate(Dialog.AuthDisclaimer) },
-        modifier = Modifier.align(Alignment.CenterStart)
-      ) {
-        Text(stringResource(R.string.auth_disclaimer))
-      }
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .padding(vertical = 32.dp, horizontal = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.AccountCircle,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
 
-      Button(
-        onClick = {
-          viewModel.auth(
-            username = username,
-            password = password,
-            onSuccess = { navController.navigateAndClearStack(Screen.Feed) },
-            onFailure = setSnackbarContent,
-          )
-        },
-        enabled = !viewModel.isAuthInProgress.value,
-        modifier = Modifier.align(Alignment.CenterEnd)
-      ) {
-        Text(stringResource(R.string.auth_next))
-      }
-    }
+            Text(
+                text = stringResource(R.string.auth_welcome),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold
+            )
 
-    SnackbarHost(
-      hostState = snackbarHostState,
-      modifier = Modifier.align(Alignment.BottomStart),
-      snackbar = { data ->
-        Snackbar(
-          containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(12.dp),
-          contentColor = MaterialTheme.colorScheme.onSurface,
-          snackbarData = data
+            Text(
+                text = stringResource(R.string.auth_welcome_text),
+                fontSize = 14.sp
+            )
+        }
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .offset(y = 80.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+                .clip(MaterialTheme.shapes.medium.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)))
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.compositeSurfaceElevation(4.dp))
+                .padding(16.dp)
+                .navigationBarsPadding()
+        ) {
+            Autofill(
+                autofillTypes = listOf(AutofillType.EmailAddress, AutofillType.Username),
+                onFill = setUsername
+            ) { autofillNode ->
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = setUsername,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions {
+                        passwordFocusRequester.requestFocus()
+                    },
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.username)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusTarget()
+                        .focusRequester(usernameFocusRequester)
+                        .onFocusChanged {
+                            autofill?.apply {
+                                if (it.isFocused) {
+                                    requestAutofillForNode(autofillNode)
+                                } else {
+                                    cancelAutofillForNode(autofillNode)
+                                }
+                            }
+                        }
+                        .focusProperties { next = passwordFocusRequester },
+                )
+            }
+
+            Autofill(
+                autofillTypes = listOf(AutofillType.Password),
+                onFill = setPassword
+            ) { autofillNode ->
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = setPassword,
+                    label = { Text(stringResource(R.string.password)) },
+                    singleLine = true,
+                    visualTransformation = if (passwordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusTarget()
+                        .focusRequester(passwordFocusRequester)
+                        .onFocusChanged {
+                            autofill?.apply {
+                                if (it.isFocused) {
+                                    requestAutofillForNode(autofillNode)
+                                } else {
+                                    cancelAutofillForNode(autofillNode)
+                                }
+                            }
+                        }
+                        .focusProperties { previous = usernameFocusRequester },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions {
+                        focusManager.clearFocus()
+                        viewModel.auth(
+                            username = username,
+                            password = password,
+                            onSuccess = { viewModel.onLoginSuccess(navController) },
+                            onFailure = setSnackbarContent,
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { passwordVisible = !passwordVisible }
+                        ) {
+                            if (passwordVisible) {
+                                Icon(
+                                    Icons.Rounded.Visibility,
+                                    stringResource(R.string.hide_password)
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Rounded.VisibilityOff,
+                                    stringResource(R.string.show_password)
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+
+            Box(
+                Modifier
+                    .fillMaxWidth()
+            ) {
+                OutlinedButton(
+                    onClick = { navController.navigate(Dialog.AuthDisclaimer) },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Text(stringResource(R.string.auth_disclaimer))
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.auth(
+                            username = username,
+                            password = password,
+                            onSuccess = { navController.navigateAndClearStack(Screen.Feed) },
+                            onFailure = setSnackbarContent,
+                        )
+                    },
+                    enabled = !viewModel.isAuthInProgress.value,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Text(stringResource(R.string.auth_next))
+                }
+            }
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomStart),
+            snackbar = { data ->
+                Snackbar(
+                    containerColor = MaterialTheme.colorScheme.compositeSurfaceElevation(12.dp),
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    snackbarData = data
+                )
+            }
         )
-      }
-    )
-  }
+    }
 }
 
 // TODO migrate from Composable wrapper to modifier
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Autofill(
-  autofillTypes: List<AutofillType>,
-  onFill: ((String) -> Unit),
-  content: @Composable (AutofillNode) -> Unit
+    autofillTypes: List<AutofillType>,
+    onFill: ((String) -> Unit),
+    content: @Composable (AutofillNode) -> Unit
 ) {
-  val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes)
+    val autofillNode = AutofillNode(onFill = onFill, autofillTypes = autofillTypes)
 
-  val autofillTree = LocalAutofillTree.current
-  autofillTree += autofillNode
+    val autofillTree = LocalAutofillTree.current
+    autofillTree += autofillNode
 
-  Box(
-    modifier = Modifier.onGloballyPositioned {
-      autofillNode.boundingBox = it.boundsInWindow()
+    Box(
+        modifier = Modifier.onGloballyPositioned {
+            autofillNode.boundingBox = it.boundsInWindow()
+        }
+    ) {
+        content(autofillNode)
     }
-  ) {
-    content(autofillNode)
-  }
 }
