@@ -98,6 +98,7 @@ private fun ControlsHeader(
             },
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
+        color = oppositeColorOfSystem(1f)
     )
     
     Spacer(Modifier.height(2.dp))
@@ -114,6 +115,7 @@ private fun ControlsHeader(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 16.sp,
+        color = oppositeColorOfSystem(0.75f)
     )
 }
 
