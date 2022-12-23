@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,12 +17,10 @@ import bruhcollective.itaysonlab.jetispot.core.collection.SpCollectionManager
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubResponse
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.isGrid
 import bruhcollective.itaysonlab.jetispot.core.objs.player.PlayFromContextData
-import bruhcollective.itaysonlab.jetispot.core.util.UpdateUtil
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubBinder
 import bruhcollective.itaysonlab.jetispot.ui.hub.HubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
-import bruhcollective.itaysonlab.jetispot.ui.screens.Dialog
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingErrorPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,8 +36,6 @@ fun HubScreen(
   onAppBarTitleChange: (String) -> Unit = {},
 ) {
   val scope = rememberCoroutineScope()
-  var latestRelease by remember { mutableStateOf(UpdateUtil.LatestRelease()) }
-  var showUpdateDialog by rememberSaveable { mutableStateOf(false) }
 
   val navController = LocalNavigationController.current
 
@@ -48,10 +43,6 @@ fun HubScreen(
 
   LaunchedEffect(Unit) {
     viewModel.load(onAppBarTitleChange, loader)
-  }
-
-  if(showUpdateDialog) {
-    navController.navigate(Dialog.UpdateAvailable)
   }
 
   when (viewModel.state) {

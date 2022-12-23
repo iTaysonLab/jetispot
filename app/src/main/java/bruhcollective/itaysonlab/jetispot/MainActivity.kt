@@ -81,9 +81,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBlocking{
-            updateLanguage(context, LocaleHelper.getLanguage(context))
-        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -244,22 +241,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-    }
-    companion object{
-
-        fun updateLanguage(context: Context = SpApp.context, language: String) {
-            val locale = Locale(language)
-            Locale.setDefault(locale)
-            val config = Configuration()
-            if (language.isEmpty()) {
-                val emptyLocaleList = LocaleListCompat.getEmptyLocaleList()
-                config.setLocale(emptyLocaleList[0])
-            } else {
-                config.setLocale(locale)
-            }
-
-            context.resources.updateConfiguration(config, context.resources.displayMetrics)
         }
     }
 }

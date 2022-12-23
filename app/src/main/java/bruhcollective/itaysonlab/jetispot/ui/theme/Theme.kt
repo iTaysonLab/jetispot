@@ -33,7 +33,7 @@ fun ApplicationTheme(
   val view = LocalView.current
   val sysUiController = rememberSystemUiController(window)
 
-  window?.let { WindowCompat.getInsetsController(it, view).isAppearanceLightStatusBars = darkTheme }
+  // window?.let { WindowCompat.getInsetsController(it, view).isAppearanceLightStatusBars = darkTheme }
 
   SideEffect {
     sysUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !darkTheme)
@@ -54,6 +54,7 @@ private fun provideColorScheme(darkTheme: Boolean): ColorScheme {
     } else {
       dynamicLightColorScheme(LocalContext.current)
     }
+
     else -> if (darkTheme) {
       darkColorScheme()
     } else {
