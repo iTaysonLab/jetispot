@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying
 
+import android.content.Context
 import androidx.collection.LruCache
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -130,9 +131,9 @@ class NowPlayingViewModel @Inject constructor(
     }
   }
 
-  fun getHeaderText(): String {
+  fun getHeaderText(context: Context): String {
     return when {
-      currentContextUri.value.contains("collection") -> SpApp.context.getString(R.string.liked_songs)
+      currentContextUri.value.contains("collection") -> context.getString(R.string.liked_songs)
       else -> currentContext.value
     }
   }

@@ -1,9 +1,12 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.search
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -14,13 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusTarget
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.api.SpInternalApi
 import bruhcollective.itaysonlab.jetispot.proto.SearchEntity
 import bruhcollective.itaysonlab.jetispot.proto.SearchViewResponse
@@ -30,13 +33,10 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.hub.HubScreen
 import bruhcollective.itaysonlab.jetispot.ui.shared.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingInfoPage
 import bruhcollective.itaysonlab.jetispot.ui.shared.PagingLoadingPage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalPagerApi::class
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 )
 @Composable
 fun SearchScreen(
@@ -100,7 +100,7 @@ fun SearchScreen(
         }, contentWindowInsets = EmptyWindowInsets
     ) { padding ->
         HorizontalPager(
-            count = 2,
+            pageCount = 2,
             state = virtualPagerState,
             userScrollEnabled = false,
             modifier = Modifier
@@ -127,37 +127,41 @@ private fun SearchBinder(
 ) {
     when {
         response?.hitsCount == 0 -> PagingInfoPage(
-            title = SpApp.context.getString(R.string.search_no_results),
-            text = SpApp.context.getString(R.string.search_no_results_desc),
+            title = stringResource(R.string.search_no_results),
+            text = stringResource(R.string.search_no_results_desc),
             modifier = Modifier.fillMaxSize()
         )
+
         response == null -> PagingLoadingPage(modifier = Modifier.fillMaxSize())
+
         else -> {
+            val context = LocalContext.current
+
             LazyColumn(Modifier.fillMaxSize()) {
                 items(response.hitsList) { entity ->
                     val text = remember(entity) {
                         when (entity.entityCase) {
                             SearchEntity.EntityCase.TRACK -> {
-                                SpApp.context.getString(R.string.song_prefix_with_dot) + entity.track.trackArtistsList.joinToString { it.name }
+                                context.getString(R.string.song_prefix_with_dot) + entity.track.trackArtistsList.joinToString { it.name }
                             }
 
                             SearchEntity.EntityCase.PLAYLIST -> {
                                 when {
-                                    entity.playlist.personalized -> SpApp.context.getString(R.string.playlist_personalized_for_you)
-                                    entity.playlist.ownedBySpotify -> SpApp.context.getString(R.string.playlist_owned_by_spotify)
-                                    else -> SpApp.context.getString(R.string.playlist_prefix)
+                                    entity.playlist.personalized -> context.getString(R.string.playlist_personalized_for_you)
+                                    entity.playlist.ownedBySpotify -> context.getString(R.string.playlist_owned_by_spotify)
+                                    else -> context.getString(R.string.playlist_prefix)
                                 }
                             }
 
                             SearchEntity.EntityCase.ALBUM -> {
-                                SpApp.context.getString(R.string.album_with_dot)+ entity.album.artistNamesList.joinToString()
+                                context.getString(R.string.album_with_dot)+ entity.album.artistNamesList.joinToString()
                             }
 
                             SearchEntity.EntityCase.ARTIST -> {
-                                SpApp.context.getString(R.string.artist)
+                                context.getString(R.string.artist)
                             }
 
-                            else -> ""
+                            else -> "N/A"
                         }
                     }
 

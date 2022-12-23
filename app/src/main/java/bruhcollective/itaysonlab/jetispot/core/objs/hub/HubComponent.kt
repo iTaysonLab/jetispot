@@ -38,10 +38,10 @@ sealed class HubComponent {
 
   // GLUE
 
-  @TypeLabel("glue:sectionHeader", alternateLabels = ["glue2:sectionHeader"])
+  @TypeLabel("glue:sectionHeader")
   object GlueSectionHeader: HubComponent()
 
-  @TypeLabel("home:carousel", alternateLabels = ["glue:carousel"])
+  @TypeLabel("home:carousel", alternateLabels = ["glue:carousel", "glue2:carousel"])
   object Carousel: HubComponent()
 
   @TypeLabel("home:cardMedium", alternateLabels = ["glue2:card"])
@@ -104,7 +104,7 @@ sealed class HubComponent {
   @TypeLabel("listeninghistory:dividerAfterEntityRow", alternateLabels = ["listeninghistory:playsFromContextRow", "listeninghistory:artistContextRow" /*This by the moment*/])
   object EmptySpace: HubComponent()
 
-  @TypeLabel("freetier:offlineSwitchComponent", alternateLabels = ["find:header"])
+  @TypeLabel("freetier:offlineSwitchComponent", alternateLabels = ["find:header", "find:imageHeader", "glue2:sectionHeader"])
   object Ignored: HubComponent()
 
   @DefaultObject

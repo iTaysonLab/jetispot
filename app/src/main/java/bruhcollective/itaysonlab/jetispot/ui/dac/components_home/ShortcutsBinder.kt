@@ -28,7 +28,7 @@ fun ShortcutsBinder(
                 Box(
                   Modifier
                     .weight(1f)
-                    .padding(end = if (xIdx == 0) 8.dp else 0.dp)) {
+                    .padding(end = if (xIdx == 0 && pairs.size == 2) 8.dp else 0.dp)) {
                     when (xItem) {
                         is AlbumCardShortcutComponent -> ShortcutComponentBinder(
                             xItem.navigateUri,
@@ -103,7 +103,6 @@ private fun ShortcutComponentBinder(
                   )
                   .padding(horizontal = 8.dp)
                     .fillMaxWidth(),
-
             )
         }
     }

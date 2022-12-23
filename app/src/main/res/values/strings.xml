@@ -167,8 +167,8 @@
     <string name="search_no_results_desc">Correct your request and try again</string>
     <string name="playing_src_search">playing from search</string>
     <string name="songs">songs</string>
-    <string name="songs_by">songs by</string>
-    <string name="likes_dot">"likes • "</string>
+    <string name="songs_by">%d songs by %s</string>
+    <string name="likes_dot">"%d likes • %s"</string>
     <string name="no_lyrics">Ups, seems like this song have no lyrics…</string>
     <string name="language">Language</string>
     <string name="plan_overview_fallback_plan">Seems like you don\'t have an Spotify Premium account.</string>

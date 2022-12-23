@@ -71,7 +71,13 @@ class SpServiceEventsListener(
       artist = p1.artist
       album = p1.albumName
       duration = p1.duration().toLong()
-      artBitmap = p0.currentCoverImage()?.let { bmpRaw -> BitmapFactory.decodeByteArray(bmpRaw, 0, bmpRaw.size) }
+
+      artBitmap = try {
+        p0.currentCoverImage()?.let { bmpRaw -> BitmapFactory.decodeByteArray(bmpRaw, 0, bmpRaw.size) }
+      } catch (e: Exception) {
+        null
+      }
+
       playable()
     }
 

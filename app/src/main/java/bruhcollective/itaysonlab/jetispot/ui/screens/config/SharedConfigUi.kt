@@ -8,7 +8,6 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
@@ -33,15 +32,12 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.SpApp.Companion.context
 import bruhcollective.itaysonlab.jetispot.core.SpConfigurationManager
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.ui.ext.rememberEUCScrollBehavior
@@ -62,6 +58,7 @@ interface ConfigViewModel {
 fun BaseConfigScreen(
   viewModel: ConfigViewModel
 ) {
+  val context = LocalContext.current
   val scrollBehavior = rememberEUCScrollBehavior()
 
   val scope = rememberCoroutineScope()
@@ -70,12 +67,11 @@ fun BaseConfigScreen(
   val navController = LocalNavigationController.current
 
   //Energy things
-  val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+  val pm = remember { context.getSystemService(Context.POWER_SERVICE) as PowerManager }
   var showBatteryHint by remember { mutableStateOf(!pm.isIgnoringBatteryOptimizations(context.packageName)) }
-  val launcher =
-    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-      showBatteryHint = !pm.isIgnoringBatteryOptimizations(context.packageName)
-    }
+  val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    showBatteryHint = !pm.isIgnoringBatteryOptimizations(context.packageName)
+  }
 
   Scaffold(topBar = {
     LargeTopAppBar(title = {

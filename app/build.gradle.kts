@@ -5,12 +5,12 @@ import com.google.protobuf.gradle.*
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("dev.zacsweers.moshix") version "0.18.3"
+    id("dev.zacsweers.moshix") version "0.19.0"
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id("com.google.protobuf") version "0.8.18"
-    kotlin("plugin.serialization") version "1.7.21"
 }
+
 apply(plugin = "dagger.hilt.android.plugin")
 
 val versionMajor = 0
@@ -36,9 +36,9 @@ android {
     if (keystorePropertiesFile.exists()) {
         val keystoreProperties = Properties()
         keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
         signingConfigs {
-            getByName("debug")
-            {
+            getByName("debug") {
                 keyAlias = keystoreProperties["keyAlias"].toString()
                 keyPassword = keystoreProperties["keyPassword"].toString()
                 storeFile = file(keystoreProperties["storeFile"]!!)
@@ -48,28 +48,35 @@ android {
     }
 
     compileSdk = 33
+
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.jetispot"
+
         minSdk = 23
         targetSdk = 33
         versionCode = 1000
         versionName = StringBuilder("${versionMajor}.${versionMinor}.${versionPatch}").apply {
             if (!isStable) append("-beta.${versionBuild}")
         }.toString()
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
-        if (!splitApks)
+
+        if (!splitApks) {
             ndk {
                 (properties["ABI_FILTERS"] as String).split(';').forEach {
                     abiFilters.add(it)
                 }
             }
+        }
     }
-    if (splitApks)
+
+    if (splitApks) {
         splits {
             abi {
                 isEnable = !project.hasProperty("noSplits")
@@ -78,6 +85,8 @@ android {
                 isUniversalApk = false
             }
         }
+    }
+
     //source sets in .kts
     sourceSets {
         getByName("main") {
@@ -107,7 +116,7 @@ android {
     }
 
     compileOptions {
-       // coreLibraryDesugaringEnabled = true
+        // coreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -162,18 +171,16 @@ moshi {
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-
 
     // AndroidX
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.palette:palette-ktx:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
 
     // Compose
-    implementation("androidx.navigation:navigation-compose:2.5.2")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("androidx.activity:activity-compose:1.6.1")
     implementation("androidx.compose.material:material:$compose_version")
     implementation("androidx.compose.material3:material3:$compose_m3_version")
@@ -187,11 +194,13 @@ dependencies {
 
     // Compose - Additions
     implementation("com.google.accompanist:accompanist-navigation-material:$accompanist_version")
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanist_version")
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-pager:$accompanist_version")
+    implementation("io.github.fornewid:material-motion-compose-core:0.11.0-alpha")
+    implementation("io.github.fornewid:material-motion-compose-navigation:0.11.0-alpha")
 
     // Images
-    implementation("io.coil-kt:coil-compose:2.2.0")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     // DI
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")

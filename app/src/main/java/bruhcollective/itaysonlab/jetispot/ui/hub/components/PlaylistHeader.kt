@@ -21,18 +21,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.core.objs.hub.HubItem
-import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.ui.hub.LocalHubScreenDelegate
 import bruhcollective.itaysonlab.jetispot.ui.hub.components.essentials.EntityActionStrip
 import bruhcollective.itaysonlab.jetispot.ui.shared.MediumText
 import bruhcollective.itaysonlab.jetispot.ui.shared.PreviewableAsyncImage
 import bruhcollective.itaysonlab.jetispot.ui.shared.navClickable
 import coil.compose.AsyncImage
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PlaylistHeader(
@@ -44,36 +46,35 @@ fun PlaylistHeader(
     val delegate = LocalHubScreenDelegate.current
 
     LaunchedEffect(Unit) {
-        launch {
-            if (dominantColor.value != Color.Transparent) return@launch
-            dominantColor.value =
-                delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
+        withContext(Dispatchers.Default) {
+            if (dominantColor.value != Color.Transparent) return@withContext
+            dominantColor.value = delegate.calculateDominantColor(item.images?.main?.uri.toString(), darkTheme)
         }
     }
 
     Column(
-      Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()
-        .background(
-          brush = Brush.verticalGradient(
-            colors = listOf(dominantColorAsBg.value, Color.Transparent)
-          )
-        )
-        .padding(top = 16.dp)
-        .statusBarsPadding()
+        Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(dominantColorAsBg.value, Color.Transparent)
+                )
+            )
+            .padding(top = 16.dp)
+            .statusBarsPadding()
     ) {
         PreviewableAsyncImage(
             item.images?.main?.uri, "playlist", modifier = Modifier
-            .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
-            .align(Alignment.CenterHorizontally)
-            .padding(bottom = 8.dp)
+                .size((LocalConfiguration.current.screenWidthDp * 0.7).dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 8.dp)
         )
 
         MediumText(
             text = item.text?.title!!, fontSize = 21.sp, modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .padding(top = 8.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
         )
 
         if (!item.text.subtitle.isNullOrEmpty()) {
@@ -82,8 +83,8 @@ fun PlaylistHeader(
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
                 text = item.text.subtitle, modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp)
             )
         }
 
@@ -100,9 +101,9 @@ fun LargePlaylistHeader(
 
     Column {
         Box(
-          Modifier
-            .fillMaxWidth()
-            .height(240.dp)
+            Modifier
+                .fillMaxWidth()
+                .height(240.dp)
         ) {
             AsyncImage(
                 model = item.images?.main?.uri,
@@ -113,13 +114,13 @@ fun LargePlaylistHeader(
             )
 
             Box(
-              Modifier
-                .background(
-                  brush = Brush.verticalGradient(
-                    colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
-                  )
-                )
-                .fillMaxSize()
+                Modifier
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
+                        )
+                    )
+                    .fillMaxSize()
             )
 
             MediumText(
@@ -128,9 +129,9 @@ fun LargePlaylistHeader(
                 lineHeight = 52.sp,
                 maxLines = 2,
                 modifier = Modifier
-                  .align(Alignment.BottomStart)
-                  .padding(horizontal = 16.dp)
-                  .padding(bottom = 8.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 8.dp)
             )
         }
 
@@ -140,8 +141,8 @@ fun LargePlaylistHeader(
                 fontSize = 12.sp,
                 lineHeight = 18.sp,
                 text = item.text?.subtitle!!, modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 16.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp)
             )
         }
 
@@ -164,38 +165,40 @@ fun PlaylistHeaderAdditionalInfo(
     Spacer(modifier = Modifier.height(12.dp))
 
     Row(Modifier
-      .navClickable(
-        enableRipple = false
-      ) { navController -> navController.navigate(custom["owner_username"] as String) }
-      .fillMaxWidth()
-      .padding(horizontal = 16.dp)) {
+        .navClickable(
+            enableRipple = false
+        ) { navController -> navController.navigate(custom["owner_username"] as String) }
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)) {
         PreviewableAsyncImage(
             imageUrl = ownerPic, placeholderType = "user", modifier = Modifier
-            .clip(CircleShape)
-            .size(32.dp)
+                .clip(CircleShape)
+                .size(32.dp)
         )
+
         MediumText(
             text = ownerName, fontSize = 13.sp, modifier = Modifier
-            .align(Alignment.CenterVertically)
-            .padding(start = 12.dp)
+                .align(Alignment.CenterVertically)
+                .padding(start = 12.dp)
         )
     }
 
     Spacer(modifier = Modifier.height(12.dp))
 
     Row(
-      Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp)
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         Icon(Icons.Rounded.Language, contentDescription = null, modifier = Modifier.size(26.dp))
+
         Text(
-            text = "$likesCount " + SpApp.context.getString(R.string.likes_dot) + totalDuration,
+            text = stringResource(id = R.string.likes_dot, likesCount, totalDuration),
             fontSize = 12.sp,
             maxLines = 1,
             modifier = Modifier
-              .align(Alignment.CenterVertically)
-              .padding(start = 8.dp)
+                .align(Alignment.CenterVertically)
+                .padding(start = 8.dp)
         )
     }
 

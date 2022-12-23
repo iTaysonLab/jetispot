@@ -5,7 +5,6 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import bruhcollective.itaysonlab.jetispot.SpApp
 import bruhcollective.itaysonlab.jetispot.proto.AppConfig
 import bruhcollective.itaysonlab.jetispot.proto.AudioNormalization
 import bruhcollective.itaysonlab.jetispot.proto.AudioQuality
@@ -27,8 +26,6 @@ class SpConfigurationManager @Inject constructor(
   @ApplicationContext private val appContext: Context,
 ) {
   companion object {
-    //get spSessionManager session
-    private val spSessionManager = SpSessionManager(SpApp.context)
     val EMPTY = object: DataStore<AppConfig> {
       override val data: Flow<AppConfig> get() = emptyFlow()
       override suspend fun updateData(transform: suspend (t: AppConfig) -> AppConfig) = TODO("This is an empty DataStore!")

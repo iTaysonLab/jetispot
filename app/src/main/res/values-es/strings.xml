@@ -130,8 +130,8 @@
     <string name="playlist_prefix">Lista de reproducción</string>
     <string name="playing_src_search">reproduciendo desde búsqueda</string>
     <string name="songs">canciones</string>
-    <string name="songs_by">canciones por</string>
-    <string name="likes_dot">"me gusta • "</string>
+    <string name="songs_by">%d canciones por %s</string>
+    <string name="likes_dot">"%d me gusta • %s"</string>
     <string name="no_lyrics">Ups, parece que esta canción no tiene letra…</string>
     <string name="language">Idioma</string>
     <string name="plan_overview_fallback_plan">Parece que no tienes una cuenta de Spotify Premium.</string>

@@ -23,16 +23,27 @@ fun Carousel(
     val isSurroundedWithPadding = LocalHubScreenDelegate.current.isSurroundedWithPadding()
 
     Column(Modifier.padding(vertical = if (isSurroundedWithPadding) 0.dp else 8.dp)) {
-        if (item.text != null) {
+        if (item.text?.title != null) {
             Text(
-                text = item.text.title!!,
+                text = item.text.title,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier
                   .padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)
-                  .padding(bottom = 12.dp)
+                  .padding(bottom = if (item.text.description != null) 2.dp else 12.dp)
             )
+
+            if (item.text.description != null) {
+                Text(
+                    text = item.text.description,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 13.sp,
+                    modifier = Modifier
+                        .padding(horizontal = if (isSurroundedWithPadding) 0.dp else 16.dp)
+                        .padding(bottom = 12.dp)
+                )
+            }
         }
 
         LazyRow(

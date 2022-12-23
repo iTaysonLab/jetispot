@@ -31,7 +31,7 @@ class AuthScreenViewModel @Inject constructor(
 
     fun onLoginSuccess(navController: NavigationController) {
         navController.navigateAndClearStack(Screen.Feed)
-        updateAudioQualityIfPremium(AudioQuality.VERY_HIGH)
+        upgradeAudioQualityIfPremium()
     }
 
     fun auth(
@@ -72,7 +72,7 @@ class AuthScreenViewModel @Inject constructor(
         }
     }
 
-    private fun updateAudioQualityIfPremium() {
+    private fun upgradeAudioQualityIfPremium() {
         viewModelScope.launch {
             if (spSessionManager.session.getUserAttribute("player-license") == "premium") {
                 modifyDatastore {

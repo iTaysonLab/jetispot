@@ -1,12 +1,8 @@
 package bruhcollective.itaysonlab.jetispot.core.lyrics
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import bruhcollective.itaysonlab.jetispot.R
-import bruhcollective.itaysonlab.jetispot.SpApp
-import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import com.spotify.lyrics.v2.lyrics.proto.LyricsResponse.LyricsLine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -16,8 +12,7 @@ import xyz.gianlu.librespot.common.Base62
 import javax.inject.Inject
 
 class SpLyricsController @Inject constructor(
-    private val requester: SpLyricsRequester,
-    private val manager: SpPlayerServiceManager
+    private val requester: SpLyricsRequester
 ): CoroutineScope by MainScope() {
     private val base62 = Base62.createInstanceWithInvertedCharacterSet()
     private var _songJob: Job? = null
@@ -59,8 +54,8 @@ class SpLyricsController @Inject constructor(
     fun setProgress(pos: Long){
         val lyricIndex = currentLyricsLines.indexOfLast { it.startTimeMs < pos }
 
-        if(currentLyricsState == LyricsState.Unavailable){
-            currentSongLine = SpApp.context.getString(R.string.no_lyrics)
+        if (currentLyricsState == LyricsState.Unavailable) {
+            currentSongLine = "N/A"
         } else {
             if (lyricIndex == -1) {
                 currentSongLine = "\uD83C\uDFB5"

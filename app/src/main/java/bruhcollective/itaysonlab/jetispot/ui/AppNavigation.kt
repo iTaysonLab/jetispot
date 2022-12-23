@@ -1,6 +1,10 @@
 package bruhcollective.itaysonlab.jetispot.ui
 
 import android.content.Intent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -13,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
-import androidx.navigation.compose.*
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.dialog
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -32,10 +37,15 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.dac.DacRendererScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.dynamic.DynamicSpIdScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import soup.compose.material.motion.animation.materialSharedAxisXIn
+import soup.compose.material.motion.animation.materialSharedAxisXOut
+import soup.compose.material.motion.animation.rememberSlideDistance
 
-@OptIn(ExperimentalMaterialNavigationApi::class)
+@OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun AppNavigation(
     navController: NavHostController,
@@ -43,6 +53,8 @@ fun AppNavigation(
     authManager: SpAuthManager,
     modifier: Modifier
 ) {
+    val slideDistance = rememberSlideDistance()
+
     LaunchedEffect(Unit) {
         if (sessionManager.isSignedIn()) return@LaunchedEffect
         authManager.authStored()
@@ -51,11 +63,31 @@ fun AppNavigation(
         }
     }
 
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = Screen.CoreLoading.route,
         route = Screen.NavGraph.route,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = {
+            if (initialState.destination.route == "coreLoading") {
+                EnterTransition.None
+            } else {
+                materialSharedAxisXIn(forward = buildAnimationForward(this), slideDistance = slideDistance)
+            }
+        },
+        exitTransition = {
+            if (initialState.destination.route == "coreLoading") {
+                ExitTransition.None
+            } else {
+                materialSharedAxisXOut(forward = buildAnimationForward(this), slideDistance = slideDistance)
+            }
+        },
+        popEnterTransition = {
+            materialSharedAxisXIn(forward = false, slideDistance = slideDistance)
+        },
+        popExitTransition = {
+            materialSharedAxisXOut(forward = false, slideDistance = slideDistance)
+        }
     ) {
         composable(Screen.CoreLoading.route) {
             Box(Modifier.fillMaxSize()) {
@@ -160,4 +192,19 @@ fun AppNavigation(
             MoreOptionsBottomSheet(trackName, artistName, artworkUrl, artistsData)
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+private fun buildAnimationForward(scope: AnimatedContentScope<NavBackStackEntry>): Boolean {
+    val isRoute = getStartingRoute(scope.initialState.destination)
+    val tsRoute = getStartingRoute(scope.targetState.destination)
+
+    val isIndex = Screen.showInBottomNavigation.keys.indexOfFirst { it.route == isRoute }
+    val tsIndex = Screen.showInBottomNavigation.keys.indexOfFirst { it.route == tsRoute }
+
+    return tsIndex == -1 || isRoute == tsRoute || tsIndex > isIndex
+}
+
+private fun getStartingRoute(destination: NavDestination): String {
+    return destination.hierarchy.toList().let { it[it.lastIndex - 1] }.route.orEmpty()
 }

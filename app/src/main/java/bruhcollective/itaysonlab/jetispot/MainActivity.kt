@@ -1,18 +1,16 @@
 package bruhcollective.itaysonlab.jetispot
 
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -20,37 +18,28 @@ import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import bruhcollective.itaysonlab.jetispot.SpApp.Companion.applicationScope
-import bruhcollective.itaysonlab.jetispot.SpApp.Companion.context
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpPlayerServiceManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
-import bruhcollective.itaysonlab.jetispot.core.util.Log
 import bruhcollective.itaysonlab.jetispot.ui.AppNavigation
-import bruhcollective.itaysonlab.jetispot.ui.ext.compositeSurfaceElevation
 import bruhcollective.itaysonlab.jetispot.ui.navigation.LocalNavigationController
 import bruhcollective.itaysonlab.jetispot.ui.navigation.NavigationController
 import bruhcollective.itaysonlab.jetispot.ui.screens.Screen
 import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingScreen
 import bruhcollective.itaysonlab.jetispot.ui.theme.ApplicationTheme
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 import javax.inject.Inject
 
@@ -78,7 +67,9 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class,
+        ExperimentalAnimationApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -95,20 +86,22 @@ class MainActivity : ComponentActivity() {
 
                 //In conclusion, you can have multiple bottom sheets, but you can only have one bottom sheet scaffold state
                 val bsState = rememberBottomSheetScaffoldState()
-
                 val bottomSheetNavigator = rememberBottomSheetNavigator()
-                val navController = rememberNavController(bottomSheetNavigator)
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val navController = rememberAnimatedNavController(bottomSheetNavigator)
                 val lambdaNavController = NavigationController { navController }
 
-                val navBarHeightDp =
-                    WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                //
+                val navigationBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val shouldHideNavigationBar = navBackStackEntry?.destination?.route == Screen.CoreLoading.route || navBackStackEntry?.destination?.route == Screen.Authorization.route
+                val bsVisible = playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
+                val dockbarHeight = navigationBarHeight + 80.dp + (if (bsVisible) 72.dp else 0.dp)
+                val bsPeek by animateDpAsState(if (bsVisible) dockbarHeight else 0.dp)
+                val currentRootRoute = remember(navBackStackEntry) {
+                    navController.backQueue.getOrNull(1)?.destination?.route
+                }
+                //
 
-                val bsVisible =
-                    playerServiceManager.playbackState.value != SpPlayerServiceManager.PlaybackState.Idle
-                val bsPeek by animateDpAsState(
-                    if (bsVisible) 80.dp + 72.dp + navBarHeightDp else 0.dp
-                )
 
                 var bsQueueOpened by remember { mutableStateOf(false) }
                 var bsLyricsOpened by remember { mutableStateOf(false) }
@@ -118,6 +111,7 @@ class MainActivity : ComponentActivity() {
                     val bsProgress = bsState.bottomSheetState.progress
 
                     when {
+                        shouldHideNavigationBar -> 1f
                         bsProgress.from == BottomSheetValue.Collapsed && bsProgress.to == BottomSheetValue.Collapsed -> 0f
                         bsProgress.from == BottomSheetValue.Expanded && bsProgress.to == BottomSheetValue.Expanded -> 1f
                         bsProgress.to == BottomSheetValue.Expanded -> bsProgress.fraction
@@ -162,24 +156,23 @@ class MainActivity : ComponentActivity() {
                 }
 
                 CompositionLocalProvider(LocalNavigationController provides lambdaNavController) {
-                    ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+                    ModalBottomSheetLayout(
+                        bottomSheetNavigator = bottomSheetNavigator,
+                        sheetShape = MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)),
+                        scrimColor = MaterialTheme.colorScheme.scrim.copy(0.5f),
+                        sheetBackgroundColor = MaterialTheme.colorScheme.surface
+                    ) {
                         Scaffold(
                             bottomBar = {
-                                val currentDestination = navBackStackEntry?.destination
-                                if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
                                 NavigationBar(
                                     modifier = Modifier
                                         .offset {
-                                            IntOffset(
-                                                0,
-                                                ((80.dp + navBarHeightDp).toPx() * bsOffset()).toInt()
+                                            IntOffset(0,
+                                                (dockbarHeight.toPx() * bsOffset()).toInt()
                                             )
                                         }
-                                        .background(
-                                            MaterialTheme.colorScheme.compositeSurfaceElevation(
-                                                3.dp
-                                            )
-                                        )
+                                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+                                        .navigationBarsPadding(),
                                 ) {
                                     Screen.showInBottomNavigation.forEach { (screen, icon) ->
                                         NavigationBarItem(
@@ -190,11 +183,7 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             },
                                             label = { Text(stringResource(screen.title)) },
-                                            selected = lambdaNavController.controller().backQueue.any {
-                                                it.destination.route?.startsWith(
-                                                    screen.route
-                                                ) == true
-                                            },
+                                            selected = currentRootRoute == screen.route,
                                             onClick = {
                                                 navController.navigate(screen.route) {
                                                     popUpTo(Screen.NavGraph.route) {
@@ -225,7 +214,6 @@ class MainActivity : ComponentActivity() {
                                 sheetPeekHeight = bsPeek,
                                 backgroundColor = MaterialTheme.colorScheme.surface,
                                 sheetGesturesEnabled = !bsQueueOpened && !bsLyricsOpened,
-                                sheetShape = RoundedCornerShape(36.dp * (1f - bsOffset())),
                                 modifier = Modifier.background(Color.Transparent)
                             ) { innerScaffoldPadding ->
                                 AppNavigation(
@@ -234,7 +222,7 @@ class MainActivity : ComponentActivity() {
                                     authManager = authManager,
                                     modifier = Modifier
                                         .padding(innerScaffoldPadding)
-                                        .padding(bottom = if (bsVisible) 0.dp else 80.dp + navBarHeightDp)
+                                        .padding(bottom = if (bsVisible) 0.dp else 80.dp + navigationBarHeight)
                                 )
                             }
                         }

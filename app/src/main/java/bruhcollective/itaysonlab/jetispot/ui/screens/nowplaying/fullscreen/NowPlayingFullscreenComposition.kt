@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -85,7 +86,7 @@ fun NowPlayingFullscreenComposition(
                         scope.launch { bottomSheetState.collapse() }
                     }
                 },
-                state = viewModel.getHeaderText(),
+                state = viewModel.getHeaderText(LocalContext.current),
                 queueStateProgress = anySuperProgress,
                 modifier = Modifier
                     .statusBarsPadding()
