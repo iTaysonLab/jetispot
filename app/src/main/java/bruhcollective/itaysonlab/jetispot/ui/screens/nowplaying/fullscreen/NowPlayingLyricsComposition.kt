@@ -1,24 +1,21 @@
 package bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.fullscreen
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Expand
-import androidx.compose.material.icons.rounded.ExpandMore
-import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material.icons.rounded.Lyrics
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -33,7 +30,8 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.nowplaying.NowPlayingViewMo
 fun NowPlayingLyricsComposition(
     modifier: Modifier,
     viewModel: NowPlayingViewModel,
-    rvStateProgress: Float
+    rvStateProgress: Float,
+    selectedLyricIndex: Int,
 ) {
     Box(modifier) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -68,14 +66,36 @@ fun NowPlayingLyricsComposition(
                         IntOffset(x = 0, y = (48.dp.toPx() * (1f - rvStateProgress)).toInt())
                     }) {
 
-                LazyColumn {
-                    items(viewModel.spLyricsController.currentLyricsLines) { line ->
-                        Text(text = line.words, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    itemsIndexed(viewModel.spLyricsController.currentLyricsLines) { index, line ->
+                        LyricLine(
+                            text = line.words,
+                            selected = index == selectedLyricIndex
+                        )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun LyricLine(
+    text: String,
+    selected: Boolean
+) {
+    val alpha by animateFloatAsState(targetValue = if (selected) 1f else 0.7f, label = "Lyrics line text alpha")
+
+    Text(
+        text = text,
+        color = Color.White,
+        fontSize = 21.sp,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier.alpha(alpha)
+    )
 }
 
 private fun lerp(a: Float, b: Float, to: Float): Float {

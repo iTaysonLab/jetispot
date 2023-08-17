@@ -33,7 +33,7 @@ class SpPlayerServiceImpl(
         emit(mediaController?.currentPosition ?: 0L)
       }
 
-      delay(1000)
+      delay(500L)
     }
   }.catch {
     emit(0L)

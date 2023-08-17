@@ -1,28 +1,29 @@
 buildscript {
     ext {
-        version_code = 13
-        version_name = "poc_v13"
+        version_code = 14
+        version_name = "poc_v14"
 
-        compose_version = "1.3.0-rc01"
-        compose_m3_version = "1.0.0-rc01"
-        compose_compiler_version = "1.3.1"
+        compose_version = "1.5.0"
+        compose_m3_version = "1.1.1"
+        compose_compiler_version = "1.5.1"
 
         media2_version = "1.2.1"
-        accompanist_version = "0.26.5-rc"
-        room_version = "2.5.0-beta01"
+        accompanist_version = "0.33.0-alpha"
+        room_version = "2.5.2"
 
-        librespot_commit = "e95c4f0529"
-        hilt_version = "2.43.2"
+        librespot_commit = "efe5b3398e"
+        hilt_version = "2.47"
     }
 }
 
 plugins {
-    id "com.android.application" version '7.3.1' apply false
-    id "com.android.library" version '7.3.1' apply false
-    id "org.jetbrains.kotlin.android" version "1.7.10" apply false
+    id "com.android.application" version '8.1.0' apply false
+    id "com.android.library" version '8.1.0' apply false
+    id "org.jetbrains.kotlin.android" version "1.9.0" apply false
     id "com.google.dagger.hilt.android" version "$hilt_version" apply false
+    id "com.google.devtools.ksp" version "1.9.0-1.0.13" apply false
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

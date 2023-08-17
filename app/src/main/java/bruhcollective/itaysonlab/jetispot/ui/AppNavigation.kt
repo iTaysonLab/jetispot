@@ -1,19 +1,27 @@
 package bruhcollective.itaysonlab.jetispot.ui
 
 import android.content.Intent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Warning
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.*
-import androidx.navigation.compose.*
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.dialog
+import androidx.navigation.navDeepLink
 import bruhcollective.itaysonlab.jetispot.R
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
 import bruhcollective.itaysonlab.jetispot.core.SpSessionManager
@@ -33,8 +41,13 @@ import bruhcollective.itaysonlab.jetispot.ui.screens.search.SearchScreen
 import bruhcollective.itaysonlab.jetispot.ui.screens.yourlibrary2.YourLibraryContainerScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import soup.compose.material.motion.animation.materialSharedAxisXIn
+import soup.compose.material.motion.animation.materialSharedAxisXOut
+import soup.compose.material.motion.animation.rememberSlideDistance
+import soup.compose.material.motion.navigation.MaterialMotionNavHost
+import soup.compose.material.motion.navigation.composable
 
-@OptIn(ExperimentalMaterialNavigationApi::class)
+@OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun AppNavigation(
   navController: NavHostController,
@@ -42,6 +55,8 @@ fun AppNavigation(
   authManager: SpAuthManager,
   modifier: Modifier
 ) {
+  val slideDistance = rememberSlideDistance()
+
   LaunchedEffect(Unit) {
     if (sessionManager.isSignedIn()) return@LaunchedEffect
     authManager.authStored()
@@ -50,11 +65,20 @@ fun AppNavigation(
     }
   }
 
-  NavHost(
+  MaterialMotionNavHost(
     navController = navController,
     startDestination = Screen.CoreLoading.route,
     route = Screen.NavGraph.route,
-    modifier = modifier
+    modifier = modifier,
+    enterTransition = {
+      materialSharedAxisXIn(forward = true, slideDistance)
+    }, exitTransition = {
+      materialSharedAxisXOut(forward = true, slideDistance)
+    }, popEnterTransition = {
+      materialSharedAxisXIn(forward = false, slideDistance)
+    }, popExitTransition = {
+      materialSharedAxisXOut(forward = false, slideDistance)
+    }
   ) {
     composable(Screen.CoreLoading.route) {
       Box(Modifier.fillMaxSize()) {

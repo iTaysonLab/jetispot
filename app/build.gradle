@@ -1,14 +1,15 @@
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
-    id "dev.zacsweers.moshix" version "0.18.3"
+    id "dev.zacsweers.moshix" version "0.24.0"
+    id "com.google.devtools.ksp"
     id "dagger.hilt.android.plugin"
     id "kotlin-kapt"
-    id "com.google.protobuf" version "0.8.18"
+    id "com.google.protobuf" version "0.9.0"
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "bruhcollective.itaysonlab.jetispot"
@@ -16,7 +17,7 @@ android {
         targetSdk 33
         versionCode version_code
         versionName version_name
-        resConfigs 'en'
+        resourceConfigurations += ['en']
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,18 +44,16 @@ android {
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
+    kapt {
+        correctErrorTypes = true
+    }
+
     buildFeatures {
         compose true
     }
 
     composeOptions {
         kotlinCompilerExtensionVersion compose_compiler_version
-    }
-
-    kapt {
-        arguments {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     packagingOptions {
@@ -80,19 +79,23 @@ moshi {
     enableSealed.set(true)
 }
 
+ksp {
+    arg(new RoomSchemaArgProvider(new File(projectDir, "schemas")))
+}
+
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
 
     // AndroidX
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
-    implementation "androidx.core:core-ktx:1.9.0"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
+    implementation "androidx.core:core-ktx:1.10.1"
     implementation "androidx.palette:palette-ktx:1.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 
     // Compose
-    implementation "androidx.navigation:navigation-compose:2.5.2"
-    implementation "androidx.activity:activity-compose:1.6.0"
+    implementation "androidx.navigation:navigation-compose:2.7.0"
+    implementation "androidx.activity:activity-compose:1.7.2"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material3:material3:$compose_m3_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
@@ -107,9 +110,11 @@ dependencies {
     implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation("io.github.fornewid:material-motion-compose-core:1.0.6")
+    implementation("io.github.fornewid:material-motion-compose-navigation:1.0.6")
 
     // Images
-    implementation "io.coil-kt:coil-compose:2.2.0"
+    implementation "io.coil-kt:coil-compose:2.2.2"
 
     // DI
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
@@ -117,7 +122,7 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Playback
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.1"
     implementation "com.gitlab.mvysny.slf4j:slf4j-handroid:1.7.30"
     implementation "androidx.media2:media2-session:$media2_version"
     implementation "androidx.media2:media2-player:$media2_version"
@@ -138,17 +143,17 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-paging:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
     // Data - Proto
     implementation "androidx.datastore:datastore:1.0.0"
-    implementation "com.google.protobuf:protobuf-java:3.21.5"
-    implementation "com.tencent:mmkv:1.2.14"
+    implementation "com.google.protobuf:protobuf-java:3.23.2"
+    implementation "com.tencent:mmkv:1.2.15"
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.21.5"
+        artifact = "com.google.protobuf:protoc:3.23.2"
     }
 
     generateProtoTasks {
@@ -159,5 +164,20 @@ protobuf {
                 }
             }
         }
+    }
+}
+
+class RoomSchemaArgProvider implements CommandLineArgumentProvider {
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    File schemaDir
+
+    RoomSchemaArgProvider(File schemaDir) {
+        this.schemaDir = schemaDir
+    }
+
+    @Override
+    Iterable<String> asArguments() {
+        return ["room.schemaLocation=${schemaDir.path}".toString()]
     }
 }

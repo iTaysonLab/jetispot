@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +37,7 @@ fun NowPlayingLyricsContainer(
                 setLyricsOpened(!lyricsOpened)
             }
             .onGloballyPositioned { coords ->
-                viewModel.lyricsCardParams = coords.positionInRoot() to coords.size
+                viewModel.lyricsCardParams = coords.positionInWindow() to coords.size
             }
             .background(Color.Transparent)
             .fillMaxWidth()

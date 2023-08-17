@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetispot.core.SpAuthManager
@@ -38,6 +40,7 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import soup.compose.material.motion.navigation.rememberMaterialMotionNavController
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,7 +67,10 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class)
+    @OptIn(
+        ExperimentalMaterialApi::class, ExperimentalMaterialNavigationApi::class,
+        ExperimentalAnimationApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,9 +84,10 @@ class MainActivity : ComponentActivity() {
                 val bsState = rememberBottomSheetScaffoldState()
 
                 val bottomSheetNavigator = rememberBottomSheetNavigator()
-                val navController = rememberNavController(bottomSheetNavigator)
+                val navController = rememberMaterialMotionNavController(bottomSheetNavigator)
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val lambdaNavController = NavigationController { navController }
+                val currentDestination = navBackStackEntry?.destination
 
                 val navBarHeightDp =
                     WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
@@ -96,15 +103,15 @@ class MainActivity : ComponentActivity() {
 
                 // lambdas
                 val bsOffset = {
-                    val bsProgress = bsState.bottomSheetState.progress
+                    val state = bsState.bottomSheetState
 
                     when {
-                        bsProgress.from == BottomSheetValue.Collapsed && bsProgress.to == BottomSheetValue.Collapsed -> 0f
-                        bsProgress.from == BottomSheetValue.Expanded && bsProgress.to == BottomSheetValue.Expanded -> 1f
-                        bsProgress.to == BottomSheetValue.Expanded -> bsProgress.fraction
-                        bsProgress.to == BottomSheetValue.Collapsed -> 1f - bsProgress.fraction
-                        else -> bsProgress.fraction
-                    }.coerceIn(0f..1f)
+                        state.currentValue == BottomSheetValue.Collapsed && state.targetValue == BottomSheetValue.Collapsed -> 0f
+                        state.currentValue == BottomSheetValue.Expanded && state.targetValue == BottomSheetValue.Expanded -> 1f
+                        state.targetValue == BottomSheetValue.Expanded -> state.progress
+                        state.targetValue == BottomSheetValue.Collapsed -> 1f - state.progress
+                        else -> state.progress
+                    }
                 }
 
                 DisposableEffect(
@@ -146,7 +153,6 @@ class MainActivity : ComponentActivity() {
                     ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
                         Scaffold(
                             bottomBar = {
-                                val currentDestination = navBackStackEntry?.destination
                                 if (Screen.hideNavigationBar.any { it == currentDestination?.route }) return@Scaffold
                                 NavigationBar(
                                     modifier = Modifier
@@ -171,11 +177,7 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             },
                                             label = { Text(stringResource(screen.title)) },
-                                            selected = lambdaNavController.controller().backQueue.any {
-                                                it.destination.route?.startsWith(
-                                                    screen.route
-                                                ) == true
-                                            },
+                                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                             onClick = {
                                                 navController.navigate(screen.route) {
                                                     popUpTo(Screen.NavGraph.route) {

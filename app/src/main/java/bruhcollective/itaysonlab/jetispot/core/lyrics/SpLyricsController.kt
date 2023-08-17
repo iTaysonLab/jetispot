@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetispot.core.lyrics
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.spotify.lyrics.v2.lyrics.proto.LyricsResponse.LyricsLine
@@ -22,10 +23,10 @@ class SpLyricsController @Inject constructor(
     var currentSongLine by mutableStateOf("")
         private set
 
-    var currentLyricsLines by mutableStateOf<List<LyricsLine>>(emptyList())
+    var currentSongLineIndex by mutableIntStateOf(-1)
         private set
 
-    var currentLyricsProviderInfo by mutableStateOf(ProviderInfo())
+    var currentLyricsLines by mutableStateOf<List<LyricsLine>>(emptyList())
         private set
 
     var currentLyricsState by mutableStateOf(LyricsState.Loading)
@@ -34,6 +35,8 @@ class SpLyricsController @Inject constructor(
     fun setSong(track: com.spotify.metadata.Metadata.Track) {
         _songJob?.cancel()
         _songJob = launch {
+            currentSongLineIndex = -1
+
             if (track.hasLyrics) {
                 currentLyricsState = LyricsState.Loading
 
@@ -56,11 +59,11 @@ class SpLyricsController @Inject constructor(
         currentSongLine = currentLyricsLines.firstOrNull {
             it.startTimeMs >= pos
         }?.words ?: ""
+
+        currentSongLineIndex = currentLyricsLines.indexOfFirst {
+            it.startTimeMs >= pos
+        }
     }
-
-    class ProviderInfo(
-
-    )
 
     enum class LyricsState {
         Loading,

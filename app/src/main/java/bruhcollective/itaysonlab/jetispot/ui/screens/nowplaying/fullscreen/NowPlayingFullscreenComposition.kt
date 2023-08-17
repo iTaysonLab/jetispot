@@ -98,7 +98,8 @@ fun NowPlayingFullscreenComposition (
     NowPlayingLyricsComposition(
       viewModel = viewModel,
       modifier = Modifier.fillMaxSize().alpha(1f - queueProgressValue),
-      rvStateProgress = lyricsProgressValue
+      rvStateProgress = lyricsProgressValue,
+      selectedLyricIndex = viewModel.spLyricsController.currentSongLineIndex
     )
   }
 }

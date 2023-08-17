@@ -46,7 +46,7 @@
             android:exported="true"
             android:theme="@style/Theme.Jetispot" />
 
-        <service android:name=".playback.service.SpPlaybackService" android:exported="true" android:foregroundServiceType="mediaPlayback">
+        <service android:name=".playback.service.SpPlaybackService" android:exported="true" android:foregroundServiceType="mediaPlayback" tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="androidx.media2.session.MediaLibraryService"/>
                 <action android:name="android.media.browse.MediaBrowserService"/>
