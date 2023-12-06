@@ -1,24 +1,24 @@
 buildscript {
     ext {
-        version_code = 14
-        version_name = "poc_v14"
+        version_code = 15
+        version_name = "poc_v15"
 
         compose_version = "1.5.0"
-        compose_m3_version = "1.1.1"
+        compose_m3_version = "1.1.2"
         compose_compiler_version = "1.5.1"
 
         media2_version = "1.2.1"
         accompanist_version = "0.33.0-alpha"
-        room_version = "2.5.2"
+        room_version = "2.6.1"
 
-        librespot_commit = "efe5b3398e"
+        librespot_commit = "6244f91aeb"
         hilt_version = "2.47"
     }
 }
 
 plugins {
-    id "com.android.application" version '8.1.0' apply false
-    id "com.android.library" version '8.1.0' apply false
+    id "com.android.application" version '8.1.4' apply false
+    id "com.android.library" version '8.1.4' apply false
     id "org.jetbrains.kotlin.android" version "1.9.0" apply false
     id "com.google.dagger.hilt.android" version "$hilt_version" apply false
     id "com.google.devtools.ksp" version "1.9.0-1.0.13" apply false

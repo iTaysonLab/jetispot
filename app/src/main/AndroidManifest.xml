@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <queries>
         <package android:name="com.google.android.projection.gearhead" />
@@ -15,19 +16,19 @@
     </queries>
 
     <application
-        android:manageSpaceActivity=".ManageStorageActivity"
-        android:networkSecurityConfig="@xml/nsc"
         android:name=".SpApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:manageSpaceActivity=".ManageStorageActivity"
+        android:networkSecurityConfig="@xml/nsc"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jetispot"
         tools:targetApi="n">
         <activity
-            android:launchMode="singleTop"
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Jetispot">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,9 +36,13 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="open.spotify.com" />
+
+                <data
+                    android:host="open.spotify.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
@@ -46,17 +51,23 @@
             android:exported="true"
             android:theme="@style/Theme.Jetispot" />
 
-        <service android:name=".playback.service.SpPlaybackService" android:exported="true" android:foregroundServiceType="mediaPlayback" tools:ignore="ExportedService">
+        <service
+            android:name=".playback.service.SpPlaybackService"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="androidx.media2.session.MediaLibraryService"/>
-                <action android:name="android.media.browse.MediaBrowserService"/>
+                <action android:name="androidx.media2.session.MediaLibraryService" />
+                <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
 
-        <meta-data android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc"/>
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
 
-        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon"
+        <meta-data
+            android:name="com.google.android.gms.car.notification.SmallIcon"
             android:resource="@drawable/ic_sound_wave_outline_28" />
     </application>
 
